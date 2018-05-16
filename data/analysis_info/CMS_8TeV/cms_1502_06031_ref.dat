@@ -1,0 +1,8 @@
+# This file is not used by CheckMATE 2. To edit values by hand, please refer to the corresponding var.j file!
+SR                        obs   bkg   bkg_err  S95_obs  S95_exp  
+SR01_GE2jets_a.lowMET     1187  1204  106      207      207      
+SR01_GE2jets_b.mediumMET  65    74.5  11.3     20     20     
+SR01_GE2jets_c.highMET    7     12.8  4.3      7.6      7.6      
+SR02_GE3jets_a.lowMET     490   478   43       89      89      
+SR02_GE3jets_b.mediumMET  35    39.2  6.6      16.1     16.1     
+SR02_GE3jets_c.highMET    6     5.3   2.3      8.0      8.0      

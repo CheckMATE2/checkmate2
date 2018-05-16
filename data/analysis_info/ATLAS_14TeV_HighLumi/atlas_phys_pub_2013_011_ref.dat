@@ -1,0 +1,5 @@
+SR                obs   bkg   bkg_err  S95_obs  S95_exp    
+1leptonmstop800   385   385   119      178      178          
+1leptonmstop1100  21.4  21.4  8.7      16.4     16.4           
+0leptonmstop800   129   129   42       66       66            
+0leptonmstop1100  12.2  12.2  5.3      11.5     11.5        

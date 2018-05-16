@@ -1,0 +1,3 @@
+#Name                          NSR  Description                                                      Lumi    CR?  
+#Unvalidated analyses
+#cms_1306_1126_WW               1    CMS, WW standard model measurement (7TeV)                        4.9     no   

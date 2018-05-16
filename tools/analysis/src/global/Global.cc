@@ -1,0 +1,1 @@
+../../../fritz/src/global/Global.cc

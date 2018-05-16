@@ -1,0 +1,34 @@
+! Settings used in the main program.
+Main:numberOfEvents = 1000        ! number of events to generate
+Main:timesAllowErrors = 3          ! how many aborts before run stops
+Init:showChangedSettings = on      ! list changed settings
+Init:showChangedParticleData = off ! list changed particle data
+Init:showOneParticleData = 36      ! print data for this particular particle
+Next:numberCount = 500             ! print message every n events
+Next:numberShowInfo = 2            ! print event information n times
+Next:numberShowProcess = 2         ! print process record n times
+Next:numberShowEvent = 2           ! print event record n times
+
+! Settings for the event generation process in the Pythia8 library.
+# PartonLevel:MPI = off              ! no multiparton interactions
+# PartonLevel:ISR = off              ! no initial-state radiation
+# PartonLevel:FSR = off              ! no final-state radiation
+# HadronLevel:Hadronize = off        ! no hadronization
+
+! For comparison with Pythia 6
+PDF:pSet = 8 !(CTEQ6L1)
+# SigmaProcess:factorscale2 = 4 ! sqrt(s-hat)
+# SigmaProcess:renormScale2 = 4
+# SigmaProcess:alphaSvalue = 0.1265
+# SigmaProcess:alphaSorder = 1
+
+! Beam parameter settings. Values below agree with default ones.
+Beams:idA = 2212                   ! first beam, p = 2212, pbar = -2212
+Beams:idB = 2212                   ! second beam, p = 2212, pbar = -2212
+
+
+Beams:eCM = 8000.
+
+SLHA:file = testspectrum.slha
+SUSY:gg2gluinogluino  = on
+SUSY:qqbar2gluinogluino  = on

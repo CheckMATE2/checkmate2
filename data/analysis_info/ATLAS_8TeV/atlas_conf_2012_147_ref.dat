@@ -1,0 +1,6 @@
+# This file is not used by CheckMATE 2. To edit values by hand, please refer to the corresponding var.j file!
+SR  S95_obs  bkg     bkg_err_stat  bkg_err_sys  obs     
+1   29400    344400  2377          12600        350932  
+2   1680     25600   555           900          25515   
+3   525      2180    139           100          2353    
+4   210      380     67            30           268     

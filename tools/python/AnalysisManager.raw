@@ -1,0 +1,24 @@
+#!/usr/bin/python
+
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "tools", "python"))
+
+reload(sys)
+
+import analysismanager_core
+from advprint import AdvPrint
+from info import Info
+
+config_paths = dict()
+config_paths['mg5_source_path']='MADGRAPH_DIR'
+
+global Info, AdvPrint
+Info.init(config_paths)
+
+def main():
+    analysismanager_core.main()
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,11 @@
+SR                 obs  bkg   bkg_err  S95_obs  S95_exp  
+GG2J               47   46    7        20       19       
+GG6J_bulk          32   24    5        22       16       
+GG6J_high_mass     3    3.8   1.2      5.0      5.6      
+GG4J_low_x         4    6     1.6      5        7        
+GG4J_low_x_b_veto  2    3.3   1.2      4.1      5.2      
+GG4J_high_x        2    3.4   0.9      4.1      5.2      
+SS4J               6    5.4   1.7      7.7      6.8      
+SS5J               8    13.2  2.5      5.9      8.9      
+SS4J_lox_x         8    11.1  2.7      6.7      8.8      
+SS5J_high_x        7    4.6   1.4      8.8      6.7      

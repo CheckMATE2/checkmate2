@@ -1,0 +1,7 @@
+SR       obs  bkg   bkg_err  S95_obs  S95_exp  
+SR_low   21   35    14       15.7       19.2       
+SR_high  8    17.3  7.5      8.0      10.5     
+SR_w_sf  13   12    4        11.1      10.3       
+SR_w_df  6    5.3   2.2      7.4      6.8      
+SR_t_sf  5    4.7   2        6.3      6.1      
+SR_t_df  3    3.7   1.5      5.1      5.7      

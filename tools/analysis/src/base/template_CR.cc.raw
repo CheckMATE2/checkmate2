@@ -1,0 +1,19 @@
+#include "@@analysis@@.h"
+// AUTHOR: @@author@@
+//  EMAIL: @@authoremail@@
+void @@Analysis@@_CR::initialize() {
+  setInformation(""
+@@longInfo@@
+  "");
+  setLuminosity(@@lumi@@*units::INVFB);      
+  setAnalysisName("@@analysis@@_CR");
+  // You should initialize any declared variables here
+}
+
+void @@Analysis@@_CR::analyze() {
+  // Your eventwise analysis code goes here
+}
+
+void @@Analysis@@_CR::finalize() {
+  // Whatever should be done after the run goes here
+}       

@@ -1,0 +1,6 @@
+SR         obs  bkg  bkg_err  S95_obs  S95_exp  
+SR1        37   24   3        26       12.9       
+tN_high    5    3.8  0.8      7.2      5.5      
+bC2x_diag  37   22   3        27.5     12.4       
+bC2x_med   14   13   2        9.9      9        
+bCbv       7    7.4  1.8      7.2      7.3      

@@ -1,0 +1,77 @@
+[Parameters]
+Name: My_New_Run
+#### The following examples run a) all 8TeV-atlas analyses, b) all atlas-stop-analyses and a specific cms analysis, c) three specific analyses
+Analyses: atlas & 8TeV
+#Analyses: atlas & stops & 8TeV, cms_sus_13_016
+#Analyses: atlas_conf_2013_061, atlas_conf_2013_047, atlas_conf_2013_049
+
+#### CheckMATE results should be stored in the following directory
+# OutputDirectory: ~/CheckMATEResults
+#### In case target output directory already exists, do the following
+####   Overwrite old directory
+# OutputExists: Overwrite
+####   Keep the old results and add the below (either as a new process, which adds to the signal prediction, or as an already existing process to add statistics)
+# OutputExists: Add
+####   Always ask (standard)
+# OutputExists: Ask
+
+#### Don't print output on screen
+# QuietMode: True
+#### Avoids the input query and starts CheckMATE straight away if the input setup is valid
+# SkipParamCheck: True
+#### Don't do any detector simulation (useful if one only wants to create Pythia .hepmc files)
+# SkipDelphes: True
+#### Don't do any analysis step (useful if one only wants to create Delphes .root files)
+# SkipAnalysis: True
+#### Don't do any evaluation (in case one just wants the analysis result)
+# SkipEvaluation: True
+
+#### Calculate signal efficiency for each signal region
+EffTab: True
+#### Calculate CLs for all signal regions of all tested analyses (can take a long time)
+# FullCLs: True
+#### Calculate CLs for the signal region with the largest r-value
+BestCLs: 5
+#### Calculate simplified likelihood for each signal region
+Likelihood: True
+
+#### Provide a SUSY-LesHouches spectrum in case one wants to generate events with Pythia8
+SLHAFile: testspectrum.slha
+#### If Pythia8 is used for event generation, store the intermediate .hepmc file
+WritePythiaEvents: True
+#### If Delphes runs, store the intermediate .root file
+WriteDelphesEvents: True
+#### Tell Delphes that some new BSM particles are invisible
+InvisiblePIDs: 35, 36
+#### Specify RandomSeed of all CheckMATE components to get deterministic results
+RandomSeed: 42
+#### Store _unevaluated_ results for each  event and each process 
+EventResultFileColumns: analysis, sr, signal_normevents, signal_err_stat, signal_err_sys, signal_err_tot
+ProcessResultFileColumns: analysis, sr, signal_normevents, signal_err_stat, signal_err_sys, signal_err_tot
+#### Store evaluated overall result and per-analysis
+TotalResultFileColumns: analysis, sr, obs, bkg, bkgerr, S95obs, S95exp, robscons, rexpcons, robsconssysonly, rexpconssysonly, CLsobs, CLsexp
+BestPerAnalysisResultFileColumns: analysis, sr, obs, bkg, bkgerr, S95obs, S95exp, robscons, rexpcons, CLsobs, CLsexp
+
+#### Process Information (Each new process 'X' must start with [X])
+#### Example 1: Running on a .hep event file. The cross section must be given
+[myprocess]
+Events: testfile.hep
+XSect: 4 FB
+
+#### Example 2: Generating events with pythia8 for a particular SUSY process. This requires 'SLHAFile' in Optional Parameters
+#[myprocess2]
+#Pythia8Process: p p > go go
+
+#### Example 3: Showering LHE events using Pythia8
+#[myprocess3]
+#Events: testfile.lhe
+
+#### Example 4: Providing a Pythia8 settings card which includes the exact to-be-generated process
+#[myprocess4]
+#Pythia8Card: testpythia8card.in
+
+## Example 5: Doing one of the above examples but providing a KFactor to scale the cross section and giving a relative systematic error
+[myprocess5]
+Pythia8Process: p p > go go
+KFactor: 1.5
+XSectErr: 10 %

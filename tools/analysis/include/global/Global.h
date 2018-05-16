@@ -1,0 +1,1 @@
+../../../fritz/include/global/Global.h

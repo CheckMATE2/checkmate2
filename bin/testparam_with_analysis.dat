@@ -1,0 +1,9 @@
+# This is a minimal working example
+[Parameters]
+Name: My_New_Run
+Analyses: atlas_1405_7875
+
+[myprocess]
+XSect: 4 FB
+Events: example_run_cards/auxiliary/testfile.hep
+

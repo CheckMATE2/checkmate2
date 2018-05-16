@@ -1,0 +1,18 @@
+[Parameters]
+Name: generate_hepmc_with_pythia
+
+# Run all 8TeV-atlas analyses
+Analyses: atlas & 8TeV 
+
+# Use this spectrum
+SLHAFile: auxiliary/testspectrum.slha 
+
+# store the intermediate HepMC file
+WritePythiaEvents: True 
+
+
+
+#### Generate events with pythia8 for a particular SUSY process.
+[gluinos_with_pythia]
+Pythia8Process: p p > go go
+

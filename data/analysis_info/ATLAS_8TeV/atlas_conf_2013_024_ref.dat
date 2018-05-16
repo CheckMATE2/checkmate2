@@ -1,0 +1,5 @@
+# This file is not used by CheckMATE 2. To edit values by hand, please refer to the corresponding var.j file!
+SR   S95_obs  S95_exp  S95_exp_errp  S95_exp_errm  bkg   bkg_err  obs  
+SR1  10.0     10.6     5.5           1.7           17.5  3.2      15   
+SR2  3.6      5.3      3.2           1.7           4.7   1.5      2    
+SR3  3.9      4.5      1.9           0.7           2.7   1.2      1    

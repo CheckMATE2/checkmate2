@@ -1,0 +1,615 @@
+CheckMATE - Changelog
+
+Ver 2.0.26
+---------
+        
+2018-04-16   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+        
+    ~ fixed center-of-mass energy setting and unifying lepton isolation
+
+Ver 2.0.25
+---------
+
+2018-04-16   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
+        
+    ~ added atlas_1804_03602
+
+
+
+	
+Ver 2.0.24
+---------
+        
+2018-03-28   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+        
+    ~ added atlas_1706_03731
+
+Ver 2.0.23
+---------
+        
+2018-03-28   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
+        
+    ~ fixed missing files in atlas_1507_05493  
+
+	
+Ver 2.0.23
+---------
+        
+2018-03-21   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
+        
+    ~ fixed tools/analysis/Makefile.am  
+
+	
+Ver 2.0.22
+---------
+	
+2018-03-21   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
+
+    ~ added atlas_conf_2016_066 (GMSB search)
+
+	
+Ver 2.0.21
+---------
+
+2018-03-16   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+
+    ~ fixed bug in atlas_1712_08119
+
+	
+Ver 2.0.20
+---------
+
+2018-03-12   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
+
+    ~ added cms_sus_16_048
+
+
+	
+Ver 2.0.20
+---------
+
+2018-03-12   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
+
+    ~ added cms_sus_16_025
+
+
+Ver 2.0.19
+---------
+
+2018-03-12   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
+
+    ~ added cms_sus_16_039
+
+
+Ver 2.0.18
+---------
+
+2018-03-08   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ added atlas_1708_07875 (EW SUSY, taus)
+    ~ added atlas_1802_03158 (GMSB photons)
+    ~ new JES function for ATLAS 13
+
+Ver 2.0.17
+---------
+
+2018-02-14   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ added atlas_1712_02332 (jets+MET, gluinos, squarks)
+    ~ added atlas_1712_08119 (electroweak soft leptons)
+
+Ver 2.0.16
+---------
+
+2017-12-14   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
+
+    ~ added atlas_1710_11412 (ttbar + met and bbar + met, simplified DM)
+
+	
+
+	
+Ver 2.0.15
+---------
+
+2017-11-20   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
+             Krzysztof Rolbiecki
+
+    ~ added atlas_conf_2017_040 (Z + met)
+    ~ moved atlas_1609_01599 to alpha
+
+Ver 2.0.14
+---------
+2017-10-13   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ Added atlas_1709_04183 (stops jets+MET)
+
+	Ver 2.0.14
+	---------
+
+	2017-11-20   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
+
+	~ added atlas_1507_05493 (GMSB search)
+	
+	
+	
+Ver 2.0.13
+---------
+
+2017-07-11   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ Added atlas_1704_03848 (monophoton)
+    ~ Update atlas_conf_2017_022
+
+
+Ver 2.0.12
+---------
+
+2017-04-27   Frederic Poncza <poncza@physik.rwth-aachen.de>
+
+    ~ Fixed bug in 7TeV and 8TeV Analysis Handlers, true_c eta cut was wrong.
+
+
+2017-04-19   Ferdinand Eiteneuer <ferdinand.eiteneuer@rwth-aachen.de>
+
+    ~ Fixed bug in atlas_conf_2016_096, the SR 3LI was not defined correctly.
+
+Ver 2.0.11
+---------
+
+2017-03-24   Jamie Tattersall <tattersall@physik.rwth-aachen.de>
+
+    ~ Allow filesizes larger than 2GB to be read on 32bit machines (thanks to Liangliang Shang)
+
+
+Ver 2.0.10
+---------
+
+2017-03-21   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ Added atlas_conf_2017_022 and atlas_1609_01599 to beta_private
+
+
+Ver 2.0.9
+---------
+
+2017-03-14   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
+    ~ added atlas_1507_05493 in beta_private
+	
+Ver 2.0.8
+---------
+
+2017-03-03   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ Fixed bug in atlas_2014_010_hl_3l (thanks to Sho Iwamoto and Daniel Dercks)
+
+
+Ver 2.0.7
+---------
+
+2017-02-28   Jamie Tattersall <tattersall@physik.rwth-aachen.de>
+
+    ~ Fixed bug that stopped generic experiment or energy selection of analyses working (many analyses did not have correct tags)
+
+
+Ver 2.0.6
+---------
+
+2017-02-28   Jamie Tattersall <tattersall@physik.rwth-aachen.de>
+
+    ~ Analysis list cleaned up and superseded analyses commented out
+    ~ Unvalidated analyses commented out in alpha version
+
+
+Ver 2.0.5
+---------
+
+2017-02-27   Jamie Tattersall <tattersall@physik.rwth-aachen.de>
+
+    ~ Inverse isolation method in AnalysisBase.h could print TLorentzVector warning if calo tower was empty
+    ~ Tidied up atlas_1602_09058
+
+
+Ver 2.0.4
+---------
+
+2017-02-27   Jamie Tattersall <tattersall@physik.rwth-aachen.de>
+
+    ~ Improved s95 values for atlas_conf_2016_096 (thanks to Matthew Low)
+
+2017-02-26   Jamie Tattersall <tattersall@physik.rwth-aachen.de>
+
+    ~ Better instructions added in AnalysisManager (thanks to Thomas Faber)
+    ~ atlas_1604_07773 no longer uses to_string
+
+2017-02-09   Jamie Tattersall <tattersall@physik.rwth-aachen.de>
+
+    ~ cms_exo_14_014 added (thanks to Ahmed Hammad)
+
+
+Ver 2.0.3
+---------
+
+2017-02-09   Jamie Tattersall <tattersall@physik.rwth-aachen.de>
+
+    ~ More informative comments added when not linking gzip
+
+2017-01-24   Jamie Tattersall <tattersall@physik.rwth-aachen.de>
+
+    ~ Updated 14TeV calorimeter to new delphes specification (same as 13TeV)
+
+2017-01-23   Jamie Tattersall <tattersall@physik.rwth-aachen.de>
+
+    ~ Fixed formatting of ecm in atlas_conf_2016_054_var.j, 078_var.j, 096_var.j
+
+2017-01-20   Jamie Tattersall <tattersall@physik.rwth-aachen.de>
+
+    ~ Typos fixed in data for atlas_1605_03814
+    ~ Lepton seg fault fix for atlas_conf_2013_021
+    ~ CheckMATE now compiles with atlas_conf_2016_096
+
+
+Ver 2.0.2
+---------
+
+2017-01-16   Ferdinand Eiteneuer <ferdinand.eiteneuer@rwth-aachen.de>
+
+    ~ Added atlas_conf_2016_096
+
+
+Ver 2.0.1
+---------
+
+2017-01-16   Jong Soo Kim <jongsoo.kim@tu-dortmund.de>
+
+    ~ Added atlas_conf_2016_078 based on atlas_1605_03814
+
+2017-01-16   Jong Soo Kim <jongsoo.kim@tu-dortmund.de>
+
+    ~ Added atlas_conf_2016_054 based on atlas_1605_04282
+	
+2016-12-30   Jamie Tattersall <tattersall@physik.rwth-aachen.de>
+
+    ~ If pythia8 is compiled with gzip, CheckMATE must be too
+    ~ Configuration now possible with --with-gzipinc and --with-gziplib that should point to gzip header and gzip library (.so) directories respectively that were used to compile pythia 8.
+
+2016-12-30   Jamie Tattersall <tattersall@physik.rwth-aachen.de>
+
+    ~ added possibility to use own mg5 configuration file
+    ~ set as default mg5 to not open browser
+    ~ set as default mg5 to not plot distributions
+
+
+Ver 2.0.0
+---------
+
+2016-12-09   Daniel Dercks <daniel.dercks@desy.de>
+
+    ~ added parameter -xsth/--xsectthreshold/"XSectThreshold: " used for internal event generation with MG5 + Pythia8: If the unshowered cross section determined by MG5 is below the given threshold, the events are not further processed and all results of that event are automatically set to 0 (to save time and not analysing processes with tiny physical importance)
+
+
+Ver 2.0.0
+---------
+
+2016-12-01   Daniel Dercks <daniel.dercks@desy.de>
+
+    ~ Uploaded Version 2.0.0 with many things changed, fixed and updated
+
+
+Ver 1.2.1
+---------
+
+2015-10-08   Jamie Tattersall <tattersall@physik.rwth-aachen.de>
+
+    ~ Large R jet signal regions added to atlas_1308_1841 (thanks to Liangliang Shang)
+
+2015-09-07   Jamie Tattersall <tattersall@physik.rwth-aachen.de>
+
+    ~ Corrected bug in missingET_rel calculation (thanks to Liangliang Shang)
+
+2015-07-30   Jamie Tattersall <tattersall@physik.rwth-aachen.de>
+
+    ~ Added Gravitinos as MET (thanks to Oscar Vives)
+
+2015-07-03   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ Added Gravitinos as MET (thanks to Oscar Vives)
+
+2015-07-03   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ Formatting error fixed in atlas_1308_1841 ref file (would lead top spurious exclusion) (thanks to Oscar Vives)
+
+
+2015-04-30   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ atlas_1308_1841 added (thanks to Junjie Cao, Liangliang Shang, Jin Min Yang, Yang Zhang)
+    ~ atlas_1405_7875 added (thanks to Junjie Cao, Liangliang Shang, Jin Min Yang, Yang Zhang)
+    ~ atlas_1503_03290 added (thanks to Junjie Cao, Liangliang Shang, Jin Min Yang, Yang Zhang)
+    ~ cms_1502_06031 added (thanks to Junjie Cao, Liangliang Shang, Jin Min Yang, Yang Zhang)
+    ~ Deprecated atlas_conf_2013_047 (replaced by atlas_1405_7875)
+    ~ Deprecated cms_sus_12_019 (replaced by cms_1502_06031)
+
+Ver 1.2.0
+---------
+2015-02-17   Daniel Schmeier <daschm@th.physik.uni-bonn.de>
+
+    ~ Added more accurate high-energy momentum smearing (thanks to Florian Jetter)
+
+2015-04-30   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ Separate CMS analysis template added (thanks to Shang Liang)
+
+2015-04-01   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ Typos fixed in analysis manager (thanks to Shang Liang)
+
+2015-03-17   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ New compiling instructions for new analyses
+
+2015-02-26   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ Fixed cutflow in atlas_1407_0583
+
+2015-02-19   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ Deprecated atlas_conf_2013_037 (replaced by atlas_1407_0583)
+
+2015-02-18   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ Added atlas_1502_01518 (Monojet plus missing energy)
+
+2015-02-17   Daniel Schmeier <daschm@th.physik.uni-bonn.de>
+
+    ~ Refined some of the explanations in the AnalysisManager
+    ~ AnalysisManager now calculates S95_obs and S95_exp automatically on the fly
+    ~ AnalysisManager allows analyses without observation and locks them for statistical evaluation
+    ~ AnalysisManager can edit analysis information easier
+    ~ AnalysisManager stores name and email of the author and prints it into analysis files
+    ~ _var.j data files for analyses are easier to read/edit
+    ~ Changed approximation of bkg_err when asymmetric errors are given
+    ~ AnalysisBase files show detailled DoxyGen documentation and are split and ordered into subfiles
+    ~ FinalStateObject class allows for easier combination of electron-, muon-, jet- or etmiss objects inside analysis
+    
+    ~ atlas_1402_7029 updated in the form as it appears in the AnalysisManager manual
+
+2015-02-17   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ Added option to create efficiency tables
+
+
+
+Ver 1.1.16
+----------
+2015-02-02   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ Added lock so that atlas and cms analyses can no longer be run simultaneously (many thanks to Michihisa Takeuchi)
+
+
+Ver 1.1.15
+----------
+2015-01-23   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ Fixed bug in cms_1405_7570 (many thanks to Michihisa Takeuchi)
+
+2015-01-22   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ Fixed bug in charm tagging (many thanks to Luka Mitzka)
+
+
+Ver 1.1.14
+----------
+2014-12-16   Daniel Schmeier < daschm@th.physik.uni-bonn.de>
+
+    ~ Tau tags activated in detector card for atlas_1402_7029
+
+
+2014-12-10   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ Renamed mCTx -> mCTperp
+    ~ Added mCTparallel
+    ~ Generalised mT to include masses for final state particles
+
+2014-12-03   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ Fixed bugs in signal regions for atlas_1407_0583 (bcd_bulk and threeBody)
+    
+2014-11-25   Daniel Schmeier < daschm@th.physik.uni-bonn.de>
+    ~ Fixed bug in analysis which caused, under circumstanced, that wrong btags are
+    used from the Delphes tree.
+    ~ log_analysis.txt now always contains the internal parameters the analysis executable
+    was called with.
+    
+    
+    
+Ver 1.1.13
+---------
+
+2014-11-10   Daniel Schmeier < daschm@th.physik.uni-bonn.de>
+    ~ Updated atlas_1402_7029 with 1tau and 2tau signal regions
+    
+2014-10-28   Daniel Schmeier <daschm@th.physik.uni-bonn.de>
+
+    ~ Fixed bug in tauid module as soon as the signal contains more than 2 taus.
+    ~ 3 prong ID is now applied to 2 track jet candidates.
+    ~ Fixed problem with HepMC weights
+
+
+Ver 1.1.12
+---------
+
+2014-10-23   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ MET smearing due to pile-up added (20 GeV gaussian) - Thanks to Travis Martin
+
+2014-10-23   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ Added opposite flavour signal regions to cms_sus_12_019
+
+2014-10-22   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ Added alphaT and razor to analysis base
+
+
+
+Ver 1.1.10
+---------
+
+2014-10-22   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ Bugfix in Makefile for cms_1301_4698_WW
+
+2014-09-09   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+    ~ cms_sus_13_016 added and validated
+    ~ atlas_1308_2631 validated
+
+
+
+Ver 1.1.9
+---------
+
+2014-09-09   Daniel Schmeier <daschm@th.physik.uni-bonn.de>
+
+    ~ Author + Email is now asked for in the analysis manager and printed into the analyses
+    ~ Spaces in run name are replaced by underscores to prevent problems with filenames
+    ~ Errors during the delphes analysis chain are properly caught and lead to a well defined error message
+    ~ Giving units in lowercase does not produce problems anymore
+
+    
+Ver 1.1.8
+---------
+
+2014-08-13   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+        ~ Added likelihood calculator option
+
+2014-07-16   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+        ~ Add mT to list of functions in AnalysisBase
+
+
+Ver 1.1.7
+---------
+
+2014-07-11   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+        ~ Fixed Delphes bug in forward ATLAS calorimeter
+
+2014-07-01   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+        ~ Added substantial number of unvalidated analyses
+
+
+Ver 1.1.6
+---------
+
+2014-05-13   Daniel Schmeier <daschm@th.physik.uni-bonn.de>
+
+        ~ Fixed bugs in isolation module writers (sometimes not the
+           right setting was considered)
+
+
+Ver 1.1.5 
+---------
+
+2014-05-06   Daniel Schmeier <daschm@th.physik.uni-bonn.de>
+
+        ~ Updated STDHep interpreter in Delphes to be compatible with
+           the most recent MadGraph_aMC@NLO update
+
+
+2014-05-02   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+        ~ Fixed tau-tagging radius
+
+2014-04-18   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+        ~ Added makefile option to allow autoreconf on macs
+
+2014-04-09   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+        ~ Added mctlib JHEP 0804:034,2008 (arXiv:0802.2879 [hep-ph]). 
+      The algorithm is described in detail in arXiv:0910.0174 [hep-ph].
+      No current analyses use this variable (tba)
+    ~ Added mt2bl_bisect (arXiv:1203.4813 [hep-ph])
+      No current analyses use this variable (tba)
+
+Ver 1.1.4 
+---------
+
+2014-03-11   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+        ~ Made commands in AnalysisManager clearer (thanks to Krzysztof Rolbiecki for suggestions).
+
+
+Ver 1.1.3
+---------
+
+2014-03-04   Daniel Schmeier <daschm@th.physik.uni-bonn.de>
+
+        ~ Bugfix in atlas_conf_2013_049, which did not properly count signal regions
+          signal regions with electrons
+
+
+Ver 1.1.2
+---------
+
+2014-02-10   Daniel Schmeier <daschm@th.physik.uni-bonn.de>
+
+        ~ Fixed removal of old result directory if choosing 'overwrite' option
+        
+
+Ver 1.1.1
+---------
+
+2014-01-31   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+
+        ~ Fixed bug in atlas_conf_2012_104 that gave SegFault for events with 0 jets.
+
+
+2014-01-31   Daniel Schmeier <daschm@th.physik.uni-bonn.de>
+
+        ~ Signal regions with 0 events passing get a statistical error of 1 event (for the whole process)
+        ~ If two signal regions have equal r / CLs, the one with the smallest S95_max is chosen
+        ~ Bugfix in final evaluation output
+
+Ver 1.1.0
+---------
+
+2014-01-22   Daniel Schmeier <daschm@th.physik.uni-bonn.de>
+
+        ~ Removed bug in determination of the overall most sensitive signal region.
+        ~ Seed for random number generator can now be set by using "RandomSeed: " in 'Optional
+          Parameters' block or alternatively -rs in the command line version.
+        ~ 'Analyses' input option also accepts 'atlas', 'cms' or 'all', which automatically finds
+          and uses all corresponding analyses.
+        ~ 'best_signal_regions.txt' in results/evaluation sums up all important information on the
+          most sensitive signal region of each individual analysis.
+
+
+Ver 1.0.2
+---------
+
+2014-01-04   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+        
+        ~ Typo in reference data for atlas_conf_2012_147 fixed.
+       
+
+Ver 1.0.1
+---------
+
+2013-12-27   Jamie Tattersall <tattersall@thphys.uni-heidelberg.de>
+        
+        ~ Muons added to met vector in atlas_conf_2013_061, atlas_conf_2013_089 and cms_1303_2985. 
+        ~ Reference data added for atlas_conf_2013_061.
+
+
+Ver 1.0.0
+---------
+       
+2013-12-05   Daniel Schmeier <daschm@th.physik.uni-bonn.de>
+        
+        ~ First version of CheckMATE goes public. 
+
+

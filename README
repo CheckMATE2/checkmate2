@@ -1,0 +1,19 @@
+            / ___| |__   ___  ___| | _|  \/  |  / \|_   _| ____|
+           | |   | '_ \ / _ \/ __| |/ / |\/| | / _ \ | | |  _|  
+           | |___| | | |  __/ (__|   <| |  | |/ ___ \| | | |___ 
+            \____|_| |_|\___|\___|_|\_\_|  |_/_/   \_\_| |_____| 2.0
+
+                                             *** Getting Started
+
+
+Congratulations! If you are able to read this file, you apparently managed to download and extract the CheckMATE tarball! Now there is only a couple of steps which need to be done in order to install CheckMATE.
+
+CheckMATE uses the standard ./configure + make + make install chain. For the configuration step, you must not provide --prefix (it will screw up the installation) but you have to provide the following parameters:
+--with-rootsys=(ROOTDIR)
+--with-delphes=(DELPHESDIR)
+
+If desired, event generation can be enabled by furthermore providing the following optional parameters
+--with-madgraph=(MG5MCNLODIR)
+--with-pythia=(PYTHIADIR)
+
+If you are not an expert on this subject, we highly recommend to go to the 'Installation Tutorial' on our website, http://checkmate.hepforge.org . There we will go through the above configuration step in all detail and most importantly explain to you how to find and install missing libraries. 

@@ -1,0 +1,32 @@
+#ifndef @@ANALYSIS@@_H_
+#define @@ANALYSIS@@_H_
+// AUTHOR: @@author@@
+//  EMAIL: @@authoremail@@
+#include "AnalysisBase.h"
+
+class @@Analysis@@ : public AnalysisBase {
+  public:
+    @@Analysis@@() : AnalysisBase()  {}               
+    ~@@Analysis@@() {}
+  
+    void initialize();
+    void analyze();        
+    void finalize();
+
+  private:
+};
+
+
+class @@Analysis@@_CR : public AnalysisBase {
+  public:
+    @@Analysis@@_CR() : AnalysisBase()  {}               
+    ~@@Analysis@@_CR() {}
+    
+    void initialize();
+    void analyze();        
+    void finalize();
+
+  private:
+};
+
+#endif

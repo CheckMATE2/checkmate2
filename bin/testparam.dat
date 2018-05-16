@@ -1,0 +1,8 @@
+# This is a minimal working example
+[Parameters]
+Name: My_New_Run
+
+[testprocess]
+XSect: 1 FB
+Events:  example_run_cards/auxiliary/testfile.hep
+

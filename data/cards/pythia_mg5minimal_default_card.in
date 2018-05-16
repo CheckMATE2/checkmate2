@@ -1,0 +1,4 @@
+Init:showChangedSettings = on      ! list changed settings
+Init:showChangedParticleData = off ! list changed particle data
+Main:timesAllowErrors = 3          ! how many aborts before run stops
+PartonLevel:MPI = off              ! no multiparton interactions

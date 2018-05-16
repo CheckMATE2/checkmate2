@@ -1,0 +1,3 @@
+#Name                          NSR  Description                                                      Lumi    CR?  
+#Unvalidated
+#atlas_1210_2979                1    ATLAS, WW measurement with 2 leptons (7TeV)                      4.6     no   
