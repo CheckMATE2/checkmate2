@@ -316,7 +316,9 @@ void AnalysisHandler::setupAnalyses(
                 bTagIds,
                 "btag"
                 );
-        bookAnalysis(label, whichTags, analysisParameters);
+        for(int iBranch=0; iBranch<nReweightingBranches; iBranch++){
+            bookAnalysis(label+"_target"+Global::intToStr(iBranch+1), whichTags, analysisParameters);    
+        }        
     }
 }
 
@@ -347,16 +349,31 @@ std::map<std::string,std::string>  AnalysisHandler::setupAnalysisParameters(
 void AnalysisHandler::setupAnalysisHandler(
         Properties props,
         std::map<std::string,EventFile> eventFiles,
-        std::map<std::string,DelphesHandler*> delphesHandler
+        std::map<std::string,DelphesHandler*> delphesHandler,
+        std::map<std::string,Reweighting,Handler*> reweightingHandler
         ) {
     std::pair<bool,std::string> pair;
     analysisLogFile = lookupOrDefault(props, keyAnalysisHandlerLogFile, "analysis");
+    
     pair = maybeLookup(props, keyAnalysisHandlerEventFile);
     bool haveEventFile = pair.first;
     std::string eventFileLabel = pair.second;
+    
     pair = maybeLookup(props, keyAnalysisHandlerDelphesHandler);
     bool haveDelphesHandler = pair.first;
     std::string delphesHandlerLabel = pair.second;
+    
+    pair = maybeLookup(props, keyAnalysisHandlerReweightingHandler);
+    bool haveReweightingHandler = pair.first;
+    std::string reweightingHandlerLabel = pair.second;
+    
+    if (haveEventFile && haveDelphesHandler && reweightinghandler) {
+        Global::abort(
+                name,
+                "Only one of eventfile, delpheshandler and reweightinghandler can be used at the same time in"
+                    " an analysishandler section"
+                );
+    }
     if (haveEventFile && haveDelphesHandler) {
         Global::abort(
                 name,
@@ -364,10 +381,24 @@ void AnalysisHandler::setupAnalysisHandler(
                     " an analysishandler section"
                 );
     }
-    if (!haveEventFile && !haveDelphesHandler) {
+    if (haveEventFile && haveReweightingHandler) {
         Global::abort(
                 name,
-                "One of eventfile and delpheshandler is required in an analysishandler section"
+                "Only one of eventfile and reweightinghandler can be used at the same time in"
+                    " an analysishandler section"
+                );
+    }
+    if (haveReweightingHandler && haveDelphesHandler) {
+        Global::abort(
+                name,
+                "Only one of reweightinghandler and delpheshandler can be used at the same time in"
+                    " an analysishandler section"
+                );
+    }
+    if (!haveEventFile && !haveDelphesHandler && !haveReweightingHandler) {
+        Global::abort(
+                name,
+                "One of eventfile, delpheshandler and reweightinghandler is required in an analysishandler section"
                 );
     }
     if (haveEventFile) {
@@ -378,7 +409,7 @@ void AnalysisHandler::setupAnalysisHandler(
                 "Can not find event file with label "+eventFileLabel
                 );
         setup(eventFile);
-    } else {
+    } eilf(haveDelphesHandler) {
         DelphesHandler* dHandler = lookupRequired(
                 delphesHandler,
                 delphesHandlerLabel,
@@ -386,6 +417,14 @@ void AnalysisHandler::setupAnalysisHandler(
                 "Can not find delphes handler with label "+delphesHandlerLabel
                 );
         setup(dHandler);
+    } else {
+        ReweightingHandler* rHandler = lookupRequired(
+                reweightingHandler,
+                reweightingHandlerLabel,
+                name,
+                "Can not find reweighting handler with label "+reweightingHandlerLabel
+                );
+        setup(rHandler);
     }
 }
 
@@ -395,6 +434,7 @@ void AnalysisHandler::setup(
         Config conf,
         std::map<std::string,EventFile> eventFiles,
         std::map<std::string,DelphesHandler*> delphesHandler,
+        std::map<std::string,ReweightingHandler*> reweightingHandler,
         bool haveRandomSeed,
         int randomSeed
         ) {
@@ -430,6 +470,7 @@ void AnalysisHandler::setup(
             haveRandomSeed,
             randomSeed
             );
+    
     setupAnalyses(
             conf,
             label,
@@ -439,7 +480,7 @@ void AnalysisHandler::setup(
             muonIsoIds,
             photonIsoIds
             );
-    setupAnalysisHandler(props,eventFiles,delphesHandler);
+    setupAnalysisHandler(props,eventFiles,delphesHandler,reweightingHandler);
 }
 
 void AnalysisHandler::setup(EventFile file) {
@@ -470,11 +511,13 @@ void AnalysisHandler::setup(EventFile file) {
     }
     Global::print(name,
                   "successfully loaded branches in ROOT file");
-}
+}   
 
 
-void AnalysisHandler::setup( DelphesHandler* dHandlerIn) {
+void AnalysisHandler::setup(DelphesHandler* dHandlerIn) {
     dHandler = dHandlerIn;
+
+    nReweightingBranches = dHandler->nReweightingBranches;
 
     Global::print(name, "Linking to "+dHandler->name+" tree");
     // link all required branch pointers to the respective pointers
@@ -516,6 +559,43 @@ void AnalysisHandler::setup( DelphesHandler* dHandlerIn) {
 }
 
 
+void AnalysisHandler::setup(ReweightingHandler* rHandlerIn) {
+    /*
+    *
+    * I am really not sure what this treeReader actually is.
+    * Is this function just to initialize the branches? Are they empty after this function is done?  
+    * 
+    */
+    rHandler = rHandlerIn;
+
+    nReweightingBranches = rHandler->nBranches;
+
+    Global::print(name, "Linking to rHandler "+rHandler->name);
+
+    treeReader = rHandler->initTreeReader();
+
+    branchEvent = treeReader->UseBranch("Event");
+    branchGenParticle = treeReader->UseBranch("Particle");
+    branchJet = treeReader->UseBranch("Jet");
+    branchTrack = treeReader->UseBranch("Track");
+    branchTower = treeReader->UseBranch("Tower");
+    branchElectron = treeReader->UseBranch("Electron");
+    branchMuon = treeReader->UseBranch("Muon");
+    branchPhoton = treeReader->UseBranch("Photon");
+    branchMissingET = treeReader->UseBranch("MissingET");
+    if(!branchGenParticle || !branchEvent || !branchJet || !branchTrack ||
+       !branchTower || !branchElectron || !branchMuon || !branchPhoton ||
+       !branchMissingET) {
+        Global::abort(name,
+                      "could not link all required branches to the "
+                      +rHandler->name+" equivalents!");
+    }
+    Global::print(name,
+                  "successfully loaded branches in ROOT file");
+}
+
+
+
 bool AnalysisHandler::processEvent(int iEvent) {
     if(!hasEvents) {
         return false;
@@ -534,6 +614,28 @@ bool AnalysisHandler::processEvent(int iEvent) {
     Global::unredirect_cout();
     return true;
 }
+
+
+
+bool AnalysisHandler::processEvent(int iEvent, int iBranch) {
+    if(!hasEvents) {
+        return false;
+    }
+    if(!readParticles(iEvent, iBranch))
+        return false;
+    postProcessParticles();
+    linkObjects();
+    for(int a = 0; a < listOfAnalyses.size(); a++) {
+        Global::unredirect_cout(); // This needs to stay, don't ask why - I don't know either.
+        Global::redirect_cout(analysisLogFile+"_"+listOfAnalyses[a]->analysis+".log");
+        listOfAnalyses[a]->processEvent(iEvent);
+        //FIXME It must be possible to do this nicer...
+        delete listOfAnalyses[a]->missingET;
+    }
+    Global::unredirect_cout();
+    return true;
+}
+
 
 void AnalysisHandler::setCrossSection(double xsect,
                                       double xsecterr) {
@@ -762,13 +864,19 @@ void AnalysisHandler::bookAnalysesViaInputFile(std::string configFile,
 
 
 
-bool AnalysisHandler::readParticles(int iEvent) {
+bool AnalysisHandler::readParticles(int iEvent, int iBranch) {
     // in ROOT file mode, we have to let the treeReader read the branches
-    if(treeReader) {
+    if(rHandler) {
+        if (!rHandler->hasNextEvent()) {
+            hasEvents = false;
+            return false;
+        }
+        rHandler->fillTreeReader(iBranch);
+    }else if(treeReader) {
         if(iEvent >= treeReader->GetEntries()) {
             hasEvents = false;
             return false; // abort the Fritz event loop
-	}
+	    }
         treeReader->ReadEntry(iEvent);
     } else {
         if (!dHandler->hasNextEvent()) {
@@ -794,6 +902,7 @@ bool AnalysisHandler::readParticles(int iEvent) {
             true_tau.push_back((GenParticle*)branchGenParticle->At(i));
         }
     }
+
     branchGenParticle->Clear();
 
     tracks.clear();
@@ -1114,5 +1223,7 @@ void AnalysisHandler::linkObjects() {
         listOfAnalyses[a]->electronIsolationTags = electronIsolationTags;
         listOfAnalyses[a]->muonIsolationTags = muonIsolationTags;
         listOfAnalyses[a]->photonIsolationTags = photonIsolationTags;
+
+        listOfAnalyses[a]->nReweightingBranches = nReweightingBranches;
     }
 }

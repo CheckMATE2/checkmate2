@@ -29,6 +29,7 @@
 #include "CMExRootTreeWriter.h"
 
 #include "DelphesHandler.h"
+#include "ReweightingHandler.h"
 #include "AnalysisBase.h"
 
 #include "Global.h"
@@ -62,7 +63,7 @@ public:
         bool divideByPTCand;
     };
 
-    //! Specific for jet flavour tags
+        //! Specific for jet flavour tags
     struct jet_tag_definition : tag_definition {
         int counter; //!< which internal tag number
         double eff; // efficiency working point, [0,1]
@@ -82,21 +83,25 @@ public:
     //! \conf the complete fritz configuration
     //! \eventFiles all available event files
     //! \delphesHandler all available delphes handler
+    //! \reweightingHandler all available reweighting handler
     void setup(
             Properties props,
             std::string label,
             Config conf,
             std::map<std::string,EventFile> eventFiles,
             std::map<std::string,DelphesHandler*> delphesHandler,
+            std::map<std::string,ReweightingHandler*> reweightingHandler,
             bool haveRandomSeed,
             int randomSeed
             );
 
     //! Processes event via all loaded analyses.
     /** \param iEvent the index of the event to be analysed, starting at 0.
+     *  \param iBranch the index of the reweighting branch.
      *  \return False if event could not be processed, else True.
      */
     bool processEvent(int iEvent);
+    bool processEvent(int iEvent, int iBranch);
 
     //! Sets cross section for analyses a posteriori
     /* Cross section can either be defined via eventParameters in the setup()
@@ -112,8 +117,16 @@ public:
     void finish();
 
     
+    //! DelphesHandler object, if used
+    DelphesHandler* dHandler;
+
+    //! ReweightingHandler object, if used
+    ReweightingHandler* rHandler;
+
     //! name which is printed in logfile
     std::string name;
+
+    int nReweightingBranches;
     
 protected:
     
@@ -189,9 +202,6 @@ protected:
 
     //! EventFile object
     EventFile eventFile;
-
-    //! DelphesHandler object, if used
-    DelphesHandler* dHandler;
 
     //! ROOT TChain object to read .root file
     TChain* rootFileChain;
@@ -271,10 +281,12 @@ private:
     //! \param props Properties of the AnalysisHandler
     //! \param eventFiles all available event files
     //! \param delphesHandler all available delphes handler
+    //! \param reweightingHandler all available reweighting handler
     void setupAnalysisHandler(
             Properties props,
             std::map<std::string,EventFile> eventFiles,
-            std::map<std::string,DelphesHandler*> delphesHandler
+            std::map<std::string,DelphesHandler*> delphesHandler,
+            std::map<std::string,ReweightingHandler*> reweightingHandler
             );
 
     //! \brief Links analyses to a root file
@@ -295,8 +307,8 @@ private:
                                   std::string logFile,
                                   Param_Map eventParameters);
 
-    //! Fills particle containers for given event
-    bool readParticles(int iEvent);
+    //! Fills particle containers for given event and given reweightingBranch
+    bool readParticles(int iEvent, int iBranch=0);
 
     //! Interal subfunctions to isolate particles
     void isolateElectrons(); //!< isolates electrons
