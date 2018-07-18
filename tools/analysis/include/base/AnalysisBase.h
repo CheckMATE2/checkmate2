@@ -24,8 +24,11 @@
 #include "external/ExRootAnalysis/ExRootTreeReader.h"
 #include "external/ExRootAnalysis/ExRootResult.h"
 
-#include "external/fastjet/JetDefinition.hh"
-#include "external/fastjet/ClusterSequence.hh"
+//#include "external/fastjet/JetDefinition.hh"
+//#include "external/fastjet/ClusterSequence.hh"
+#include "fastjet/JetDefinition.hh"
+#include "fastjet/ClusterSequence.hh"
+
 
 #include "ETMiss.h"
 #include "FinalStateObject.h"
@@ -844,6 +847,7 @@ class AnalysisBase {
     // keeps track of all loaded FinalStateParticles and properly frees them 
     std::vector<FinalStateObject*> finalStateObjects;
 
+    int nReweightingBranches;
 };
 
 

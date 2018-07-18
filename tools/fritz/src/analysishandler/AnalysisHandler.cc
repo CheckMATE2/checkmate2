@@ -19,6 +19,7 @@ AnalysisHandler::AnalysisHandler() {
     analysisLogFile = "analysis";
     hasEvents = true;
     name = "analysishandler";
+    reweightingOn = false;
 }
 
 AnalysisHandler::~AnalysisHandler() {
@@ -49,6 +50,7 @@ static const std::string keyAnalysisHandlerType = "analysistype";
 static const std::string keyAnalysisHandlerOutputFolder = "outputdirectory";
 static const std::string keyAnalysisHandlerOutputPrefix = "outputprefix";
 static const std::string keyAnalysisHandlerDelphesHandler = "delpheshandler";
+static const std::string keyAnalysisHandlerReweightingHandler = "reweightinghandler";
 static const std::string keyAnalysisHandlerEventFile = "eventfile";
 static const std::string keyAnalysisHandlerLogFile = "logfile";
 
@@ -350,7 +352,7 @@ void AnalysisHandler::setupAnalysisHandler(
         Properties props,
         std::map<std::string,EventFile> eventFiles,
         std::map<std::string,DelphesHandler*> delphesHandler,
-        std::map<std::string,Reweighting,Handler*> reweightingHandler
+        std::map<std::string,ReweightingHandler*> reweightingHandler
         ) {
     std::pair<bool,std::string> pair;
     analysisLogFile = lookupOrDefault(props, keyAnalysisHandlerLogFile, "analysis");
@@ -367,7 +369,7 @@ void AnalysisHandler::setupAnalysisHandler(
     bool haveReweightingHandler = pair.first;
     std::string reweightingHandlerLabel = pair.second;
     
-    if (haveEventFile && haveDelphesHandler && reweightinghandler) {
+    if (haveEventFile && haveDelphesHandler && haveReweightingHandler) {
         Global::abort(
                 name,
                 "Only one of eventfile, delpheshandler and reweightinghandler can be used at the same time in"
@@ -409,7 +411,7 @@ void AnalysisHandler::setupAnalysisHandler(
                 "Can not find event file with label "+eventFileLabel
                 );
         setup(eventFile);
-    } eilf(haveDelphesHandler) {
+    }else if(haveDelphesHandler) {
         DelphesHandler* dHandler = lookupRequired(
                 delphesHandler,
                 delphesHandlerLabel,
@@ -518,6 +520,9 @@ void AnalysisHandler::setup(DelphesHandler* dHandlerIn) {
     dHandler = dHandlerIn;
 
     nReweightingBranches = dHandler->nReweightingBranches;
+    if(nReweightingBranches>0){
+        reweightingOn = true;
+    }
 
     Global::print(name, "Linking to "+dHandler->name+" tree");
     // link all required branch pointers to the respective pointers
@@ -566,6 +571,7 @@ void AnalysisHandler::setup(ReweightingHandler* rHandlerIn) {
     * Is this function just to initialize the branches? Are they empty after this function is done?  
     * 
     */
+    reweightingOn = true;
     rHandler = rHandlerIn;
 
     nReweightingBranches = rHandler->nBranches;

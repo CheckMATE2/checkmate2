@@ -12,6 +12,8 @@
 #include "PythiaHandler.h"
 #endif
 
+#include "external/ExRootAnalysis/ExRootTreeReader.h"
+
 #include "Reweightor.h"
 #include "ReweightingProcInfo.h"
 #include "LHEF.h"

@@ -14,6 +14,7 @@ AnalysisBase::AnalysisBase() {
     weight = 0;
     missingET = NULL;
     result = NULL;
+    nReweightingBranches = 0;
 }
 
 AnalysisBase::~AnalysisBase() {
@@ -48,7 +49,7 @@ void AnalysisBase::setup(std::map<std::string, std::vector<int> > whichTagsIn, s
 
     searchIterator = eventParameters.find("xsectErr");
     if(searchIterator != eventParameters.end())
-        xsecterr = Global::strToDouble(searchIterator->second);
+        xsecterr = Global::strToDouble(searchIterator->second);     
 
     whichTags = whichTagsIn;
     initialize(); // specified by derived analysis classes
@@ -66,8 +67,10 @@ void AnalysisBase::processEvent(int iEvent) {
     finalStateObjects.clear(); 
 }
 
+
 void AnalysisBase::finish() {
     finalize(); // specified by derived analysis classes
+
     if(!cutflowRegions.empty()) {
       int cutflowOutput = bookFile(analysis+"_cutflow.dat");
       *fStreams[cutflowOutput] << "Cut  Sum_W  Sum_W2  Acc  N_Norm\n";
@@ -146,7 +149,7 @@ int AnalysisBase::bookFile(std::string name, bool noheader) {
     // Assemble absolute filename
     std::string filename = outputFolder+"/"+outputPrefix+"_"+name;
     // Open stream
-    std::ofstream* file = new ofstream(filename.c_str());
+    std::ofstream* file = new std::ofstream(filename.c_str());
     // Write standard information
     if (!noheader) {
       //FIXME Most of it is not known at the beginning!

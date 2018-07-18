@@ -452,7 +452,7 @@ ExRootTreeReader* ReweightingHandler::initTreeReader(){
     return treeReader;
 }
 
-void ReweightingHandler::fillTreeReader(){
+void ReweightingHandler::fillTreeReader(int iBranch){
     // TODO
 }
 

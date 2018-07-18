@@ -126,6 +126,7 @@ public:
     //! name which is printed in logfile
     std::string name;
 
+    bool reweightingOn;
     int nReweightingBranches;
     
 protected:
@@ -298,6 +299,11 @@ private:
     //!
     //! \param dHandler DelphesHandler to link against
     void setup(DelphesHandler* dHandler);
+
+    //! \brief Link analyses to a reweighting handler directly
+    //!
+    //! \param rHandler ReweightingHandler to link against
+    void setup(ReweightingHandler* rHandler);
 
     //! Performes experiment independent analysis initialisation
     /* \sa setup function

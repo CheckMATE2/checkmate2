@@ -83,325 +83,325 @@
 
 
 
-double Matrixelements_pp2sqgo::calc(const std::vector<HepMC::GenParticle*> & initial_state, const std::vector<HepMC::GenParticle*> & final_state){
+// double Matrixelements_pp2sqgo::calc(const std::vector<HepMC::GenParticle*> & initial_state, const std::vector<HepMC::GenParticle*> & final_state){
 
-	double p1[4], p2[4], p3[4], p4[4];
+// 	double p1[4], p2[4], p3[4], p4[4];
 
-	p1[0] = initial_state[0]->momentum().e();
-	p1[1] = 0; // initial_state[0]->momentum().px();
-	p1[2] = 0; // initial_state[0]->momentum().py();
-	p1[3] = initial_state[0]->momentum().pz();
+// 	p1[0] = initial_state[0]->momentum().e();
+// 	p1[1] = 0; // initial_state[0]->momentum().px();
+// 	p1[2] = 0; // initial_state[0]->momentum().py();
+// 	p1[3] = initial_state[0]->momentum().pz();
 
-	p2[0] = initial_state[1]->momentum().e();
-	p2[1] = 0; // initial_state[1]->momentum().px();
-	p2[2] = 0; // initial_state[1]->momentum().py()
-	p2[3] = initial_state[1]->momentum().pz();
+// 	p2[0] = initial_state[1]->momentum().e();
+// 	p2[1] = 0; // initial_state[1]->momentum().px();
+// 	p2[2] = 0; // initial_state[1]->momentum().py()
+// 	p2[3] = initial_state[1]->momentum().pz();
 
-	p3[0] = final_state[1]->momentum().e();
-	p3[1] = final_state[1]->momentum().px();
-	p3[2] = final_state[1]->momentum().py();
-	p3[3] = final_state[1]->momentum().pz();
+// 	p3[0] = final_state[1]->momentum().e();
+// 	p3[1] = final_state[1]->momentum().px();
+// 	p3[2] = final_state[1]->momentum().py();
+// 	p3[3] = final_state[1]->momentum().pz();
 
-	p4[0] = final_state[0]->momentum().e();
-	p4[1] = final_state[0]->momentum().px();
-	p4[2] = final_state[0]->momentum().py();
-	p4[3] = final_state[0]->momentum().pz();
+// 	p4[0] = final_state[0]->momentum().e();
+// 	p4[1] = final_state[0]->momentum().px();
+// 	p4[2] = final_state[0]->momentum().py();
+// 	p4[3] = final_state[0]->momentum().pz();
 
-	std::vector<double*> momenta = {p1,p2,p3,p4};
+// 	std::vector<double*> momenta = {p1,p2,p3,p4};
 
-	int pid1 = initial_state[0]->pdg_id();
-	int pid2 = initial_state[1]->pdg_id();
-	int pid3 = final_state[1]->pdg_id();
-	int pid4 = final_state[0]->pdg_id();
+// 	int pid1 = initial_state[0]->pdg_id();
+// 	int pid2 = initial_state[1]->pdg_id();
+// 	int pid3 = final_state[1]->pdg_id();
+// 	int pid4 = final_state[0]->pdg_id();
 
 
-	double me = 0;
+// 	double me = 0;
 
-	if((pid1 == 21 && pid2 == 4 || pid1 == 4 && pid2 == 21) && fabs(pid3) == 1000004 && fabs(pid4) == 1000021){
-		GC_CLGO_CPPProcess & process = gc_clgo_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		// const double * mes = process.getMatrixElements();
-		// me = mes[0];
+// 	if((pid1 == 21 && pid2 == 4 || pid1 == 4 && pid2 == 21) && fabs(pid3) == 1000004 && fabs(pid4) == 1000021){
+// 		GC_CLGO_CPPProcess & process = gc_clgo_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 		// const double * mes = process.getMatrixElements();
+// 		// me = mes[0];
 		
-	}else if((pid1 == 21 && pid2 == 4 || pid1 == 4 && pid2 == 21) && fabs(pid3) == 2000004 && fabs(pid4) == 1000021){
-		GC_CRGO_CPPProcess & process = gc_crgo_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		// const double * mes = process.getMatrixElements();
-		// me = mes[0];
+// 	}else if((pid1 == 21 && pid2 == 4 || pid1 == 4 && pid2 == 21) && fabs(pid3) == 2000004 && fabs(pid4) == 1000021){
+// 		GC_CRGO_CPPProcess & process = gc_crgo_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 		// const double * mes = process.getMatrixElements();
+// 		// me = mes[0];
 		
-	}else if((pid1 == 21 && pid2 == -4 || pid1 == -4 && pid2 == 21) && (pid3 == -1000004 && pid4 == 1000021 || pid3 == 1000021 && pid4 == -1000004)){
-		GCX_CLXGO_CPPProcess & process = gcx_clxgo_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		// const double * mes = process.getMatrixElements();
-		// me = mes[0];
+// 	}else if((pid1 == 21 && pid2 == -4 || pid1 == -4 && pid2 == 21) && (pid3 == -1000004 && pid4 == 1000021 || pid3 == 1000021 && pid4 == -1000004)){
+// 		GCX_CLXGO_CPPProcess & process = gcx_clxgo_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 		// const double * mes = process.getMatrixElements();
+// 		// me = mes[0];
 		
-	}else if((pid1 == 21 && pid2 == -4 || pid1 == -4 && pid2 == 21) && (pid3 == -2000004 && pid4 == 1000021 || pid3 == 1000021 && pid4 == -2000004)){
-		GCX_CRXGO_CPPProcess & process = gcx_crxgo_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		// const double * mes = process.getMatrixElements();
-		// me = mes[0];
+// 	}else if((pid1 == 21 && pid2 == -4 || pid1 == -4 && pid2 == 21) && (pid3 == -2000004 && pid4 == 1000021 || pid3 == 1000021 && pid4 == -2000004)){
+// 		GCX_CRXGO_CPPProcess & process = gcx_crxgo_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 		// const double * mes = process.getMatrixElements();
+// 		// me = mes[0];
 	
-	}else if((pid1 == 21 && pid2 == 1 || pid1 == 1 && pid2 == 21) && fabs(pid3) == 1000001 && fabs(pid4) == 1000021){
-		GD_DLGO_CPPProcess & process = gd_dlgo_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		// const double * mes = process.getMatrixElements();
-		// me = mes[0];
+// 	}else if((pid1 == 21 && pid2 == 1 || pid1 == 1 && pid2 == 21) && fabs(pid3) == 1000001 && fabs(pid4) == 1000021){
+// 		GD_DLGO_CPPProcess & process = gd_dlgo_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 		// const double * mes = process.getMatrixElements();
+// 		// me = mes[0];
 		
-	}else if((pid1 == 21 && pid2 == 1 || pid1 == 1 && pid2 == 21) && fabs(pid3) == 2000001 && fabs(pid4) == 1000021){
-		GD_DRGO_CPPProcess & process = gd_drgo_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		// const double * mes = process.getMatrixElements();
-		// me = mes[0];
+// 	}else if((pid1 == 21 && pid2 == 1 || pid1 == 1 && pid2 == 21) && fabs(pid3) == 2000001 && fabs(pid4) == 1000021){
+// 		GD_DRGO_CPPProcess & process = gd_drgo_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 		// const double * mes = process.getMatrixElements();
+// 		// me = mes[0];
 		
-	}else if((pid1 == 21 && pid2 == -1 || pid1 == -1 && pid2 == 21) && (pid3 == -1000001 && pid4 == 1000021 || pid3 == 1000021 && pid4 == -1000001)){
-		GDX_DLXGO_CPPProcess & process = gdx_dlxgo_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		// const double * mes = process.getMatrixElements();
-		// me = mes[0];
+// 	}else if((pid1 == 21 && pid2 == -1 || pid1 == -1 && pid2 == 21) && (pid3 == -1000001 && pid4 == 1000021 || pid3 == 1000021 && pid4 == -1000001)){
+// 		GDX_DLXGO_CPPProcess & process = gdx_dlxgo_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 		// const double * mes = process.getMatrixElements();
+// 		// me = mes[0];
 		
-	}else if((pid1 == 21 && pid2 == -1 || pid1 == -1 && pid2 == 21) && (pid3 == -2000001 && pid4 == 1000021 || pid3 == 1000021 && pid4 == -2000001)){
-		GDX_DRXGO_CPPProcess & process = gdx_drxgo_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		// const double * mes = process.getMatrixElements();
-		// me = mes[0];
+// 	}else if((pid1 == 21 && pid2 == -1 || pid1 == -1 && pid2 == 21) && (pid3 == -2000001 && pid4 == 1000021 || pid3 == 1000021 && pid4 == -2000001)){
+// 		GDX_DRXGO_CPPProcess & process = gdx_drxgo_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 		// const double * mes = process.getMatrixElements();
+// 		// me = mes[0];
 	
-	}else if((pid1 == 21 && pid2 == 3 || pid1 == 3 && pid2 == 21) && fabs(pid3) == 1000003 && fabs(pid4) == 1000021){
-		GS_SLGO_CPPProcess & process = gs_slgo_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		// const double * mes = process.getMatrixElements();
-		// me = mes[0];
+// 	}else if((pid1 == 21 && pid2 == 3 || pid1 == 3 && pid2 == 21) && fabs(pid3) == 1000003 && fabs(pid4) == 1000021){
+// 		GS_SLGO_CPPProcess & process = gs_slgo_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 		// const double * mes = process.getMatrixElements();
+// 		// me = mes[0];
 		
-	}else if((pid1 == 21 && pid2 == 3 || pid1 == 3 && pid2 == 21) && fabs(pid3) == 2000003 && fabs(pid4) == 1000021){
-		GS_SRGO_CPPProcess & process = gs_srgo_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		// const double * mes = process.getMatrixElements();
-		// me = mes[0];
+// 	}else if((pid1 == 21 && pid2 == 3 || pid1 == 3 && pid2 == 21) && fabs(pid3) == 2000003 && fabs(pid4) == 1000021){
+// 		GS_SRGO_CPPProcess & process = gs_srgo_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 		// const double * mes = process.getMatrixElements();
+// 		// me = mes[0];
 		
-	}else if((pid1 == 21 && pid2 == -3 || pid1 == -3 && pid2 == 21) && (pid3 == -1000003 && pid4 == 1000021 || pid3 == 1000021 && pid4 == -1000003)){
-		GSX_SLXGO_CPPProcess & process = gsx_slxgo_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		// const double * mes = process.getMatrixElements();
-		// me = mes[0];
+// 	}else if((pid1 == 21 && pid2 == -3 || pid1 == -3 && pid2 == 21) && (pid3 == -1000003 && pid4 == 1000021 || pid3 == 1000021 && pid4 == -1000003)){
+// 		GSX_SLXGO_CPPProcess & process = gsx_slxgo_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 		// const double * mes = process.getMatrixElements();
+// 		// me = mes[0];
 		
-	}else if((pid1 == 21 && pid2 == -3 || pid1 == -3 && pid2 == 21) && (pid3 == -2000003 && pid4 == 1000021 || pid3 == 1000021 && pid4 == -2000003)){
-		GSX_SRXGO_CPPProcess & process = gsx_srxgo_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		// const double * mes = process.getMatrixElements();
-		// me = mes[0];
+// 	}else if((pid1 == 21 && pid2 == -3 || pid1 == -3 && pid2 == 21) && (pid3 == -2000003 && pid4 == 1000021 || pid3 == 1000021 && pid4 == -2000003)){
+// 		GSX_SRXGO_CPPProcess & process = gsx_srxgo_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 		// const double * mes = process.getMatrixElements();
+// 		// me = mes[0];
 
-	}else if((pid1 == 21 && pid2 == 2 || pid1 == 2 && pid2 == 21) && fabs(pid3) == 1000002 && fabs(pid4) == 1000021){
-		GU_ULGO_CPPProcess & process = gu_ulgo_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		// const double * mes = process.getMatrixElements();
-		// me = mes[0];
+// 	}else if((pid1 == 21 && pid2 == 2 || pid1 == 2 && pid2 == 21) && fabs(pid3) == 1000002 && fabs(pid4) == 1000021){
+// 		GU_ULGO_CPPProcess & process = gu_ulgo_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 		// const double * mes = process.getMatrixElements();
+// 		// me = mes[0];
 		
-	}else if((pid1 == 21 && pid2 == 2 || pid1 == 2 && pid2 == 21) && fabs(pid3) == 2000002 && fabs(pid4) == 1000021){
-		GU_URGO_CPPProcess & process = gu_urgo_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		// const double * mes = process.getMatrixElements();
-		// me = mes[0];
+// 	}else if((pid1 == 21 && pid2 == 2 || pid1 == 2 && pid2 == 21) && fabs(pid3) == 2000002 && fabs(pid4) == 1000021){
+// 		GU_URGO_CPPProcess & process = gu_urgo_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 		// const double * mes = process.getMatrixElements();
+// 		// me = mes[0];
 		
-	}else if((pid1 == 21 && pid2 == -2 || pid1 == -2 && pid2 == 21) && (pid3 == -1000002 && pid4 == 1000021 || pid3 == 1000021 && pid4 == -1000002)){
-		GUX_ULXGO_CPPProcess & process = gux_ulxgo_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		// const double * mes = process.getMatrixElements();
-		// me = mes[0];
+// 	}else if((pid1 == 21 && pid2 == -2 || pid1 == -2 && pid2 == 21) && (pid3 == -1000002 && pid4 == 1000021 || pid3 == 1000021 && pid4 == -1000002)){
+// 		GUX_ULXGO_CPPProcess & process = gux_ulxgo_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 		// const double * mes = process.getMatrixElements();
+// 		// me = mes[0];
 		
-	}else if((pid1 == 21 && pid2 == -2 || pid1 == -2 && pid2 == 21) && (pid3 == -2000002 && pid4 == 1000021 || pid3 == 1000021 && pid4 == -2000002)){
-		GUX_URXGO_CPPProcess & process = gux_urxgo_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		// const double * mes = process.getMatrixElements();
-		// me = mes[0];
+// 	}else if((pid1 == 21 && pid2 == -2 || pid1 == -2 && pid2 == 21) && (pid3 == -2000002 && pid4 == 1000021 || pid3 == 1000021 && pid4 == -2000002)){
+// 		GUX_URXGO_CPPProcess & process = gux_urxgo_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 		// const double * mes = process.getMatrixElements();
+// 		// me = mes[0];
 
-	}else{
+// 	}else{
 
-		cerr << "no fitting subprocess found.. " << endl;
-		cerr << pid1 << ", " << pid2 << " -> " << pid3 << ", " << pid4 << endl;		
-	}
-	
-
-	return me;
-	
-}
-
-
-
-double Matrixelements_pp2sqsqbar::calc(const std::vector<HepMC::GenParticle*> & initial_state, const std::vector<HepMC::GenParticle*> & final_state){
-
-	// std::vector<std::vector<double>> p = sort_momenta_for_pair_production(initial_state, final_state);
-	// std::vector<double*> momenta = {&p[0][0], &p[1][0], &p[2][0], &p[3][0]};
-
-	double p1[4], p2[4], p3[4], p4[4];
-
-	p1[0] = initial_state[0]->momentum().e();
-	p1[1] = 0; // initial_state[0]->momentum().px();
-	p1[2] = 0; // initial_state[0]->momentum().py();
-	p1[3] = initial_state[0]->momentum().pz();
-
-	p2[0] = initial_state[1]->momentum().e();
-	p2[1] = 0; // initial_state[1]->momentum().px();
-	p2[2] = 0; // initial_state[1]->momentum().py();
-	p2[3] = initial_state[1]->momentum().pz();
-
-	p3[0] = final_state[0]->momentum().e();
-	p3[1] = final_state[0]->momentum().px();
-	p3[2] = final_state[0]->momentum().py();
-	p3[3] = final_state[0]->momentum().pz();
-
-	p4[0] = final_state[1]->momentum().e();
-	p4[1] = final_state[1]->momentum().px();
-	p4[2] = final_state[1]->momentum().py();
-	p4[3] = final_state[1]->momentum().pz();
-
-	std::vector<double*> momenta = {p1,p2,p3,p4};
-
-	int pid1 = initial_state[0]->pdg_id();
-	int pid2 = initial_state[1]->pdg_id();
-	int pid3 = final_state[0]->pdg_id();
-	int pid4 = final_state[1]->pdg_id();
-
-
-	double me = 0;
-
-
-	if(fabs(pid1) == 1 && fabs(pid2) == 1 && fabs(pid3) == 1000001 && fabs(pid4) == 1000001){
-		PP2SQSQBAR_DDX_DLDLX_CPPProcess & process = ddx_dldlx_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		
-	}else if(fabs(pid1) == 1 && fabs(pid2) == 1 && fabs(pid3) == 2000001 && fabs(pid4) == 2000001){
-		PP2SQSQBAR_DDX_DRDRX_CPPProcess & process = ddx_drdrx_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		
-	}else if(fabs(pid1) == 1 && fabs(pid2) == 1 && (pid3 == 1000001 && pid4 == -2000001 || pid3 == -2000001 && pid4 == 1000001)){
-		PP2SQSQBAR_DDX_DLDRX_CPPProcess & process = ddx_dldrx_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		
-	}else if(fabs(pid1) == 1 && fabs(pid2) == 1 && (pid3 == -1000001 && pid4 == 2000001 || pid3 == 2000001 && pid4 == -1000001)){
-		PP2SQSQBAR_DDX_DRDLX_CPPProcess & process = ddx_drdlx_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		
-	}else if(pid1 == 21 && pid2 == 21 && fabs(pid3) == 1000001 && fabs(pid4) == 1000001){
-		PP2SQSQBAR_GG_DLDLX_CPPProcess & process = gg_dldlx_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		
-	}else if(pid1 == 21 && pid2 == 21 && fabs(pid3) == 2000001 && fabs(pid4) == 2000001){
-		PP2SQSQBAR_GG_DRDRX_CPPProcess & process = gg_drdrx_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		
-	}else if(fabs(pid1) > 1 && fabs(pid1) <= 4 && fabs(pid2) > 1 && fabs(pid2) <= 4 && fabs(pid3) == 1000001 && fabs(pid4) == 1000001){
-		PP2SQSQBAR_UUX_DLDLX_CPPProcess & process = uux_dldlx_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		
-	}else if(fabs(pid1) > 1 && fabs(pid1) <= 4 && fabs(pid2) > 1 && fabs(pid2) <= 4 && fabs(pid3) == 2000001 && fabs(pid4) == 2000001){
-		PP2SQSQBAR_UUX_DRDRX_CPPProcess & process = uux_drdrx_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-		
-	}else{
-
-		cerr << "no fitting subprocess found.. " << endl;
-		cerr << pid1 << ", " << pid2 << " -> " << pid3 << ", " << pid4 << endl;		
-	}
+// 		cerr << "no fitting subprocess found.. " << endl;
+// 		cerr << pid1 << ", " << pid2 << " -> " << pid3 << ", " << pid4 << endl;		
+// 	}
 	
 
-	return me;
+// 	return me;
 	
-}
+// }
+
+
+
+// double Matrixelements_pp2sqsqbar::calc(const std::vector<HepMC::GenParticle*> & initial_state, const std::vector<HepMC::GenParticle*> & final_state){
+
+// 	// std::vector<std::vector<double>> p = sort_momenta_for_pair_production(initial_state, final_state);
+// 	// std::vector<double*> momenta = {&p[0][0], &p[1][0], &p[2][0], &p[3][0]};
+
+// 	double p1[4], p2[4], p3[4], p4[4];
+
+// 	p1[0] = initial_state[0]->momentum().e();
+// 	p1[1] = 0; // initial_state[0]->momentum().px();
+// 	p1[2] = 0; // initial_state[0]->momentum().py();
+// 	p1[3] = initial_state[0]->momentum().pz();
+
+// 	p2[0] = initial_state[1]->momentum().e();
+// 	p2[1] = 0; // initial_state[1]->momentum().px();
+// 	p2[2] = 0; // initial_state[1]->momentum().py();
+// 	p2[3] = initial_state[1]->momentum().pz();
+
+// 	p3[0] = final_state[0]->momentum().e();
+// 	p3[1] = final_state[0]->momentum().px();
+// 	p3[2] = final_state[0]->momentum().py();
+// 	p3[3] = final_state[0]->momentum().pz();
+
+// 	p4[0] = final_state[1]->momentum().e();
+// 	p4[1] = final_state[1]->momentum().px();
+// 	p4[2] = final_state[1]->momentum().py();
+// 	p4[3] = final_state[1]->momentum().pz();
+
+// 	std::vector<double*> momenta = {p1,p2,p3,p4};
+
+// 	int pid1 = initial_state[0]->pdg_id();
+// 	int pid2 = initial_state[1]->pdg_id();
+// 	int pid3 = final_state[0]->pdg_id();
+// 	int pid4 = final_state[1]->pdg_id();
+
+
+// 	double me = 0;
+
+
+// 	if(fabs(pid1) == 1 && fabs(pid2) == 1 && fabs(pid3) == 1000001 && fabs(pid4) == 1000001){
+// 		PP2SQSQBAR_DDX_DLDLX_CPPProcess & process = ddx_dldlx_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+		
+// 	}else if(fabs(pid1) == 1 && fabs(pid2) == 1 && fabs(pid3) == 2000001 && fabs(pid4) == 2000001){
+// 		PP2SQSQBAR_DDX_DRDRX_CPPProcess & process = ddx_drdrx_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+		
+// 	}else if(fabs(pid1) == 1 && fabs(pid2) == 1 && (pid3 == 1000001 && pid4 == -2000001 || pid3 == -2000001 && pid4 == 1000001)){
+// 		PP2SQSQBAR_DDX_DLDRX_CPPProcess & process = ddx_dldrx_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+		
+// 	}else if(fabs(pid1) == 1 && fabs(pid2) == 1 && (pid3 == -1000001 && pid4 == 2000001 || pid3 == 2000001 && pid4 == -1000001)){
+// 		PP2SQSQBAR_DDX_DRDLX_CPPProcess & process = ddx_drdlx_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+		
+// 	}else if(pid1 == 21 && pid2 == 21 && fabs(pid3) == 1000001 && fabs(pid4) == 1000001){
+// 		PP2SQSQBAR_GG_DLDLX_CPPProcess & process = gg_dldlx_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+		
+// 	}else if(pid1 == 21 && pid2 == 21 && fabs(pid3) == 2000001 && fabs(pid4) == 2000001){
+// 		PP2SQSQBAR_GG_DRDRX_CPPProcess & process = gg_drdrx_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+		
+// 	}else if(fabs(pid1) > 1 && fabs(pid1) <= 4 && fabs(pid2) > 1 && fabs(pid2) <= 4 && fabs(pid3) == 1000001 && fabs(pid4) == 1000001){
+// 		PP2SQSQBAR_UUX_DLDLX_CPPProcess & process = uux_dldlx_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+		
+// 	}else if(fabs(pid1) > 1 && fabs(pid1) <= 4 && fabs(pid2) > 1 && fabs(pid2) <= 4 && fabs(pid3) == 2000001 && fabs(pid4) == 2000001){
+// 		PP2SQSQBAR_UUX_DRDRX_CPPProcess & process = uux_drdrx_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+		
+// 	}else{
+
+// 		cerr << "no fitting subprocess found.. " << endl;
+// 		cerr << pid1 << ", " << pid2 << " -> " << pid3 << ", " << pid4 << endl;		
+// 	}
+	
+
+// 	return me;
+	
+// }
 
 
 
@@ -665,67 +665,67 @@ double Matrixelements_pp2sqsqbar_nogluino::calc(const std::vector<HepMC::GenPart
 // }
 
 
-double Matrixelements_pp2ttbar::calc(const std::vector<HepMC::GenParticle*> & initial_state, const std::vector<HepMC::GenParticle*> & final_state){
+// double Matrixelements_pp2ttbar::calc(const std::vector<HepMC::GenParticle*> & initial_state, const std::vector<HepMC::GenParticle*> & final_state){
 
-	double p1[4], p2[4], p3[4], p4[4];
+// 	double p1[4], p2[4], p3[4], p4[4];
 
-	p1[0] = initial_state[0]->momentum().e();
-	p1[1] = 0; // initial_state[0]->momentum().px();
-	p1[2] = 0; // initial_state[0]->momentum().py();
-	p1[3] = initial_state[0]->momentum().pz();
+// 	p1[0] = initial_state[0]->momentum().e();
+// 	p1[1] = 0; // initial_state[0]->momentum().px();
+// 	p1[2] = 0; // initial_state[0]->momentum().py();
+// 	p1[3] = initial_state[0]->momentum().pz();
 
-	p2[0] = initial_state[1]->momentum().e();
-	p2[1] = 0; // initial_state[1]->momentum().px();
-	p2[2] = 0; // initial_state[1]->momentum().py();
-	p2[3] = initial_state[1]->momentum().pz();
+// 	p2[0] = initial_state[1]->momentum().e();
+// 	p2[1] = 0; // initial_state[1]->momentum().px();
+// 	p2[2] = 0; // initial_state[1]->momentum().py();
+// 	p2[3] = initial_state[1]->momentum().pz();
 
-	p3[0] = final_state[0]->momentum().e();
-	p3[1] = final_state[0]->momentum().px();
-	p3[2] = final_state[0]->momentum().py();
-	p3[3] = final_state[0]->momentum().pz();
+// 	p3[0] = final_state[0]->momentum().e();
+// 	p3[1] = final_state[0]->momentum().px();
+// 	p3[2] = final_state[0]->momentum().py();
+// 	p3[3] = final_state[0]->momentum().pz();
 
-	p4[0] = final_state[1]->momentum().e();
-	p4[1] = final_state[1]->momentum().px();
-	p4[2] = final_state[1]->momentum().py();
-	p4[3] = final_state[1]->momentum().pz();
+// 	p4[0] = final_state[1]->momentum().e();
+// 	p4[1] = final_state[1]->momentum().px();
+// 	p4[2] = final_state[1]->momentum().py();
+// 	p4[3] = final_state[1]->momentum().pz();
 
-	std::vector<double*> momenta = {p1,p2,p3,p4};
+// 	std::vector<double*> momenta = {p1,p2,p3,p4};
 
-	int pid1 = initial_state[0]->pdg_id();
-	int pid2 = initial_state[1]->pdg_id();
-	int pid3 = final_state[0]->pdg_id();
-	int pid4 = final_state[1]->pdg_id();
+// 	int pid1 = initial_state[0]->pdg_id();
+// 	int pid2 = initial_state[1]->pdg_id();
+// 	int pid3 = final_state[0]->pdg_id();
+// 	int pid4 = final_state[1]->pdg_id();
 
-	if(fabs(pid1) == 21 && fabs(pid2) == 21 && fabs(pid3) == 6 && fabs(pid4) == 6){
-		GG_TTX_CPPProcess process = gg_ttx_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
+// 	if(fabs(pid1) == 21 && fabs(pid2) == 21 && fabs(pid3) == 6 && fabs(pid4) == 6){
+// 		GG_TTX_CPPProcess process = gg_ttx_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
 
-		const double * mes = process.getMatrixElements();
-		return mes[0];
+// 		const double * mes = process.getMatrixElements();
+// 		return mes[0];
 		
-	}else if(is_quark(pid1) && is_quark(pid2) && fabs(pid3) == 6 && fabs(pid4) == 6){
-		UUX_TTX_CPPProcess process = uux_ttx_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
+// 	}else if(is_quark(pid1) && is_quark(pid2) && fabs(pid3) == 6 && fabs(pid4) == 6){
+// 		UUX_TTX_CPPProcess process = uux_ttx_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
 
-		const double * mes = process.getMatrixElements();
-		return mes[0];
+// 		const double * mes = process.getMatrixElements();
+// 		return mes[0];
 		
-	}
+// 	}
 	
 
-	cerr << "no fitting subprocess found.. " << endl;
-	cerr << pid1 << ", " << pid2 << " -> " << pid3 << ", " << pid4 << endl;
-	return 0;
+// 	cerr << "no fitting subprocess found.. " << endl;
+// 	cerr << pid1 << ", " << pid2 << " -> " << pid3 << ", " << pid4 << endl;
+// 	return 0;
 	
-}
+// }
 
 // double Matrixelements_pp2ttbar2wbwb_analytical::calc(const std::vector<HepMC::GenParticle*> & initial_state, const std::vector<HepMC::GenParticle*> & top_final_state){
 
@@ -837,297 +837,298 @@ double Matrixelements_pp2ttbar::calc(const std::vector<HepMC::GenParticle*> & in
 // 	return ret;
 // }
 
-double Matrixelements_pp2ttbar2wbwb::calc(const std::vector<HepMC::GenParticle*> & initial_state, const std::vector<HepMC::GenParticle*> & top_final_state){
 
-	double p1[4], p2[4], p3[4], p4[4], p5[4], p6[4], p7[4], p8[4];
+// double Matrixelements_pp2ttbar2wbwb::calc(const std::vector<HepMC::GenParticle*> & initial_state, const std::vector<HepMC::GenParticle*> & top_final_state){
 
-	int ix1 = 0;
-	int ix2 = 1;
-	if(initial_state[0]->pdg_id() < 0){
-		ix1 = 1;
-		ix2 = 0;
-	}
+// 	double p1[4], p2[4], p3[4], p4[4], p5[4], p6[4], p7[4], p8[4];
 
-	p1[0] = initial_state[ix1]->momentum().e();
-	p1[1] = 0; // initial_state[ix1]->momentum().px();
-	p1[2] = 0; // initial_state[ix1]->momentum().py();
-	p1[3] = initial_state[ix1]->momentum().pz();
+// 	int ix1 = 0;
+// 	int ix2 = 1;
+// 	if(initial_state[0]->pdg_id() < 0){
+// 		ix1 = 1;
+// 		ix2 = 0;
+// 	}
 
-	p2[0] = initial_state[ix2]->momentum().e();
-	p2[1] = 0; // initial_state[ix2]->momentum().px();
-	p2[2] = 0; // initial_state[ix2]->momentum().py();
-	p2[3] = initial_state[ix2]->momentum().pz();
+// 	p1[0] = initial_state[ix1]->momentum().e();
+// 	p1[1] = 0; // initial_state[ix1]->momentum().px();
+// 	p1[2] = 0; // initial_state[ix1]->momentum().py();
+// 	p1[3] = initial_state[ix1]->momentum().pz();
 
-
-	HepMC::GenParticle *top, *antitop;
-	if(top_final_state[0]->pdg_id()>0){
-		top = last_status(top_final_state[0]);
-		antitop = last_status(top_final_state[1]);
-	}else{
-		top = last_status(top_final_state[1]);
-		antitop = last_status(top_final_state[0]);
-	}
-
-	HepMC::GenParticle *wp, *b;
-	for(auto it : HepMC::GenVertexParticleRange(*top->end_vertex(), HepMC::children)){
-		if(it->pdg_id() > 10) wp = last_status(it);
-		if(it->pdg_id() < 10) b = last_status(it);
-	}
-
-	HepMC::GenParticle *wm, *bx;
-	for(auto it : HepMC::GenVertexParticleRange(*antitop->end_vertex(), HepMC::children)){
-		if(it->pdg_id() < -10) wm = last_status(it);
-		if(it->pdg_id() > -10) bx = last_status(it);
-	}
-
-	HepMC::GenParticle *lp, *lpx;
-	for(auto it : HepMC::GenVertexParticleRange(*wp->end_vertex(), HepMC::children)){
-		if(it->pdg_id() > 0) lp = last_status(it);
-		if(it->pdg_id() < 0) lpx = last_status(it);
-	}
-
-	HepMC::GenParticle *lm, *lmx;
-	for(auto it : HepMC::GenVertexParticleRange(*wm->end_vertex(), HepMC::children)){
-		if(it->pdg_id() > 0) lm = last_status(it);
-		if(it->pdg_id() < 0) lmx = last_status(it);
-	}
+// 	p2[0] = initial_state[ix2]->momentum().e();
+// 	p2[1] = 0; // initial_state[ix2]->momentum().px();
+// 	p2[2] = 0; // initial_state[ix2]->momentum().py();
+// 	p2[3] = initial_state[ix2]->momentum().pz();
 
 
-	p3[0] = lp->momentum().e();
-	p3[1] = lp->momentum().px();
-	p3[2] = lp->momentum().py();
-	p3[3] = lp->momentum().pz();
+// 	HepMC::GenParticle *top, *antitop;
+// 	if(top_final_state[0]->pdg_id()>0){
+// 		top = last_status(top_final_state[0]);
+// 		antitop = last_status(top_final_state[1]);
+// 	}else{
+// 		top = last_status(top_final_state[1]);
+// 		antitop = last_status(top_final_state[0]);
+// 	}
 
-	p4[0] = lpx->momentum().e();
-	p4[1] = lpx->momentum().px();
-	p4[2] = lpx->momentum().py();
-	p4[3] = lpx->momentum().pz();
+// 	HepMC::GenParticle *wp, *b;
+// 	for(auto it : HepMC::GenVertexParticleRange(*top->end_vertex(), HepMC::children)){
+// 		if(it->pdg_id() > 10) wp = last_status(it);
+// 		if(it->pdg_id() < 10) b = last_status(it);
+// 	}
 
-	p5[0] = b->momentum().e();
-	p5[1] = b->momentum().px();
-	p5[2] = b->momentum().py();
-	p5[3] = b->momentum().pz();
+// 	HepMC::GenParticle *wm, *bx;
+// 	for(auto it : HepMC::GenVertexParticleRange(*antitop->end_vertex(), HepMC::children)){
+// 		if(it->pdg_id() < -10) wm = last_status(it);
+// 		if(it->pdg_id() > -10) bx = last_status(it);
+// 	}
 
-	p6[0] = lm->momentum().e();
-	p6[1] = lm->momentum().px();
-	p6[2] = lm->momentum().py();
-	p6[3] = lm->momentum().pz();
+// 	HepMC::GenParticle *lp, *lpx;
+// 	for(auto it : HepMC::GenVertexParticleRange(*wp->end_vertex(), HepMC::children)){
+// 		if(it->pdg_id() > 0) lp = last_status(it);
+// 		if(it->pdg_id() < 0) lpx = last_status(it);
+// 	}
 
-	p7[0] = lmx->momentum().e();
-	p7[1] = lmx->momentum().px();
-	p7[2] = lmx->momentum().py();
-	p7[3] = lmx->momentum().pz();
+// 	HepMC::GenParticle *lm, *lmx;
+// 	for(auto it : HepMC::GenVertexParticleRange(*wm->end_vertex(), HepMC::children)){
+// 		if(it->pdg_id() > 0) lm = last_status(it);
+// 		if(it->pdg_id() < 0) lmx = last_status(it);
+// 	}
 
-	p8[0] = bx->momentum().e();
-	p8[1] = bx->momentum().px();
-	p8[2] = bx->momentum().py();
-	p8[3] = bx->momentum().pz();
 
-	std::vector<double*> momenta = {p1,p2,p3,p4,p5,p6,p7,p8};
+// 	p3[0] = lp->momentum().e();
+// 	p3[1] = lp->momentum().px();
+// 	p3[2] = lp->momentum().py();
+// 	p3[3] = lp->momentum().pz();
 
-	int pid1 = initial_state[ix1]->pdg_id();
-	int pid2 = initial_state[ix2]->pdg_id();
-	int pid3 = lp->pdg_id();
-	int pid6 = lm->pdg_id();
+// 	p4[0] = lpx->momentum().e();
+// 	p4[1] = lpx->momentum().px();
+// 	p4[2] = lpx->momentum().py();
+// 	p4[3] = lpx->momentum().pz();
+
+// 	p5[0] = b->momentum().e();
+// 	p5[1] = b->momentum().px();
+// 	p5[2] = b->momentum().py();
+// 	p5[3] = b->momentum().pz();
+
+// 	p6[0] = lm->momentum().e();
+// 	p6[1] = lm->momentum().px();
+// 	p6[2] = lm->momentum().py();
+// 	p6[3] = lm->momentum().pz();
+
+// 	p7[0] = lmx->momentum().e();
+// 	p7[1] = lmx->momentum().px();
+// 	p7[2] = lmx->momentum().py();
+// 	p7[3] = lmx->momentum().pz();
+
+// 	p8[0] = bx->momentum().e();
+// 	p8[1] = bx->momentum().px();
+// 	p8[2] = bx->momentum().py();
+// 	p8[3] = bx->momentum().pz();
+
+// 	std::vector<double*> momenta = {p1,p2,p3,p4,p5,p6,p7,p8};
+
+// 	int pid1 = initial_state[ix1]->pdg_id();
+// 	int pid2 = initial_state[ix2]->pdg_id();
+// 	int pid3 = lp->pdg_id();
+// 	int pid6 = lm->pdg_id();
 
 
 	
-	if(fabs(pid1) == 21 && fabs(pid2) == 21 && pid3 < 10 && pid6 < 10){
-		PP2TTBAR2WBWB_GG_UDXBDUXBX_CPPProcess process = gg_udxbduxbx_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-	}else if(fabs(pid1) == 21 && fabs(pid2) == 21 && pid3 > 10 && pid6 < 10){
-		PP2TTBAR2WBWB_GG_VEEPBDUXBX_CPPProcess process = gg_veepbduxbx_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-	}else if(fabs(pid1) == 21 && fabs(pid2) == 21 && pid3 < 10 && pid6 > 10){
-		PP2TTBAR2WBWB_GG_UDXBEMVEXBX_CPPProcess process = gg_udxbemvexbx_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-	}else if(fabs(pid1) == 21 && fabs(pid2) == 21 && pid3 > 10 && pid6 > 10){
-		PP2TTBAR2WBWB_GG_VEEPBEMVEXBX_CPPProcess process = gg_veepbemvexbx_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
+// 	if(fabs(pid1) == 21 && fabs(pid2) == 21 && pid3 < 10 && pid6 < 10){
+// 		PP2TTBAR2WBWB_GG_UDXBDUXBX_CPPProcess process = gg_udxbduxbx_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 	}else if(fabs(pid1) == 21 && fabs(pid2) == 21 && pid3 > 10 && pid6 < 10){
+// 		PP2TTBAR2WBWB_GG_VEEPBDUXBX_CPPProcess process = gg_veepbduxbx_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 	}else if(fabs(pid1) == 21 && fabs(pid2) == 21 && pid3 < 10 && pid6 > 10){
+// 		PP2TTBAR2WBWB_GG_UDXBEMVEXBX_CPPProcess process = gg_udxbemvexbx_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 	}else if(fabs(pid1) == 21 && fabs(pid2) == 21 && pid3 > 10 && pid6 > 10){
+// 		PP2TTBAR2WBWB_GG_VEEPBEMVEXBX_CPPProcess process = gg_veepbemvexbx_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
 		
-	}else if(is_quark(pid1) && is_quark(pid2) && pid3 < 10 && pid6 < 10){
-		PP2TTBAR2WBWB_UUX_UDXBDUXBX_CPPProcess process = uux_udxbduxbx_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-	}else if(is_quark(pid1) && is_quark(pid2) && pid3 > 10 && pid6 < 10){
-		PP2TTBAR2WBWB_UUX_VEEPBDUXBX_CPPProcess process = uux_veepbduxbx_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-	}else if(is_quark(pid1) && is_quark(pid2) && pid3 < 10 && pid6 > 10){
-		PP2TTBAR2WBWB_UUX_UDXBEMVEXBX_CPPProcess process = uux_udxbemvexbx_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-	}else if(is_quark(pid1) && is_quark(pid2) && pid3 > 10 && pid6 > 10){
-		PP2TTBAR2WBWB_UUX_VEEPBEMVEXBX_CPPProcess process = uux_veepbemvexbx_cppprocess;
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		return process.sigmaHat();
-	}
+// 	}else if(is_quark(pid1) && is_quark(pid2) && pid3 < 10 && pid6 < 10){
+// 		PP2TTBAR2WBWB_UUX_UDXBDUXBX_CPPProcess process = uux_udxbduxbx_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 	}else if(is_quark(pid1) && is_quark(pid2) && pid3 > 10 && pid6 < 10){
+// 		PP2TTBAR2WBWB_UUX_VEEPBDUXBX_CPPProcess process = uux_veepbduxbx_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 	}else if(is_quark(pid1) && is_quark(pid2) && pid3 < 10 && pid6 > 10){
+// 		PP2TTBAR2WBWB_UUX_UDXBEMVEXBX_CPPProcess process = uux_udxbemvexbx_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 	}else if(is_quark(pid1) && is_quark(pid2) && pid3 > 10 && pid6 > 10){
+// 		PP2TTBAR2WBWB_UUX_VEEPBEMVEXBX_CPPProcess process = uux_veepbemvexbx_cppprocess;
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		return process.sigmaHat();
+// 	}
 	
 
-	cerr << "no fitting subprocess found.. " << endl;
-	cerr << pid1 << ", " << pid2 << " -> " << pid3 << ", " << pid6 << endl;
-	return 0;
+// 	cerr << "no fitting subprocess found.. " << endl;
+// 	cerr << pid1 << ", " << pid2 << " -> " << pid3 << ", " << pid6 << endl;
+// 	return 0;
 	
-}
+// }
 
 
 
-double Matrixelements_pp2zp2mupmum::calc(const std::vector<HepMC::GenParticle*> & initial_state, const std::vector<HepMC::GenParticle*> & final_state){
+// double Matrixelements_pp2zp2mupmum::calc(const std::vector<HepMC::GenParticle*> & initial_state, const std::vector<HepMC::GenParticle*> & final_state){
 
-	double p1[4], p2[4], p3[4], p4[4];
+// 	double p1[4], p2[4], p3[4], p4[4];
 
-	p1[0] = initial_state[0]->momentum().e();
-	p1[1] = 0; // initial_state[0]->momentum().px();
-	p1[2] = 0; // initial_state[0]->momentum().py();
-	p1[3] = initial_state[0]->momentum().pz();
+// 	p1[0] = initial_state[0]->momentum().e();
+// 	p1[1] = 0; // initial_state[0]->momentum().px();
+// 	p1[2] = 0; // initial_state[0]->momentum().py();
+// 	p1[3] = initial_state[0]->momentum().pz();
 
-	p2[0] = initial_state[1]->momentum().e();
-	p2[1] = 0; // initial_state[1]->momentum().px();
-	p2[2] = 0; // initial_state[1]->momentum().py();
-	p2[3] = initial_state[1]->momentum().pz();
+// 	p2[0] = initial_state[1]->momentum().e();
+// 	p2[1] = 0; // initial_state[1]->momentum().px();
+// 	p2[2] = 0; // initial_state[1]->momentum().py();
+// 	p2[3] = initial_state[1]->momentum().pz();
 
-	p3[0] = final_state[0]->momentum().e();
-	p3[1] = final_state[0]->momentum().px();
-	p3[2] = final_state[0]->momentum().py();
-	p3[3] = final_state[0]->momentum().pz();
+// 	p3[0] = final_state[0]->momentum().e();
+// 	p3[1] = final_state[0]->momentum().px();
+// 	p3[2] = final_state[0]->momentum().py();
+// 	p3[3] = final_state[0]->momentum().pz();
 
-	p4[0] = final_state[1]->momentum().e();
-	p4[1] = final_state[1]->momentum().px();
-	p4[2] = final_state[1]->momentum().py();
-	p4[3] = final_state[1]->momentum().pz();
+// 	p4[0] = final_state[1]->momentum().e();
+// 	p4[1] = final_state[1]->momentum().px();
+// 	p4[2] = final_state[1]->momentum().py();
+// 	p4[3] = final_state[1]->momentum().pz();
 
-	std::vector<double*> momenta = {p1,p2,p3,p4};
+// 	std::vector<double*> momenta = {p1,p2,p3,p4};
 
-	int pid1 = initial_state[0]->pdg_id();
-	int pid2 = initial_state[1]->pdg_id();
-	int pid3 = final_state[0]->pdg_id();
-	int pid4 = final_state[1]->pdg_id();
+// 	int pid1 = initial_state[0]->pdg_id();
+// 	int pid2 = initial_state[1]->pdg_id();
+// 	int pid3 = final_state[0]->pdg_id();
+// 	int pid4 = final_state[1]->pdg_id();
 
 
-	if(fabs(pid1) == 1 && fabs(pid2) == 1 && fabs(pid3) == 13 && fabs(pid4) == 13){
-		DDX_MUPMUM_CPPProcess process = ddx_mupmum_cppprocess;
-		// process.initProc(param_card);
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		// const double * mes = process.getMatrixElements();
-		// return mes[0];
-		return process.sigmaHat();
+// 	if(fabs(pid1) == 1 && fabs(pid2) == 1 && fabs(pid3) == 13 && fabs(pid4) == 13){
+// 		DDX_MUPMUM_CPPProcess process = ddx_mupmum_cppprocess;
+// 		// process.initProc(param_card);
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		// const double * mes = process.getMatrixElements();
+// 		// return mes[0];
+// 		return process.sigmaHat();
 	
-	}else if(fabs(pid1) == 2 && fabs(pid2) == 2 && fabs(pid3) == 13 && fabs(pid4) == 13){
-		UUX_MUPMUM_CPPProcess process = uux_mupmum_cppprocess;
-		// process.initProc(param_card);
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		// const double * mes = process.getMatrixElements();
-		// return mes[0];
-		return process.sigmaHat();
+// 	}else if(fabs(pid1) == 2 && fabs(pid2) == 2 && fabs(pid3) == 13 && fabs(pid4) == 13){
+// 		UUX_MUPMUM_CPPProcess process = uux_mupmum_cppprocess;
+// 		// process.initProc(param_card);
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		// const double * mes = process.getMatrixElements();
+// 		// return mes[0];
+// 		return process.sigmaHat();
 
-	}else if(fabs(pid1) == 3 && fabs(pid2) == 3 && fabs(pid3) == 13 && fabs(pid4) == 13){
-		SSX_MUPMUM_CPPProcess process = ssx_mupmum_cppprocess;
-		// process.initProc(param_card);
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		// const double * mes = process.getMatrixElements();
-		// return mes[0];
-		return process.sigmaHat();
+// 	}else if(fabs(pid1) == 3 && fabs(pid2) == 3 && fabs(pid3) == 13 && fabs(pid4) == 13){
+// 		SSX_MUPMUM_CPPProcess process = ssx_mupmum_cppprocess;
+// 		// process.initProc(param_card);
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		// const double * mes = process.getMatrixElements();
+// 		// return mes[0];
+// 		return process.sigmaHat();
 
-	}else if(fabs(pid1) == 4 && fabs(pid2) == 4 && fabs(pid3) == 13 && fabs(pid4) == 13){
-		CCX_MUPMUM_CPPProcess process = ccx_mupmum_cppprocess;
-		// process.initProc(param_card);
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		// const double * mes = process.getMatrixElements();
-		// return mes[0];
-		return process.sigmaHat();
+// 	}else if(fabs(pid1) == 4 && fabs(pid2) == 4 && fabs(pid3) == 13 && fabs(pid4) == 13){
+// 		CCX_MUPMUM_CPPProcess process = ccx_mupmum_cppprocess;
+// 		// process.initProc(param_card);
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		// const double * mes = process.getMatrixElements();
+// 		// return mes[0];
+// 		return process.sigmaHat();
 
-	}else if(fabs(pid1) == 2 && fabs(pid2) == 4 && fabs(pid3) == 13 && fabs(pid4) == 13){
-		UCX_MUPMUM_CPPProcess process = ucx_mupmum_cppprocess;
-		// process.initProc(param_card);
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		// const double * mes = process.getMatrixElements();
-		// return mes[0];
-		return process.sigmaHat();
+// 	}else if(fabs(pid1) == 2 && fabs(pid2) == 4 && fabs(pid3) == 13 && fabs(pid4) == 13){
+// 		UCX_MUPMUM_CPPProcess process = ucx_mupmum_cppprocess;
+// 		// process.initProc(param_card);
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		// const double * mes = process.getMatrixElements();
+// 		// return mes[0];
+// 		return process.sigmaHat();
 
-	}else if(fabs(pid1) == 4 && fabs(pid2) == 2 && fabs(pid3) == 13 && fabs(pid4) == 13){
-		CUX_MUPMUM_CPPProcess process = cux_mupmum_cppprocess;
-		// process.initProc(param_card);
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		// const double * mes = process.getMatrixElements();
-		// return mes[0];
-		return process.sigmaHat();
+// 	}else if(fabs(pid1) == 4 && fabs(pid2) == 2 && fabs(pid3) == 13 && fabs(pid4) == 13){
+// 		CUX_MUPMUM_CPPProcess process = cux_mupmum_cppprocess;
+// 		// process.initProc(param_card);
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		// const double * mes = process.getMatrixElements();
+// 		// return mes[0];
+// 		return process.sigmaHat();
 
-	}else if(fabs(pid1) == 1 && fabs(pid2) == 3 && fabs(pid3) == 13 && fabs(pid4) == 13){
-		DSX_MUPMUM_CPPProcess process = dsx_mupmum_cppprocess;
-		// process.initProc(param_card);
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		// const double * mes = process.getMatrixElements();
-		// return mes[0];
-		return process.sigmaHat();
+// 	}else if(fabs(pid1) == 1 && fabs(pid2) == 3 && fabs(pid3) == 13 && fabs(pid4) == 13){
+// 		DSX_MUPMUM_CPPProcess process = dsx_mupmum_cppprocess;
+// 		// process.initProc(param_card);
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		// const double * mes = process.getMatrixElements();
+// 		// return mes[0];
+// 		return process.sigmaHat();
 
-	}else if(fabs(pid1) == 3 && fabs(pid2) == 1 && fabs(pid3) == 13 && fabs(pid4) == 13){
-		SDX_MUPMUM_CPPProcess process = sdx_mupmum_cppprocess;
-		// process.initProc(param_card);
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		// const double * mes = process.getMatrixElements();
-		// return mes[0];
-		return process.sigmaHat();
+// 	}else if(fabs(pid1) == 3 && fabs(pid2) == 1 && fabs(pid3) == 13 && fabs(pid4) == 13){
+// 		SDX_MUPMUM_CPPProcess process = sdx_mupmum_cppprocess;
+// 		// process.initProc(param_card);
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		// const double * mes = process.getMatrixElements();
+// 		// return mes[0];
+// 		return process.sigmaHat();
 
-	}
+// 	}
 	
 
-	cerr << "no fitting subprocess found.. " << endl;
-	cerr << pid1 << ", " << pid2 << " -> " << pid3 << ", " << pid4 << endl;
-	return 0;
+// 	cerr << "no fitting subprocess found.. " << endl;
+// 	cerr << pid1 << ", " << pid2 << " -> " << pid3 << ", " << pid4 << endl;
+// 	return 0;
 	
-}
+// }
 
 
 
@@ -1183,86 +1184,86 @@ double Matrixelements_pp2zp2mupmum::calc(const std::vector<HepMC::GenParticle*> 
 
 
 
-double Matrixelements_pp2z2mupmum::calc(const std::vector<HepMC::GenParticle*> & initial_state, const std::vector<HepMC::GenParticle*> & final_state){
+// double Matrixelements_pp2z2mupmum::calc(const std::vector<HepMC::GenParticle*> & initial_state, const std::vector<HepMC::GenParticle*> & final_state){
 
-	double p1[4], p2[4], p3[4], p4[4];
+// 	double p1[4], p2[4], p3[4], p4[4];
 
-	p1[0] = initial_state[0]->momentum().e();
-	p1[1] = 0; // initial_state[0]->momentum().px();
-	p1[2] = 0; // initial_state[0]->momentum().py();
-	p1[3] = initial_state[0]->momentum().pz();
+// 	p1[0] = initial_state[0]->momentum().e();
+// 	p1[1] = 0; // initial_state[0]->momentum().px();
+// 	p1[2] = 0; // initial_state[0]->momentum().py();
+// 	p1[3] = initial_state[0]->momentum().pz();
 
-	p2[0] = initial_state[1]->momentum().e();
-	p2[1] = 0; // initial_state[1]->momentum().px();
-	p2[2] = 0; // initial_state[1]->momentum().py();
-	p2[3] = initial_state[1]->momentum().pz();
+// 	p2[0] = initial_state[1]->momentum().e();
+// 	p2[1] = 0; // initial_state[1]->momentum().px();
+// 	p2[2] = 0; // initial_state[1]->momentum().py();
+// 	p2[3] = initial_state[1]->momentum().pz();
 
-	p3[0] = final_state[0]->momentum().e();
-	p3[1] = final_state[0]->momentum().px();
-	p3[2] = final_state[0]->momentum().py();
-	p3[3] = final_state[0]->momentum().pz();
+// 	p3[0] = final_state[0]->momentum().e();
+// 	p3[1] = final_state[0]->momentum().px();
+// 	p3[2] = final_state[0]->momentum().py();
+// 	p3[3] = final_state[0]->momentum().pz();
 
-	p4[0] = final_state[1]->momentum().e();
-	p4[1] = final_state[1]->momentum().px();
-	p4[2] = final_state[1]->momentum().py();
-	p4[3] = final_state[1]->momentum().pz();
+// 	p4[0] = final_state[1]->momentum().e();
+// 	p4[1] = final_state[1]->momentum().px();
+// 	p4[2] = final_state[1]->momentum().py();
+// 	p4[3] = final_state[1]->momentum().pz();
 
-	std::vector<double*> momenta = {p1,p2,p3,p4};
+// 	std::vector<double*> momenta = {p1,p2,p3,p4};
 
-	int pid1 = initial_state[0]->pdg_id();
-	int pid2 = initial_state[1]->pdg_id();
-	int pid3 = final_state[0]->pdg_id();
-	int pid4 = final_state[1]->pdg_id();
+// 	int pid1 = initial_state[0]->pdg_id();
+// 	int pid2 = initial_state[1]->pdg_id();
+// 	int pid3 = final_state[0]->pdg_id();
+// 	int pid4 = final_state[1]->pdg_id();
 
 
-	if(fabs(pid1) == 1 && fabs(pid2) == 1 && fabs(pid3) == 13 && fabs(pid4) == 13){
-		PP2Z2MUPMUM_DDX_MUPMUM_CPPProcess process = ddx_mupmum_cppprocess;
-		// process.initProc(param_card);
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		// const double * mes = process.getMatrixElements();
-		// return mes[0];
-		return process.sigmaHat();
+// 	if(fabs(pid1) == 1 && fabs(pid2) == 1 && fabs(pid3) == 13 && fabs(pid4) == 13){
+// 		PP2Z2MUPMUM_DDX_MUPMUM_CPPProcess process = ddx_mupmum_cppprocess;
+// 		// process.initProc(param_card);
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		// const double * mes = process.getMatrixElements();
+// 		// return mes[0];
+// 		return process.sigmaHat();
 	
-	}else if(fabs(pid1) == 3 && fabs(pid2) == 3 && fabs(pid3) == 13 && fabs(pid4) == 13){
-		PP2Z2MUPMUM_DDX_MUPMUM_CPPProcess process = ddx_mupmum_cppprocess;
-		// process.initProc(param_card);
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		// const double * mes = process.getMatrixElements();
-		// return mes[0];
-		return process.sigmaHat();
+// 	}else if(fabs(pid1) == 3 && fabs(pid2) == 3 && fabs(pid3) == 13 && fabs(pid4) == 13){
+// 		PP2Z2MUPMUM_DDX_MUPMUM_CPPProcess process = ddx_mupmum_cppprocess;
+// 		// process.initProc(param_card);
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		// const double * mes = process.getMatrixElements();
+// 		// return mes[0];
+// 		return process.sigmaHat();
 	
-	}else if(fabs(pid1) == 2 && fabs(pid2) == 2 && fabs(pid3) == 13 && fabs(pid4) == 13){
-		PP2Z2MUPMUM_UUX_MUPMUM_CPPProcess process = uux_mupmum_cppprocess;
-		// process.initProc(param_card);
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		// const double * mes = process.getMatrixElements();
-		// return mes[0];
-		return process.sigmaHat();
+// 	}else if(fabs(pid1) == 2 && fabs(pid2) == 2 && fabs(pid3) == 13 && fabs(pid4) == 13){
+// 		PP2Z2MUPMUM_UUX_MUPMUM_CPPProcess process = uux_mupmum_cppprocess;
+// 		// process.initProc(param_card);
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		// const double * mes = process.getMatrixElements();
+// 		// return mes[0];
+// 		return process.sigmaHat();
 
-	}else if(fabs(pid1) == 4 && fabs(pid2) == 4 && fabs(pid3) == 13 && fabs(pid4) == 13){
-		PP2Z2MUPMUM_UUX_MUPMUM_CPPProcess process = uux_mupmum_cppprocess;
-		// process.initProc(param_card);
-		process.setInitial(pid1, pid2);
-		process.setMomenta(momenta);
-		// Evaluate matrix element
-		process.sigmaKin();
-		// const double * mes = process.getMatrixElements();
-		// return mes[0];
-		return process.sigmaHat();
-	}
+// 	}else if(fabs(pid1) == 4 && fabs(pid2) == 4 && fabs(pid3) == 13 && fabs(pid4) == 13){
+// 		PP2Z2MUPMUM_UUX_MUPMUM_CPPProcess process = uux_mupmum_cppprocess;
+// 		// process.initProc(param_card);
+// 		process.setInitial(pid1, pid2);
+// 		process.setMomenta(momenta);
+// 		// Evaluate matrix element
+// 		process.sigmaKin();
+// 		// const double * mes = process.getMatrixElements();
+// 		// return mes[0];
+// 		return process.sigmaHat();
+// 	}
 	
 
-	cerr << "no fitting subprocess found.. " << endl;
-	cerr << pid1 << ", " << pid2 << " -> " << pid3 << ", " << pid4 << endl;
-	return 0;
+// 	cerr << "no fitting subprocess found.. " << endl;
+// 	cerr << pid1 << ", " << pid2 << " -> " << pid3 << ", " << pid4 << endl;
+// 	return 0;
 	
-}
+// }
