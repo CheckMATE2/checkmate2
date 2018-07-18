@@ -15,7 +15,7 @@ from resultcollector import ResultCollector
 
 class CheckMATE2:
     """ This is the main object whose instance corresponds to a full CheckMATE run """
-    procList = list()
+    procList = list() # Is there a reason that procList is static? That way the self.procList objects in __init__ are completely different objects. As far as I can see this static version of procList is never used!
 
     def __init__(self):
         #global Info, AdvPrint
