@@ -25,8 +25,19 @@ class Process:
     kfac = 0.0  # k-factor (to be used when using internal Pythia or Madgraph processes)
 
     eventsList = list()
+
+    have_reweighting = False
+    reweighting_spectrum_dir = ''
+    have_matrix_element_reweighting = False
+    reweighting_me_proc_name = ''
+    reweighting_pdf_name = ''
+    reweighting_writing_mode = False
+    reweighting_detector_simulation = False
     
     result_output_file = ""
+
+    # Why are there static members of the class? Surely the name of a process does not need to be a property of the class but the object.
+    # And that is also why the exact same variable are created at the object level in __init__... Why??
 
     def __init__(self, name):
         self.name = name
@@ -41,6 +52,14 @@ class Process:
                 
         self.eventsList = list()
             
+        self.have_reweighting = False
+        self.reweighting_spectrum_dir = ''
+        self.have_matrix_element_reweighting = False
+        self.reweighting_me_proc_name = ''
+        self.reweighting_pdf_name = ''
+        self.reweighting_writing_mode = False
+        self.reweighting_detector_simulation = False
+
         self.result_output_file = os.path.join(Info.paths["output_evaluation"], self.name+"_processResults.txt")
     
     
@@ -120,6 +139,63 @@ class Process:
                         
         return config
 
+
+    def prepareFritzReweighting(self, config, events):    
+        name = "ReweightingHandler: "+events.identifier
+        config.add_section(name)
+        
+        config.set(name, "outputDirectory", Info.paths["output_reweighting"])
+        settings = os.path.join(Info.paths["output_reweighting"],"reweighting_"+events.identifier+".ini")
+        config.set(name, "settings", settings)
+        logFile = os.path.join(
+                Info.paths["output_reweighting"],
+                "reweighting_"+events.identifier+".log"
+                )
+        config.set(name, "logFile", logFile)
+
+        from events import Pythia8Events, DelphesEvents   
+        if isinstance(events, Pythia8Events):
+            config.set(name, "pythiaHandler", events.identifier)
+        elif isinstance(events, DelphesEvents):
+            AdvPrint.cerr_exit("Reweighting does not support ROOT input files yet.")
+        else:
+            config.set(name, "eventFile", events.identifier)
+
+        if not os.path.isdir(self.reweighting_spectrum_dir):
+            AdvPrint.cerr_exit("reweighting_spectrum_dir does not exist: "+self.reweighting_spectrum_dir)
+        slha_files = os.listdir(self.reweighting_spectrum_dir)
+        if any([os.path.splitext(slha_file)[1]!=".slha" for slha_file in slha_files]):
+            AdvPrint.cerr_exit("One of the given spectrum files is not an .slha file.")
+        if not "base.slha" in slha_files:
+            AdvPrint.cerr_exit("No base.slha file given.")
+        slha_files.remove("base.slha")
+
+        if len(slha_files) < 1:
+            AdvPrint.cerr_exit("No reweighting target .slha files given.")
+        config.set(name, "ntargets", str(len(slha_files)))
+
+        reweightingConfig = ConfigParser.RawConfigParser()
+        globalSectionName = "Section: Global"
+        reweightingConfig.add_section(globalSectionName)
+        reweightingConfig.set(globalSectionName, "matrix_element_reweighting", "true")
+        reweightingConfig.set(globalSectionName, "detector_simulation", self.reweighting_detector_simulation)
+        reweightingConfig.set(globalSectionName, "writing_mode", self.reweighting_writing_mode)
+        reweightingConfig.set(globalSectionName, "pdf_name", self.reweighting_pdf_name)
+        if self.have_matrix_element_reweighting:
+            reweightingConfig.set(globalSectionName, "procname", self.reweighting_me_proc_name)
+        
+        slhaFilesSectionsName = "Section: SLHAFiles"
+        reweightingConfig.add_section(slhaFilesSectionsName)
+        reweightingConfig.set(slhaFilesSectionsName, "base", os.path.abspath(os.path.join(self.reweighting_spectrum_dir, "base.slha")))
+        for itarget,slha_file in enumerate(slha_files):
+            full_path = os.path.abspath(os.path.join(self.reweighting_spectrum_dir,slha_file))
+            reweightingConfig.set(slhaFilesSectionsName, "target{}".format(itarget+1), full_path)
+
+        with open(settings, 'wb') as outfile: 
+            reweightingConfig.write(outfile)
+
+        return config
+
     
     def prepareFritzDelphes(self, config, events):
         for atype in Info.used_experiments:
@@ -138,11 +214,16 @@ class Process:
                         events.identifier+"_"+atype+".root"
                         )
                 config.set(name, "outputFile", outputFile)
-            from events import Pythia8Events    
-            if isinstance(events, Pythia8Events):
-                config.set(name, "pythiaHandler", events.identifier)
+            
+            if self.have_reweighting:
+                config.set(name, "reweightingHandler", events.identifier)
             else:
-                config.set(name, "eventFile", events.identifier)
+                from events import Pythia8Events    
+                if isinstance(events, Pythia8Events):
+                    config.set(name, "pythiaHandler", events.identifier)
+                else:
+                    config.set(name, "eventFile", events.identifier)
+
 
     def prepareFritzAnalysisHandler(self, config, events):
         if Info.flags["skipanalysis"]:
@@ -177,9 +258,11 @@ class Process:
             config = ConfigParser.RawConfigParser()
             
             self.prepareFritzInputFile(config, events)
+            self.prepareFritzReweighting(config, events)
             self.prepareFritzDelphes(config, events)
             self.prepareFritzAnalysisHandler(config, events)
             path = os.path.join(Info.paths["output_fritz"],events.identifier+".ini")
+
             with open(path, 'wb') as file: 
                 globalconfig.write(file)
             with open(path, 'ab') as file:
@@ -195,6 +278,7 @@ class Process:
                 continue
             fritz_command = Info.files["fritz_bin"]+" "+event.configFile
             result = subprocess.Popen(fritz_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            #result = subprocess.Popen("echo foobar", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
             maxlen = 0
             try:
