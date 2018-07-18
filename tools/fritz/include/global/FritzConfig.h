@@ -19,6 +19,7 @@ const std::string keyPhotonIsoSection = "photoniso";
 const std::string keyAnalysisSection = "analysis";
 const std::string keyEventFileSection = "eventfile";
 const std::string keyPythiaHandlerSection = "pythiahandler";
+const std::string keyReweightingHandlerSection = "reweightinghandler";
 const std::string keyDelphesHandlerSection = "delpheshandler";
 const std::string keyAnalysisHandlerSection = "analysishandler";
 
@@ -70,6 +71,16 @@ void warnUnknownKeys(std::map<std::string, T> m, std::vector<std::string> keys, 
 //! \returns a pair, where the first element says if the key was found and the second
 //!          argument is the value of the key or the default value
 std::pair<bool,std::string> maybeLookup(Properties p, std::string key, std::string def="");
+
+//! \brief Test if a key is set and if so return its value as bool.
+//!
+//! If the key exists its value is converted to bool.
+//! \param p Properties to search for the key
+//! \param key the key to search
+//! \param def optional default value
+//! \returns a pair, where the first element says if the key was found and the second
+//!          argument is the value of the key or the default value
+std::pair<bool,bool> maybeLookupBool(Properties p, std::string key, bool def=true);
 
 //! \brief Test if a key is set and if so return its value as double.
 //!

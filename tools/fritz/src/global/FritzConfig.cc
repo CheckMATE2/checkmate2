@@ -14,6 +14,16 @@ std::pair<bool,std::string> maybeLookup(Properties p, std::string key, std::stri
 	}
 }
 
+std::pair<bool,bool> maybeLookupBool(Properties p, std::string key, bool def) {
+	std::map<std::string, std::string>::iterator it;
+	it = p.find(key);
+	if (it != p.end()) {
+		return std::make_pair(true, Global::strToBool(it->second));
+	} else {
+		return std::make_pair(false, def);
+	}
+}
+
 std::pair<bool,double> maybeLookupDouble(Properties p, std::string key, double def) {
 	std::map<std::string, std::string>::iterator it;
 	it = p.find(key);
