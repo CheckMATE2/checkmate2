@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.63])
 AC_INIT(CheckMATE, 2.0.0, daschm@uni-bonn.de)
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([subdir-objects])
 # Checks for programs.
 AC_PROG_CXX
 #AC_PROG_RANLIB
@@ -35,6 +35,8 @@ AC_SUBST(DYLD_LIBRARY_PATH)
 AC_SUBST(LD_RUN_PATH)
 CHECK_DELPHES([6], ,AC_MSG_ERROR("No Delphes... but why?") )
 CHECK_MADGRAPH([6], ,AC_MSG_ERROR("No MadGraph... but why?") )
+CHECK_LHAPDF([6], ,AC_MSG_ERROR("No LHAPDF... So no reweighting...") )
+CHECK_FASTJET([6], ,AC_MSG_ERROR("No FastJet... So no reweighting...") )
 
 # Checks for header files.
 
@@ -46,7 +48,8 @@ CHECK_MADGRAPH([6], ,AC_MSG_ERROR("No MadGraph... but why?") )
                    
 AC_CONFIG_FILES([Makefile
                  tools/analysis/Makefile
-                 tools/fritz/Makefile])
+                 tools/fritz/Makefile
+                 tools/fritz/include/reweightinghandler/procs/Makefile])
 AC_OUTPUT
 
 AC_MSG_RESULT([])
@@ -75,4 +78,19 @@ if test "x$with_hepmc" = "xno"; then
   AC_MSG_RESULT([=== IMPORANT! ===])
   AC_MSG_RESULT([You did not provide any link to HepMC using the --with-hepmc parameter. If you continue you will not be able to])
   AC_MSG_RESULT([   - Create .hepmc output events using Pythia])
+  AC_MSG_RESULT([   - Use the Reweighting Module])
+fi
+
+if test "x$with_lhapdf" = "xno"; then
+  AC_MSG_RESULT([])
+  AC_MSG_RESULT([=== IMPORANT! ===])
+  AC_MSG_RESULT([You did not provide any link to LHAPDF using the --with-lhapdf parameter. If you continue you will not be able to])
+  AC_MSG_RESULT([   - Use the Reweighting Module])
+fi
+
+if test "x$with_fastjet" = "xno"; then
+  AC_MSG_RESULT([])
+  AC_MSG_RESULT([=== IMPORANT! ===])
+  AC_MSG_RESULT([You did not provide any link to FastJet using the --with-fastjet parameter. If you continue you will not be able to])
+  AC_MSG_RESULT([   - Use the Reweighting Module])
 fi

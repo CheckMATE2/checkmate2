@@ -6,6 +6,7 @@
  */
 
 #include "Global.h"
+#include <algorithm>
 
 
 namespace Global {
@@ -64,6 +65,14 @@ void checkIfFileExistsAndRemoveAfterQuery(std::string filename) {
             exit(1);
         remove(filename.c_str());
     }
+}
+
+bool strToBool(std::string s){
+    std::transform(s.begin(), s.end(), s.begin(), tolower);
+    bool x;
+    std::istringstream buffer(s);
+    buffer >> std::boolalpha >> x;
+    return x;
 }
 
 double strToDouble(std::string s) {

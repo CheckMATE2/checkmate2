@@ -57,6 +57,7 @@ namespace Global {
 
     int strToInt(std::string s);
     double strToDouble(std::string s);
+    bool strToBool(std::string s);
     std::string intToStr(int x);
     std::string doubleToStr(double x);
     std::string vectorBoolToStr(std::vector<bool> v);

@@ -18,6 +18,7 @@ class LHAupMadgraph;
 
 class PythiaHandler {
     friend class DelphesHandler;
+    friend class ReweightingHandler;
     
 public:
     //! Standard Constructor
