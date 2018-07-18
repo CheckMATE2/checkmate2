@@ -184,6 +184,13 @@ class Info(dict):
         parser.add_argument('-se', '--skip-evaluation', dest='skipevaluation', action='store_true', help='Skips evaluation step.')
         parser.add_argument('-cr', '--control-regions', dest='controlregions', action='store_true', help='Analyses control regions instead of signal regions. Sets -se automatically.')
         parser.add_argument('-rs', '--random-seed', dest='randomseed', type=int, default=0, help='Chooses fixed seed for random number generator. 0 chooses a random seed automatically.')     
+
+        parser.add_argument('-rwsd', '--reweighting-spectrum-dir', dest='reweighting_spectrum_dir', type=str, default="", help='Path to directory that contains base.slha and target .* slha files for reweighting.')     
+        parser.add_argument('-rwpc', '--reweighting-me-proc-name', dest='reweighting_me_proc_name', type=str, default="", help='Name of the MG process to be used for Matrix Element Reweighting. A corresponding process must be added to CheckMATE in order to be able to use Matrix Element Reweighting. ')     
+        parser.add_argument('-rwpdfn', '--reweighting-pdf-name', dest='reweighting_pdf_name', type=str, default="NNPDF23_lo_as_0130_qed", help='Name of the PDF used for PDF Reweighting. Default is "NNPDF23_lo_as_0130_qed". The given name must be installed in the linked LHAPDF package.')     
+        parser.add_argument('-rwwm', '--reweighting-writing-mode', dest='reweighting_writing_mode', action='store_true', help='Create one .hepmc output file for each target .slha file. ')     
+        parser.add_argument('-rwds', '--reweighting-detector-simulation', dest='reweighting_detector_simulation', action='store_true', help='Use a simple reweighting instead of Delphes for Detector simulation. ')     
+
         
         # Parse arguments and set return parameters
         if emptyparser:
@@ -433,7 +440,7 @@ class Info(dict):
             process.have_kfac = True
             process.kfac = float(args.kfactor)
  
-            
+          
         
         # first, global check for py8 parameters which require py8 linking and which load the Py8 event
         if args.pyprocess != "" or args.pycard != "":
@@ -489,6 +496,20 @@ class Info(dict):
         if args.maxevents != "":
             for events in process.eventsList:                
                 events.maxEvents = int(args.maxevents)
+
+        if args.reweighting_spectrum_dir != "":
+            process.have_reweighting = True
+            process.reweighting_spectrum_dir = args.reweighting_spectrum_dir
+
+        if args.reweighting_me_proc_name != "":
+            process.have_matrix_element_reweighting = True
+            process.reweighting_me_proc_name = args.reweighting_me_proc_name
+
+        if args.reweighting_pdf_name != "":
+            process.reweighting_pdf_name = args.reweighting_pdf_name
+
+        process.reweighting_writing_mode = args.reweighting_writing_mode
+        process.reweighting_detector_simulation = args.reweighting_detector_simulation
                 
         process.ecm = cls.parameters["ecm"]
         return process
@@ -556,6 +577,18 @@ class Info(dict):
                 args.mgconfig = Config.get(process_block,"mgconfig")
             if "maxevents" in Config.options(process_block):
                 args.maxevents = Config.get(process_block, "maxevents")
+            
+            if "reweightingspectrumdir" in Config.options(process_block):
+                args.reweighting_spectrum_dir = Config.get(process_block, "reweightingspectrumdir")
+            if "reweightingmeprocname" in Config.options(process_block):
+                args.reweighting_me_proc_name = Config.get(process_block, "reweightingmeprocname")
+            if "reweightingpdfname" in Config.options(process_block):
+                args.reweighting_pdf_name = Config.get(process_block, "reweightingpdfname")
+            if "reweightingwritingmode" in Config.options(process_block):
+                args.reweighting_writing_mode = Config.get(process_block, "reweightingwritingmode")
+            if "reweightingdetectorsimulation" in Config.options(process_block):
+                args.reweighting_detector_simulation = Config.get(process_block, "reweightingdetectorsimulation")
+            
             procList.append(cls.fill_process_from_args(args))
             
         return procList    
@@ -745,6 +778,7 @@ class Info(dict):
     def fill_output_paths_and_files(cls, odir, oname):
         """Fills cls.paths with paths given a particular output directory"""
         cls.paths['output'] = os.path.join(odir, oname)
+        cls.paths['output_reweighting'] = os.path.join(cls.paths['output'], "reweighting")
         cls.paths['output_delphes'] = os.path.join(cls.paths['output'], "delphes")
         cls.paths['output_pythia'] = os.path.join(cls.paths['output'], "pythia")
         cls.paths['output_mg5'] = os.path.join(cls.paths['output'], "mg5amcatnlo")
@@ -763,11 +797,14 @@ class Info(dict):
         cls.files['internal_info'] = os.path.join(cls.paths['output_internal'], "info.j")
         cls.files['internal_processes'] = os.path.join(cls.paths['output_internal'], "processes.j")
         
+        cls.files['reweighting_log'] = os.path.join(cls.paths['output_reweighting'], "reweighting_output.log")
         cls.files['delphes_log'] = os.path.join(cls.paths['output_delphes'], "delphes_output.log")
         cls.files['pythia_log'] = os.path.join(cls.paths['output_pythia'], "pythia_output.log")
         cls.files['analysis_log'] = os.path.join(cls.paths['output_analysis'], "analysisstdout")
         cls.files['fritz_log'] = os.path.join(cls.paths['output_fritz'], "fritz_error.log")
         cls.files['mg5_log'] = os.path.join(cls.paths['output_mg5'], "mg5amcatnlo_output.log")
+
+        cls.files['reweighting_config_file'] = dict()
         
         if cls.flags["likelihood"]:
             cls.files['likelihood'] = os.path.join(cls.paths['output'], "likelihood.txt")
@@ -832,6 +869,7 @@ class Info(dict):
         os.mkdir(cls.paths['output_mg5'])
         os.mkdir(cls.paths['output_pythia'])
         os.mkdir(cls.paths['output_fritz'])
+        os.mkdir(cls.paths['output_reweighting'])
         os.mkdir(cls.paths['output_delphes'])
         os.mkdir(cls.paths['output_analysis'])
         os.mkdir(cls.paths['output_evaluation'])            
