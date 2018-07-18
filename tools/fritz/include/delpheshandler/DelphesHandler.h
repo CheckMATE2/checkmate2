@@ -37,6 +37,7 @@
 #endif
 #include "Global.h"
 #include "EventFile.h"
+#include "ReweightingHandler.h"
 #include "FritzConfig.h"
 
 class DelphesHandler {
@@ -57,24 +58,35 @@ public:
     void setup(
             Properties props,
             std::map<std::string,EventFile> eventFiles,
+            std::map<std::string,ReweightingHandler*> reweightingHandler,
             std::map<std::string,PythiaHandler*> pythiaHandler
             );
-#else
+#endif
+
     //! \brief Setup Delphes from config file
     //!
     //! \param props map containing delphes settings
     //! \param eventFiles map of available event files
     void setup(
             Properties props,
-            std::map<std::string,EventFile> eventFiles
+            std::map<std::string,EventFile> eventFiles,
+            std::map<std::string,ReweightingHandler*> reweightingHandler
             );
-#endif
+
 
     //! Processes event via Delphes and stores it if needed.
     /** \param iEvent the index of the event to be analysed, starting at 0.
      *  \return False if event could not be processed, else True.
      */
     bool processEvent(int iEvent);
+
+    //! Processes reweighted event via Delphes and stores it if needed.
+    /** \param iEvent the index of the event to be analysed, starting at 0.
+     *  \param iBranch the index of the reweighting branch
+     *  \return False if event could not be processed, else True.
+     */
+    bool processEvent(int iEvent, int iBranch);
+
 
     //! Returns true if there are still events available
     bool hasNextEvent();
@@ -90,10 +102,17 @@ public:
 
     //! Name to be printed in logfiles
     std::string name;
+
+    // indicates whether reweighting mode is on
+    bool reweightingOn;
+
+    // number of reweighted Branches
+    int nReweightingBranches;
     
 private:
     enum DelphesMode {
         PythiaMode,
+        ReweightingMode,
         STDHEPMode,
         HepMCMode,
         LHEFMode
@@ -106,12 +125,16 @@ private:
     void setupCommon(Properties props);
     //! Link Delphes to event file
     void setup(Properties props, EventFile eventFile);
+    //! Link Delphes to event file
+    void setup(Properties props, ReweightingHandler* rHandler);
     //! Set up Delphes object and potentially create output .root file
     void initialiseDelphes(std::string configFile,
                            std::string logFile,
                            std::string outputRootFileName);
     // in case of pHandler mode, translate Pythia event into Delphes event
     void readPythiaEvent(int iEvent);
+    // in case of rHandler mode, translate Reweighting (HepMC) event into Delphes event
+    void readReweightingEvent(int iEvent, int iBranch);
     
     // These are needed to read in events and process them further
     Delphes *mainDelphes;
@@ -134,6 +157,9 @@ private:
     //! Link Delphes to PythiaHandler
     void setup(Properties props, PythiaHandler* pHandler);
 #endif
+
+    //only defined in reweighting mode
+    ReweightingHandler *rHandler;
 
     //only defined in hepmc or stdhep mode
     TStopwatch* readStopWatch;

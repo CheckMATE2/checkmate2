@@ -28,6 +28,7 @@ DelphesHandler::DelphesHandler() {
 #endif
     delphesLogFile = "delphes.log";
     hasEvents = true;
+    reweightingOn = false;
     name = "delpheshandler";
 }
 
@@ -46,6 +47,7 @@ DelphesHandler::~DelphesHandler() {
 static const std::string keyName = "name";
 static const std::string keySettings = "settings";
 static const std::string keyPythiaHandler = "pythiahandler";
+static const std::string keyReweightingHandler = "reweightingHandler";
 static const std::string keyEventFile = "eventfile";
 static const std::string keyLogFile = "logfile";
 static const std::string keyOutputFile = "outputfile";
@@ -55,6 +57,7 @@ static void unknownKeys(Properties props) {
     knownKeys.push_back(keyName);
     knownKeys.push_back(keySettings);
     knownKeys.push_back(keyPythiaHandler);
+    knownKeys.push_back(keyReweightingHandler);
     knownKeys.push_back(keyEventFile);
     knownKeys.push_back(keyLogFile);
     knownKeys.push_back(keyOutputFile);
@@ -82,8 +85,9 @@ void DelphesHandler::setupCommon(Properties props) {
 void DelphesHandler::setup(
         Properties props,
         std::map<std::string,EventFile> eventFiles,
+        std::map<std::string,ReweightingHandler*> reweightingHandler,
         std::map<std::string,PythiaHandler*> pythiaHandler
-        ) {
+) {
     name = props["name"];
     unknownKeys(props);
     std::pair<bool,std::string> pair;
@@ -98,16 +102,33 @@ void DelphesHandler::setup(
     bool haveEvents = pair.first;
     std::string eventsLabel = pair.second;
 
+     // Same as above for reweighting
+    pair = maybeLookup(props, keyReweightingHandler);
+    bool reweightingOn = pair.first;
+    std::string reweightingLabel = pair.second;
+
     if (havePythia && haveEvents) {
         Global::abort(
                 name,
                 "PythiaHandler and EventFile can not be combined."
                 );
     }
-    if (!havePythia && !haveEvents) {
+    if (havePythia && reweightingOn) {
         Global::abort(
                 name,
-                "One of PythiaHandler and EventFile is required."
+                "PythiaHandler and Reweighting can not be combined."
+                );
+    }
+    if (haveEvents && reweightingOn) {
+        Global::abort(
+                name,
+                "EventFile and Reweighting can not be combined."
+                );
+    }
+    if (!havePythia && !haveEvents && !reweightingOn) {
+        Global::abort(
+                name,
+                "One of PythiaHandler, ReweightingHandler or EventFile is required."
                 );
     }
     if (havePythia) {
@@ -122,7 +143,7 @@ void DelphesHandler::setup(
                 "Initialising Delphes via linking to "+pHandler->name
                 );
         setup(props,pHandler);
-    } else {
+    } else if(haveEvents) {
         EventFile file = lookupRequired(
                 eventFiles,
                 eventsLabel,
@@ -134,13 +155,29 @@ void DelphesHandler::setup(
                 "Initialising Delphes via input event "+file.filepath
                 );
         setup(props,file);
+    } else {
+        rHandler = lookupRequired(
+                reweightingHandler,
+                reweightingLabel,
+                name,
+                "Can not find ReweightingHandler with label "+reweightingLabel
+                );
+
+        Global::print(
+                name,
+                "Initialising Delphes via linking to "+rHandler->name
+                );
+        setup(props,rHandler);
     }
 }
-#else
+#endif
+
+
 void DelphesHandler::setup(
         Properties props,
-        std::map<std::string,EventFile> eventFiles
-        ) {
+        std::map<std::string,EventFile> eventFiles,
+        std::map<std::string,ReweightingHandler*> reweightingHandler
+) {
     unknownKeys(props);
     if (hasKey(props, keyPythiaHandler)) {
         Global::abort(
@@ -148,26 +185,60 @@ void DelphesHandler::setup(
                 "To link delphes to pythia,"
                 " fritz needs to be compiled with pythia support");
     }
-    std::string eventsLabel = lookupRequired(
-            props,
-            keyEventFile,
-            name,
-            "EventFile is required."
-            );
 
-    EventFile file = lookupRequired(
-            eventFiles,
-            eventsLabel,
+    std::pair<bool,std::string> pair;
+    // Check if Delphes section in .ini file has a property with key keyEventFile
+    // maybeLookup returns (bool existent, string name)
+    pair = maybeLookup(props, keyEventFile);
+    bool haveEvents = pair.first;
+    std::string eventsLabel = pair.second;
+
+    // Same as above for reweighting
+    pair = maybeLookup(props, keyReweightingHandler);
+    bool reweightingOn = pair.first;
+    std::string reweightingLabel = pair.second;
+
+    if(haveEvents && reweightingOn){
+        Global::abort(
             name,
-            "Can not find EventFile with label "+eventsLabel
+            "EventFile and Reweighting can not be combined."
             );
-    Global::print(
+    }
+
+    if(!haveEvents && !reweightingOn){
+        Global::abort(
             name,
-            "Initialising Delphes via input event "+file.filepath
+            "One of ReweightingHandler or EventFile is required."
             );
-    setup(props,file);
+    }
+
+   
+    if(haveEvents){
+        EventFile file = lookupRequired(
+                eventFiles,
+                eventsLabel,
+                name,
+                "Can not find EventFile with label "+eventsLabel
+                );
+        Global::print(
+                name,
+                "Initialising Delphes via input event "+file.filepath
+                );
+        setup(props,file);
+    }else{
+        rHandler = lookupRequired(
+                reweightingHandler,
+                reweightingLabel,
+                name,
+                "Can not find ReweightingHandler with label "+reweightingLabel
+                );
+        Global::print(
+                name,
+                "Initialising Delphes via linking to "+reweightingLabel
+                );
+        setup(props,rHandler);
+    }
 }
-#endif
 
 #ifdef HAVE_PYTHIA
 void DelphesHandler::setup(
@@ -182,6 +253,21 @@ void DelphesHandler::setup(
     mainDelphes->Clear();
 }
 #endif
+
+
+void DelphesHandler::setup(
+        Properties props,
+        ReweightingHandler *rHandler
+    ) {
+    mode = ReweightingMode;
+    setupCommon(props);
+    this->rHandler = rHandler;
+    nReweightingBranches = rHandler->nBranches;
+    treeWriter->Clear();
+    mainDelphes->Clear();
+}
+
+
 void DelphesHandler::setup(
         Properties props,
         EventFile eventFile
@@ -253,7 +339,7 @@ bool DelphesHandler::processEvent(int iEvent) {
 
     Global::redirect_cout(delphesLogFile);
 
-    // read event from the correct sourcwe
+    // read event from the correct source
 #ifdef HAVE_PYTHIA
     if(mainPythia) {
         if (!pHandler->hasNextEvent()) {
@@ -322,6 +408,7 @@ bool DelphesHandler::processEvent(int iEvent) {
     else{
         Global::abort(name, "no valid input source");
     }
+    
 
     treeWriter->Fill();
     if(dHepmcReader)
@@ -331,6 +418,43 @@ bool DelphesHandler::processEvent(int iEvent) {
     Global::unredirect_cout();
     return true;
 }
+
+
+bool DelphesHandler::processEvent(int iEvent, int iBranch) {
+    /* We have to clear at the beginning of an event
+    * to make sure that results are kept for later handlers
+    * (like the analysis Handler)
+    */
+    if (!hasEvents) {
+        return false;
+    }
+
+    treeWriter->Clear();
+    mainDelphes->Clear();
+
+    Global::redirect_cout(delphesLogFile);
+
+    // read event from the correct source
+    if(!rHandler) {
+        Global::abort(name,"No reweightingHandler defined!");
+    }
+
+     if (!rHandler->hasNextEvent()) {
+        hasEvents = false;
+        return false;
+    }
+
+    readReweightingEvent(iEvent, iBranch);
+
+    mainDelphes->ProcessTask();
+    treeWriter->Fill();
+    
+    Global::unredirect_cout();
+    return true;
+
+}
+
+
 
 bool DelphesHandler::hasNextEvent() {
     return hasEvents;
@@ -489,4 +613,85 @@ void DelphesHandler::readPythiaEvent(int iEvent) {
 }
 #endif
 
+#ifdef HAVE_HEPMC
+void DelphesHandler::readReweightingEvent(int iEvent, int iBranch){
+    // Translates HepMC event into Delphes event format
+    HepMCEvent *element;
+    Candidate *candidate;
+    TDatabasePDG *pdg;
+    TParticlePDG *pdgParticle;
+    Int_t pdgCode;
 
+    Int_t pid, status;
+    Double_t px, py, pz, e, mass;
+    Double_t x, y, z, t;
+
+    // event information
+    element = static_cast<HepMCEvent *>(branchEvent->NewEntry());
+
+    element->Number = iEvent;
+    element->MPI = 1;
+
+    HepMC::GenEvent * evt = rHandler->reweightedEvents[iBranch].first;
+
+    element->ProcessID = evt->signal_process_id();
+    element->Weight = rHandler->reweightedEventWeights[iBranch];
+    element->Scale = evt->event_scale();
+    element->AlphaQED = evt->alphaQED();
+    element->AlphaQCD = evt->alphaQCD();
+
+    element->ID1 = rHandler->info[iBranch].id1;
+    element->ID2 = rHandler->info[iBranch].id2;
+    element->X1 = rHandler->info[iBranch].x1;
+    element->X2 = rHandler->info[iBranch].x2;
+    element->ScalePDF = rHandler->info[iBranch].scalePDF;
+    element->PDF1 = rHandler->info[iBranch].pdf1;
+    element->PDF2 = rHandler->info[iBranch].pdf2;
+
+    element->ReadTime = readStopWatch->RealTime();
+    element->ProcTime = procStopWatch->RealTime();
+
+    pdg = TDatabasePDG::Instance();
+    HepMC::GenEvent::particle_iterator it;
+    for(it=evt->particles_begin(); it!=evt->particles_end(); it++) {
+        HepMC::GenParticle * particle = *it;
+
+        pid = particle->pdg_id();
+        status = particle->status();
+        px = particle->momentum().px();
+        py = particle->momentum().py();
+        pz = particle->momentum().pz();
+        e = particle->momentum().e();
+        mass = particle->momentum().m();
+
+        HepMC::GenVertex * production_vertex = particle->production_vertex();
+        x = production_vertex->position().x();
+        y = production_vertex->position().y();
+        z = production_vertex->position().z();
+        t = production_vertex->position().t();
+
+        candidate = factory->NewCandidate();
+        candidate->PID = pid;
+        pdgCode = TMath::Abs(candidate->PID);
+        candidate->Status = status;
+        // candidate->M1 = particle->info.mother1() - 1; // FIXME: Why -1 ??
+        // candidate->M2 = particle->info.mother2() - 1; // FIXME: Why -1 ??
+        // candidate->D1 = particle->info.daughter1() - 1; // FIXME: Why -1 ??
+        // candidate->D2 = particle->info.daughter2() - 1; // FIXME: Why -1 ??
+        pdgParticle = pdg->GetParticle(pid);
+        candidate->Charge = pdgParticle ? Int_t(pdgParticle->Charge()/3.):-999;
+        candidate->Mass = mass;
+        candidate->Momentum.SetPxPyPzE(px, py, pz, e);
+        candidate->Position.SetXYZT(x, y, z, t);
+
+        allParticleOutputArray->Add(candidate);
+
+        if(!pdgParticle)
+            continue;
+        if(particle->is_undecayed())
+            stableParticleOutputArray->Add(candidate);
+        else if(pdgCode <= 5 || pdgCode == 21 || pdgCode == 15)
+            partonOutputArray->Add(candidate);
+    }
+}
+#endif
