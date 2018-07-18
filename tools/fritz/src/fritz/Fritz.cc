@@ -16,6 +16,8 @@ Fritz::Fritz() {
     haveNEvents = false;
     nEvents = 0;
     haveRandomSeed = false;
+    reweightingOn = false;
+    nReweightingBranches = 0;
     signal(SIGINT, signalHandler);
 }
 
@@ -24,6 +26,12 @@ Fritz::~Fritz() {
     for (ita=analysisHandler.begin(); ita!=analysisHandler.end(); ita++) {
         delete ita->second;
         ita->second = NULL;
+    }
+
+    std::map<std::string,ReweightingHandler*>::iterator itr;
+    for (itr=reweightingHandler.begin(); itr!=reweightingHandler.end(); itr++) {
+        delete itr->second;
+        itr->second = NULL;
     }
 
     std::map<std::string,DelphesHandler*>::iterator itd;
@@ -68,11 +76,11 @@ void Fritz::processEventLoop() {
        * Otherwise, print every 10000th event. For printouts, counting
        * starts with 1.*/
       if (nEvents != 0 && (nEvents < 100 || ((iEvent)%(nEvents/10) == 0)))
-	message += Global::intToStr((iEvent)*100/nEvents) + " %";
+        message += Global::intToStr((iEvent)*100/nEvents) + " %";
       else if (nEvents == 0 && (iEvent) % 100 == 0)
-	message += strEvent + " Events";
+        message += strEvent + " Events";
       if (message != "Progress: ")
-	Global::print("Fritz", message);
+        Global::print("Fritz", message);
     }
     Global::unredirect_cout();
     Global::print("Fritz", " >> Finalising after " + strEvent + " events. <<");
@@ -89,13 +97,32 @@ bool Fritz::processEvent(int iEvent) {
         running |= itp->second->processEvent(iEvent);
     }
 #endif
+
+    std::map<std::string,ReweightingHandler*>::iterator itr;
+    for (itr=reweightingHandler.begin(); itr!=reweightingHandler.end(); itr++) {
+        running |= itr->second->processEvent(iEvent);
+    }
+
     std::map<std::string,DelphesHandler*>::iterator itd;
     for (itd=delphesHandler.begin(); itd!=delphesHandler.end(); itd++) {
+        if(itd->second->reweightingOn) continue;
         running |= itd->second->processEvent(iEvent);
     }
+    
+
     std::map<std::string,AnalysisHandler*>::iterator ita;
     for (ita=analysisHandler.begin(); ita!=analysisHandler.end(); ita++) {
+        if(ita->second->reweightingOn) continue;
         running |= ita->second->processEvent(iEvent);
+    }
+
+    for (ita=analysisHandler.begin(); ita!=analysisHandler.end(); ita++) {
+        if(!ita->second->reweightingOn) continue;
+        int nBranches = ita->second->nReweightingBranches;
+        for(int iBranch=0; iBranch<nBranches; iBranch++){
+            running |= ita->second->dHandler->processEvent(iEvent, iBranch);
+            running |= ita->second->processEvent(iEvent);
+        }
     }
     return running;
 }
@@ -104,19 +131,29 @@ void Fritz::finalize() {
     // Finalisation in opposite order of creation
     std::map<std::string,AnalysisHandler*>::iterator ita;
     for (ita=analysisHandler.begin(); ita!=analysisHandler.end(); ita++) {
-        ita->second->finish();
+        int nBranches = ita->second->nReweightingBranches;
+        for(int iBranch=0; iBranch<nBranches; iBranch++){
+            ita->second->finish();
+        }
     }
 
     std::map<std::string,DelphesHandler*>::iterator itd;
     for (itd=delphesHandler.begin(); itd!=delphesHandler.end(); itd++) {
         itd->second->finish();
     }
+
+    std::map<std::string,ReweightingHandler*>::iterator itr;
+    for (itr=reweightingHandler.begin(); itr!=reweightingHandler.end(); itr++) {
+        itr->second->finish();
+    }
+
 #ifdef HAVE_PYTHIA
     std::map<std::string,PythiaHandler*>::iterator itp;
     for (itp=pythiaHandler.begin(); itp!=pythiaHandler.end(); itp++) {
         itp->second->finish();
     }
 #endif
+
     Global::print("Fritz", " >> Done <<");
 }
 
@@ -133,6 +170,7 @@ static void unknownSections(Config conf) {
     knownKeys.push_back(keyAnalysisHandlerSection);
     knownKeys.push_back(keyEventFileSection);
     knownKeys.push_back(keyPythiaHandlerSection);
+    knownKeys.push_back(keyReweightingHandlerSection);
     knownKeys.push_back(keyDelphesHandlerSection);
     knownKeys.push_back(keyAnalysisHandlerSection);
     warnUnknownKeys(conf, knownKeys, "Fritz", "Unknown section type in input file");
@@ -159,8 +197,27 @@ void Fritz::setupPythiaHandler(Config conf) {
         pHandler->setup(props);
         pythiaHandler[label] = pHandler;
     }
+    // Can be 0 or 1 PythiaHandler for each process, i.e. each input file, i.e. each Fritz run 
 }
 #endif
+
+void Fritz::setupReweightingHandler(Config conf) {
+    Sections sections = conf[keyReweightingHandlerSection];
+    std::map<std::string,Properties>::iterator it;
+    for (it=sections.begin(); it!=sections.end(); it++) {
+        std::string label = it->first;
+        Properties props = it->second;
+        ReweightingHandler *rHandler = new ReweightingHandler();
+#ifdef HAVE_PYTHIA
+        rHandler->setup(props,eventFiles,pythiaHandler);
+#else
+        rHandler->setup(props,eventFiles);
+#endif        
+        reweightingHandler[label] = rHandler;
+        reweightingOn = true;
+    }
+    // Can be 0 or 1 ReweightingHandler for each process, i.e. each input file, i.e. each Fritz run
+}
 
 void Fritz::setupDelphesHandler(Config conf) {
     Sections sections = conf[keyDelphesHandlerSection];
@@ -170,12 +227,14 @@ void Fritz::setupDelphesHandler(Config conf) {
         Properties props = it->second;
         DelphesHandler *dHandler = new DelphesHandler();
 #ifdef HAVE_PYTHIA
-        dHandler->setup(props,eventFiles,pythiaHandler);
+        dHandler->setup(props,eventFiles,reweightingHandler,pythiaHandler);
 #else
-        dHandler->setup(props,eventFiles);
+        dHandler->setup(props,eventFiles,reweightingHandler);
 #endif
         delphesHandler[label] = dHandler;
     }
+    // One DelphesHandler for each analysis type (ATLAS13TEV, CMS14TEV,... ) that is needed
+
 }
 
 void Fritz::setupAnalysisHandler(Config conf) {
@@ -222,11 +281,13 @@ void Fritz::setupAnalysisHandler(Config conf) {
                 conf,
                 eventFiles,
                 delphesHandler,
+                reweightingHandler,
                 haveRandomSeed,
                 randomSeed
                 );
         analysisHandler[label] = aHandler;
     }
+    // One AnalysisHandler for each analysis type (ATLAS13TEV, CMS14TEV,... ) that is needed. 
 }
 
 static const std::string keyGlobalNEvents = "nevents";
@@ -284,6 +345,13 @@ void Fritz::readInputFile(std::string filepath) {
 #else
     if (hasKey(conf, keyPythiaHandlerSection)) {
         Global::abort("Fritz", "To use pythia you need to compile fritz with pythia support.");
+    }
+#endif
+#ifdef HAVE_HEPMC
+    setupReweightingHandler(conf);
+#else
+    if (hasKey(conf, keyReweightingHandlerSection)) {
+        Global::abort("Fritz", "To use reweighting you need to compile fritz with HepMC support.");
     }
 #endif
     setupDelphesHandler(conf);

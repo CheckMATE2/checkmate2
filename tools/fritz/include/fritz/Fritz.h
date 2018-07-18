@@ -28,6 +28,12 @@
 #include "PythiaHandler.h"
 #endif 
 
+#if defined(HAVE_HEPMC) && defined(HAVE_LHAPDF) && defined(HAVE_FASTJET)
+#include "ReweightingHandler.h"
+#endif
+
+
+
 /*! \mainpage Introduction
  * This documentation describes all classes and functions that are used by the
  * FRITZ tool within CheckMATE. You can find information on all handlers that
@@ -81,6 +87,9 @@ class Fritz {
         //! Takes the config and extracts and initializes all event files
         void setupEventFiles(Config conf);
 
+        //! Takes the config and initializes all reweighting handlers
+        void setupReweightingHandler(Config conf);
+
         //! Takes the config and initializes all delphes handlers
         void setupDelphesHandler(Config conf);
 
@@ -105,6 +114,8 @@ class Fritz {
 
         //! Map from event file label to eventfile
         std::map<std::string,EventFile> eventFiles;
+        //! Map from reweighting handler label to reweighting handler
+        std::map<std::string,ReweightingHandler*> reweightingHandler;
         //! Map from delphes handler label to delphes handler
         std::map<std::string,DelphesHandler*> delphesHandler;
         //! Map from analysis handler label to analysis handler
@@ -122,6 +133,8 @@ class Fritz {
         bool haveRandomSeed; //!< Has randomSeed been set
         int randomSeed; //!< Random seed for this run
         static bool interupted; //!< set to true if interrupt signal is called
+        bool reweightingOn; //!< flag whether reweighting module is used
+        int nReweightingBranches; //!< number of reweighting targets
 };
 
 #endif /* FRITZ_H_ */
