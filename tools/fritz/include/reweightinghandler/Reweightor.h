@@ -32,6 +32,7 @@ public:
 	//! \return pair of a) boolean return code b) list of pairs of events and eventinformation. Each item in the list corresponds to one target parameter point.
 	std::vector<std::pair<bool, std::pair<HepMC::GenEvent*,ReweightingProcInfo>>> reweight(HepMC::GenEvent* evt);
 
+	ReweightingProcInfo oldProcInfo; // ProcInfo of the original event. Needed in ReweightingHandler and best extracted in Reweightor::reweight.
 
 private:
 

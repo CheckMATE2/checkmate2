@@ -26,6 +26,9 @@ DelphesHandler::DelphesHandler() {
     pHandler = NULL;
     mainPythia = NULL;
 #endif
+#ifdef HAVE_REWEIGHTING
+    rHandler = NULL;
+#endif
     delphesLogFile = "delphes.log";
     hasEvents = true;
     reweightingOn = false;
@@ -47,7 +50,7 @@ DelphesHandler::~DelphesHandler() {
 static const std::string keyName = "name";
 static const std::string keySettings = "settings";
 static const std::string keyPythiaHandler = "pythiahandler";
-static const std::string keyReweightingHandler = "reweightingHandler";
+static const std::string keyReweightingHandler = "reweightinghandler";
 static const std::string keyEventFile = "eventfile";
 static const std::string keyLogFile = "logfile";
 static const std::string keyOutputFile = "outputfile";
@@ -81,7 +84,7 @@ void DelphesHandler::setupCommon(Properties props) {
     initialiseDelphes(settings, logFile, outputFile);
 }
 
-#ifdef HAVE_PYTHIA
+#if defined(HAVE_PYTHIA) && defined(HAVE_REWEIGHTING)
 void DelphesHandler::setup(
         Properties props,
         std::map<std::string,EventFile> eventFiles,
@@ -173,6 +176,7 @@ void DelphesHandler::setup(
 #endif
 
 
+#ifdef HAVE_REWEIGHTING
 void DelphesHandler::setup(
         Properties props,
         std::map<std::string,EventFile> eventFiles,
@@ -239,6 +243,8 @@ void DelphesHandler::setup(
         setup(props,rHandler);
     }
 }
+#endif
+
 
 #ifdef HAVE_PYTHIA
 void DelphesHandler::setup(
@@ -255,6 +261,7 @@ void DelphesHandler::setup(
 #endif
 
 
+#ifdef HAVE_REWEIGHTING
 void DelphesHandler::setup(
         Properties props,
         ReweightingHandler *rHandler
@@ -266,6 +273,7 @@ void DelphesHandler::setup(
     treeWriter->Clear();
     mainDelphes->Clear();
 }
+#endif
 
 
 void DelphesHandler::setup(
@@ -420,6 +428,7 @@ bool DelphesHandler::processEvent(int iEvent) {
 }
 
 
+#ifdef HAVE_REWEIGHTING
 bool DelphesHandler::processEvent(int iEvent, int iBranch) {
     /* We have to clear at the beginning of an event
     * to make sure that results are kept for later handlers
@@ -453,6 +462,7 @@ bool DelphesHandler::processEvent(int iEvent, int iBranch) {
     return true;
 
 }
+#endif
 
 
 
@@ -509,7 +519,7 @@ void DelphesHandler::initialiseDelphes(std::string configFile,
     readStopWatch = new TStopwatch();
     procStopWatch = new TStopwatch();
 
-    if (mode == HepMCMode || mode == PythiaMode) {
+    if (mode == HepMCMode || mode == PythiaMode || mode == ReweightingMode) {
         branchEvent = treeWriter->NewBranch("Event", HepMCEvent::Class());
     } else if (mode == STDHEPMode || mode == LHEFMode) {
         branchEvent = treeWriter->NewBranch("Event", LHEFEvent::Class());
@@ -536,6 +546,8 @@ void DelphesHandler::initialiseDelphes(std::string configFile,
     Global::unredirect_cout();
     Global::print(name, "Delphes successfully initialised!");
 }
+
+
 #ifdef HAVE_PYTHIA
 void DelphesHandler::readPythiaEvent(int iEvent) {
     // Translates Pythia HepMC event into Delphes event format
@@ -613,9 +625,10 @@ void DelphesHandler::readPythiaEvent(int iEvent) {
 }
 #endif
 
-#ifdef HAVE_HEPMC
+#ifdef HAVE_REWEIGHTING
 void DelphesHandler::readReweightingEvent(int iEvent, int iBranch){
     // Translates HepMC event into Delphes event format
+
     HepMCEvent *element;
     Candidate *candidate;
     TDatabasePDG *pdg;
@@ -640,13 +653,13 @@ void DelphesHandler::readReweightingEvent(int iEvent, int iBranch){
     element->AlphaQED = evt->alphaQED();
     element->AlphaQCD = evt->alphaQCD();
 
-    element->ID1 = rHandler->info[iBranch].id1;
-    element->ID2 = rHandler->info[iBranch].id2;
-    element->X1 = rHandler->info[iBranch].x1;
-    element->X2 = rHandler->info[iBranch].x2;
-    element->ScalePDF = rHandler->info[iBranch].scalePDF;
-    element->PDF1 = rHandler->info[iBranch].pdf1;
-    element->PDF2 = rHandler->info[iBranch].pdf2;
+    element->ID1 = rHandler->reweightedEvents[iBranch].second.id1;
+    element->ID2 = rHandler->reweightedEvents[iBranch].second.id2;
+    element->X1 = rHandler->reweightedEvents[iBranch].second.x1;
+    element->X2 = rHandler->reweightedEvents[iBranch].second.x2;
+    element->ScalePDF = rHandler->reweightedEvents[iBranch].second.scalePDF;
+    element->PDF1 = rHandler->reweightedEvents[iBranch].second.pdf1;
+    element->PDF2 = rHandler->reweightedEvents[iBranch].second.pdf2;
 
     element->ReadTime = readStopWatch->RealTime();
     element->ProcTime = procStopWatch->RealTime();
@@ -665,17 +678,21 @@ void DelphesHandler::readReweightingEvent(int iEvent, int iBranch){
         mass = particle->momentum().m();
 
         HepMC::GenVertex * production_vertex = particle->production_vertex();
-        x = production_vertex->position().x();
-        y = production_vertex->position().y();
-        z = production_vertex->position().z();
-        t = production_vertex->position().t();
+        if(production_vertex != 0){
+            x = production_vertex->position().x();
+            y = production_vertex->position().y();
+            z = production_vertex->position().z();
+            t = production_vertex->position().t();
+            // candidate->M1 = particle->info.mother1() - 1; // FIXME: Why -1 ??
+            // candidate->M2 = particle->info.mother2() - 1; // FIXME: Why -1 ??
+        }else{
+            x=0; y=0; z=0; t=0;
+        }
 
         candidate = factory->NewCandidate();
         candidate->PID = pid;
         pdgCode = TMath::Abs(candidate->PID);
         candidate->Status = status;
-        // candidate->M1 = particle->info.mother1() - 1; // FIXME: Why -1 ??
-        // candidate->M2 = particle->info.mother2() - 1; // FIXME: Why -1 ??
         // candidate->D1 = particle->info.daughter1() - 1; // FIXME: Why -1 ??
         // candidate->D2 = particle->info.daughter2() - 1; // FIXME: Why -1 ??
         pdgParticle = pdg->GetParticle(pid);
@@ -683,6 +700,7 @@ void DelphesHandler::readReweightingEvent(int iEvent, int iBranch){
         candidate->Mass = mass;
         candidate->Momentum.SetPxPyPzE(px, py, pz, e);
         candidate->Position.SetXYZT(x, y, z, t);
+
 
         allParticleOutputArray->Add(candidate);
 

@@ -64,7 +64,6 @@ endif
 
 if HAVE_HEPMC
 if HAVE_LHAPDF
-if HAVE_FASTJET
   SUBDIRS = include/reweightinghandler/procs
 
   fritz_SOURCES += src/reweightinghandler/ReweightingHandler.cc include/reweightinghandler/ReweightingHandler.h \
@@ -74,11 +73,10 @@ if HAVE_FASTJET
                     src/reweightinghandler/Matrixelements.cc include/reweightinghandler/Matrixelements.h \
                     src/reweightinghandler/reweightingaux.cc include/reweightinghandler/reweightingaux.h 
   
-  fritz_CXXFLAGS += -Iinclude/reweightinghandler
+  fritz_CXXFLAGS += -Iinclude/reweightinghandler -DHAVE_REWEIGHTING=1
   fritz_LDADD += @LHAPDFLIBS@ @FASTJETLIBS@
   fritz_LDADD += include/reweightinghandler/procs/libmgprocs.a
   LD_RUN_PATH += :@LHAPDFLIBDIR@ :@FASTJETLIBDIR@
-endif
 endif
 endif
 ROOTSYS = @ROOTSYSTEM@:

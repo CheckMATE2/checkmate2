@@ -16,8 +16,7 @@ AC_DEFUN([CHECK_LHAPDF],
     LHAPDFLIBS="-L$with_lhapdf/lib -lLHAPDF"
     LHAPDFLIBDIR="$with_lhapdf/lib"
   fi
-
-  AM_CONDITIONAL(HAVE_LHAPDF,[test "x$with_lhapdf" != "xno"])
+  AM_CONDITIONAL([HAVE_LHAPDF],[test "x$with_lhapdf" != "xno"])  
   AC_SUBST(LHAPDFINCLUDE)
   AC_SUBST(LHAPDFLIBS)
   AC_SUBST(LHAPDFLIBDIR)

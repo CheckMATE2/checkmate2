@@ -63,12 +63,13 @@ void ReweightingHandler::setup(
 		"Path to reweighting config file is required."
 	);
 
-	int nTargetsStr = lookupRequiredInt(
+	int nTargets = lookupRequiredInt(
 		props,
 		keyNTargets,
 		name,
 		"Number of target parameter points is required"
 	);
+    nBranches = nTargets + 1;
 
 	reweightingLogFile = lookupOrDefault(props, keyLogFile, "reweighting.log");
 	std::string outputDirectory = lookupOrDefault(props, keyOutputDirectory, "");
@@ -241,9 +242,8 @@ bool ReweightingHandler::processEvent(int iEvent){
     }
 
     Global::redirect_cout(reweightingLogFile);
-    
-    if(evt!=0) delete evt;
 
+    // don't need to extra delete evt since it's the first entry of reweightedEvents. Just delete every GenEvent in reweightedEvents.
     std::vector<std::pair<HepMC::GenEvent*,ReweightingProcInfo> >::iterator reweightedEventsIterator;
     for(reweightedEventsIterator=reweightedEvents.begin(); reweightedEventsIterator!=reweightedEvents.end(); reweightedEventsIterator++){
         if(reweightedEventsIterator->first!=0){
@@ -292,30 +292,39 @@ bool ReweightingHandler::processEvent(int iEvent){
         	);
     }
     
-    std::vector<std::pair<bool, std::pair<HepMC::GenEvent*,ReweightingProcInfo>>> reweightingResult;
-    std::vector<std::pair<bool, std::pair<HepMC::GenEvent*,ReweightingProcInfo>>>::iterator it;
+    std::cout << evt << std::endl;
 
-    reweightingResult = reweightor->reweight(evt);
-    
+    ReweightingProcInfo oldProcInfo = reweightor->oldProcInfo;
+    std::pair<HepMC::GenEvent*,ReweightingProcInfo> eventPair = std::make_pair(evt,oldProcInfo);
+    reweightedEvents.push_back(eventPair);
+
+    std::vector<std::pair<bool, std::pair<HepMC::GenEvent*,ReweightingProcInfo>>> reweightingResult;
+    reweightingResult = reweightor->reweight(evt);  
+
     bool success = true;
+    std::vector<std::pair<bool, std::pair<HepMC::GenEvent*,ReweightingProcInfo>>>::iterator it;
     for(it = reweightingResult.begin(); it!=reweightingResult.end(); it++){
+        std::cout << it->second.first << std::endl;
     	reweightedEvents.push_back(it->second);
     	success = success && it->first;
     }
 
     if(success){
     	fill_info();
-    	return true;
+    }else{
+        Global::abort(
+            name,
+            "Could not successfully reweight the events."
+        );
     }
-    return false;
+
+    return true;
 
 }
 
 
 void ReweightingHandler::fill_info(){
 	
-	nBranches = reweightedEvents.size();
-
 	// reweightedEventWeights
 	double totalWeight;
 
@@ -329,7 +338,6 @@ void ReweightingHandler::fill_info(){
 		}
 		reweightedEventWeights.push_back(totalWeight);
 	}
-
 
 
 }

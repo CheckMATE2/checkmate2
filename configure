@@ -15614,6 +15614,8 @@ $as_echo "$ac_res" >&6; }
         fi
 
 
+
+
 # Checks for libraries.
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for HepMC location" >&5
@@ -16527,7 +16529,6 @@ $as_echo "$with_lhapdf" >&6; }
     LHAPDFLIBS="-L$with_lhapdf/lib -lLHAPDF"
     LHAPDFLIBDIR="$with_lhapdf/lib"
   fi
-
    if test "x$with_lhapdf" != "xno"; then
   HAVE_LHAPDF_TRUE=
   HAVE_LHAPDF_FALSE='#'
@@ -16586,6 +16587,7 @@ fi
 #AC_CONFIG_SUBDIRS([tools/delphes/Delphes-3.1.10X])
 
 ac_config_files="$ac_config_files Makefile tools/analysis/Makefile tools/fritz/Makefile tools/fritz/include/reweightinghandler/procs/Makefile"
+
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure

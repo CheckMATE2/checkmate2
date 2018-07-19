@@ -3,6 +3,7 @@
 #include "Global.h"
 
 int main(int argc, char *argv[]) {
+
     Fritz* fritz = new Fritz();
     try {
         fritz->initialize(argc, argv);

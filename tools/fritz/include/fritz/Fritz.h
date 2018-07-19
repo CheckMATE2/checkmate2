@@ -28,7 +28,7 @@
 #include "PythiaHandler.h"
 #endif 
 
-#if defined(HAVE_HEPMC) && defined(HAVE_LHAPDF) && defined(HAVE_FASTJET)
+#ifdef HAVE_REWEIGHTING
 #include "ReweightingHandler.h"
 #endif
 
@@ -87,9 +87,6 @@ class Fritz {
         //! Takes the config and extracts and initializes all event files
         void setupEventFiles(Config conf);
 
-        //! Takes the config and initializes all reweighting handlers
-        void setupReweightingHandler(Config conf);
-
         //! Takes the config and initializes all delphes handlers
         void setupDelphesHandler(Config conf);
 
@@ -114,8 +111,6 @@ class Fritz {
 
         //! Map from event file label to eventfile
         std::map<std::string,EventFile> eventFiles;
-        //! Map from reweighting handler label to reweighting handler
-        std::map<std::string,ReweightingHandler*> reweightingHandler;
         //! Map from delphes handler label to delphes handler
         std::map<std::string,DelphesHandler*> delphesHandler;
         //! Map from analysis handler label to analysis handler
@@ -126,6 +121,13 @@ class Fritz {
         void setupPythiaHandler(Config conf);
         //! Map from pythia handler label to pythia handler
         std::map<std::string,PythiaHandler*> pythiaHandler;
+#endif
+
+#ifdef HAVE_REWEIGHTING
+        //! Takes the config and initializes all reweighting handlers
+        void setupReweightingHandler(Config conf);
+        //! Map from reweighting handler label to reweighting handler
+        std::map<std::string,ReweightingHandler*> reweightingHandler;
 #endif
 
         bool haveNEvents; //!< Has nEvents been set

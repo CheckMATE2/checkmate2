@@ -1016,6 +1016,16 @@ std::vector<std::pair<bool, std::pair<HepMC::GenEvent*,ReweightingProcInfo>>> Re
 	double old_m1 = slhaConfig["base"].get_block_entry("mass",pid1);	
 	double old_m2 = slhaConfig["base"].get_block_entry("mass",pid2);
 
+
+	oldProcInfo.id1 = initial_state[0]->pdg_id();
+	oldProcInfo.id2 = initial_state[1]->pdg_id();
+	oldProcInfo.x1 = initial_state[0]->momentum().e()/6500.;
+	oldProcInfo.x2 = initial_state[1]->momentum().e()/6500.;
+	oldProcInfo.scalePDF = slhaConfig["base"].get_block_entry("mass",23);
+	oldProcInfo.pdf1 = pdf->xfxQ(oldProcInfo.id1, oldProcInfo.x1, oldProcInfo.scalePDF)/oldProcInfo.x1;
+	oldProcInfo.pdf2 = pdf->xfxQ(oldProcInfo.id2, oldProcInfo.x2, oldProcInfo.scalePDF)/oldProcInfo.x2;
+
+
 	std::vector<std::pair<bool, std::pair<HepMC::GenEvent*,ReweightingProcInfo>>> ret;
 
 	std::map<std::string,SLHAReader>::iterator slhaIterator;
@@ -1035,8 +1045,8 @@ std::vector<std::pair<bool, std::pair<HepMC::GenEvent*,ReweightingProcInfo>>> Re
 			// at least one massive particle in a multi particle final state
 			// use on-shell masses, so no jacobian necessary
 			a = (new_m1+new_m2)/(old_m1+old_m2);
-		}else if(slha.has_block_entry("masses",mediator_pid)){
-			a = slha.get_block_entry("masses",mediator_pid)/slhaConfig["base"].get_block_entry("masses",mediator_pid);
+		}else if(slha.has_block_entry("mass",mediator_pid)){
+			a = slha.get_block_entry("mass",mediator_pid)/slhaConfig["base"].get_block_entry("mass",mediator_pid);
 		}else{
 			// final state is completely massles and no s-channel mediator
 			// TODO: One could take the invariant mass of the final state as scale
@@ -1060,7 +1070,7 @@ std::vector<std::pair<bool, std::pair<HepMC::GenEvent*,ReweightingProcInfo>>> Re
 			interface = add_underlying_event(newEvt,evt,jet_candidates); // add everything that comes before the hard vertex. interface tells us where we have to add the hard event.
 		}
 
-
+	
 		// Step 3: Transform the Hard Event
 		
 		double x1 = initial_state[0]->momentum().e() / 6500.;
@@ -1286,16 +1296,16 @@ std::vector<std::pair<bool, std::pair<HepMC::GenEvent*,ReweightingProcInfo>>> Re
 		newEvt->set_signal_process_vertex(new_hard_vertex);
 
 		ReweightingProcInfo newProcInfo;
-		newProcInfo.id1 = initial_state[0]->pdg_id();
-		newProcInfo.id2 = initial_state[1]->pdg_id();
-		newProcInfo.x1 = initial_state[0]->momentum().e()/6500.;
-		newProcInfo.x2 = initial_state[1]->momentum().e()/6500.;
+		newProcInfo.id1 = new_initial_state[0]->pdg_id();
+		newProcInfo.id2 = new_initial_state[1]->pdg_id();
+		newProcInfo.x1 = new_initial_state[0]->momentum().e()/6500.;
+		newProcInfo.x2 = new_initial_state[1]->momentum().e()/6500.;
 		newProcInfo.scalePDF = scale;
 		newProcInfo.pdf1 = pdf->xfxQ(newProcInfo.id1, newProcInfo.x1, scale)/newProcInfo.x1;
 		newProcInfo.pdf2 = pdf->xfxQ(newProcInfo.id2, newProcInfo.x2, scale)/newProcInfo.x2;
 
-		std::pair<HepMC::GenEvent*,ReweightingProcInfo> evenrPair = std::make_pair(newEvt,newProcInfo);
-		std::pair<bool, std::pair<HepMC::GenEvent*,ReweightingProcInfo>> returnPair = std::make_pair(returnStatus,evenrPair);
+		std::pair<HepMC::GenEvent*,ReweightingProcInfo> eventPair = std::make_pair(newEvt,newProcInfo);
+		std::pair<bool, std::pair<HepMC::GenEvent*,ReweightingProcInfo>> returnPair = std::make_pair(returnStatus,eventPair);
 
 		ret.push_back(returnPair);
 	}

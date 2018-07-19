@@ -19,6 +19,8 @@ AC_CHECK_HEADERS([fstream])
 
 AX_CXX_COMPILE_STDCXX_11()
 
+AC_CONFIG_MACRO_DIR([m4])
+
 # Checks for libraries.
 THEPEG_CHECK_HEPMC([2], ,AC_MSG_ERROR("No HepMC... but why?") )
 CHECK_PYTHIA([6], ,AC_MSG_ERROR("No Pythia... but why?") )
@@ -50,6 +52,7 @@ AC_CONFIG_FILES([Makefile
                  tools/analysis/Makefile
                  tools/fritz/Makefile
                  tools/fritz/include/reweightinghandler/procs/Makefile])
+
 AC_OUTPUT
 
 AC_MSG_RESULT([])

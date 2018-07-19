@@ -35,9 +35,13 @@
 #ifdef HAVE_PYTHIA
 #include "PythiaHandler.h"
 #endif
+
+#ifdef HAVE_REWEIGHTING
+#include "ReweightingHandler.h"
+#endif
+
 #include "Global.h"
 #include "EventFile.h"
-#include "ReweightingHandler.h"
 #include "FritzConfig.h"
 
 class DelphesHandler {
@@ -63,6 +67,7 @@ public:
             );
 #endif
 
+#ifdef HAVE_REWEIGHTING
     //! \brief Setup Delphes from config file
     //!
     //! \param props map containing delphes settings
@@ -72,6 +77,7 @@ public:
             std::map<std::string,EventFile> eventFiles,
             std::map<std::string,ReweightingHandler*> reweightingHandler
             );
+#endif    
 
 
     //! Processes event via Delphes and stores it if needed.
@@ -80,13 +86,14 @@ public:
      */
     bool processEvent(int iEvent);
 
+#ifdef HAVE_REWEIGHTING
     //! Processes reweighted event via Delphes and stores it if needed.
     /** \param iEvent the index of the event to be analysed, starting at 0.
      *  \param iBranch the index of the reweighting branch
      *  \return False if event could not be processed, else True.
      */
     bool processEvent(int iEvent, int iBranch);
-
+#endif
 
     //! Returns true if there are still events available
     bool hasNextEvent();
@@ -125,8 +132,6 @@ private:
     void setupCommon(Properties props);
     //! Link Delphes to event file
     void setup(Properties props, EventFile eventFile);
-    //! Link Delphes to event file
-    void setup(Properties props, ReweightingHandler* rHandler);
     //! Set up Delphes object and potentially create output .root file
     void initialiseDelphes(std::string configFile,
                            std::string logFile,
@@ -158,8 +163,12 @@ private:
     void setup(Properties props, PythiaHandler* pHandler);
 #endif
 
+#ifdef HAVE_REWEIGHTING
     //only defined in reweighting mode
     ReweightingHandler *rHandler;
+    //! Link Delphes to event file
+    void setup(Properties props, ReweightingHandler* rHandler);
+#endif
 
     //only defined in hepmc or stdhep mode
     TStopwatch* readStopWatch;

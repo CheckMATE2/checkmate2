@@ -10,6 +10,8 @@
 #include "FritzConfig.h"
 #include "ConfigParser.h"
 
+
+
 bool Fritz::interupted = false;
 
 Fritz::Fritz() {
@@ -28,17 +30,20 @@ Fritz::~Fritz() {
         ita->second = NULL;
     }
 
+#ifdef HAVE_REWEIGHTING
     std::map<std::string,ReweightingHandler*>::iterator itr;
     for (itr=reweightingHandler.begin(); itr!=reweightingHandler.end(); itr++) {
         delete itr->second;
         itr->second = NULL;
     }
+#endif
 
     std::map<std::string,DelphesHandler*>::iterator itd;
     for (itd=delphesHandler.begin(); itd!=delphesHandler.end(); itd++) {
         delete itd->second;
         itd->second = NULL;
     }
+
 #ifdef HAVE_PYTHIA
     std::map<std::string,PythiaHandler*>::iterator itp;
     for (itp=pythiaHandler.begin(); itp!=pythiaHandler.end(); itp++) {
@@ -98,22 +103,13 @@ bool Fritz::processEvent(int iEvent) {
     }
 #endif
 
+    std::map<std::string,DelphesHandler*>::iterator itd;
+    std::map<std::string,AnalysisHandler*>::iterator ita;
+
+#ifdef HAVE_REWEIGHTING
     std::map<std::string,ReweightingHandler*>::iterator itr;
     for (itr=reweightingHandler.begin(); itr!=reweightingHandler.end(); itr++) {
         running |= itr->second->processEvent(iEvent);
-    }
-
-    std::map<std::string,DelphesHandler*>::iterator itd;
-    for (itd=delphesHandler.begin(); itd!=delphesHandler.end(); itd++) {
-        if(itd->second->reweightingOn) continue;
-        running |= itd->second->processEvent(iEvent);
-    }
-    
-
-    std::map<std::string,AnalysisHandler*>::iterator ita;
-    for (ita=analysisHandler.begin(); ita!=analysisHandler.end(); ita++) {
-        if(ita->second->reweightingOn) continue;
-        running |= ita->second->processEvent(iEvent);
     }
 
     for (ita=analysisHandler.begin(); ita!=analysisHandler.end(); ita++) {
@@ -124,6 +120,15 @@ bool Fritz::processEvent(int iEvent) {
             running |= ita->second->processEvent(iEvent);
         }
     }
+#else
+    for (itd=delphesHandler.begin(); itd!=delphesHandler.end(); itd++) {
+        running |= itd->second->processEvent(iEvent);
+    }
+    for (ita=analysisHandler.begin(); ita!=analysisHandler.end(); ita++) {
+        running |= ita->second->processEvent(iEvent);
+    }
+#endif
+
     return running;
 }
 
@@ -142,10 +147,12 @@ void Fritz::finalize() {
         itd->second->finish();
     }
 
+#ifdef HAVE_REWEIGHTING
     std::map<std::string,ReweightingHandler*>::iterator itr;
     for (itr=reweightingHandler.begin(); itr!=reweightingHandler.end(); itr++) {
         itr->second->finish();
     }
+#endif
 
 #ifdef HAVE_PYTHIA
     std::map<std::string,PythiaHandler*>::iterator itp;
@@ -201,6 +208,7 @@ void Fritz::setupPythiaHandler(Config conf) {
 }
 #endif
 
+#if HAVE_REWEIGHTING
 void Fritz::setupReweightingHandler(Config conf) {
     Sections sections = conf[keyReweightingHandlerSection];
     std::map<std::string,Properties>::iterator it;
@@ -218,6 +226,7 @@ void Fritz::setupReweightingHandler(Config conf) {
     }
     // Can be 0 or 1 ReweightingHandler for each process, i.e. each input file, i.e. each Fritz run
 }
+#endif
 
 void Fritz::setupDelphesHandler(Config conf) {
     Sections sections = conf[keyDelphesHandlerSection];
@@ -226,10 +235,18 @@ void Fritz::setupDelphesHandler(Config conf) {
         std::string label = it->first;
         Properties props = it->second;
         DelphesHandler *dHandler = new DelphesHandler();
+#ifdef HAVE_REWEIGHTING
 #ifdef HAVE_PYTHIA
         dHandler->setup(props,eventFiles,reweightingHandler,pythiaHandler);
 #else
         dHandler->setup(props,eventFiles,reweightingHandler);
+#endif
+#else
+#ifdef HAVE_PYTHIA
+        dHandler->setup(props,eventFiles,pythiaHandler);
+#else
+        dHandler->setup(props,eventFiles);
+#endif
 #endif
         delphesHandler[label] = dHandler;
     }
@@ -347,11 +364,11 @@ void Fritz::readInputFile(std::string filepath) {
         Global::abort("Fritz", "To use pythia you need to compile fritz with pythia support.");
     }
 #endif
-#ifdef HAVE_HEPMC
+#ifdef HAVE_REWEIGHTING
     setupReweightingHandler(conf);
 #else
     if (hasKey(conf, keyReweightingHandlerSection)) {
-        Global::abort("Fritz", "To use reweighting you need to compile fritz with HepMC support.");
+        Global::abort("Fritz", "To use reweighting you need to compile fritz with HepMC and LHAPDF support.");
     }
 #endif
     setupDelphesHandler(conf);
