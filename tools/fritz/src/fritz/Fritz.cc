@@ -107,17 +107,19 @@ bool Fritz::processEvent(int iEvent) {
     std::map<std::string,AnalysisHandler*>::iterator ita;
 
 #ifdef HAVE_REWEIGHTING
-    std::map<std::string,ReweightingHandler*>::iterator itr;
-    for (itr=reweightingHandler.begin(); itr!=reweightingHandler.end(); itr++) {
-        running |= itr->second->processEvent(iEvent);
+    if(reweightingOn){
+        std::map<std::string,ReweightingHandler*>::iterator itr;
+        for (itr=reweightingHandler.begin(); itr!=reweightingHandler.end(); itr++) {
+            running |= itr->second->processEvent(iEvent);
+        }
     }
 
     for (ita=analysisHandler.begin(); ita!=analysisHandler.end(); ita++) {
         if(!ita->second->reweightingOn) continue;
         int nBranches = ita->second->nReweightingBranches;
-        for(int iBranch=0; iBranch<nBranches; iBranch++){
+        for(int iBranch=0; iBranch<=nBranches; iBranch++){
             running |= ita->second->dHandler->processEvent(iEvent, iBranch);
-            running |= ita->second->processEvent(iEvent);
+            running |= ita->second->processEvent(iEvent, iBranch);
         }
     }
 #else
@@ -223,6 +225,7 @@ void Fritz::setupReweightingHandler(Config conf) {
 #endif        
         reweightingHandler[label] = rHandler;
         reweightingOn = true;
+        nReweightingBranches = rHandler->nBranches;
     }
     // Can be 0 or 1 ReweightingHandler for each process, i.e. each input file, i.e. each Fritz run
 }
@@ -291,6 +294,10 @@ void Fritz::setupAnalysisHandler(Config conf) {
             aHandler = new AnalysisHandlerCMS_14TeV_projected();
         } else {
             Global::abort("Fritz", "Unknown analysis type "+type);
+        }
+        if(reweightingOn){
+            std::cout << "call setupReweighting with " << nReweightingBranches << std::endl;
+            aHandler->setupReweighting(nReweightingBranches);
         }
         aHandler->setup(
                 props,

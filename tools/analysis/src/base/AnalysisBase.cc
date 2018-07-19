@@ -14,7 +14,7 @@ AnalysisBase::AnalysisBase() {
     weight = 0;
     missingET = NULL;
     result = NULL;
-    nReweightingBranches = 0;
+    reweightingBranch = 0;
 }
 
 AnalysisBase::~AnalysisBase() {
@@ -51,6 +51,10 @@ void AnalysisBase::setup(std::map<std::string, std::vector<int> > whichTagsIn, s
     if(searchIterator != eventParameters.end())
         xsecterr = Global::strToDouble(searchIterator->second);     
 
+    searchIterator = eventParameters.find("reweightingBranch");
+    if(searchIterator != eventParameters.end())
+        reweightingBranch = Global::strToInt(searchIterator->second);
+    
     whichTags = whichTagsIn;
     initialize(); // specified by derived analysis classes
 }
@@ -71,20 +75,27 @@ void AnalysisBase::processEvent(int iEvent) {
 void AnalysisBase::finish() {
     finalize(); // specified by derived analysis classes
 
+    std::string suffix;
+    if(reweightingBranch == 0){
+        suffix = "";
+    }else{
+        suffix = "_target"+Global::intToStr(reweightingBranch);
+    }
+
     if(!cutflowRegions.empty()) {
-      int cutflowOutput = bookFile(analysis+"_cutflow.dat");
+      int cutflowOutput = bookFile(analysis+suffix+"_cutflow.dat");
       *fStreams[cutflowOutput] << "Cut  Sum_W  Sum_W2  Acc  N_Norm\n";
       for(std::map<std::string, double>::iterator cutflow_iter=cutflowRegions.begin(); cutflow_iter!=cutflowRegions.end(); ++cutflow_iter)
         *fStreams[cutflowOutput] << cutflow_iter->first << "  " << cutflow_iter->second << "  " << cutflowRegions2[cutflow_iter->first] << "  " << cutflow_iter->second/sumOfWeights << "  " << normalize(cutflow_iter->second) << "\n";
     }
     if(!signalRegions.empty()) {
-      int signalOutput = bookFile(analysis+"_signal.dat");
+      int signalOutput = bookFile(analysis+suffix+"_signal.dat");
       *fStreams[signalOutput] << "SR  Sum_W  Sum_W2  Acc  N_Norm\n";
       for(std::map<std::string, double>::iterator signal_iter=signalRegions.begin(); signal_iter!=signalRegions.end(); ++signal_iter)
         *fStreams[signalOutput] << signal_iter->first << "  " << signal_iter->second << "  " << signalRegions2[signal_iter->first] << "  " << signal_iter->second/sumOfWeights << "  " << normalize(signal_iter->second) << "\n";
     }
     if(!controlRegions.empty()) {
-      int controlOutput = bookFile(analysis+"_control.dat");
+      int controlOutput = bookFile(analysis+suffix+"_control.dat");
       *fStreams[controlOutput] << "CR  Sum_W  Sum_W2  Acc  N_Norm\n";
       for(std::map<std::string, double>::iterator control_iter=controlRegions.begin(); control_iter!=controlRegions.end(); ++control_iter)
         *fStreams[controlOutput] << control_iter->first << "  " << control_iter->second << "  " << controlRegions2[control_iter->first] << "  " << control_iter->second/sumOfWeights << "  " << normalize(control_iter->second) << "\n";

@@ -69,7 +69,7 @@ void ReweightingHandler::setup(
 		name,
 		"Number of target parameter points is required"
 	);
-    nBranches = nTargets + 1;
+    nBranches = nTargets;
 
 	reweightingLogFile = lookupOrDefault(props, keyLogFile, "reweighting.log");
 	std::string outputDirectory = lookupOrDefault(props, keyOutputDirectory, "");

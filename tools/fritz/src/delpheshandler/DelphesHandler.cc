@@ -443,12 +443,11 @@ bool DelphesHandler::processEvent(int iEvent, int iBranch) {
 
     Global::redirect_cout(delphesLogFile);
 
-    // read event from the correct source
     if(!rHandler) {
         Global::abort(name,"No reweightingHandler defined!");
     }
 
-     if (!rHandler->hasNextEvent()) {
+    if (!rHandler->hasNextEvent()) {
         hasEvents = false;
         return false;
     }

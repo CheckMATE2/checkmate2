@@ -75,6 +75,12 @@ public:
     //! Virtual Destructor, defined by real daughter classes
     virtual ~AnalysisHandler();
 
+    //! \brief Give AnalysisHandler necessary information about Reweighting before setup is called
+    //!         
+    //!
+    //! \param nBranches number of Reweighting Targets
+    void setupReweighting(int nBranches);
+
     //! \brief Sets up analyses and links to Delphes or an event file
     //!         as necessary
     //!
@@ -100,8 +106,7 @@ public:
      *  \param iBranch the index of the reweighting branch.
      *  \return False if event could not be processed, else True.
      */
-    bool processEvent(int iEvent);
-    bool processEvent(int iEvent, int iBranch);
+    bool processEvent(int iEvent, int iBranch=0);
 
     //! Sets cross section for analyses a posteriori
     /* Cross section can either be defined via eventParameters in the setup()

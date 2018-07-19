@@ -20,6 +20,9 @@ AnalysisHandler::AnalysisHandler() {
     hasEvents = true;
     name = "analysishandler";
     reweightingOn = false;
+#ifdef HAVE_REWEIGHTING
+    rHandler = NULL;
+#endif
 }
 
 AnalysisHandler::~AnalysisHandler() {
@@ -268,6 +271,12 @@ static std::vector<int> linkAnalysis(
 }
 
 
+void AnalysisHandler::setupReweighting(int nBranches){
+    nReweightingBranches = nBranches;
+    reweightingOn = true;
+}
+
+
 void AnalysisHandler::setupAnalyses(
         Config conf,
         std::string handlerLabel,
@@ -318,9 +327,13 @@ void AnalysisHandler::setupAnalyses(
                 bTagIds,
                 "btag"
                 );
-        for(int iBranch=0; iBranch<nReweightingBranches; iBranch++){
-            bookAnalysis(label+"_target"+Global::intToStr(iBranch+1), whichTags, analysisParameters);    
+        
+        
+        for(int iBranch=0; iBranch<=nReweightingBranches; iBranch++){
+            analysisParameters["reweightingBranch"] = Global::intToStr(iBranch);
+            bookAnalysis(label, whichTags, analysisParameters);    
         }        
+    
     }
 }
 
@@ -430,6 +443,7 @@ void AnalysisHandler::setupAnalysisHandler(
     }
 }
 
+
 void AnalysisHandler::setup(
         Properties props,
         std::string label,
@@ -520,7 +534,7 @@ void AnalysisHandler::setup(DelphesHandler* dHandlerIn) {
     dHandler = dHandlerIn;
 
     nReweightingBranches = dHandler->nReweightingBranches;
-    if(nReweightingBranches>0){
+    if(nReweightingBranches>1){
         reweightingOn = true;
     }
 
@@ -571,10 +585,7 @@ void AnalysisHandler::setup(ReweightingHandler* rHandlerIn) {
     * Is this function just to initialize the branches? Are they empty after this function is done?  
     * 
     */
-    reweightingOn = true;
     rHandler = rHandlerIn;
-
-    nReweightingBranches = rHandler->nBranches;
 
     Global::print(name, "Linking to rHandler "+rHandler->name);
 
@@ -602,27 +613,6 @@ void AnalysisHandler::setup(ReweightingHandler* rHandlerIn) {
 
 
 
-bool AnalysisHandler::processEvent(int iEvent) {
-    if(!hasEvents) {
-        return false;
-    }
-    if(!readParticles(iEvent))
-        return false;
-    postProcessParticles();
-    linkObjects();
-    for(int a = 0; a < listOfAnalyses.size(); a++) {
-        Global::unredirect_cout(); // This needs to stay, don't ask why - I don't know either.
-        Global::redirect_cout(analysisLogFile+"_"+listOfAnalyses[a]->analysis+".log");
-        listOfAnalyses[a]->processEvent(iEvent);
-        //FIXME It must be possible to do this nicer...
-        delete listOfAnalyses[a]->missingET;
-    }
-    Global::unredirect_cout();
-    return true;
-}
-
-
-
 bool AnalysisHandler::processEvent(int iEvent, int iBranch) {
     if(!hasEvents) {
         return false;
@@ -631,9 +621,10 @@ bool AnalysisHandler::processEvent(int iEvent, int iBranch) {
         return false;
     postProcessParticles();
     linkObjects();
+
     for(int a = 0; a < listOfAnalyses.size(); a++) {
         Global::unredirect_cout(); // This needs to stay, don't ask why - I don't know either.
-        Global::redirect_cout(analysisLogFile+"_"+listOfAnalyses[a]->analysis+".log");
+        Global::redirect_cout(analysisLogFile+"_"+listOfAnalyses[a]->analysis+"_target"+Global::intToStr(iBranch)+".log");
         listOfAnalyses[a]->processEvent(iEvent);
         //FIXME It must be possible to do this nicer...
         delete listOfAnalyses[a]->missingET;
@@ -1230,6 +1221,5 @@ void AnalysisHandler::linkObjects() {
         listOfAnalyses[a]->muonIsolationTags = muonIsolationTags;
         listOfAnalyses[a]->photonIsolationTags = photonIsolationTags;
 
-        listOfAnalyses[a]->nReweightingBranches = nReweightingBranches;
     }
 }

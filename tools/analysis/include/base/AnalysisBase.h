@@ -845,7 +845,7 @@ class AnalysisBase {
     // keeps track of all loaded FinalStateParticles and properly frees them 
     std::vector<FinalStateObject*> finalStateObjects;
 
-    int nReweightingBranches;
+    int reweightingBranch; // the reweighting branch this analysis corresponds to
 };
 
 
