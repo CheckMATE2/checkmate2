@@ -63,10 +63,6 @@ void Reweightor::setup(const std::string & configPath){
 		"No Sections given in Reweighting settings file: "+configPath
 		);
 
-	for(std::map<std::string, Properties>::iterator it=sects.begin(); it!=sects.end(); it++){
-		std::cout << it->first << std::endl;
-	}
-
 	Properties slhaFilesProps = lookupRequired(
 		sects,
 		keySLHAFiles,
@@ -78,6 +74,22 @@ void Reweightor::setup(const std::string & configPath){
 		if(it->first == "name") continue;
 		SLHAReader slha(it->second);
 		slhaConfig[it->first] = slha;
+	}
+
+	Properties xsecProps;
+	if(hasKey(sects,keyCrossSections)){
+		xsecProps = sects[keyCrossSections];
+		for(std::map<std::string, std::string>::iterator it=xsecProps.begin(); it!=xsecProps.end(); it++){
+			crossSections[it->first] = Global::strToDouble(it->second);
+		}
+	}
+
+	Properties xsecerrProps;
+	if(hasKey(sects,keyCrossSectionErrors)){
+		xsecerrProps = sects[keyCrossSectionErrors];
+		for(std::map<std::string, std::string>::iterator it=xsecerrProps.begin(); it!=xsecerrProps.end(); it++){
+			crossSectionErrors[it->first] = Global::strToDouble(it->second);
+		}
 	}
 
 	Properties globalProps;
@@ -119,6 +131,23 @@ void Reweightor::setup(const std::string & configPath){
 	}
 	
 }
+
+
+void Reweightor::setCrossSections(std::vector<ReweightingProcInfo> & info){
+
+	for(int iBranch=0; iBranch<info.size(); iBranch++){
+		std::string name;
+		if(iBranch == 0){
+			name = "base";
+		}else{
+			name = "target"+Global::intToStr(iBranch);
+		}
+		info[iBranch].xsec = crossSections[name];
+		info[iBranch].xsecerr = crossSectionErrors[name];
+	}
+
+}
+
 
 
 std::map<int,int> Reweightor::add_underlying_event(HepMC::GenEvent* new_evt, HepMC::GenEvent* old_evt, JetCandidateContainer & jet_candidates){

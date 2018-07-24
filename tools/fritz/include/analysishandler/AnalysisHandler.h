@@ -75,11 +75,58 @@ public:
     //! Virtual Destructor, defined by real daughter classes
     virtual ~AnalysisHandler();
 
-    //! \brief Give AnalysisHandler necessary information about Reweighting before setup is called
-    //!         
+
+
+    //! \brief Sets up analyses and links to Delphes or an event file
+    //!         as necessary
     //!
-    //! \param nBranches number of Reweighting Targets
-    void setupReweighting(int nBranches);
+    //! \param props properties of this analysis handler
+    //! \param label the label of this analysis handler
+    //! \conf the complete fritz configuration
+    //! \eventFiles all available event files
+    //! \delphesHandler all available delphes handler
+    //! \reweightingHandler all available reweighting handler
+    void setup(
+            Properties props,
+            std::string label,
+            Config conf,
+            std::map<std::string,EventFile> eventFiles,
+            std::map<std::string,DelphesHandler*> delphesHandler,
+            bool haveRandomSeed,
+            int randomSeed
+            );
+
+    //! \brief Give AnalysisHandler information about number of branches and that reweighting is on.
+    //! \param iBranch the reweighting branch
+    void setupReweighting(int iBranch);
+
+    //! Processes event via all loaded analyses.
+    /** \param iEvent the index of the event to be analysed, starting at 0.
+     *  \param iBranch the index of the reweighting branch.
+     *  \return False if event could not be processed, else True.
+     */
+    bool processEvent(int iEvent, int iBranch=0);
+
+    //! Sets cross section for analyses a posteriori
+    /* Cross section can either be defined via eventParameters in the setup()
+     * functions at the beginning or via this function at the end. This is
+     * necessary if Pythia8 is used to calculate the cross section.
+     * \input xsect cross section in fb
+     * \input xsecterr absolute systematic cross section error in fb
+     */
+    void setCrossSection(double xsect,
+                         double xsecterr = -1.0);
+
+    //! Finalises analyses
+    void finish(int iBranch);
+
+    
+    //! DelphesHandler object, if used
+    DelphesHandler* dHandler;
+
+#ifdef HAVE_REWEIGHTING
+    //! ReweightingHandler object, if used
+    ReweightingHandler* rHandler;
 
     //! \brief Sets up analyses and links to Delphes or an event file
     //!         as necessary
@@ -100,33 +147,7 @@ public:
             bool haveRandomSeed,
             int randomSeed
             );
-
-    //! Processes event via all loaded analyses.
-    /** \param iEvent the index of the event to be analysed, starting at 0.
-     *  \param iBranch the index of the reweighting branch.
-     *  \return False if event could not be processed, else True.
-     */
-    bool processEvent(int iEvent, int iBranch=0);
-
-    //! Sets cross section for analyses a posteriori
-    /* Cross section can either be defined via eventParameters in the setup()
-     * functions at the beginning or via this function at the end. This is
-     * necessary if Pythia8 is used to calculate the cross section.
-     * \input xsect cross section in fb
-     * \input xsecterr absolute systematic cross section error in fb
-     */
-    void setCrossSection(double xsect,
-                         double xsecterr = -1.0);
-
-    //! Finalises analyses
-    void finish();
-
-    
-    //! DelphesHandler object, if used
-    DelphesHandler* dHandler;
-
-    //! ReweightingHandler object, if used
-    ReweightingHandler* rHandler;
+#endif
 
     //! name which is printed in logfile
     std::string name;
@@ -145,7 +166,8 @@ protected:
     //! Books analysis, defined by daughter class of the right experiment
     virtual void bookAnalysis(std::string analysisName,
                               Tag_Map whichTags,
-                              Param_Map eventParameters ) {};
+                              Param_Map eventParameters,
+                              int iBranch) {};
 
     //! Performs experiment dependent particle procession
     /** Experiment dependent parts are identification/reconstruction
@@ -156,7 +178,9 @@ protected:
     //! Links experiment dependent particle lists
     virtual void linkObjects();
 
-    //! List of all booked analyses
+    //! List of all booked analyses, one list for each reweighting branch if applicable
+    std::vector<std::vector<AnalysisBase*>> branchesListOfAnalyses;
+    //! List of all booked analyses for a given branch
     std::vector<AnalysisBase*> listOfAnalyses;
 
     //! List of all booked jet btags
@@ -287,12 +311,10 @@ private:
     //! \param props Properties of the AnalysisHandler
     //! \param eventFiles all available event files
     //! \param delphesHandler all available delphes handler
-    //! \param reweightingHandler all available reweighting handler
     void setupAnalysisHandler(
             Properties props,
             std::map<std::string,EventFile> eventFiles,
-            std::map<std::string,DelphesHandler*> delphesHandler,
-            std::map<std::string,ReweightingHandler*> reweightingHandler
+            std::map<std::string,DelphesHandler*> delphesHandler
             );
 
     //! \brief Links analyses to a root file
@@ -305,10 +327,6 @@ private:
     //! \param dHandler DelphesHandler to link against
     void setup(DelphesHandler* dHandler);
 
-    //! \brief Link analyses to a reweighting handler directly
-    //!
-    //! \param rHandler ReweightingHandler to link against
-    void setup(ReweightingHandler* rHandler);
 
     //! Performes experiment independent analysis initialisation
     /* \sa setup function
@@ -325,6 +343,27 @@ private:
     void isolateElectrons(); //!< isolates electrons
     void isolateMuons(); //!< isolates muons;
     void isolatePhotons(); //!< isolates photons;
+
+
+#ifdef HAVE_REWEIGHTING
+    //! \brief Final setup of the AnalysisHandler object
+    //!
+    //! \param props Properties of the AnalysisHandler
+    //! \param eventFiles all available event files
+    //! \param delphesHandler all available delphes handler
+    //! \param reweightingHandler all available reweighting handler
+    void setupAnalysisHandler(
+        Properties props,
+        std::map<std::string,EventFile> eventFiles,
+        std::map<std::string,DelphesHandler*> delphesHandler,
+        std::map<std::string,ReweightingHandler*> reweightingHandler
+        );
+
+    //! \brief Link analyses to a reweighting handler directly
+    //!
+    //! \param rHandler ReweightingHandler to link against
+    void setup(ReweightingHandler* rHandler);
+#endif
 
     //! text file to store standard output and error of all analyses
     std::string analysisLogFile;

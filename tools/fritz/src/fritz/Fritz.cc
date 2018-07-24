@@ -139,8 +139,8 @@ void Fritz::finalize() {
     std::map<std::string,AnalysisHandler*>::iterator ita;
     for (ita=analysisHandler.begin(); ita!=analysisHandler.end(); ita++) {
         int nBranches = ita->second->nReweightingBranches;
-        for(int iBranch=0; iBranch<nBranches; iBranch++){
-            ita->second->finish();
+        for(int iBranch=0; iBranch<=nBranches; iBranch++){
+            ita->second->finish(iBranch);
         }
     }
 
@@ -296,7 +296,7 @@ void Fritz::setupAnalysisHandler(Config conf) {
             Global::abort("Fritz", "Unknown analysis type "+type);
         }
         if(reweightingOn){
-            std::cout << "call setupReweighting with " << nReweightingBranches << std::endl;
+            std::cout << "call setupReweighting with " << nReweightingBranches << "branches" << std::endl;
             aHandler->setupReweighting(nReweightingBranches);
         }
         aHandler->setup(

@@ -36,8 +36,8 @@ class Process:
     
     result_output_file = ""
 
-    # Why are there static members of the class? Surely the name of a process does not need to be a property of the class but the object.
-    # And that is also why the exact same variable are created at the object level in __init__... Why??
+    # Question: Why are there static members of the class? Surely the name of a process does not need to be a property of the class but the object.
+    # And that is also why the exact same variables are created again at the object level in __init__...
 
     def __init__(self, name):
         self.name = name
@@ -164,6 +164,15 @@ class Process:
         if not os.path.isdir(self.reweighting_spectrum_dir):
             AdvPrint.cerr_exit("reweighting_spectrum_dir does not exist: "+self.reweighting_spectrum_dir)
         slha_files = os.listdir(self.reweighting_spectrum_dir)
+        
+        cross_section_info = dict()
+        if os.path.exists(os.path.join(self.reweighting_spectrum_dir,"xsec.dat")):
+            with open(os.path.join(self.reweighting_spectrum_dir,"xsec.dat"),"r") as xsec_file:
+                for line in xsec_file:
+                    target_name, xsec, xsec_err = line.strip().split("\t")
+                    cross_section_info[target_name] = (xsec, xsec_err)
+            slha_files.remove("xsec.dat")
+
         if any([os.path.splitext(slha_file)[1]!=".slha" for slha_file in slha_files]):
             AdvPrint.cerr_exit("One of the given spectrum files is not an .slha file.")
         if not "base.slha" in slha_files:
@@ -190,6 +199,18 @@ class Process:
         for itarget,slha_file in enumerate(slha_files):
             full_path = os.path.abspath(os.path.join(self.reweighting_spectrum_dir,slha_file))
             reweightingConfig.set(slhaFilesSectionsName, "target{}".format(itarget+1), full_path)
+
+        if len(cross_section_info) > 0:
+            crossSectionsSectionsName = "Section: CrossSections"
+            crossSectionErrorsSectionsName = "Section: CrossSectionErrors"
+
+            reweightingConfig.add_section(crossSectionsSectionsName)
+            reweightingConfig.add_section(crossSectionErrorsSectionsName)
+
+            for itarget, (target_name,(xsec,xsec_err)) in enumerate(cross_section_info.iteritems()):
+                target_name = "base" if itarget==0 else "target{}".format(itarget)
+                reweightingConfig.set(crossSectionsSectionsName, target_name, xsec)
+                reweightingConfig.set(crossSectionErrorsSectionsName, target_name, xsec_err)
 
         with open(settings, 'wb') as outfile: 
             reweightingConfig.write(outfile)
@@ -346,7 +367,7 @@ class Process:
             for f in [x for x in os.listdir(Info.paths['output_analysis']) if x.startswith("analysisstdout")]:
                 if os.stat(os.path.join(Info.paths['output_analysis'], f)).st_size == 0:
                     os.remove(os.path.join(Info.paths['output_analysis'], f))
-            
+          
             # Associate result files to event
             for a in Info.analyses:
                 event.analysis_signal_files[a] = os.path.join(Info.paths['output_analysis'], event.identifier+'_'+a+'_signal.dat')

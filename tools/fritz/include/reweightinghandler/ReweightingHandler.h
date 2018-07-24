@@ -83,6 +83,10 @@ public:
     // initialize TTree Reader for direct input to AnalysisHandler
     void fillTreeReader(int iBranch);
 
+    // what the names say
+    double getCrossSection(int iBranch);
+    double getCrossSectionErr(int iBranch);
+
 
     // Name used for logfiles
     std::string name;

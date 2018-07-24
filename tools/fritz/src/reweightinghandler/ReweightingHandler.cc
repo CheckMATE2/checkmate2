@@ -69,7 +69,9 @@ void ReweightingHandler::setup(
 		name,
 		"Number of target parameter points is required"
 	);
+    
     nBranches = nTargets;
+    info = std::vector<ReweightingProcInfo>(nBranches);
 
 	reweightingLogFile = lookupOrDefault(props, keyLogFile, "reweighting.log");
 	std::string outputDirectory = lookupOrDefault(props, keyOutputDirectory, "");
@@ -141,12 +143,15 @@ void ReweightingHandler::setup(
 		"Path to reweighting config file is required."
 	);
 
-	int nTargetsStr = lookupRequiredInt(
+	int nTargets = lookupRequiredInt(
 		props,
 		keyNTargets,
 		name,
 		"Number of target parameter points is required"
 	);
+
+    nBranches = nTargets;
+    info = std::vector<ReweightingProcInfo>(nBranches);
 
 	reweightingLogFile = lookupOrDefault(props, keyLogFile, "reweighting.log");
 	std::string outputDirectory = lookupOrDefault(props, keyOutputDirectory, "");
@@ -211,6 +216,7 @@ void ReweightingHandler::setup(
     	);
     
     reweightor = new Reweightor(reweightingConfigPath);
+    reweightor->setCrossSections(info);
 
 }
 
@@ -292,8 +298,6 @@ bool ReweightingHandler::processEvent(int iEvent){
         	);
     }
     
-    std::cout << evt << std::endl;
-
     ReweightingProcInfo oldProcInfo = reweightor->oldProcInfo;
     std::pair<HepMC::GenEvent*,ReweightingProcInfo> eventPair = std::make_pair(evt,oldProcInfo);
     reweightedEvents.push_back(eventPair);
@@ -304,7 +308,6 @@ bool ReweightingHandler::processEvent(int iEvent){
     bool success = true;
     std::vector<std::pair<bool, std::pair<HepMC::GenEvent*,ReweightingProcInfo>>>::iterator it;
     for(it = reweightingResult.begin(); it!=reweightingResult.end(); it++){
-        std::cout << it->second.first << std::endl;
     	reweightedEvents.push_back(it->second);
     	success = success && it->first;
     }
@@ -339,7 +342,18 @@ void ReweightingHandler::fill_info(){
 		reweightedEventWeights.push_back(totalWeight);
 	}
 
+}
 
+
+double ReweightingHandler::getCrossSection(int iBranch){
+    Global::print(name, "Answering with cross section.");
+    double ret = info[iBranch].xsec;
+    Global::print(name, "Now back to you, Fritz.");
+    return ret;
+}
+
+double ReweightingHandler::getCrossSectionErr(int iBranch){
+    return info[iBranch].xsecerr;
 }
 
 

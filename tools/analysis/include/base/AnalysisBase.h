@@ -85,7 +85,7 @@ class AnalysisBase {
      *  the user defined 'finalize() function is called before all booked cutflow and signal tables
      *  are finalised and printed.
      */
-    void setup(std::map<std::string, std::vector<int> > whichTagsIn, std::map<std::string, std::string> eventParameters);
+    void setup(std::map<std::string, std::vector<int> > whichTagsIn, std::map<std::string, std::string> eventParameters, int iBranch);
     void processEvent(int iEvent);
     void finish();
 //TODO Texts

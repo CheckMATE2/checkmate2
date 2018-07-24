@@ -27,6 +27,8 @@ public:
 
 	void initialize(const std::string & filepath);
 
+	void setCrossSections(std::vector<ReweightingProcInfo> & info);
+
 	//! 
 	//! \param evt GenEvent to be transformed and reweighted
 	//! \return pair of a) boolean return code b) list of pairs of events and eventinformation. Each item in the list corresponds to one target parameter point.
@@ -123,6 +125,9 @@ private:
 	Matrixelements * getMatrixElements();
 
 	std::map<std::string,SLHAReader> slhaConfig;
+	std::map<std::string,double> crossSections;
+	std::map<std::string,double> crossSectionErrors;
+
 	bool matrixElementReweighting;
 	bool writingMode;
 	bool detectorSimulation;
@@ -137,6 +142,8 @@ private:
 	const std::string keySections = "section";
 	const std::string keyGlobal = "Global";
 	const std::string keySLHAFiles = "SLHAFiles";
+	const std::string keyCrossSections = "CrossSections";
+	const std::string keyCrossSectionErrors = "CrossSectionErrors";
 
 
 };

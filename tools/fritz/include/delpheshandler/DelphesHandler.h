@@ -99,10 +99,10 @@ public:
     bool hasNextEvent();
 
     //! Returns the cross section of the events processed by Delphes
-    double getCrossSection();
+    double getCrossSection(int iBranch);
 
     //! Returns the cross section error of the events processed by Delphes
-    double getCrossSectionErr();
+    double getCrossSectionErr(int iBranch);
 
     //! Finalize Delphes
     void finish();

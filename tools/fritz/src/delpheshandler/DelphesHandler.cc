@@ -469,20 +469,32 @@ bool DelphesHandler::hasNextEvent() {
     return hasEvents;
 }
 
-double DelphesHandler::getCrossSection() {
+double DelphesHandler::getCrossSection(int iBranch) {
 #ifdef HAVE_PYTHIA
     if (pHandler!=NULL) {
         Global::print(name, "Asking "+pHandler->name+" for cross section information");
         return pHandler->getCrossSection();
     }
 #endif
+#ifdef HAVE_REWEIGHTING
+    if(rHandler!=NULL) {
+        Global::print(name, "Asking "+rHandler->name+" for cross section information");
+        return rHandler->getCrossSection(iBranch);
+    }
+#endif
     Global::print(name, "Asking "+eventFile.name+" for cross section information");
     return eventFile.getCrossSection();
 }
-double DelphesHandler::getCrossSectionErr() {
+double DelphesHandler::getCrossSectionErr(int iBranch) {
 #ifdef HAVE_PYTHIA
     if (pHandler!=NULL) {
         return pHandler->getCrossSectionErr();
+    }
+#endif
+#ifdef HAVE_REWEIGHTING
+    if(rHandler!=NULL) {
+        Global::print(name, "Asking "+rHandler->name+" for cross section information");
+        return rHandler->getCrossSectionErr(iBranch);
     }
 #endif
     return eventFile.getCrossSectionErr();

@@ -64,7 +64,8 @@ protected:
     //! booking of ATLAS analyses
     void bookAnalysis(std::string analysisName,
                       Tag_Map whichTags,
-                      Param_Map eventParameters);
+                      Param_Map eventParameters,
+                      int iBranch);
 
     //! Applies ATLAS reconstructions on electrons, muons, photons, jets
     void postProcessParticles();

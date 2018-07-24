@@ -32,7 +32,8 @@ void AnalysisHandlerATLAS_14TeV_HL_FlatBtagger::finalize() {
 
 void AnalysisHandlerATLAS_14TeV_HL_FlatBtagger::bookAnalysis(std::string analysisName,
                                         Tag_Map whichTags,
-                                        Param_Map eventParameters) {
+                                        Param_Map eventParameters,
+                                        int iBranch) {
     Global::print(name, "Loading Analysis "+analysisName);
 
     AnalysisBase* a = NULL;
@@ -44,8 +45,8 @@ void AnalysisHandlerATLAS_14TeV_HL_FlatBtagger::bookAnalysis(std::string analysi
                       "Cannot load analysis "+analysisName+
                           " - analysis unknown.");
 
-    a->setup(whichTags, eventParameters);
-    listOfAnalyses.push_back(a);
+    a->setup(whichTags, eventParameters, iBranch);
+    branchesListOfAnalyses[iBranch].push_back(a);
     Global::print(name,
                   "Successfully loaded analysis "+analysisName);
 }

@@ -25,7 +25,7 @@ AnalysisBase::~AnalysisBase() {
 }
 
 
-void AnalysisBase::setup(std::map<std::string, std::vector<int> > whichTagsIn, std::map<std::string, std::string> eventParameters) {
+void AnalysisBase::setup(std::map<std::string, std::vector<int> > whichTagsIn, std::map<std::string, std::string> eventParameters, int iBranch) {
     // parameters MUST include
     // - outdir, prefix
     std::map<std::string, std::string>::iterator searchIterator;
@@ -51,9 +51,7 @@ void AnalysisBase::setup(std::map<std::string, std::vector<int> > whichTagsIn, s
     if(searchIterator != eventParameters.end())
         xsecterr = Global::strToDouble(searchIterator->second);     
 
-    searchIterator = eventParameters.find("reweightingBranch");
-    if(searchIterator != eventParameters.end())
-        reweightingBranch = Global::strToInt(searchIterator->second);
+    reweightingBranch = iBranch;
     
     whichTags = whichTagsIn;
     initialize(); // specified by derived analysis classes

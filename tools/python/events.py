@@ -70,53 +70,52 @@ class Events(dict):
             signal_regions = Info.get_analysis_parameters(analysis)["signal_regions"]
 
             # Read result file
-            f = open(self.analysis_signal_files[analysis], "r")
-            for line in f:
-                # Ignore empty or commented lines
-                line = line.rstrip()
-                if line == "" or line[0] == "#":
-                    continue
-                
-                # Read file:
-                line = AdvPrint.remove_extra_spaces(line)
-                tokens = [t for t in line.split("  ") if t != ""]
-                # First, read information on total events number
-                if tokens[0] == "MCEvents:":
-                    resultCollector.total_mcevents = float(tokens[1])
-                elif tokens[0] == " SumOfWeights:":
-                    resultCollector.total_sumofweights = float(tokens[1])
-                elif tokens[0] == " SumOfWeights2:":
-                    resultCollector.total_sumofweights2 = float(tokens[1])
-                elif tokens[0] == " NormEvents:":
-                    resultCollector.total_normevents = float(tokens[1])
-                elif tokens[0] == "XSect:":
-                    xsect = float(tokens[1].split(" ")[0])
-                elif tokens[0] == " Error:":      
-                    xsecterr = float(tokens[1].split(" ")[0])
-                else:
-                    # SR  Sum_W  Sum_W2  Acc  N_Norm
-                    for sr in signal_regions:                        
-                        if tokens[0].startswith(sr):
-                            resultCollector.sr = sr
-                            # Read number of events
-                            resultCollector.signal_sumofweights = float(tokens[1])
-                            resultCollector.signal_sumofweights2 = float(tokens[2])
-                            resultCollector.signal_normevents = float(tokens[4])
-                            
-                            # Calculate errors
-                            if resultCollector.signal_sumofweights > 0:
-                                resultCollector.signal_err_stat = resultCollector.signal_normevents*sqrt(resultCollector.signal_sumofweights2)/resultCollector.signal_sumofweights
-                                resultCollector.signal_err_sys = resultCollector.signal_normevents*xsecterr/xsect
-                                resultCollector.signal_err_tot = sqrt(resultCollector.signal_err_stat**2+resultCollector.signal_err_sys**2)
-                            else:
-                                resultCollector.signal_err_stat = 0
-                                resultCollector.signal_err_sys = 0
-                                resultCollector.signal_err_tot = 0
+            with open(self.analysis_signal_files[analysis], "r") as f:
+                for line in f:
+                    # Ignore empty or commented lines
+                    line = line.rstrip()
+                    if line == "" or line[0] == "#":
+                        continue
+                    
+                    # Read file:
+                    line = AdvPrint.remove_extra_spaces(line)
+                    tokens = [t for t in line.split("  ") if t != ""]
+                    # First, read information on total events number
+                    if tokens[0] == "MCEvents:":
+                        resultCollector.total_mcevents = float(tokens[1])
+                    elif tokens[0] == " SumOfWeights:":
+                        resultCollector.total_sumofweights = float(tokens[1])
+                    elif tokens[0] == " SumOfWeights2:":
+                        resultCollector.total_sumofweights2 = float(tokens[1])
+                    elif tokens[0] == " NormEvents:":
+                        resultCollector.total_normevents = float(tokens[1])
+                    elif tokens[0] == "XSect:":
+                        xsect = float(tokens[1].split(" ")[0])
+                    elif tokens[0] == " Error:":      
+                        xsecterr = float(tokens[1].split(" ")[0])
+                    else:
+                        # SR  Sum_W  Sum_W2  Acc  N_Norm
+                        for sr in signal_regions:                        
+                            if tokens[0].startswith(sr):
+                                resultCollector.sr = sr
+                                # Read number of events
+                                resultCollector.signal_sumofweights = float(tokens[1])
+                                resultCollector.signal_sumofweights2 = float(tokens[2])
+                                resultCollector.signal_normevents = float(tokens[4])
                                 
-                                
-                            # put copy of resultCollector in collector dict
-                            resultCollectors[analysis][sr] = deepcopy(resultCollector)
-            f.close()
+                                # Calculate errors
+                                if resultCollector.signal_sumofweights > 0:
+                                    resultCollector.signal_err_stat = resultCollector.signal_normevents*sqrt(resultCollector.signal_sumofweights2)/resultCollector.signal_sumofweights
+                                    resultCollector.signal_err_sys = resultCollector.signal_normevents*xsecterr/xsect
+                                    resultCollector.signal_err_tot = sqrt(resultCollector.signal_err_stat**2+resultCollector.signal_err_sys**2)
+                                else:
+                                    resultCollector.signal_err_stat = 0
+                                    resultCollector.signal_err_sys = 0
+                                    resultCollector.signal_err_tot = 0
+                                    
+                                    
+                                # put copy of resultCollector in collector dict
+                                resultCollectors[analysis][sr] = deepcopy(resultCollector)
             
         
         # Write events file, if wanted

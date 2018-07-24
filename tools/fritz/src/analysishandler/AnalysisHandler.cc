@@ -328,10 +328,9 @@ void AnalysisHandler::setupAnalyses(
                 "btag"
                 );
         
-        
         for(int iBranch=0; iBranch<=nReweightingBranches; iBranch++){
-            analysisParameters["reweightingBranch"] = Global::intToStr(iBranch);
-            bookAnalysis(label, whichTags, analysisParameters);    
+            branchesListOfAnalyses.push_back(std::vector<AnalysisBase*>(0));
+            bookAnalysis(label, whichTags, analysisParameters, iBranch);    
         }        
     
     }
@@ -361,6 +360,62 @@ std::map<std::string,std::string>  AnalysisHandler::setupAnalysisParameters(
     return analysisParameters;
 }
 
+
+void AnalysisHandler::setupAnalysisHandler(
+        Properties props,
+        std::map<std::string,EventFile> eventFiles,
+        std::map<std::string,DelphesHandler*> delphesHandler
+        ) {
+    std::pair<bool,std::string> pair;
+    analysisLogFile = lookupOrDefault(props, keyAnalysisHandlerLogFile, "analysis");
+    
+    pair = maybeLookup(props, keyAnalysisHandlerEventFile);
+    bool haveEventFile = pair.first;
+    std::string eventFileLabel = pair.second;
+    
+    pair = maybeLookup(props, keyAnalysisHandlerDelphesHandler);
+    bool haveDelphesHandler = pair.first;
+    std::string delphesHandlerLabel = pair.second;
+    
+    pair = maybeLookup(props, keyAnalysisHandlerReweightingHandler);
+    bool haveReweightingHandler = pair.first;
+    std::string reweightingHandlerLabel = pair.second;
+    
+    if (haveEventFile && haveDelphesHandler) {
+        Global::abort(
+                name,
+                "Only one of eventfile and delpheshandler can be used at the same time in"
+                    " an analysishandler section"
+                );
+    }
+  
+    if (!haveEventFile && !haveDelphesHandler) {
+        Global::abort(
+                name,
+                "One of eventfile, delpheshandler and reweightinghandler is required in an analysishandler section"
+                );
+    }
+    if (haveEventFile) {
+        EventFile eventFile = lookupRequired(
+                eventFiles,
+                eventFileLabel,
+                name,
+                "Can not find event file with label "+eventFileLabel
+                );
+        setup(eventFile);
+    }else {
+        DelphesHandler* dHandler = lookupRequired(
+                delphesHandler,
+                delphesHandlerLabel,
+                name,
+                "Can not find delphes handler with label "+delphesHandlerLabel
+                );
+        setup(dHandler);
+    }
+}
+
+
+#if HAVE_REWEIGHTING
 void AnalysisHandler::setupAnalysisHandler(
         Properties props,
         std::map<std::string,EventFile> eventFiles,
@@ -442,8 +497,66 @@ void AnalysisHandler::setupAnalysisHandler(
         setup(rHandler);
     }
 }
+#endif
+
+void AnalysisHandler::setup(
+        Properties props,
+        std::string label,
+        Config conf,
+        std::map<std::string,EventFile> eventFiles,
+        std::map<std::string,DelphesHandler*> delphesHandler,
+        bool haveRandomSeed,
+        int randomSeed
+        ) {
+    name = props["name"];
+    props.erase("name");
+    Global::print(name, "Initialising AnalysisHandler");
+    unknownKeysAnalysisHandler(props);
+    std::map<std::string,int> bTagIds = setupBTags(conf, label);
+    setupTauTag(conf, label);
+    std::map<std::string,int> electronIsoIds = setupIsolation(
+            conf,
+            label,
+            keyElectronIsoSection,
+            "electron",
+            listOfElectronTags
+            );
+    std::map<std::string,int> muonIsoIds = setupIsolation(
+            conf,
+            label,
+            keyMuonIsoSection,
+            "muon",
+            listOfMuonTags
+            );
+    std::map<std::string,int> photonIsoIds = setupIsolation(
+            conf,
+            label,
+            keyPhotonIsoSection,
+            "photon",
+            listOfPhotonTags
+            );
+    std::map<std::string,std::string> analysisParameters = setupAnalysisParameters(
+            props,
+            haveRandomSeed,
+            randomSeed
+            );
+    
+    setupAnalyses(
+            conf,
+            label,
+            analysisParameters,
+            bTagIds,
+            electronIsoIds,
+            muonIsoIds,
+            photonIsoIds
+            );
+
+    setupAnalysisHandler(props,eventFiles,delphesHandler);
+}
 
 
+
+#if HAVE_REWEIGHTING
 void AnalysisHandler::setup(
         Properties props,
         std::string label,
@@ -498,6 +611,8 @@ void AnalysisHandler::setup(
             );
     setupAnalysisHandler(props,eventFiles,delphesHandler,reweightingHandler);
 }
+#endif
+
 
 void AnalysisHandler::setup(EventFile file) {
     eventFile = file;
@@ -578,6 +693,7 @@ void AnalysisHandler::setup(DelphesHandler* dHandlerIn) {
 }
 
 
+#ifdef HAVE_REWEIGHTING
 void AnalysisHandler::setup(ReweightingHandler* rHandlerIn) {
     /*
     *
@@ -609,17 +725,20 @@ void AnalysisHandler::setup(ReweightingHandler* rHandlerIn) {
     }
     Global::print(name,
                   "successfully loaded branches in ROOT file");
+    initialize(); // virtual, defined by derived classes
 }
-
-
+#endif
 
 bool AnalysisHandler::processEvent(int iEvent, int iBranch) {
     if(!hasEvents) {
         return false;
     }
+
+    listOfAnalyses = branchesListOfAnalyses[iBranch];
+
     if(!readParticles(iEvent, iBranch))
         return false;
-    postProcessParticles();
+    postProcessParticles();    
     linkObjects();
 
     for(int a = 0; a < listOfAnalyses.size(); a++) {
@@ -636,6 +755,7 @@ bool AnalysisHandler::processEvent(int iEvent, int iBranch) {
 
 void AnalysisHandler::setCrossSection(double xsect,
                                       double xsecterr) {
+    /* This function is never used... */
     for(int a = 0; a < listOfAnalyses.size(); a++) {
             listOfAnalyses[a]->xsect = xsect;
             if (xsecterr != -1.0)
@@ -650,13 +770,17 @@ void AnalysisHandler::setCrossSection(double xsect,
 }
 
 
-void AnalysisHandler::finish() {
+void AnalysisHandler::finish(int iBranch) {
     double xsect;
     double xsectErr;
-    if (dHandler!=NULL) {    
+    if (rHandler!=NULL){
+        Global::print(name, "Asking "+rHandler->name+" for cross section information");
+        xsect = rHandler->getCrossSection(iBranch);
+        xsectErr = rHandler->getCrossSectionErr(iBranch);
+    }else if (dHandler!=NULL) {    
         Global::print(name, "Asking "+dHandler->name+" for cross section information");
-        xsect = dHandler->getCrossSection();
-        xsectErr = dHandler->getCrossSectionErr();
+        xsect = dHandler->getCrossSection(iBranch);
+        xsectErr = dHandler->getCrossSectionErr(iBranch);
     } else {
         Global::print(name, "Asking "+eventFile.name+" for cross section information");
         xsect = eventFile.getCrossSection();
@@ -668,10 +792,10 @@ void AnalysisHandler::finish() {
         "Analyses updated with sigma = " +Global::doubleToStr(xsect)+" fb"
             " and dSigma = " +Global::doubleToStr(xsectErr)+" fb"
         );
-    for(int a = 0; a < listOfAnalyses.size(); a++) {
-        listOfAnalyses[a]->xsect = xsect;
-        listOfAnalyses[a]->xsecterr = xsectErr;
-        listOfAnalyses[a]->finish();
+    for(int a = 0; a < branchesListOfAnalyses[iBranch].size(); a++) {
+        branchesListOfAnalyses[iBranch][a]->xsect = xsect;
+        branchesListOfAnalyses[iBranch][a]->xsecterr = xsectErr;
+        branchesListOfAnalyses[iBranch][a]->finish();
     }
     Global::unredirect_cout();
     finalize(); // virtual, defined by derived classes
@@ -681,6 +805,8 @@ void AnalysisHandler::finish() {
 void AnalysisHandler::bookAnalysesViaInputFile(std::string configFile,
                                                std::string logFile,
                                                Param_Map eventParameters) {
+    /* also never used... */
+
     analysisLogFile = logFile;
     Global::print(name, "Reading analysis.ini file");
     std::string line;
@@ -849,7 +975,7 @@ void AnalysisHandler::bookAnalysesViaInputFile(std::string configFile,
                         whichTags["BJetTagging"].push_back(x);
                 }
                 else if (line == "") {
-                    bookAnalysis(analysisName, whichTags, eventParameters);
+                    bookAnalysis(analysisName, whichTags, eventParameters, 0);
                     break;
                 }
             }
@@ -863,13 +989,16 @@ void AnalysisHandler::bookAnalysesViaInputFile(std::string configFile,
 
 bool AnalysisHandler::readParticles(int iEvent, int iBranch) {
     // in ROOT file mode, we have to let the treeReader read the branches
+#if HAVE_REWEIGHTING
     if(rHandler) {
         if (!rHandler->hasNextEvent()) {
             hasEvents = false;
             return false;
         }
         rHandler->fillTreeReader(iBranch);
-    }else if(treeReader) {
+    }else 
+#endif
+    if(treeReader) {
         if(iEvent >= treeReader->GetEntries()) {
             hasEvents = false;
             return false; // abort the Fritz event loop
@@ -1198,6 +1327,7 @@ void AnalysisHandler::isolatePhotons() {
 }
 
 void AnalysisHandler::linkObjects() {
+
     for(int a = 0; a < listOfAnalyses.size(); a++) {
         // important: as many analyses cut on the containers,
         //  every analysis must use its own container
@@ -1222,4 +1352,5 @@ void AnalysisHandler::linkObjects() {
         listOfAnalyses[a]->photonIsolationTags = photonIsolationTags;
 
     }
+
 }

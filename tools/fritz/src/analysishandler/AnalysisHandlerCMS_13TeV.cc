@@ -33,7 +33,8 @@ void AnalysisHandlerCMS_13TeV::finalize() {
 
 void AnalysisHandlerCMS_13TeV::bookAnalysis(std::string analysisName,
                                       Tag_Map whichTags,
-                                      Param_Map eventParameters) {
+                                      Param_Map eventParameters,
+                                      int iBranch) {
     Global::print(name, "Loading Analysis "+analysisName);
 
     AnalysisBase* a = NULL;
@@ -50,8 +51,8 @@ void AnalysisHandlerCMS_13TeV::bookAnalysis(std::string analysisName,
                       "Cannot load analysis "+analysisName+
                           " - analysis unknown.");
 
-    a->setup(whichTags, eventParameters);
-    listOfAnalyses.push_back(a);
+    a->setup(whichTags, eventParameters, iBranch);
+    branchesListOfAnalyses[iBranch].push_back(a);
     Global::print(name,
                   "Successfully loaded analysis "+analysisName);
 }
