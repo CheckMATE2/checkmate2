@@ -28,6 +28,7 @@ class Process:
 
     have_reweighting = False
     reweighting_spectrum_dir = ''
+    n_reweighting_targets = 0
     have_matrix_element_reweighting = False
     reweighting_me_proc_name = ''
     reweighting_pdf_name = ''
@@ -54,6 +55,7 @@ class Process:
             
         self.have_reweighting = False
         self.reweighting_spectrum_dir = ''
+        self.n_reweighting_targets = 0
         self.have_matrix_element_reweighting = False
         self.reweighting_me_proc_name = ''
         self.reweighting_pdf_name = ''
@@ -164,7 +166,7 @@ class Process:
         if not os.path.isdir(self.reweighting_spectrum_dir):
             AdvPrint.cerr_exit("reweighting_spectrum_dir does not exist: "+self.reweighting_spectrum_dir)
         slha_files = os.listdir(self.reweighting_spectrum_dir)
-        
+
         cross_section_info = dict()
         if os.path.exists(os.path.join(self.reweighting_spectrum_dir,"xsec.dat")):
             with open(os.path.join(self.reweighting_spectrum_dir,"xsec.dat"),"r") as xsec_file:
@@ -181,7 +183,9 @@ class Process:
 
         if len(slha_files) < 1:
             AdvPrint.cerr_exit("No reweighting target .slha files given.")
-        config.set(name, "ntargets", str(len(slha_files)))
+        self.n_reweighting_targets = len(slha_files)
+        
+        config.set(name, "ntargets", str(self.n_reweighting_targets))
 
         reweightingConfig = ConfigParser.RawConfigParser()
         globalSectionName = "Section: Global"
@@ -367,15 +371,19 @@ class Process:
             for f in [x for x in os.listdir(Info.paths['output_analysis']) if x.startswith("analysisstdout")]:
                 if os.stat(os.path.join(Info.paths['output_analysis'], f)).st_size == 0:
                     os.remove(os.path.join(Info.paths['output_analysis'], f))
-          
+
             # Associate result files to event
             for a in Info.analyses:
-                event.analysis_signal_files[a] = os.path.join(Info.paths['output_analysis'], event.identifier+'_'+a+'_signal.dat')
-                if os.path.isfile(event.analysis_signal_files[a]):
-                    AdvPrint.format_columnated_file(event.analysis_signal_files[a])
-                event.analysis_cutflow_files[a] = os.path.join(Info.paths['output_analysis'], event.identifier+'_'+a+'_cutflow.dat')
-                if os.path.isfile(event.analysis_cutflow_files[a]):
-                    AdvPrint.format_columnated_file(event.analysis_cutflow_files[a])
+                for itarget in xrange(self.n_reweighting_targets+1):
+                    a_key = a if itarget == 0 else "{}_target{}".format(a,itarget)
+
+                    event.analysis_signal_files[a_key] = os.path.join(Info.paths['output_analysis'], event.identifier+'_'+a_key+'_signal.dat')
+                    if os.path.isfile(event.analysis_signal_files[a_key]):
+                        AdvPrint.format_columnated_file(event.analysis_signal_files[a_key])
+                    
+                    event.analysis_cutflow_files[a_key] = os.path.join(Info.paths['output_analysis'], event.identifier+'_'+a_key+'_cutflow.dat')
+                    if os.path.isfile(event.analysis_cutflow_files[a_key]):
+                        AdvPrint.format_columnated_file(event.analysis_cutflow_files[a_key])
             
             # finish
             event.processed = True
@@ -387,18 +395,21 @@ class Process:
         """ Gathers results from all events"""
         # setup resultCollector object
         resultCollectors_pr = dict()
-        for analysis in Info.analyses:                      
-            resultCollectors_pr[analysis] = dict()
-            signal_regions = Info.get_analysis_parameters(analysis)["signal_regions"]
-            for sr in signal_regions:
-                resultCollectors_pr[analysis][sr] = ResultCollector(self.name, analysis, sr)
-            
+                   
         # loop over all associated events and average results in all resultCollectors
         for event in self.eventsList:
-            resultCollectors_ev = event.get_resultCollectors()            
-            for analysis in resultCollectors_pr:                
-                for sr in resultCollectors_pr[analysis]:
-                    resultCollectors_pr[analysis][sr].add_and_average(resultCollectors_ev[analysis][sr])
+            resultCollectors_ev = event.get_resultCollectors()
+
+            for analysis, signal_regions in resultCollectors_ev.iteritems():                
+                if not analysis in resultCollectors_pr:
+                    resultCollectors_pr[analysis] = dict()
+
+                for sr, rc in signal_regions.iteritems():
+                    if not sr in resultCollectors_pr[analysis]:
+                        resultCollectors_pr[analysis][sr] = ResultCollector(self.name, analysis, sr)
+
+                    resultCollectors_pr[analysis][sr].add_and_average(rc)
+                    
         
         # Write process file, if wanted
         if Info.parameters["ProcessResultFileColumns"] != []: 

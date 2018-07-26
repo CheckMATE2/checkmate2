@@ -47,6 +47,7 @@ class CheckMATE2:
             p.prepare()
             p.run()
         AdvPrint.cout("\n")    
+        
         # Evaluate
         if not Info.flags['skipevaluation']:
 	    self.evaluate()
@@ -213,6 +214,7 @@ class CheckMATE2:
         
 
     def evaluate(self):
+
         """ Performs statistical evaluation of the result """
         AdvPrint.cout("Evaluating Results")
         resultCollectors = self.get_resultCollectors()
@@ -223,10 +225,13 @@ class CheckMATE2:
             evaluators[analysis] = dict()
                 
         # only process those results and those signal regions that are given in the reference file
-        for analysis in Info.analyses:
-            signal_regions = Info.get_analysis_parameters(analysis)["signal_regions"]
-            for sr in signal_regions:
-                evaluator = Evaluator(resultCollectors[analysis][sr])
+        for analysis, signal_regions in resultCollectors.iteritems():
+            # if reweighting is on, analysis could be something like atlas_1712_02332_target1
+            if "target" in analysis:
+                analysis = "_".join(analysis.split("_")[:-1])
+
+            for sr, rc in signal_regions.iteritems():
+                evaluator = Evaluator(rc)
                 # Calculate everything that should be calculated
                 # TODO: Beware analyses with unknown background
                 evaluator.calc_efficiencies()
@@ -238,6 +243,7 @@ class CheckMATE2:
                 if Info.flags["zsig"]:
                     evaluator.calc_zsig()
                 evaluators[analysis][sr] = evaluator
+       
                 
         if Info.parameters["bestcls"] != 0:
             AdvPrint.cout("Calculating CLs for the "+str(Info.parameters["bestcls"])+" most sensitive signal regions!")
@@ -286,23 +292,31 @@ class CheckMATE2:
           
     def get_resultCollectors(self):
         """ Finds the results of all events within all processes and sums and averages them """
-        #setup resultCollector object
+         #setup resultCollector object
         resultCollectors_tot = dict()
-        for analysis in Info.analyses:                
-            resultCollectors_tot[analysis] = dict()
-            signal_regions = Info.get_analysis_parameters(analysis)["signal_regions"]
-            for sr in signal_regions:
-                resultCollectors_tot[analysis][sr] = ResultCollector("total", analysis, sr)
-                
+
         # loop over all associated processes
         for proc in self.procList:
             # process results are summed
             resultCollectors_proc = proc.get_resultCollectors()
-            for analysis in resultCollectors_tot:
-                for sr in resultCollectors_tot[analysis]:
-                    resultCollectors_tot[analysis][sr].add_and_sum(resultCollectors_proc[analysis][sr])
-                      
+            
+            # loop over all analyses and signal regions used by process (analyses here includes reweighting targets)
+            for analysis, signal_regions in resultCollectors_proc.iteritems():
+                if not analysis in resultCollectors_tot:
+                    resultCollectors_tot[analysis] = dict()
+
+                for sr, rc in signal_regions.iteritems():
+                    if not sr in resultCollectors_tot[analysis]:
+                        resultCollectors_tot[analysis][sr] = ResultCollector("total", analysis, sr)
+
+                    resultCollectors_tot[analysis][sr].add_and_sum(rc)
+
         return resultCollectors_tot
+
+
+
+
+
 
 def _print_zsig(evaluators):
     for analysis, v in evaluators.iteritems():

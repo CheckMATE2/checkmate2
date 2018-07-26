@@ -924,9 +924,10 @@ class Info(dict):
         if 'analysis_settings' not in cls.files or analysis not in cls.files['analysis_settings']:
             print cls.files['analysis_settings']
             AdvPrint.cerr_exit("Cannot find files for reading parameters of analysis "+analysis)
-        jfile = open(cls.files['analysis_settings'][analysis], "rb")
-        parameters = json.loads(jfile.read())
-        jfile.close()
+        
+        with open(cls.files['analysis_settings'][analysis], "rb") as jfile:
+            parameters = json.load(jfile)
+        
         return parameters
 
     @classmethod
