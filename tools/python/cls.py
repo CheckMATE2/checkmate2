@@ -421,7 +421,7 @@ def findapproxlh(mu_tested, N_obs, N_backg,  N_sig,  dN_backg,  dN_sig,  nuTilde
 	
 
 def likelihood(mu_tested,  N_obs, N_backg,  N_sig,  dN_backg,  dN_sig,  nuTilde_obs = []):
-    if(int(scipy.__version__.split('.')[1]) <= 10):
+    if (int(scipy.__version__.split('.')[0]) == 0) and (int(scipy.__version__.split('.')[1]) <= 10):
         print "ERROR: Scipy  Version 0.11.0 needed. You have Version",  scipy.__version__,". Please upgrade your scipy."
         sys.exit()
     if(N_obs==0.0):
