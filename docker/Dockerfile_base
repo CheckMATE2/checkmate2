@@ -1,0 +1,97 @@
+FROM fedora:27
+RUN yum --assumeyes groupinstall "Development Tools"
+RUN yum install -y \
+        autoconf \
+        automake \
+        avahi-compat-libdns_sd-devel \
+        binutils \
+        bzr \
+        cfitsio-devel \
+        cmake3 \
+        file \
+        fftw-devel \
+        ftgl-devel \
+        gcc \
+        gcc-c++ \
+        gcc-gfortran \
+        glew-devel \
+        graphviz-devel \
+#        gsl-static \
+        libtool \
+        libX11-devel \
+        libXext-devel \
+        libXft-devel \
+        libXpm-devel \
+#        libldap-dev \
+        libxml2-devel \
+        make \
+        mesa-libGL-devel \
+        mesa-libGLU-devel \
+        mysql-devel \
+        nano \
+        openssl-devel \
+        pcre-devel \
+        perl \
+        python-devel \
+        python2-numpy \
+        python2-scipy \
+        tar \
+        wget \
+        which 
+#        && ln -s /usr/bin/cmake3 /usr/bin/cmake
+WORKDIR /code
+
+ENV ROOTSYS /usr/local
+RUN git clone --quiet http://root.cern.ch/git/root.git /code/root-v6-10-02 &&\
+    cd  /code/root-v6-10-02 &&\
+    git checkout v6-10-02 &&\
+    ./configure --all &&\
+    make -j4 &&\
+    make -j4 install
+
+###########
+## HepMC
+###########
+RUN curl -sSL http://lcgapp.cern.ch/project/simu/HepMC/download/HepMC-2.06.09.tar.gz | tar -xzvf - && \
+    cd HepMC-2.06.09 && \
+    ./configure --with-momentum=GEV --with-length=MM --prefix /usr/local && \
+    make -j4 && \
+    make install
+
+###########
+## Pythia 8
+###########
+RUN yum install -y rsync
+RUN curl -sSL http://home.thep.lu.se/~torbjorn/pythia8/pythia8230.tgz|tar -xzvf - && \
+    cd pythia8230 && \
+    ./configure \
+    --with-hepmc2=/usr/local \
+    --enable-shared \
+    --enable-64bit \
+    --prefix=/usr/local && \
+    make -j4 && \
+    make install && \
+    chmod +x /usr/local/bin/pythia8-config
+ENV PYTHIA8DATA /usr/local/share/Pythia8/xmldoc
+
+
+###########
+## Madgraph
+###########
+
+RUN curl -sSL https://launchpad.net/mg5amcnlo/2.0/2.6.x/+download/MG5_aMC_v2.6.3.2.tar.gz|tar -xzvf - && \
+    ln -s $PWD/MG5_aMC_v2_6_3_2/bin/mg5_aMC /usr/local/bin && \
+    ln -s $PWD/MG5_aMC_v2_6_3_2/bin/mg5 /usr/local/bin
+
+RUN echo "/usr/local/lib" >> /etc/ld.so.conf.d/local.conf && ldconfig
+
+###########
+## Delphes
+###########
+RUN git clone https://github.com/delphes/delphes.git && \
+    source /usr/local/bin/thisroot.sh && \
+    cd delphes && \
+    git checkout 3.4.1 && \
+    make -j4
+
+
