@@ -3,6 +3,12 @@ CheckMATE - Changelog
 Ver 2.0.26
 ---------
         
+2018-10-29   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
+    ~ added LLP  particle search atlas_1712_02118 with modification of CM	
+	
+Ver 2.0.26
+---------
+        
 2018-04-16   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
         
     ~ fixed center-of-mass energy setting and unifying lepton isolation

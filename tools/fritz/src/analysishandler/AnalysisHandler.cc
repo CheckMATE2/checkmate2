@@ -780,19 +780,21 @@ bool AnalysisHandler::readParticles(int iEvent) {
     true_b.clear();
     true_c.clear();
     true_tau.clear();
+    true_particles.clear();
     if (!branchGenParticle) {
         Global::abort(name,
                       "GenParticleBranch not properly assigned!");
     }
 
     for(int i = 0; i < branchGenParticle->GetEntries(); i++) {
-        if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 5)
-            true_b.push_back((GenParticle*)branchGenParticle->At(i));
-        else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 4)
-            true_c.push_back((GenParticle*)branchGenParticle->At(i));
-        else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 15) {
-            true_tau.push_back((GenParticle*)branchGenParticle->At(i));
-        }
+      //        if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 5)
+      //      true_b.push_back((GenParticle*)branchGenParticle->At(i));
+      //  else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 4)
+      //      true_c.push_back((GenParticle*)branchGenParticle->At(i));
+      //  else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 15) {
+      //      true_tau.push_back((GenParticle*)branchGenParticle->At(i));
+      //  }
+      true_particles.push_back((GenParticle*)branchGenParticle->At(i));
     }
     branchGenParticle->Clear();
 
@@ -1111,6 +1113,11 @@ void AnalysisHandler::linkObjects() {
         listOfAnalyses[a]->missingET = tempMissingET;
         listOfAnalyses[a]->weight = eventWeight;
 
+	std::vector<GenParticle*> tempParticles = true_particles;
+        listOfAnalyses[a]->true_particles = tempParticles;
+
+	
+	
         listOfAnalyses[a]->electronIsolationTags = electronIsolationTags;
         listOfAnalyses[a]->muonIsolationTags = muonIsolationTags;
         listOfAnalyses[a]->photonIsolationTags = photonIsolationTags;

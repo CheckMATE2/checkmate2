@@ -349,8 +349,8 @@ module Merger FinalTrackMerger {
 
 module TreeWriter TreeWriter {
 # add Branch InputArray BranchName BranchClass
-  add Branch TagSkimmer/particles Particle GenParticle
-
+#  add Branch TagSkimmer/particles Particle GenParticle
+  add Branch Delphes/allParticles Particle GenParticle
   add Branch TrackMerger/tracks Track Track
   add Branch EFlowMerger/eflow Tower Tower
 
