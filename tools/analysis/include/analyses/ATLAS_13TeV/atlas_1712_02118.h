@@ -14,6 +14,10 @@ class Atlas_1712_02118 : public AnalysisBase {
     void finalize();
 
   private:
+    double PixelTrackletSmearingFunction(double *x, double *par);
+    TFile *acceffmapFile                        = 0;
+    TH2 *acceffmapHist                          = 0;
+
 };
 
 #endif
