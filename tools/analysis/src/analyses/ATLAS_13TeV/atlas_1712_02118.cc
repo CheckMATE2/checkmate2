@@ -1,6 +1,16 @@
 #include "atlas_1712_02118.h"
+
+#include <TRandom.h>
+#include <TFile.h>
+#include <TH2.h>
+#include <TF1.h>
+#include <TMath.h>
+
 // AUTHOR: J.S.Kim
 //  EMAIL: jsk@th.physik.uni-bonn.de
+
+
+
 void Atlas_1712_02118::initialize() {
   setAnalysisName("atlas_1712_02118");          
   setInformation(""
@@ -299,7 +309,7 @@ void Atlas_1712_02118::finalize() {
   // Whatever should be done after the run goes here
 }       
 
-double Test::PixelTrackletSmearingFunction(double *x, double *par) {
+double Atlas_1712_02118::PixelTrackletSmearingFunction(double *x, double *par) {
         double constant = par[0];
         double mean     = par[1];
         double sigma    = par[2];
