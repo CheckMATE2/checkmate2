@@ -1,4 +1,4 @@
-#include "atlas_1712_02118.h"
+#include "atlas_1712_02118_re.h"
 
 #include <TRandom.h>
 #include <TFile.h>
@@ -11,8 +11,8 @@
 
 
 
-void Atlas_1712_02118::initialize() {
-  setAnalysisName("atlas_1712_02118");          
+void Atlas_1712_02118_re::initialize() {
+  setAnalysisName("atlas_1712_02118_re");          
   setInformation(""
 		 "# Search for long-lived charginos based on a disappearing-track signature\n"
 		 "");
@@ -48,7 +48,7 @@ void Atlas_1712_02118::initialize() {
 
 }
 
-void Atlas_1712_02118::analyze() {
+void Atlas_1712_02118_re::analyze() {
   // Your eventwise analysis code goes here
   // The following objects are always defined unless they are 'ignored' above. They form std::vector objects of the respective Delphes class type (except for Etmiss which is a single object)
   // All std::vector members and etmiss have the common properties PT, Eta, Phi and P4() with the latter giving access to the full ROOT TLorentzVector.
@@ -104,7 +104,7 @@ void Atlas_1712_02118::analyze() {
   const double smearPar3 = 1.66707e+00 * (1 - 0.0498447); // slope
   
   std::vector<GenParticle*> charginos;
-  std::vector<GenParticle*> charginostemp;
+  std::vector<GenParticle*> charginostemp = true_llpmothers;
   std::vector<GenParticle*> neutralinos;
   double r,y;
   
@@ -113,27 +113,9 @@ void Atlas_1712_02118::analyze() {
 
   std::cout << "-----------------NEU----------------------" << std::endl;
   
-  for(int i=0;i<true_particles.size();i++){
-    std::cout << "i: " << i <<std::endl;
-    if( fabs(true_particles[i]->PID) == 1000024 ){
-      if( true_particles[i]->Status == 62){
-	charginostemp.push_back(true_particles[i]);
-	 std::cout << "chargino Status: " << true_particles[i]->Status << std::endl;
-	 std::cout << "chargino daughter: " << true_particles[i]->D1 << " " << true_particles[i]->D1 << std::endl;
-	 std::cout << "chargino mother: " << true_particles[i]->M1 << " " << true_particles[i]->M1 << std::endl;
-
-	for(int j=i;j < true_particles.size();j++){
-	  std::cout << "j: " << j <<std::endl;
-	  if(true_particles[j]->PID == 1000022 && true_particles[j]->Status == 1 && true_particles[j]->M1 == i){
-
-	    neutralinos.push_back(true_particles[j]);
-	    std::cout << "neutralino status: "  << true_particles[j]->Status << std::endl;
-	    std::cout << "neutralino daughter: " << true_particles[j]->D1 << " " << true_particles[j]->D1 << std::endl;
-	    std::cout << "neutralino mother: " << true_particles[j]->M1 << " " << true_particles[j]->M1 << std::endl;
-	  }
-	}
-      }
-    }
+  for(int i=0;i<true_llpmothers.size();i++) {
+      if( fabs(true_llpdecays[i]->PID) == 1000022 && true_llpdecays[i]->Status == 1)
+	  neutralinos.push_back(true_particles[i]);
   }
 
     // Simulate tracklet efficiency
@@ -305,11 +287,11 @@ void Atlas_1712_02118::analyze() {
 
 }
 
-void Atlas_1712_02118::finalize() {
+void Atlas_1712_02118_re::finalize() {
   // Whatever should be done after the run goes here
 }       
 
-double Atlas_1712_02118::PixelTrackletSmearingFunction(double *x, double *par) {
+double Atlas_1712_02118_re::PixelTrackletSmearingFunction(double *x, double *par) {
         double constant = par[0];
         double mean     = par[1];
         double sigma    = par[2];

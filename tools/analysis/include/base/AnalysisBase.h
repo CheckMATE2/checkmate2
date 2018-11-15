@@ -124,6 +124,8 @@ class AnalysisBase {
      * @{
      */
     std::vector<GenParticle*> true_particles;
+    std::vector<GenParticle*> true_llpmothers; //!< Container of truth particles with large decay vertex, only filled for llp searches
+    std::vector<GenParticle*> true_llpdecays; //!< Container of truth particles with large decay vertex and their entire decay trees, only filled for llp searches
     std::vector<Electron*> electrons; //!< Container of all truth electrons after detector smearing in acceptance range.
     std::vector<Electron*> electronsLoose; //!< Container of 'electrons' objects that pass loose isolation condition.
     std::vector<Electron*> electronsMedium; //!< Container of 'electronsLoose'  objects that pass 'medium' efficiency cut.

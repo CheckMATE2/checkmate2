@@ -4,6 +4,8 @@ AnalysisHandler::AnalysisHandler() {
     doJetTauTags = false;
     eventWeight = 0;
     branchGenParticle = NULL;
+    branchLLPMothers = NULL;
+    branchLLPDecays = NULL;
     branchEvent = NULL;
     branchElectron = NULL;
     branchMuon = NULL;
@@ -454,6 +456,8 @@ void AnalysisHandler::setup(EventFile file) {
 
     branchEvent = treeReader->UseBranch("Event");
     branchGenParticle = treeReader->UseBranch("Particle");
+    branchLLPMothers = treeReader->UseBranch("LLPMothers");
+    branchLLPDecays = treeReader->UseBranch("LLPDecays");
     branchJet = treeReader->UseBranch("Jet");
     branchTrack = treeReader->UseBranch("Track");
     branchTower = treeReader->UseBranch("Tower");
@@ -486,6 +490,10 @@ void AnalysisHandler::setup( DelphesHandler* dHandlerIn) {
          it++) {
         if ((std::string)(*it)->GetData()->GetName() == "Particle")
                 branchGenParticle = (*it)->GetData();
+	else if ((std::string)(*it)->GetData()->GetName() == "LLPMothers")
+	    branchLLPMothers = (*it)->GetData();
+	else if ((std::string)(*it)->GetData()->GetName() == "LLPDecays")
+	    branchLLPDecays = (*it)->GetData();
         else if ((std::string)(*it)->GetData()->GetName() == "Event")
                 branchEvent= (*it)->GetData();
         else if ((std::string)(*it)->GetData()->GetName() == "Jet")
@@ -503,6 +511,7 @@ void AnalysisHandler::setup( DelphesHandler* dHandlerIn) {
         else if ((std::string)(*it)->GetData()->GetName() == "MissingET")
                 branchMissingET = (*it)->GetData();
     }
+    // LLP stuff should be optional
     if(!branchGenParticle || !branchEvent || !branchJet || !branchTrack ||
        !branchTower || !branchElectron || !branchMuon || !branchPhoton ||
        !branchMissingET) {
@@ -787,16 +796,30 @@ bool AnalysisHandler::readParticles(int iEvent) {
     }
 
     for(int i = 0; i < branchGenParticle->GetEntries(); i++) {
-      //        if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 5)
-      //      true_b.push_back((GenParticle*)branchGenParticle->At(i));
-      //  else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 4)
-      //      true_c.push_back((GenParticle*)branchGenParticle->At(i));
-      //  else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 15) {
-      //      true_tau.push_back((GenParticle*)branchGenParticle->At(i));
-      //  }
-      true_particles.push_back((GenParticle*)branchGenParticle->At(i));
+      if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 5)
+            true_b.push_back((GenParticle*)branchGenParticle->At(i));
+      else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 4)
+            true_c.push_back((GenParticle*)branchGenParticle->At(i));
+      else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 15) {
+            true_tau.push_back((GenParticle*)branchGenParticle->At(i));
+      }
+      // true_particles.push_back((GenParticle*)branchGenParticle->At(i));
     }
     branchGenParticle->Clear();
+
+    // LLP particles are optional
+    true_llpmothers.clear();
+    true_llpdecays.clear();
+    if (branchLLPMothers) {	
+	for(int i = 0; i < branchLLPMothers->GetEntries(); i++)
+	    true_llpmothers.push_back((GenParticle*)branchLLPMothers->At(i));
+	if (!branchLLPDecays)
+	    Global::abort(name, "BranchLLPMothers set but BranchLLPDecays is not!");
+	for(int i = 0; i < branchLLPDecays->GetEntries(); i++)
+	    true_llpdecays.push_back((GenParticle*)branchLLPDecays->At(i));
+    }
+    
+       
 
     tracks.clear();
     if (!branchTrack)
@@ -1115,8 +1138,13 @@ void AnalysisHandler::linkObjects() {
 
 	std::vector<GenParticle*> tempParticles = true_particles;
         listOfAnalyses[a]->true_particles = tempParticles;
-
+ 
+	std::vector<GenParticle*> tempLLPMothers = true_llpmothers;
+        listOfAnalyses[a]->true_llpmothers = true_llpmothers;
 	
+	std::vector<GenParticle*> tempLLPDecays = true_llpdecays;
+        listOfAnalyses[a]->true_llpdecays = true_llpdecays;
+
 	
         listOfAnalyses[a]->electronIsolationTags = electronIsolationTags;
         listOfAnalyses[a]->muonIsolationTags = muonIsolationTags;
