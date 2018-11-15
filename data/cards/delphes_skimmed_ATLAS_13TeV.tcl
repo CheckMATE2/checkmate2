@@ -25,6 +25,8 @@ set ExecutionPath {
 
   TagSkimmer
 
+  LLP
+  
   TreeWriter
 }
 
@@ -339,6 +341,19 @@ module Merger FinalTrackMerger {
   set OutputArray tracks
 }
 
+
+module LLPModule LLP {
+# earlier arrays take precedence over later ones
+    # add InputArray InputArray OutputArray
+    set InputArray Delphes/allParticles
+    set MinRadius 100
+    set MaxRadius 1000
+    add PDGCodes 1000024
+    add PDGCodes -1000024
+    set OutputArrayAll FullLLPs
+    set OutputArrayMothers MothersOnly
+}
+
 ##################
 # ROOT tree writer
 ##################
@@ -350,7 +365,8 @@ module Merger FinalTrackMerger {
 module TreeWriter TreeWriter {
 # add Branch InputArray BranchName BranchClass
 #  add Branch TagSkimmer/particles Particle GenParticle
-  add Branch Delphes/allParticles Particle GenParticle
+#  add Branch Delphes/allParticles Particle GenParticle
+  add Branch LLP/FullLLPs Particle GenParticle
   add Branch TrackMerger/tracks Track Track
   add Branch EFlowMerger/eflow Tower Tower
 
