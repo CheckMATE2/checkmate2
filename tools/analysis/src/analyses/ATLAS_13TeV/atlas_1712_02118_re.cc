@@ -23,8 +23,10 @@ void Atlas_1712_02118_re::initialize() {
 
   // You should initialize any declared variables here
   const std::string production = "electroweak";
-
-  const char *const acceffmapFilePath         = "/hdd/Tools/CheckMATE_Git/CheckMATECollab/current/bin/llptest/DisappearingTrack2016-TrackAcceptanceEfficiency.root";
+  // _SHAREDIR should be defined via the preprocessor which should be initialised by the makefile... maybe
+  const char *const acceffmapFilePath         = _SHAREEFFFILE;
+  //const char *const acceffmapFilePath         = "/hdd/Tools/CheckMATE_Git/CheckMATECollab/current/tools/analysis/share/DisappearingTrack2016-TrackAcceptanceEfficiency.root";
+  std::cout << "Trying to access efficiency from " << acceffmapFilePath << std::endl;
   const char *const acceffStrongHistName      = "StrongEfficiency";
   const char *const acceffElectroweakHistName = "ElectroweakEfficiency";
   
@@ -105,6 +107,8 @@ void Atlas_1712_02118_re::analyze() {
   
   std::vector<GenParticle*> charginos;
   std::vector<GenParticle*> charginostemp = true_llpmothers;
+  std::cout << "Truemothes" << true_llpmothers.size() << std::endl;
+  std::cout << "Truedecays" << true_llpdecays.size() << std::endl;
   std::vector<GenParticle*> neutralinos;
   double r,y;
   
@@ -112,18 +116,25 @@ void Atlas_1712_02118_re::analyze() {
   
 
   std::cout << "-----------------NEU----------------------" << std::endl;
-  
+  /*
   for(int i=0;i<true_llpmothers.size();i++) {
-      if( fabs(true_llpdecays[i]->PID) == 1000022 && true_llpdecays[i]->Status == 1)
-	  neutralinos.push_back(true_particles[i]);
+      int d1 = true_llpmothers[i]->D1;
+      int d2 = true_llpmothers[i]->D2;
+      if( fabs(true_llpdecays[d1]->PID) == 1000022 && true_llpdecays[d1]->Status == 1)
+	  neutralinos.push_back(true_llpdecays[d1]);
+      if( fabs(true_llpdecays[d2]->PID) == 1000022 && true_llpdecays[d2]->Status == 1)
+	  neutralinos.push_back(true_llpdecays[d2]);
   }
-
+  std::cout << true_llpmothers.size() << " Mothers and " << neutralinos.size() << " Neutralinos" << std::endl;
+  */
     // Simulate tracklet efficiency
   for (int i=0;i<charginostemp.size();i++) {
     // Simulate decay position
     if(charginostemp[i]->PT > 20. ){
-      r=TMath::Sqrt(neutralinos[i]->X*neutralinos[i]->X+neutralinos[i]->Y*neutralinos[i]->Y);
-      y=neutralinos[i]->Eta;
+	// need to access daughter for decay vertex
+	GenParticle* dau1 = true_llpdecays[charginostemp[i]->D1];
+      r=TMath::Sqrt(dau1->X*dau1->X+dau1->Y*dau1->Y);
+      y=charginostemp[i]->Eta;
       std::cout << "i : " << i << std::endl;
       std::cout << "r : " << r << std::endl;
       std::cout << "eff: "<< acceffmapHist->GetBinContent(acceffmapHist->FindBin(y,r)) << std::endl;

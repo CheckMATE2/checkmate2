@@ -363,9 +363,10 @@ module LLPModule LLP {
 
 module TreeWriter TreeWriter {
 # add Branch InputArray BranchName BranchClass
-#  add Branch TagSkimmer/particles Particle GenParticle
+  add Branch TagSkimmer/particles Particle GenParticle
 #  add Branch Delphes/allParticles Particle GenParticle
-  add Branch LLP/FullLLPs Particle GenParticle
+  add Branch LLP/MothersOnly LLPMothers GenParticle
+  add Branch LLP/FullLLPs LLPDecays GenParticle
   add Branch TrackMerger/tracks Track Track
   add Branch EFlowMerger/eflow Tower Tower
 

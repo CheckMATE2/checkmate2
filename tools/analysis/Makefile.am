@@ -3,7 +3,8 @@ AUTOMAKE_OPTIONS = subdir-objects
 AM_CXXFLAGS = @ROOTCFLAGS@ @DELPHESCFLAGS@ -Iinclude/base -Iinclude/kinematics -Iinclude/kinematics/mctlib \
              -Iinclude/kinematics/mt2family -Iinclude/kinematics/topness -Iinclude/global \
              -Iinclude/analyses/ATLAS_7TeV -Iinclude/analyses/ATLAS_8TeV -Iinclude/analyses/ATLAS_13TeV -Iinclude/analyses/ATLAS_14TeV_HighLumi \
-             -Iinclude/analyses/CMS_7TeV -Iinclude/analyses/CMS_8TeV -Iinclude/analyses/CMS_13TeV -Iinclude/analyses/CMS_14TeV_HighLumi
+             -Iinclude/analyses/CMS_7TeV -Iinclude/analyses/CMS_8TeV -Iinclude/analyses/CMS_13TeV -Iinclude/analyses/CMS_14TeV_HighLumi \
+             -D_SHAREEFFFILE="\"$(abs_top_builddir)/tools/analysis/share/DisappearingTrack2016-TrackAcceptanceEfficiency.root\""
 
 # the library names to build
 mylibdir = $(abs_top_builddir)/tools/analysis/lib
