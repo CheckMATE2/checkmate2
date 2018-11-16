@@ -348,8 +348,7 @@ module LLPModule LLP {
     set InputArray Delphes/allParticles
     set MinRadius 100
     set MaxRadius 1000
-    add PDGCodes 1000024
-    add PDGCodes -1000024
+    #@@newLLPs@@
     set OutputArrayAll FullLLPs
     set OutputArrayMothers MothersOnly
 }

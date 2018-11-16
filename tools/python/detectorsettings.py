@@ -21,11 +21,16 @@ class DetectorSettings:
 
     # Add invisible PIDs to detector card, if needed
     @classmethod
-    def _update_delphes_invpids(cls, line):
+    def _update_delphes_pids(cls, line):
         if Info.parameters['invisiblePIDs'] != [] and "  #@@newInvisibles@@" in line:
             line = ""
             for pid in Info.parameters['invisiblePIDs']:
                 line += "  add EnergyFraction {"+str(pid)+"} {0.0 0.0}\n"
+
+        if Info.parameters['llpPIDs']!=[] and "  #@@newLLPs@@" in line:
+            line = ""
+            for pid in Info.parameters['llpPIDs']:
+                line += "  add PDGCodes "+ str(pid) + "\n"
         return line
 
     # Add random seed to detector card, if needed
@@ -38,15 +43,15 @@ class DetectorSettings:
     # Update the detector card of experiment 'experiment'
     @classmethod
     def _update_delphes_file(cls, experiment):
-        if Info.parameters['invisiblePIDs'] == [] and Info.parameters['randomseed'] == 0:
+        if Info.parameters['invisiblePIDs'] == [] and Info.parameters['llpPIDs'] == [] and Info.parameters['randomseed'] == 0:
             return
         oldfile_name = Info.files['delphes_global_config'][experiment]
-	newfile_name = os.path.join(Info.paths['output_delphes'], "modified_"+experiment+"_card.tcl") 
+        newfile_name = os.path.join(Info.paths['output_delphes'], "modified_"+experiment+"_card.tcl")
         Info.files['delphes_global_config'][experiment] = newfile_name
         with open(oldfile_name, "r") as oldfile:
             with open(newfile_name, "w") as newfile:
                 for line in oldfile:
-                    line = DetectorSettings._update_delphes_invpids(line)
+                    line = DetectorSettings._update_delphes_pids(line)
                     newfile.write(line)
                 DetectorSettings._update_delphes_randomseed(newfile)
 

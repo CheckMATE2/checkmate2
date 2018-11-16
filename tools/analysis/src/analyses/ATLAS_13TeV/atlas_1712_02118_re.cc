@@ -196,6 +196,7 @@ void Atlas_1712_02118_re::analyze() {
     Px += charginos[i]->Px;
     Py += charginos[i]->Py;
   }
+
   // don't add charginos to MET, since neutrlalinos are already included.
   //  metVec.SetPxPyPzE(metVec.Px() + Px, metVec.Py() + Py, 0.0, 1.0);
   double met = metVec.Pt();
@@ -216,7 +217,7 @@ void Atlas_1712_02118_re::analyze() {
 
   
   //  trigger=true;
-  
+
   if(!trigger)
     return;
   
@@ -226,7 +227,7 @@ void Atlas_1712_02118_re::analyze() {
   
   if( electronsTight.size() || muonsCombined.size() )
     return;
-  
+
   countCutflowEvent("1_leptonveto");
   
   
@@ -234,26 +235,26 @@ void Atlas_1712_02118_re::analyze() {
     return;
   
   countCutflowEvent("2_at_least_one_jet");
-  
+
   if(jets[0]->PT < 140.)
     return;
   
   countCutflowEvent("3_ptmin(j1)>140");
   
-  
+
   if(met < 140.)
     return;
   
   countCutflowEvent("4_MET");
   
-  
+
   for (int i = 0; i < jets50.size(); i++ ){
     if ( jets50.size() < 5 && fabs(jets50[i]->P4().DeltaPhi( missingET->P4() )) < 1.0 )
       return;
   }
   
   countCutflowEvent("5_DeltaPhiCut");
-    
+
   if (charginoIndex >= 0) {
     double charginoPt = charginos[charginoIndex]->PT;
     countCutflowEvent("7_Chargino_candidate");
