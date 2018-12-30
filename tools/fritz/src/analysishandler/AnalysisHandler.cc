@@ -902,7 +902,32 @@ void AnalysisHandler::postProcessParticles() {
     isolateElectrons();
     isolateMuons();
     isolatePhotons();
-    // loop over electrons
+
+    // AnalysisHandler also creates curtom LLP Vertices
+    createLLPVertices();
+}
+
+void AnalysisHandler::createLLPVertices() {
+    true_llpvertices.clear();
+    for (auto m: true_llpmothers) {
+	// LLP vertex is defined in CM base, and is DIFFERENT to the Delphes Vertex class!
+	LLPVertex* v = new LLPVertex(m);
+	v->fillDaughters(true_llpdecays);
+	true_llpvertices.push_back(v);
+    }
+    std::cout << " I found " << true_llpvertices.size() << " vertices." << std::endl;
+    if (true_llpvertices.size() > 0) {
+	LLPVertex* v = true_llpvertices[0];
+	std::cout << "   th first has " << v->tracks.size() << "tracks, " << v->vertexDaughters.size() << " vertexdaughters and " << v->stableDaughters.size() << " stable daughters" << std::endl;
+	for (auto vt: v->tracks)
+	    std::cout << "      track PID " << vt->PID << std::endl;
+
+    	for (auto vt: v->vertexDaughters)
+	    std::cout << "      vertex PID " << vt->PID << std::endl;
+	
+    	for (auto vt: v->stableDaughters)
+	    std::cout << "      stable PID " << vt->PID << std::endl;
+}
 }
 
 void AnalysisHandler::isolateElectrons() {

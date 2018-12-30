@@ -30,6 +30,7 @@
 #include "ETMiss.h"
 #include "FinalStateObject.h"
 #include "Units.h"
+#include "LLPVertex.h"
 
 #include "mt2_bisect.h"
 #include "mctlib.h"

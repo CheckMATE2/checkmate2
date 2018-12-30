@@ -157,8 +157,10 @@ protected:
      *  @{
      */
     std::vector<GenParticle*> true_particles;
-    std::vector<GenParticle*> true_llpmothers;
-    std::vector<GenParticle*> true_llpdecays;
+    std::vector<GenParticle*> true_llpmothers;  //!< true particles with long lifetime
+    std::vector<GenParticle*> true_llpdecays;  //! true particles with long liftim plus their entire decay tree
+    std::vector<LLPVertex*> true_llpvertices;
+    
     std::vector<GenParticle*> true_c; //!< true c quarks to perform btagging
     std::vector<GenParticle*> true_b; //!< true b quarks to perform btagging
     std::vector<GenParticle*> true_tau; //!< true visible hadronic taus
@@ -305,6 +307,9 @@ private:
     void isolateElectrons(); //!< isolates electrons
     void isolateMuons(); //!< isolates muons;
     void isolatePhotons(); //!< isolates photons;
+
+    //! subfunction to create LLPVertices
+    void createLLPVertices(); //!< creates LLPVertices
 
     //! text file to store standard output and error of all analyses
     std::string analysisLogFile;

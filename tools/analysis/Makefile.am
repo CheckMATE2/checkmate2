@@ -14,6 +14,7 @@ libanalyses_la_SOURCES =	\
              src/base/AnalysisBase.cc include/base/AnalysisBase.h \
              src/base/ETMiss.cc include/base/ETMiss.h \
              src/base/FinalStateObject.cc include/base/FinalStateObject.h \
+             src/base/LLPVertex.cc include/base/LLPVertex.h \
              src/base/Units.cc include/base/Units.h \
              src/kinematics/mt2family/mt2_bisect.cc include/kinematics/mt2family/mt2_bisect.h \
              src/kinematics/mctlib/mctlib.cc include/kinematics/mctlib/mctlib.h \
