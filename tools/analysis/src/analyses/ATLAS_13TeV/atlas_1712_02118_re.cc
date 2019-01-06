@@ -109,6 +109,20 @@ void Atlas_1712_02118_re::analyze() {
   std::vector<GenParticle*> charginostemp = true_llpmothers;
   std::cout << "Truemothes" << true_llpmothers.size() << std::endl;
   std::cout << "Truedecays" << true_llpdecays.size() << std::endl;
+  std::cout << "Truevertices" << true_llpvertices.size() << std::endl;
+
+  int iv = 0;
+  for (auto v : true_llpvertices) {
+      iv += 1;
+      std::cout << " vertex " << iv << " comes from mothere with PID " << v->mother->PID << std::endl;
+      std::cout << " it has " << v->tracks.size() << " tracks,   " << v->stableDaughters.size() << " stable daughters and   " << v->vertexDaughters.size() << " daughters associatd to the vertex itself " << std::endl;
+      std::cout << " the associated daughters have PIDS " << std::endl;
+      for (auto vd : v->stableDaughters) {
+	  std::cout << "   " << vd->PID << std::endl;
+      }
+  }
+  std::cout << std::endl;
+  
   std::vector<GenParticle*> neutralinos;
   double r,y;
   

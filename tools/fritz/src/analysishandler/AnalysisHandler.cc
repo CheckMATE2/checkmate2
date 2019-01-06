@@ -915,19 +915,6 @@ void AnalysisHandler::createLLPVertices() {
 	v->fillDaughters(true_llpdecays);
 	true_llpvertices.push_back(v);
     }
-    std::cout << " I found " << true_llpvertices.size() << " vertices." << std::endl;
-    if (true_llpvertices.size() > 0) {
-	LLPVertex* v = true_llpvertices[0];
-	std::cout << "   th first has " << v->tracks.size() << "tracks, " << v->vertexDaughters.size() << " vertexdaughters and " << v->stableDaughters.size() << " stable daughters" << std::endl;
-	for (auto vt: v->tracks)
-	    std::cout << "      track PID " << vt->PID << std::endl;
-
-    	for (auto vt: v->vertexDaughters)
-	    std::cout << "      vertex PID " << vt->PID << std::endl;
-	
-    	for (auto vt: v->stableDaughters)
-	    std::cout << "      stable PID " << vt->PID << std::endl;
-}
 }
 
 void AnalysisHandler::isolateElectrons() {
@@ -1165,10 +1152,13 @@ void AnalysisHandler::linkObjects() {
         listOfAnalyses[a]->true_particles = tempParticles;
  
 	std::vector<GenParticle*> tempLLPMothers = true_llpmothers;
-        listOfAnalyses[a]->true_llpmothers = true_llpmothers;
+        listOfAnalyses[a]->true_llpmothers = tempLLPMothers;
 	
 	std::vector<GenParticle*> tempLLPDecays = true_llpdecays;
-        listOfAnalyses[a]->true_llpdecays = true_llpdecays;
+        listOfAnalyses[a]->true_llpdecays = tempLLPDecays;
+
+	std::vector<LLPVertex*> tempLLPVertices = true_llpvertices;
+        listOfAnalyses[a]->true_llpvertices = tempLLPVertices;
 
 	
         listOfAnalyses[a]->electronIsolationTags = electronIsolationTags;
