@@ -1,7 +1,6 @@
 #ifndef ATLAS_1708_07875_H_
 #define ATLAS_1708_07875_H_
-// AUTHOR:Junjie Cao, Liangliang Shang, Jin Min Yang, Yuanfang Yue and Yang ZhangJunjie Cao, Liangliang Shang, Jin Min Yang, Yuanfang Yue and Yang Zhang
-//  EMAIL: junjiec@itp.ac.cn,shlwell1988@gmail.com,jmyang@itp.ac.cn,yuanfang405@gmail.com,zhangyang@itp.ac.cn
+// AUTHOR:Junjie Cao, K. Rolbiecki, Liangliang Shang and Di Zhang
 #include "AnalysisBase.h"
 
 class Atlas_1708_07875 : public AnalysisBase {

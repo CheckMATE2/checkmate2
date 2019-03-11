@@ -1,6 +1,5 @@
 #include "atlas_1708_07875.h"
-// AUTHOR:Junjie Cao, Liangliang Shang, Jin Min Yang, Yuanfang Yue and Yang ZhangJunjie Cao, Liangliang Shang, Jin Min Yang, Yuanfang Yue and Yang Zhang, K. Rolbiecki
-//  EMAIL: junjiec@itp.ac.cn,shlwell1988@gmail.com,jmyang@itp.ac.cn,yuanfang405@gmail.com,zhangyang@itp.ac.cn
+// AUTHOR:Junjie Cao, K. Rolbiecki, Liangliang Shang and Di Zhang
 void Atlas_1708_07875::initialize() {
   setAnalysisName("atlas_1708_07875"); 
   setInformation(""
@@ -32,20 +31,13 @@ void Atlas_1708_07875::analyze() {
   }
   tauJets=filterPhaseSpace(tauJets, 20., -2.47, 2.47, true);
 
-  int num_bjet = 0;
-  for(int i=0; i<jets.size(); i++) {
-    if(jets[i]->PT > 20. and fabs(jets[i]->Eta)<2.5) {
-      if(checkBTag(jets[i])) {
-        num_bjet++;
-      }
-    }
-  }
 
-  tauJets=overlapRemoval(tauJets, electronsLoose, 0.2, "y");
-  tauJets=overlapRemoval(tauJets, muonsCombinedPlus, 0.2, "y");
-  jets = overlapRemoval(jets, tauJets, 0.4);
+  tauJets=overlapRemoval(tauJets, electronsLoose, 0.2);
+  tauJets=overlapRemoval(tauJets, muonsCombinedPlus, 0.2);
+  electronsLoose=overlapRemoval(electronsLoose, muonsCombinedPlus, 0.2);
   overlapRemoval_electrons_jets(electronsLoose, jets);
-  jets = overlapRemoval(jets, muonsCombinedPlus, 0.4, "y");
+  jets = overlapRemoval(jets, tauJets, 0.4);
+  jets = overlapRemoval(jets, muonsCombinedPlus, 0.4);
 
 
   countCutflowEvent("00_all");
@@ -82,18 +74,14 @@ void Atlas_1708_07875::analyze() {
   countCutflowEvent("cut01_2leptons");*/
 
   if( tauJets.size() < 2 ) return;
-  bool trigger1 = missingET->PT > 50. and tauJets[0]->PT > 35. and tauJets[1]->PT > 25.;
-  bool trigger2 = tauJets[0]->PT > 85. and tauJets[1]->PT > 50.;
-  if ( !trigger1 and !trigger2) return;
-//  if( (electronsLoose.size() 
-//       + muonsCombinedPlus.size()) > 1) return;
+  bool trigger_asy_pre = tauJets[0]->PT > 85. and tauJets[1]->PT > 50.;
+  bool trigger_met_pre = missingET->PT > 50. and tauJets[0]->PT > 35. and tauJets[1]->PT > 25.;
+  bool trigger_asy = tauJets[0]->PT > 95. and tauJets[1]->PT > 65.;
+  bool trigger_met = missingET->PT > 150. and tauJets[0]->PT > 50. and tauJets[1]->PT > 40.;
+  if (!trigger_asy_pre and !trigger_met_pre) return;
  
   countCutflowEvent("01_2taus");
 
-  int num_tight_tau=0;
-  for(int i=0; i<tauJets.size(); i++) {
-    if (checkTauTag(tauJets[i], "tight") ) num_tight_tau++;
-  }
 
   int num_OSTau_pair = 0;
   bool z_veto = false;
@@ -102,7 +90,6 @@ void Atlas_1708_07875::analyze() {
       if(i>j) {
         if(tauJets[i]->Charge * tauJets[j]->Charge < 0) {
           //veto taus from low mass resonance
-          if( (tauJets[i]->P4()+tauJets[j]->P4()).M() < 12. ) return;
           num_OSTau_pair++;
           //mz=81GeV
           if( fabs( (tauJets[i]->P4()+tauJets[j]->P4()).M()-79.) < 10. ) z_veto = true;
@@ -112,16 +99,27 @@ void Atlas_1708_07875::analyze() {
   }
 
   if (num_OSTau_pair < 1) return;
-  
   countCutflowEvent("02_OStaus");
 
+  int num_bjet = 0;
+  for(int i=0; i<jets.size(); i++) {
+    if(jets[i]->PT > 20. and fabs(jets[i]->Eta)<2.5) {
+      if(checkBTag(jets[i])) {
+        num_bjet++;
+      }
+    }
+  }
+
   if (num_bjet > 0) return;
-  
   countCutflowEvent("03_bveto");
 
   if (z_veto) return;
-  
   countCutflowEvent("04_Zveto");
+
+  int num_tight_tau=0;
+  for(int i=0; i<tauJets.size(); i++) {
+    if (checkTauTag(tauJets[i], "tight") ) num_tight_tau++;
+  }
 
   double mt2max=-99.;
   for(int i=0; i<tauJets.size(); i++) { 
@@ -135,42 +133,65 @@ void Atlas_1708_07875::analyze() {
   double mtautau=(tauJets[0]->P4() + tauJets[1]->P4() ).M();
   
   //signal regions
-  if(true) { //sr-lowmass
-    if(trigger1 and missingET->PT > 150. and tauJets[0]->PT > 50. and tauJets[1]->PT > 40.) {
-      countCutflowEvent("srL_01_Trigger");
-      if(mt2max > 70.) {
-        countCutflowEvent("srL_02_mt2");
-        countSignalEvent("sr1-lowmass");
-      }
+  //sr-lowmass
+  if(trigger_met) {
+    countCutflowEvent("srL_01_Trigger");
+    if(mt2max > 70.) {
+      countCutflowEvent("srL_02_mt2");
+      countSignalEvent("sr1-lowmass");
     }
   } 
 
-  if(true) { //sr-highmass
-    if( (missingET->PT > 150. and tauJets[0]->PT > 50. and tauJets[1]->PT > 40.) or (tauJets[0]->PT > 95. and tauJets[1]->PT > 65.)) {
-      countCutflowEvent("srH_01_Trigger");
-      if(num_tight_tau>=1) {
-        countCutflowEvent("srH_02_TightTau");
-	if (tauJets[0]->PT > 80. )
-	  countCutflowEvent("srH_03_LeadingTau");
-            if(mtautau>110.) {
-              countCutflowEvent("srH_04_MassTauP");
-                if(missingET->PT > 110.) {
-                   countCutflowEvent("srH_05_MET");
-		      if(mt2max>90.) {
-			countCutflowEvent("srH_06_MT2");
-			countSignalEvent("sr2-highmass");
-		      }
-                }
+
+  //sr-highmass
+   
+  if (tauJets.size() > 1 and num_tight_tau > 0) {
+    countCutflowEvent("srH_01_TightTau");
+    if(trigger_met) {
+      if (tauJets[0]->PT > 80.) {
+        countCutflowEvent("srH_02_PT");
+        if (mtautau>=110) {
+          countCutflowEvent("srH_03_mass");
+          if (trigger_asy ) {
+            if( missingET->PT > 110.) {
+              countCutflowEvent("srH_04_MET");
+              if(mt2max>90.) {
+                countCutflowEvent("srH_04_MT2");
+              } 
             }
-         }
+          } else {
+            countCutflowEvent("srH_04_MET");
+            if(mt2max>90.) {
+              countCutflowEvent("srH_04_MT2");
+            } 
+          }
+        }
       }
-    }  
-  
+    } else {
+      countCutflowEvent("srH_02_PT");
+      if (mtautau>=110) {
+        countCutflowEvent("srH_03_mass");
+        if (trigger_asy ) {
+          if( missingET->PT > 110.) {
+            countCutflowEvent("srH_04_MET");
+            if(mt2max>90.) {
+              countCutflowEvent("srH_04_MT2");
+            } 
+          }
+        } else {
+          countCutflowEvent("srH_04_MET");
+          if(mt2max>90.) {
+            countCutflowEvent("srH_04_MT2");
+          } 
+        }
+      }
+    }
+  }
 }
 
 void Atlas_1708_07875::finalize() {
-  // Whatever should be done after the run goes here
-}       
+  // Whatever should be done after the run goes here                            
+}
 
 
 void Atlas_1708_07875::overlapRemoval_electrons_jets(std::vector<Electron*>& electrons, std::vector<Jet*>& jets) {

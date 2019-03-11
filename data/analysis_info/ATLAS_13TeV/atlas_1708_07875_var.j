@@ -1,7 +1,7 @@
 {
   "analysis": "atlas_1708_07875", 
-  "author": "Junjie Cao, Liangliang Shang, Jin Min Yang, Yuanfang Yue and Yang ZhangJunjie Cao, Liangliang Shang, Jin Min Yang, Yuanfang Yue and Yang Zhang, K. Rolbiecki", 
-  "authoremail": "junjiec@itp.ac.cn,shlwell1988@gmail.com,jmyang@itp.ac.cn,yuanfang405@gmail.com,zhangyang@itp.ac.cn", 
+  "author": "Junjie Cao, K. Rolbiecki, Liangliang Shang and Di Zhang", 
+  "authoremail": "shlwell1988@gmail.com", 
   "cr": "n", 
   "ecm": "13.0", 
   "electron_iso_absorrel": [
