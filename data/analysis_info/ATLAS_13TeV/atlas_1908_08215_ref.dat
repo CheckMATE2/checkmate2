@@ -1,0 +1,17 @@
+SR               obs  bkg   bkg_err  S95_obs  S95_exp  
+SR-DF-0J-INC100  95   96    15       33       33       
+SR-DF-0J-INC160  21   18.8  2.4      13.0     10.9     
+SR-DF-0J-EXC100  47   45    9        23       21       
+SR-DF-0J-EXC120  27   33    5        11       15       
+SR-DF-1J-INC100  75   75    9        25       25       
+SR-DF-1J-INC160  15   15.1  2.7      10.3     10.0     
+SR-DF-1J-EXC100  38   39    6        16       17       
+SR-DF-1J-EXC120  22   21.3  2.8      11.9     11.7     
+SR-SF-0J-INC100  147  144   12       36       33       
+SR-SF-0J-INC160  37   37.3  3        14.1     14.4     
+SR-SF-0J-EXC100  53   56    6        17       19       
+SR-SF-0J-EXC120  57   51    5        23       18       
+SR-SF-1J-INC100  120  124   12       29       32       
+SR-SF-1J-INC160  29   36    5        11       15       
+SR-SF-1J-EXC100  55   48    8        26       22       
+SR-SF-1J-EXC120  36   40    4        13       15       
