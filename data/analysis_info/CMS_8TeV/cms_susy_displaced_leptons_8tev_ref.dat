@@ -1,0 +1,4 @@
+SR     obs  bkg    bkg_err_stat  bkg_err_sys  S95_obs  S95_exp  
+SR3  0    0.051  0.015         0.010        2.928    2.953    
+SR2   0    1.01   0.06          0.30         2.97     3.42     
+SR1    19   18     0.5           3.8          13       12       
