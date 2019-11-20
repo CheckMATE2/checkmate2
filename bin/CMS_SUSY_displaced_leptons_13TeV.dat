@@ -1,7 +1,7 @@
 [Parameters]
-Name: Run_8TeV_500GeV_100mm_em
+Name: Run_13TeV_700GeV_1000mm_em
 #### The following examples run a) all 8TeV-atlas analyses, b) all atlas-stop-analyses and a specific cms analysis, c) three specific analyses
-Analyses: cms_susy_displaced_leptons_8tev
+Analyses: cms_susy_displaced_leptons_13tev
 #Analyses: atlas & stops & 8TeV, cms_sus_13_016
 #Analyses: atlas_conf_2013_061, atlas_conf_2013_047, atlas_conf_2013_049
 
@@ -55,9 +55,9 @@ RandomSeed: 42
 #### Process Information (Each new process 'X' must start with [X])
 #### Example 1: Running on a .hep event file. The cross section must be given
 [test1]
-Events: /home/sentientmango/Pythia_Delphes/MG5/MG5_aMC_v2_6_5/CMS_SUSY_displaced_lepton_8TeV/Events/100mm/run_01/CMS_SUSY_displaced_leptons_8TeV_10k.lhe
-XSect: 57.07 FB
-XSectErr: 8.56 FB
+Events: /home/sentientmango/Pythia_Delphes/MG5/MG5_aMC_v2_6_5/CMS_SUSY_displaced_lepton_13TeV/Events/1000mm/run_01/CMS_SUSY_displaced_leptons_13TeV_10k.lhe
+XSect: 0.0783 PB
+XSectErr: 0.0068904 PB
 
 #### Example 2: Generating events with pythia8 for a particular SUSY process. This requires 'SLHAFile' in Optional Parameters
 #[myprocess2]

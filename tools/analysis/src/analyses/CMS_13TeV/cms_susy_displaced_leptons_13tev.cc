@@ -1,17 +1,17 @@
-#include "cms_susy_displaced_leptons_8tev.h"
+#include "cms_susy_displaced_leptons_13tev.h"
 // AUTHOR: Mangesh Sonawane
 //  EMAIL: son.arnav95@gmail.com
 
-void Cms_susy_displaced_leptons_8tev::initialize() {
-  setAnalysisName("cms_susy_displaced_leptons_8tev");          
+void Cms_susy_displaced_leptons_13tev::initialize() {
+  setAnalysisName("cms_susy_displaced_leptons_13tev");          
   setInformation(""
     "# CMS\n"
     "# SUSY\n"
     "# displaced leptons\n"
     "# e/mu\n"
-    "# 8TeV\n"
+    "# 13TeV\n"
   "");
-  setLuminosity(19.7*units::INVFB);      
+  setLuminosity(2.6*units::INVFB);      
   bookSignalRegions("SR3;SR2;SR1");
   // You can also book cutflow regions with bookCutflowRegions("CR1;CR2;..."). Note that the regions are
   //  always ordered alphabetically in the cutflow output files.
@@ -21,8 +21,8 @@ void Cms_susy_displaced_leptons_8tev::initialize() {
   EventCount = 0;
   n_e = 0, n_mu = 0, n_tau = 0;
 
-  xsec = 85.6; //fb
-  i_lumi = 19.7; //fb-1
+  xsec = 78.3; //fb
+  i_lumi = 2.6; //fb-1
 
   SR1 = 0., SR2 = 0., SR3 = 0.;
 
@@ -59,7 +59,7 @@ void Cms_susy_displaced_leptons_8tev::initialize() {
 
 //User defined functions;
 
-int Cms_susy_displaced_leptons_8tev::initEff(string filename, vector< vector<double> > &arrayname){
+int Cms_susy_displaced_leptons_13tev::initEff(string filename, vector< vector<double> > &arrayname){
 
   ifstream file_eff(filename);
 
@@ -81,7 +81,7 @@ int Cms_susy_displaced_leptons_8tev::initEff(string filename, vector< vector<dou
   return 1;
 }
 
-double Cms_susy_displaced_leptons_8tev::getEff(double value, vector< vector<double> > &arrayname){
+double Cms_susy_displaced_leptons_13tev::getEff(double value, vector< vector<double> > &arrayname){
 
   if(arrayname.size() < 1) return 0.0;
 
@@ -105,17 +105,17 @@ double Cms_susy_displaced_leptons_8tev::getEff(double value, vector< vector<doub
   return eff;
 } 
 
-bool Cms_susy_displaced_leptons_8tev::lep_selection(GenParticle* part, int ID, double pT, double eta, bool overlap){
+bool Cms_susy_displaced_leptons_13tev::lep_selection(GenParticle* part, int ID, double pT, double eta, bool overlap){
   if (abs(part->PID) != ID) return false;
   if (part->PT < pT) return false;
   if (fabs(part->Eta) > eta) return false;
   if (overlap){
-    if (fabs(part->Eta) > 1.44 && fabs(part->Eta) < 1.56) return false;
+    if (fabs(part->Eta) > 0.9 && fabs(part->Eta) < 1.2) return false;
   }
   return true;
 }
 
-bool Cms_susy_displaced_leptons_8tev::is_isolated(GenParticle* lep, vector <GenParticle*> &stable, double epsilon, double dR_cone)
+bool Cms_susy_displaced_leptons_13tev::is_isolated(GenParticle* lep, vector <GenParticle*> &stable, double epsilon, double dR_cone)
 {
   bool isol = false;
 
@@ -143,7 +143,7 @@ bool Cms_susy_displaced_leptons_8tev::is_isolated(GenParticle* lep, vector <GenP
   return isol;
 }
 
-bool Cms_susy_displaced_leptons_8tev::is_isolated_from_jet(GenParticle* lep, vector <Jet*> &jets, double dR_cone)
+bool Cms_susy_displaced_leptons_13tev::is_isolated_from_jet(GenParticle* lep, vector <Jet*> &jets, double dR_cone)
 {
   // TLorentzVector p1, p2;
   // p1.SetPtEtaPhiE(lep->PT,lep->Eta,lep->Phi,lep->E);
@@ -163,7 +163,7 @@ bool Cms_susy_displaced_leptons_8tev::is_isolated_from_jet(GenParticle* lep, vec
   return true;
 }
 
-void Cms_susy_displaced_leptons_8tev::analyze() {
+void Cms_susy_displaced_leptons_13tev::analyze() {
   EventCount++;
 
   missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
@@ -200,13 +200,13 @@ void Cms_susy_displaced_leptons_8tev::analyze() {
     if (abs(M->PID) < 1000000) continue;         //Disregard final state particle if it does not originate from exotic particle
 
     // finaldaughters.push_back(part);           //store final state daughter if originating from an exotic
-    if (abs(part->PID)==11 && part->PT > 22.){  
+    if (abs(part->PID)==11 && part->PT > 38.){  
       n_e++;
       finalleptons.push_back(part);
       // if (abs(M->PID) >= 1000000) exotic.push_back(M);
     }// end electron check block
 
-    if (abs(part->PID)==13 && part->PT > 22.){
+    if (abs(part->PID)==13 && part->PT > 38.){
       n_mu++;
       finalleptons.push_back(part);
       // if (abs(M->PID) >= 1000000) exotic.push_back(M);
@@ -232,18 +232,18 @@ void Cms_susy_displaced_leptons_8tev::analyze() {
     auto lep = finalleptons[i];
 
     //Selection of electron candidates
-    if (lep_selection(lep, 11, 25, 2.5, true)){
+    if (lep_selection(lep, 11, 42, 2.4, true)){
       bool isol = false;
 
       //Implementing electron isolation
-      if (fabs(lep->Eta < 1.44)) isol = is_isolated(lep, stable, 0.035, 0.3);
-      if (fabs(lep->Eta > 1.56)) isol = is_isolated(lep, stable, 0.065, 0.3);
+      if (fabs(lep->Eta < 0.9)) isol = is_isolated(lep, stable, 0.035, 0.3);
+      if (fabs(lep->Eta > 1.2)) isol = is_isolated(lep, stable, 0.065, 0.3);
 
       if (isol) el.push_back(lep);
     }//end electron selection block
 
     //Selection of muon candidates
-    if (lep_selection(lep, 13, 25, 2.5)){
+    if (lep_selection(lep, 13, 40, 2.4)){
       bool isol = false;
 
       //Implementing electron isolation
@@ -286,10 +286,10 @@ void Cms_susy_displaced_leptons_8tev::analyze() {
 
   double evt_weight = 0.95*e_d0_eff*e_pt_eff*mu_d0_eff*mu_pt_eff;
 
-  if (fabs(el[0]->D0) > 20. || fabs(mu[0]->D0) > 20.) return;
+  if (fabs(el[0]->D0) > 100. || fabs(mu[0]->D0) > 100.) return;
   if (fabs(el[0]->D0) < 0.2 || fabs(mu[0]->D0) < 0.2) return;
 
-  countCutflowEvent("Cut 6: lepton d0 bounds [0.2, 20] mm");
+  countCutflowEvent("Cut 6: lepton d0 bounds [0.2, 100] mm");
 
   double rno = rand()/(RAND_MAX+1.);
 
@@ -305,7 +305,7 @@ void Cms_susy_displaced_leptons_8tev::analyze() {
 
 }
 
-void Cms_susy_displaced_leptons_8tev::finalize() {
+void Cms_susy_displaced_leptons_13tev::finalize() {
   // Whatever should be done after the run goes here
 
   signal << "Signal regions" << endl;
@@ -323,5 +323,3 @@ void Cms_susy_displaced_leptons_8tev::finalize() {
   debug.close();
   signal.close();
 }       
-
-
