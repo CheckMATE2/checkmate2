@@ -123,6 +123,7 @@ class AnalysisBase {
      * 
      * @{
      */
+    std::vector<GenParticle*> true_particles; //!< Container of all truth particles.
     std::vector<Electron*> electrons; //!< Container of all truth electrons after detector smearing in acceptance range.
     std::vector<Electron*> electronsLoose; //!< Container of 'electrons' objects that pass loose isolation condition.
     std::vector<Electron*> electronsMedium; //!< Container of 'electronsLoose'  objects that pass 'medium' efficiency cut.
