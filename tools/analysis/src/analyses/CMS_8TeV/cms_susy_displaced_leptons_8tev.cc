@@ -109,6 +109,9 @@ bool Cms_susy_displaced_leptons_8tev::lep_selection(GenParticle* part, int ID, d
   if (abs(part->PID) != ID) return false;
   if (part->PT < pT) return false;
   if (fabs(part->Eta) > eta) return false;
+  if (fabs(part->Z) > 300.) return false;
+  double v0 = sqrt(part->X*part->X + part->Y*part->Y);
+  if (v0 > 40.) return false;
   if (overlap){
     if (fabs(part->Eta) > 1.44 && fabs(part->Eta) < 1.56) return false;
   }
@@ -246,7 +249,7 @@ void Cms_susy_displaced_leptons_8tev::analyze() {
     if (lep_selection(lep, 13, 25, 2.5)){
       bool isol = false;
 
-      //Implementing electron isolation
+      //Implementing muon isolation
       isol = is_isolated(lep, stable, 0.15, 0.4);
 
       if (isol) mu.push_back(lep);
@@ -308,10 +311,10 @@ void Cms_susy_displaced_leptons_8tev::analyze() {
 void Cms_susy_displaced_leptons_8tev::finalize() {
   // Whatever should be done after the run goes here
 
-  signal << "Signal regions" << endl;
-  signal << endl << "SR1: \t" << SR1*xsec*i_lumi*2./3*1e-4;
-  signal << endl << "SR2: \t" << SR2*xsec*i_lumi*2./3*1e-4;
-  signal << endl << "SR3: \t" << SR3*xsec*i_lumi*2./3*1e-4;
+  signal << "Output Signal regions" << endl;
+  signal << endl << "SR1: \t" << SR1*xsec*i_lumi*2./3 /EventCount;
+  signal << endl << "SR2: \t" << SR2*xsec*i_lumi*2./3 /EventCount;
+  signal << endl << "SR3: \t" << SR3*xsec*i_lumi*2./3 /EventCount;
 
   hists->cd();
   n_elec->Write();

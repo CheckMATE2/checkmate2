@@ -21,7 +21,7 @@ void Cms_susy_displaced_leptons_13tev::initialize() {
   EventCount = 0;
   n_e = 0, n_mu = 0, n_tau = 0;
 
-  xsec = 78.3; //fb
+  xsec = 67.0; //fb
   i_lumi = 2.6; //fb-1
 
   SR1 = 0., SR2 = 0., SR3 = 0.;
@@ -109,8 +109,11 @@ bool Cms_susy_displaced_leptons_13tev::lep_selection(GenParticle* part, int ID, 
   if (abs(part->PID) != ID) return false;
   if (part->PT < pT) return false;
   if (fabs(part->Eta) > eta) return false;
+  // if (fabs(part->Z) > 300.) return false;
+  // double v0 = sqrt(part->X*part->X + part->Y*part->Y);
+  // if (v0 > 40.) return false;
   if (overlap){
-    if (fabs(part->Eta) > 0.9 && fabs(part->Eta) < 1.2) return false;
+    if (fabs(part->Eta) > 1.44 && fabs(part->Eta) < 1.57) return false;
   }
   return true;
 }
@@ -126,7 +129,7 @@ bool Cms_susy_displaced_leptons_13tev::is_isolated(GenParticle* lep, vector <Gen
   //loop over all stable particles
   for (int i = 0; i < stable.size(); ++i){
 
-    if (stable[i]->PT < 0.1) continue;   
+    if (stable[i]->PT < 0.2) continue;   
     if (abs(stable[i]->PID) == 12 || abs(stable[i]->PID) == 14 || abs(stable[i]->PID) == 16) continue;                  //minimum pt for particle to be considered for isolation
 
     p2.SetPtEtaPhiE(stable[i]->PT,stable[i]->Eta,stable[i]->Phi,stable[i]->E);
@@ -236,8 +239,8 @@ void Cms_susy_displaced_leptons_13tev::analyze() {
       bool isol = false;
 
       //Implementing electron isolation
-      if (fabs(lep->Eta < 0.9)) isol = is_isolated(lep, stable, 0.035, 0.3);
-      if (fabs(lep->Eta > 1.2)) isol = is_isolated(lep, stable, 0.065, 0.3);
+      if (fabs(lep->Eta < 1.44)) isol = is_isolated(lep, stable, 0.035, 0.3);
+      if (fabs(lep->Eta > 1.56)) isol = is_isolated(lep, stable, 0.065, 0.3);
 
       if (isol) el.push_back(lep);
     }//end electron selection block
@@ -246,7 +249,7 @@ void Cms_susy_displaced_leptons_13tev::analyze() {
     if (lep_selection(lep, 13, 40, 2.4)){
       bool isol = false;
 
-      //Implementing electron isolation
+      //Implementing muon isolation
       isol = is_isolated(lep, stable, 0.15, 0.4);
 
       if (isol) mu.push_back(lep);
@@ -268,8 +271,8 @@ void Cms_susy_displaced_leptons_13tev::analyze() {
   jets = overlapRemoval(jets, mu, 0.1);
 
   // Check isolation from jet
-  if (!is_isolated_from_jet(el[0],jets,0.5)) return;
-  if (!is_isolated_from_jet(mu[0],jets,0.5)) return;
+  // if (!is_isolated_from_jet(el[0],jets,0.5)) return;
+  // if (!is_isolated_from_jet(mu[0],jets,0.5)) return;
   countCutflowEvent("Cut 4: Jet-Lepton isolation dR > 0.5");
 
   double dR = el[0]->P4().DeltaR(mu[0]->P4());
@@ -308,10 +311,10 @@ void Cms_susy_displaced_leptons_13tev::analyze() {
 void Cms_susy_displaced_leptons_13tev::finalize() {
   // Whatever should be done after the run goes here
 
-  signal << "Signal regions" << endl;
-  signal << endl << "SR1: \t" << SR1*xsec*i_lumi*2./3*1e-4;
-  signal << endl << "SR2: \t" << SR2*xsec*i_lumi*2./3*1e-4;
-  signal << endl << "SR3: \t" << SR3*xsec*i_lumi*2./3*1e-4;
+  signal << "Output Signal regions" << endl;
+  signal << endl << "SR1: \t" << SR1*xsec*i_lumi*2./3 /EventCount;
+  signal << endl << "SR2: \t" << SR2*xsec*i_lumi*2./3 /EventCount;
+  signal << endl << "SR3: \t" << SR3*xsec*i_lumi*2./3 /EventCount;
 
   hists->cd();
   n_elec->Write();
