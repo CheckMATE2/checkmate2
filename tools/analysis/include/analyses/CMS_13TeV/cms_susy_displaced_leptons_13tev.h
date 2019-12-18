@@ -19,7 +19,7 @@ class Cms_susy_displaced_leptons_13tev : public AnalysisBase {
   	int EventCount;
   	int n_e, n_mu, n_tau;
 
-  	ofstream debug, signal;
+  	// ofstream debug, signal;
 
   	double SR3, SR2, SR1;
 
@@ -30,9 +30,9 @@ class Cms_susy_displaced_leptons_13tev : public AnalysisBase {
   	//Efficiency records
 	vector< vector<double> > elec_d0_eff, muon_d0_eff, elec_pt_eff, muon_pt_eff;
 
-  	TFile *hists;
+  	// TFile *hists;
 
-  	TH1F *n_elec, *n_muon, *n_ta;
+  	// TH1F *n_elec, *n_muon, *n_ta;
 
   	int initEff(string filename, vector< vector<double> > &arrayname);
   	double getEff(double value, vector< vector<double> > &arrayname);

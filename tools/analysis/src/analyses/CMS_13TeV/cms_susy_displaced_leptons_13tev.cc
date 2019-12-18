@@ -27,16 +27,16 @@ void Cms_susy_displaced_leptons_13tev::initialize() {
   SR1 = 0., SR2 = 0., SR3 = 0.;
 
   //Debug output file
-  debug.open("debug.txt");
-  signal.open("signal.txt");
+  // debug.open("debug.txt");
+  // signal.open("signal.txt");
 
   //Define histograms
-  n_elec = new TH1F("n_e", "n_e", 10, 0, 10);
-  n_muon = new TH1F("n_mu", "n_mu", 10, 0, 10);
-  n_ta = new TH1F("n_tau", "n_tau", 10, 0, 10);
+  // n_elec = new TH1F("n_e", "n_e", 10, 0, 10);
+  // n_muon = new TH1F("n_mu", "n_mu", 10, 0, 10);
+  // n_ta = new TH1F("n_tau", "n_tau", 10, 0, 10);
 
   //TFile
-  hists = new TFile("hists.root","recreate");
+  // hists = new TFile("hists.root","recreate");
 
   elec_d0_eff.clear();
   muon_d0_eff.clear();
@@ -52,7 +52,7 @@ void Cms_susy_displaced_leptons_13tev::initialize() {
 
   if (!isinit) {
     cout << endl << "Efficiency file read error!!!";
-    debug << endl << "Efficiency file read error!!!";
+    // debug << endl << "Efficiency file read error!!!";
     return;
   }
 }
@@ -171,8 +171,8 @@ void Cms_susy_displaced_leptons_13tev::analyze() {
 
   missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
   
-  debug << endl << endl << "Event: " << EventCount;
-  debug << endl << "true_particles size: " << true_particles.size() << endl;
+  // debug << endl << endl << "Event: " << EventCount;
+  // debug << endl << "true_particles size: " << true_particles.size() << endl;
 
   finalleptons.clear();
   stable.clear();
@@ -223,9 +223,9 @@ void Cms_susy_displaced_leptons_13tev::analyze() {
 
   }//end loop over all true particles
 
-  n_elec->Fill(n_e);
-  n_muon->Fill(n_mu);
-  n_ta->Fill(n_tau);
+  // n_elec->Fill(n_e);
+  // n_muon->Fill(n_mu);
+  // n_ta->Fill(n_tau);
 
   if (n_e < 1 || n_mu < 1) return;
   countCutflowEvent("Cut 1: At lease 1 e and mu");
@@ -294,7 +294,9 @@ void Cms_susy_displaced_leptons_13tev::analyze() {
 
   countCutflowEvent("Cut 6: lepton d0 bounds [0.2, 100] mm");
 
-  double rno = rand()/(RAND_MAX+1.);
+  weight = weight*evt_weight;
+
+  // double rno = rand()/(RAND_MAX+1.);
 
   // if (evt_weight > rno) return;
 
@@ -302,27 +304,27 @@ void Cms_susy_displaced_leptons_13tev::analyze() {
 
 
 
-  if (fabs(el[0]->D0) > 1. && fabs(mu[0]->D0) > 1.) {SR3+=evt_weight; if (evt_weight < rno) countSignalEvent("SR3");}
-  else if (fabs(el[0]->D0) > 0.5 && fabs(mu[0]->D0) > 0.5) {SR2+=evt_weight; if (evt_weight < rno) countSignalEvent("SR2");}
-  else if (fabs(el[0]->D0) > 0.2 && fabs(mu[0]->D0) > 0.2) {SR1+=evt_weight; if (evt_weight < rno) countSignalEvent("SR1");}
+  if (fabs(el[0]->D0) > 1. && fabs(mu[0]->D0) > 1.) {SR3+=evt_weight; countSignalEvent("SR3");}
+  else if (fabs(el[0]->D0) > 0.5 && fabs(mu[0]->D0) > 0.5) {SR2+=evt_weight; countSignalEvent("SR2");}
+  else if (fabs(el[0]->D0) > 0.2 && fabs(mu[0]->D0) > 0.2) {SR1+=evt_weight; countSignalEvent("SR1");}
 
 }
 
 void Cms_susy_displaced_leptons_13tev::finalize() {
   // Whatever should be done after the run goes here
 
-  signal << "Output Signal regions" << endl;
-  signal << endl << "SR1: \t" << SR1*xsec*i_lumi*2./3 /EventCount;
-  signal << endl << "SR2: \t" << SR2*xsec*i_lumi*2./3 /EventCount;
-  signal << endl << "SR3: \t" << SR3*xsec*i_lumi*2./3 /EventCount;
+  // signal << "Output Signal regions" << endl;
+  // signal << endl << "SR1: \t" << SR1*xsec*i_lumi*2./3 /EventCount;
+  // signal << endl << "SR2: \t" << SR2*xsec*i_lumi*2./3 /EventCount;
+  // signal << endl << "SR3: \t" << SR3*xsec*i_lumi*2./3 /EventCount;
 
-  hists->cd();
-  n_elec->Write();
-  n_muon->Write();
-  n_ta->Write();
+  // hists->cd();
+  // n_elec->Write();
+  // n_muon->Write();
+  // n_ta->Write();
 
   //Closing files
-  hists->Close();
-  debug.close();
-  signal.close();
+  // hists->Close();
+  // debug.close();
+  // signal.close();
 }       
