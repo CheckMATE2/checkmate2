@@ -21,7 +21,9 @@ void Cms_susy_displaced_leptons_13tev::initialize() {
   EventCount = 0;
   n_e = 0, n_mu = 0, n_tau = 0;
 
-  xsec = 67.0; //fb
+  BR = 2./3;
+
+  xsec = 78.3; //fb
   i_lumi = 2.6; //fb-1
 
   SR1 = 0., SR2 = 0., SR3 = 0.;
@@ -294,7 +296,7 @@ void Cms_susy_displaced_leptons_13tev::analyze() {
 
   countCutflowEvent("Cut 6: lepton d0 bounds [0.2, 100] mm");
 
-  weight = weight*evt_weight;
+  weight = weight*evt_weight*BR;
 
   // double rno = rand()/(RAND_MAX+1.);
 

@@ -22,6 +22,8 @@ class Cms_susy_displaced_leptons_13tev : public AnalysisBase {
   	// ofstream debug, signal;
 
   	double SR3, SR2, SR1;
+	
+	double BR;
 
   	double xsec;
   	double i_lumi;

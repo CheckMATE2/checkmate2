@@ -21,6 +21,8 @@ void Cms_susy_displaced_leptons_8tev::initialize() {
   EventCount = 0;
   n_e = 0, n_mu = 0, n_tau = 0;
 
+  BR = 2./3;
+
   xsec = 85.6; //fb
   i_lumi = 19.7; //fb-1
 
@@ -299,7 +301,7 @@ void Cms_susy_displaced_leptons_8tev::analyze() {
 
   // countCutflowEvent("Cut 7: Combined efficiency cut");
 
-  weight = weight*evt_weight;
+  weight = weight*evt_weight*BR;
 
 
   if (fabs(el[0]->D0) > 1. && fabs(mu[0]->D0) > 1.) {SR3+=evt_weight; countSignalEvent("SR3");}
