@@ -780,19 +780,25 @@ bool AnalysisHandler::readParticles(int iEvent) {
     true_b.clear();
     true_c.clear();
     true_tau.clear();
+    true_e.clear();
+    true_particles.clear();
     if (!branchGenParticle) {
         Global::abort(name,
                       "GenParticleBranch not properly assigned!");
     }
 
     for(int i = 0; i < branchGenParticle->GetEntries(); i++) {
+        true_particles.push_back((GenParticle*)branchGenParticle->At(i));
         if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 5)
             true_b.push_back((GenParticle*)branchGenParticle->At(i));
         else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 4)
             true_c.push_back((GenParticle*)branchGenParticle->At(i));
-        else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 15) {
+        else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 15)
             true_tau.push_back((GenParticle*)branchGenParticle->At(i));
-        }
+        else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 11)
+            true_e.push_back((GenParticle*)branchGenParticle->At(i));
+        else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 13)
+            true_mu.push_back((GenParticle*)branchGenParticle->At(i));
     }
     branchGenParticle->Clear();
 
@@ -1095,6 +1101,8 @@ void AnalysisHandler::linkObjects() {
     for(int a = 0; a < listOfAnalyses.size(); a++) {
         // important: as many analyses cut on the containers,
         //  every analysis must use its own container
+        std::vector<GenParticle*> temptruePart = true_particles;
+        listOfAnalyses[a]->true_particles = temptruePart;
         std::vector<Track*> tempTracks = tracks;
         listOfAnalyses[a]->tracks = tempTracks;
         std::vector<Tower*> tempTowers = towers;

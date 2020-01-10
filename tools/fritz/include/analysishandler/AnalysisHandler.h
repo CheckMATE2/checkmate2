@@ -159,6 +159,9 @@ protected:
     std::vector<GenParticle*> true_c; //!< true c quarks to perform btagging
     std::vector<GenParticle*> true_b; //!< true b quarks to perform btagging
     std::vector<GenParticle*> true_tau; //!< true visible hadronic taus
+    std::vector<GenParticle*> true_e; //!< true electrons
+    std::vector<GenParticle*> true_mu; //!< true muons
+    std::vector<GenParticle*> true_particles; //!< All true particles
     std::vector<Track*> tracks; //!< reconstructed tracks
     std::vector<Tower*> towers; //!< reconstructed calorimeter towers
     std::vector<Jet*> jets; //!< reconstructed jets
