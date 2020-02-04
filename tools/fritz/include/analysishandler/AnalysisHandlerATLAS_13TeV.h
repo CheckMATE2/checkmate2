@@ -35,6 +35,9 @@
 #include "atlas_conf_2017_060.h"
 #include "atlas_1706_03731.h"
 
+#include "atlas_1908_08215.h"
+#include "atlas_1909_08457.h"
+#include "atlas_conf_2019_040.h"
 //@extraheader@
 #include "AnalysisBase.h"
 

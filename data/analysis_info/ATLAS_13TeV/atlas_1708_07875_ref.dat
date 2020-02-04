@@ -1,3 +1,3 @@
 SR               obs  bkg   bkg_err  S95_obs  S95_exp  
-sr1-lowmass       10   14    6      11.191     9.386      
-sr2-highmass      5    3.7   1.4     6.137     7.22 
+sr1-lowmass       10   14    6        9.386    11.191   
+sr2-highmass      5    3.7   1.4      7.22     6.137  
