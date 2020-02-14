@@ -165,6 +165,7 @@ protected:
     std::vector<Track*> tracks; //!< reconstructed tracks
     std::vector<Tower*> towers; //!< reconstructed calorimeter towers
     std::vector<Jet*> jets; //!< reconstructed jets
+    std::vector<Jet*> genjets; //!< generator jets
     std::vector<Electron*> electrons; //!< true smeared electrons
     std::vector<Muon*> muons; //!< true smeared muons
     std::vector<Photon*> photons; //!< true smeared photons after some pT cut
@@ -317,6 +318,7 @@ private:
     TClonesArray *branchElectron; //!< truth smeared electrons
     TClonesArray *branchMuon; //!< truth smeared muons
     TClonesArray *branchJet; //!< reconstructed jets
+    TClonesArray *branchGenJet; //!< generator-level jets
     TClonesArray *branchPhoton; //!< truth smeared photons with ptmin cut
     TClonesArray *branchMissingET; //!< reconstructed ETMiss without muons
     TClonesArray *branchTrack; //!< reconstructed tracks

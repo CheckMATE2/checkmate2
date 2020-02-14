@@ -132,6 +132,7 @@ class AnalysisBase {
     std::vector<Muon*> muonsLoose; //!< Container of all 'muons' that pass loose isolation condition.
     std::vector<Muon*> muonsCombinedPlus; //!< Container of  all 'muonsLoose' that pass 'CBplusST' efficiency.
     std::vector<Muon*> muonsCombined; //!< Container of 'muonsCombinedPlus'  objects that pass 'CB' efficiency.
+    std::vector<Jet*> genjets; //!< Container of all generator-level jets.
     std::vector<Jet*> jets; //!< Container of all reconstructed jets.
     std::vector<Photon*> photons; //!< Container of all truth photons after detector smearing.
     std::vector<Photon*> photonsLoose; //!< Container of 'photons' that pass loose isolation condition.

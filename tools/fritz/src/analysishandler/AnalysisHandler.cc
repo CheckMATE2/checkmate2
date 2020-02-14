@@ -490,7 +490,9 @@ void AnalysisHandler::setup( DelphesHandler* dHandlerIn) {
                 branchEvent= (*it)->GetData();
         else if ((std::string)(*it)->GetData()->GetName() == "Jet")
                 branchJet = (*it)->GetData();
-        else if ((std::string)(*it)->GetData()->GetName() == "Track")
+        else if ((std::string)(*it)->GetData()->GetName() == "GenJet")
+	        branchGenJet = (*it)->GetData();
+	else if ((std::string)(*it)->GetData()->GetName() == "Track")
                 branchTrack = (*it)->GetData();
         else if ((std::string)(*it)->GetData()->GetName() == "Tower")
                 branchTower = (*it)->GetData();
@@ -822,6 +824,14 @@ bool AnalysisHandler::readParticles(int iEvent) {
     for(int i = 0; i < branchJet->GetEntries(); i++)
         jets.push_back((Jet*)branchJet->At(i));
     branchJet->Clear();
+
+    genjets.clear();
+    if (!branchGenJet)
+      Global::abort(name, "branchGenJet not properly assigned!");
+    for(int i = 0; i < branchGenJet->GetEntries(); i++)
+      jets.push_back((Jet*)branchGenJet->At(i));
+    branchGenJet->Clear();
+
 
     electrons.clear();
     if (!branchElectron) {
