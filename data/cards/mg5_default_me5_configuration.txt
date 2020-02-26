@@ -202,5 +202,5 @@
 # amcfast = amcfast-config
 
 
-mg5_path = /home/sentientmango/Pythia_Delphes/MG5/MG5_aMC_v2_6_5
+mg5_path = /home/wzeren/Desktop/Research/HEP_Softwares/mg5amcatnlo
 
