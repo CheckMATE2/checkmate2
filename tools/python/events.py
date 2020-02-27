@@ -292,6 +292,15 @@ class Pythia8Events(Events):
         else:
             AdvPrint.cerr_exit("\t Process:genPy8card():: Cannot understand process " + part)
 
+
+        # Add random seed
+        if int(Info.parameters['randomseed']) != 0:
+            seed = int(Info.parameters["randomseed"])
+            proclist.append('Random:setSeed = on\n')
+            proclist.append('Random:seed=')
+            proclist.append(str(seed))
+            proclist.append('\n')
+
         # Write Pythia cards
         ecm_str = "Beams:eCM = 8000.\n"
         if( float(Info.parameters["ecm"]) == 7.0): 

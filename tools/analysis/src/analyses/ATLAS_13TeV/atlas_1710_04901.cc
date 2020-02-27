@@ -228,7 +228,7 @@ double acceffmap[12][8][8] = {{{0.2802,0.2851,0.2774,0.2655,0.1954,0.2125,0.1364
 //  for(int i=0;i<Tljets.size();i++){
 //   cout << "trackless jets " << i << ", " << genjets[Tljets[i]]->PT << endl;
 //  }
-
+  cout << genjets.size() << endl;
   //    2- Applying jet cuts on 75% of the events
   double rno = rand()/(RAND_MAX+1.);
   int jetselIndex = 0;

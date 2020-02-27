@@ -38,4 +38,4 @@ dlopen=''
 dlpreopen=''
 
 # Directory that this library needs to be installed in:
-libdir='/home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/tools/analysis/lib'
+libdir='/home/wzeren/Desktop/Research/HEP_Softwares/checkmate2-LLP_DL_MS/tools/analysis/lib'

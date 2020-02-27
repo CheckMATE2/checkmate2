@@ -19,30 +19,26 @@ class Cms_susy_displaced_leptons_8tev : public AnalysisBase {
   	int EventCount;
   	int n_e, n_mu, n_tau;
 
-  	TFile *eff_file;
-
-  	TH1F *elec_d0_eff_hist;
-  	TH1F *elec_pt_eff_hist;
-  	TH1F *muon_d0_eff_hist;
-  	TH1F *muon_pt_eff_hist;
-
-  	// ofstream debug;
+  	ofstream debug, signal;
 
   	double SR3, SR2, SR1;
-
-	double BR;
 
   	double xsec;
   	double i_lumi;
 
   	vector <GenParticle*> finalleptons, el, mu, stable;
+  	//Efficiency records
+	vector< vector<double> > elec_d0_eff, muon_d0_eff, elec_pt_eff, muon_pt_eff;
 
-  	//User defined functions for selection and isolation
+  	TFile *hists;
 
+  	TH1F *n_elec, *n_muon, *n_ta;
+
+  	int initEff(string filename, vector< vector<double> > &arrayname);
+  	double getEff(double value, vector< vector<double> > &arrayname);
   	bool lep_selection(GenParticle* part, int ID = 0, double pT = 0., double eta = 5., bool overlap = false);
   	bool is_isolated(GenParticle* lep, vector <GenParticle*> &stable, double epsilon=0., double dR_cone = 0.);
   	bool is_isolated_from_jet(GenParticle* lep, vector <Jet*> &jets, double dR_cone = 0.);
 };
 
 #endif
-
