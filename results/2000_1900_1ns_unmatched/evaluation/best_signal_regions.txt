@@ -1,0 +1,2 @@
+analysis          sr   obs  bkg   bkgerr           S95obs  S95exp  robscons       rexpcons       CLsobs  CLsexp  
+atlas_1710_04901  SR1  0.0  0.02  0.0158113883008  2.96    2.9     2.11693844079  2.16073716715  -1      -1      

@@ -1,0 +1,15 @@
+# atlas, 13TeV, tracks, displaced vertices and missing energy
+
+Inputfile:
+XSect:           3.7846 fb
+ Error:          0 fb
+MCEvents:        9832
+ SumOfWeights:   0.000439491
+ SumOfWeights2:  3.6826e-11
+ NormEvents:     124.135
+
+Cut          Sum_W        Sum_W2       Acc        N_Norm   
+1_initial    0.000439491  3.6826e-11   1          124.135  
+2_effETMiss  9.70316e-05  8.13051e-12  0.220782   27.4067  
+3_DVfid      8.58034e-05  7.18967e-12  0.195234   24.2353  
+4_effDV      2.87408e-05  2.40826e-12  0.0653956  8.11788  

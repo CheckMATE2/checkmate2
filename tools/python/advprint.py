@@ -51,9 +51,9 @@ class AdvPrint:
     @classmethod
     def get_terminal_width(cls):
         # careful: this command might not work on all machines
-        stty_output = os.popen('stty size', 'r').read().split()
-        if len(stty_output) >= 2:
-            return int(stty_output[1])
+        #stty_output = os.popen('stty size', 'r').read().split()
+        #if len(stty_output) >= 2:
+        #    return int(stty_output[1])
         return 80 # standard value
     
     @classmethod        

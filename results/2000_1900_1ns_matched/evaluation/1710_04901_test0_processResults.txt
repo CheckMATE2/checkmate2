@@ -1,0 +1,2 @@
+analysis          sr   signal_normevents  signal_err_stat  signal_err_sys  signal_err_tot  
+atlas_1710_04901  SR1  8.11788912173      0.438324704619   0.0             0.438324704619  

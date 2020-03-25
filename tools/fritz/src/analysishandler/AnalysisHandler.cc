@@ -818,6 +818,7 @@ bool AnalysisHandler::readParticles(int iEvent) {
         towers.push_back((Tower*)branchTower->At(i));
     branchTower->Clear();
 
+
     jets.clear();
     if (!branchJet)
         Global::abort(name, "branchJet not properly assigned!");
@@ -825,6 +826,8 @@ bool AnalysisHandler::readParticles(int iEvent) {
         jets.push_back((Jet*)branchJet->At(i));
     branchJet->Clear();
 
+
+    jets.clear();
     genjets.clear();
     if (!branchGenJet)
       Global::abort(name, "branchGenJet not properly assigned!");

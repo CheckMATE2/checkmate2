@@ -1,0 +1,37 @@
+Fritz: Initialising handlers from file /home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/1710_04901_test0/fritz/1710_04901_test0.ini
+Fritz: Set random seed to 428
+PythiaHandler '1710_04901_test0': Pythia8 output redirected to /home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/1710_04901_test0/pythia/pythia_1710_04901_test0.log
+PythiaHandler '1710_04901_test0': Initializing Pythia8 with /home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/1710_04901_test0/pythia/1710_04901_test0card_0.in
+PythiaHandler '1710_04901_test0': Pythia8 successfully initialized!
+PythiaHandler '1710_04901_test0': Pythia8 successfully initialised!
+PythiaHandler '1710_04901_test0': Pythia8 will generate 10000 events
+DelphesHandler 'atlas13tev': Initialising Delphes via linking to PythiaHandler '1710_04901_test0'
+DelphesHandler 'atlas13tev': Initialising settings from /home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/1710_04901_test0/delphes/modified_atlas13tev_card.tcl
+DelphesHandler 'atlas13tev': Delphes successfully initialised!
+AnalysisHandler 'atlas13tev': Initialising AnalysisHandler
+AnalysisHandler 'atlas13tev': Loading Analysis atlas_1710_04901
+AnalysisHandler 'atlas13tev': Successfully loaded analysis atlas_1710_04901
+AnalysisHandler 'atlas13tev': Linking to DelphesHandler 'atlas13tev' tree
+AnalysisHandler 'atlas13tev': AnalysisHandler successfully linked to DelphesHandler 'atlas13tev'
+Fritz: Fritz successfully loaded command line parameters!
+Fritz:  >> Successfully initialized and linked all handlers! <<
+Fritz: Starting event loop!
+Fritz: Progress: 10 %
+Fritz: Progress: 20 %
+Fritz: Progress: 30 %
+Fritz: Progress: 40 %
+Fritz: Progress: 50 %
+Fritz: Progress: 60 %
+Fritz: Progress: 70 %
+Fritz: Progress: 80 %
+Fritz: Progress: 90 %
+Fritz: Progress: 100 %
+Fritz:  >> Finalising after 10000 events. <<
+AnalysisHandler 'atlas13tev': Asking DelphesHandler 'atlas13tev' for cross section information
+DelphesHandler 'atlas13tev': Asking PythiaHandler '1710_04901_test0' for cross section information
+PythiaHandler '1710_04901_test0': Pythia8 returned cross section error of 0 fb
+AnalysisHandler 'atlas13tev': Analyses updated with sigma = 3.7846 fb and dSigma = 0 fb
+AnalysisHandler 'atlas13tev': Analyses successfully finished!
+DelphesHandler 'atlas13tev': Delphes successfully finished!
+PythiaHandler '1710_04901_test0': Pythia8 successfully finished!
+Fritz:  >> Done <<

@@ -60,26 +60,28 @@ double acceffmap[12][8][8] = {{{0.2802,0.2851,0.2774,0.2655,0.1954,0.2125,0.1364
 
   missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
 
+  countCutflowEvent("1_initial");
   //       A: Missing ET cut
   TLorentzVector metVec = missingET->P4();
   float met = metVec.Pt();
   bool METcut = false;
   met=0.;
+  metVec.SetPxPyPzE(0.,0.,0.,0.);
   vector <int> tooLLgluino;
-  for(int i=0;i<true_particles.size();++i){
-   auto part=true_particles[i];                           // open particle
-   if(abs(part->PID)==1000021){
-    float dist=TMath::Sqrt(part->X*part->X+part->Y*part->Y);
-    if(dist<3870.){
-     auto daughter=true_particles[part->D1];
-     dist=TMath::Sqrt(daughter->X*daughter->X+daughter->Y*daughter->Y);
-     if(dist>3870.){
-      met=met+part->PT;
-      tooLLgluino.push_back(i);                           // add the particle to the list
-     }
-    }
-   }
-  }
+//  for(int i=0;i<true_particles.size();++i){
+//   auto part=true_particles[i];                           // open particle
+//   if(abs(part->PID)==1000021){
+//    float dist=TMath::Sqrt(part->X*part->X+part->Y*part->Y);
+//    if(dist<3870.){
+//     auto daughter=true_particles[part->D1];
+//     dist=TMath::Sqrt(daughter->X*daughter->X+daughter->Y*daughter->Y);
+//     if(dist>3870.){
+//      met=met+part->PT;
+//      tooLLgluino.push_back(i);                           // add the particle to the list
+//     }
+//    }
+//   }
+//  }
 //  float rmax=0.;
   for(int i=0;i<true_particles.size();++i){               // loop over particles in the decay table
    auto part=true_particles[i];                           // open particle
@@ -97,7 +99,7 @@ double acceffmap[12][8][8] = {{{0.2802,0.2851,0.2774,0.2655,0.1954,0.2125,0.1364
       decind=M->M1;
      }
     }
-    if(!motherintooLLg)met=met+part->PT;
+    if(!motherintooLLg)metVec=metVec+part->P4();
    }
 //   if(abs(part->PID)==1000021){
 //    auto daughter=true_particles[part->D1];
@@ -105,8 +107,10 @@ double acceffmap[12][8][8] = {{{0.2802,0.2851,0.2774,0.2655,0.1954,0.2125,0.1364
 //    if(dist>rmax)rmax=dist;
 //   }
   }
+  met=metVec.Pt();
   if( met > 200. )METcut = true;                            // condition MET > 200GeV 
   if( !METcut )return;
+
 //  countCutflowEvent("1_metcut");
 
   //       B: Define the displaced vertices
@@ -147,7 +151,11 @@ double acceffmap[12][8][8] = {{{0.2802,0.2851,0.2774,0.2655,0.1954,0.2125,0.1364
     DVlist[DVpos][2]=(DVlist[DVpos][2]*(float)(DVpart[DVpos].size()-1)+part->Z)/(float)(DVpart[DVpos].size());
    }
    vector <float> momentuminDV{part->Px,part->Py,part->Pz,TMath::Sqrt(part->Px*part->Px+part->Py*part->Py+part->Pz*part->Pz+0.14*0.14)};                                          // define 4-momentum of the particle (assuming a pion mass)
+   TLorentzVector MomProd=part->P4();
+   TLorentzVector PosProd(part->X,part->Y,part->Z,0.);
    float imppar = part->D0;                               // define impact parameter of the particle
+   float apimppar = TMath::Sqrt(part->X*part->X+part->Y*part->Y)*fabs(sin(MomProd.DeltaPhi(PosProd)));                               // define impact parameter of the particle
+   imppar=apimppar;
    if(abs(part->PT) > 1. && fabs(imppar) > 2.){           // check if the particle qualifies as a selected decay product
     DVselprod[DVpos]=DVselprod[DVpos]+1;                  // adds the selected decay product to the counter
     for(int j=0;j<4;++j){                                 // and add the 4-momentum
@@ -215,7 +223,10 @@ double acceffmap[12][8][8] = {{{0.2802,0.2851,0.2774,0.2655,0.1954,0.2125,0.1364
     if(!copiedcluster[j] && DVpart[j].size()>0){
      for (int k=0;k<DVpart[j].size();k++) {
       auto part=true_particles[DVpart[j][k]];
-      if(part->D0<2. && part->P4().DeltaR(jets[i]->P4())<0.4 ) {
+      TLorentzVector MomProd=part->P4();
+      TLorentzVector PosProd(part->X,part->Y,part->Z,0.);
+      float apimppar = TMath::Sqrt(part->X*part->X+part->Y*part->Y)*fabs(sin(MomProd.DeltaPhi(PosProd)));                               // define impact parameter of the particle
+      if(apimppar<2. && part->P4().DeltaR(jets[i]->P4())<0.4 ) {
        PTsum=PTsum+part->PT;                                            // add the PT's of all the tracks that are collinear to the jet i
   // NB: only colinearity of the 4-momentum is checked. In the DV context, this might not be sufficient / relevant.
       }
@@ -225,10 +236,11 @@ double acceffmap[12][8][8] = {{{0.2802,0.2851,0.2774,0.2655,0.1954,0.2125,0.1364
    if( PTsum>5. ) trackless=false;                         // trackless condition PT(tracks) < 5GeV
    if(trackless) Tljets.push_back(i);
   }
-//  for(int i=0;i<Tljets.size();i++){
+//  cout << "genjets " << genjets.size() << endl;
+//  for(int i=0;i<genjets.size();i++){
 //   cout << "trackless jets " << i << ", " << genjets[Tljets[i]]->PT << endl;
 //  }
-  cout << genjets.size() << endl;
+
   //    2- Applying jet cuts on 75% of the events
   double rno = rand()/(RAND_MAX+1.);
   int jetselIndex = 0;
@@ -243,12 +255,16 @@ double acceffmap[12][8][8] = {{{0.2802,0.2851,0.2774,0.2655,0.1954,0.2125,0.1364
    }
   }
 //  countCutflowEvent("2_jetcut");
-  
+//   for(int i=0;i<jets.size();i++){
+//   cout << jets[i]->PT << endl;
+//   }
+//   cout << genjets.size() << endl;
   //       D: Displaced vertex condition
   //    1- Select LLP's in the fiducial region
   vector <int> obsLLP;
   float rmax=0.;
   // Checking fiducial cuts
+  bool DVfidtest=false;
   bool DVfidcut = true;
   for (int i=0;i<DVlist.size();i++) {
    if(copiedcluster[i])continue;
@@ -258,6 +274,7 @@ double acceffmap[12][8][8] = {{{0.2802,0.2851,0.2774,0.2655,0.1954,0.2125,0.1364
    if(r<4. || r>300. || abs(z)>300.)DVfidcut = false;      // is DV i in fiducial volume?
    float MDV=TMath::Sqrt(DVmomentum[i][3]*DVmomentum[i][3]-DVmomentum[i][0]*DVmomentum[i][0]-DVmomentum[i][1]*DVmomentum[i][1]-DVmomentum[i][2]*DVmomentum[i][2]);                                                      // mass of the DV i
    if(DVfidcut && (DVselprod[i] < 5 || MDV < 10.))DVfidcut = false; // Constraints on the number of selected products and DV mass
+   if(DVfidcut)DVfidtest=true;
    if(r > rmax && DVselprod[i] > 4 && MDV > 10.){
     rmax=r;                                                // find the position of the farthest DV (even if it is beyond the search region?)
    }
@@ -307,7 +324,7 @@ double acceffmap[12][8][8] = {{{0.2802,0.2851,0.2774,0.2655,0.1954,0.2125,0.1364
    }
   }
 //  cout << "observed DV: " << obsLLP.size() << endl;
-  if(obsLLP.size()<1)return;
+//  if(obsLLP.size()<1)return;
 //  countCutflowEvent("3_fidcut");
 
   //       D: MET efficiency depending on the position of the farthest (?) DV
@@ -338,7 +355,13 @@ double acceffmap[12][8][8] = {{{0.2802,0.2851,0.2774,0.2655,0.1954,0.2125,0.1364
    } else return;
   } else return;
   // apply the efficiency map
-//  countCutflowEvent("4_effcut");
+  countCutflowEvent("2_effETMiss");
+
+  if(!DVfidtest)return;
+  countCutflowEvent("3_DVfid");
+
+  if(obsLLP.size()<1)return;
+  countCutflowEvent("4_effDV");
 
   countSignalEvent("SR1");
 }
