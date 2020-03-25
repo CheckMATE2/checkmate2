@@ -83,6 +83,8 @@ double acceffmap[12][8][8] = {{{0.2802,0.2851,0.2774,0.2655,0.1954,0.2125,0.1364
 //   }
 //  }
 //  float rmax=0.;
+  if(true_particles.size()<1)return;
+
   for(int i=0;i<true_particles.size();++i){               // loop over particles in the decay table
    auto part=true_particles[i];                           // open particle
    if(abs(part->PID)==1000022){
@@ -116,7 +118,6 @@ double acceffmap[12][8][8] = {{{0.2802,0.2851,0.2774,0.2655,0.1954,0.2125,0.1364
   //       B: Define the displaced vertices
 
   //    1- Search the decay tables for displaced-produced stable charged particles
-  if(true_particles.size()<1)return;
 
   vector <vector <float>> DVlist;
   vector <vector <int>> DVpart;

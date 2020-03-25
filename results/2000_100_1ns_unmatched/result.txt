@@ -1,0 +1,5 @@
+Test: Calculation of approximate (fast) likelihood given in results folder
+Result: Excluded
+Result for r: 1.03839895987
+Analysis: atlas_1710_04901
+SR: SR1
