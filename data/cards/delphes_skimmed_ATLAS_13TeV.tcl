@@ -574,6 +574,8 @@ module PdgCodeFilter NeutrinoFilter {
 
   set PTMin 0.0
 
+  add PdgCode {1000022}
+  add PdgCode {1000021}
   add PdgCode {12}
   add PdgCode {14}
   add PdgCode {16}
@@ -594,7 +596,7 @@ module FastJetFinder GenJetFinder {
 
   # algorithm: 1 CDFJetClu, 2 MidPoint, 3 SIScone, 4 kt, 5 Cambridge/Aachen, 6 antikt
   set JetAlgorithm 6
-  set ParameterR 0.6
+  set ParameterR 0.4
 
   set JetPTMin 20.0
 }
@@ -623,7 +625,7 @@ module FastJetFinder FastJetFinder {
 
   # algorithm: 1 CDFJetClu, 2 MidPoint, 3 SIScone, 4 kt, 5 Cambridge/Aachen, 6 antikt
   set JetAlgorithm 6
-  set ParameterR 0.6
+  set ParameterR 0.4
 
   set JetPTMin 20.0
 }
