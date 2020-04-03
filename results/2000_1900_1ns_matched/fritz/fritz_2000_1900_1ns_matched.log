@@ -1,0 +1,33 @@
+Fritz: Initialising handlers from file /home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/2000_1900_1ns_matched/fritz/2000_1900_1ns_matched.ini
+Fritz: Set random seed to 428
+DelphesHandler 'atlas13tev': Initialising Delphes via input event /home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/bin/example_run_cards/auxiliary/gogo_2jets_2000_1900_1ns.hepmc
+DelphesHandler 'atlas13tev': Input File determined to be HepMC.
+DelphesHandler 'atlas13tev': Initialising settings from /home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/2000_1900_1ns_matched/delphes/modified_atlas13tev_card.tcl
+DelphesHandler 'atlas13tev': Delphes successfully initialised!
+DelphesHandler 'atlas13tev': Input file successfully opened!
+AnalysisHandler 'atlas13tev': Initialising AnalysisHandler
+AnalysisHandler 'atlas13tev': Loading Analysis atlas_1710_04901
+AnalysisHandler 'atlas13tev': Successfully loaded analysis atlas_1710_04901
+AnalysisHandler 'atlas13tev': Linking to DelphesHandler 'atlas13tev' tree
+AnalysisHandler 'atlas13tev': AnalysisHandler successfully linked to DelphesHandler 'atlas13tev'
+Fritz: Fritz successfully loaded command line parameters!
+Fritz:  >> Successfully initialized and linked all handlers! <<
+Fritz: Starting event loop!
+Fritz: Progress: 10 %
+Fritz: Progress: 20 %
+Fritz: Progress: 30 %
+Fritz: Progress: 40 %
+Fritz: Progress: 50 %
+Fritz: Progress: 60 %
+Fritz: Progress: 70 %
+Fritz: Progress: 80 %
+Fritz: Progress: 90 %
+Fritz:  >> Finalising after 9832 events. <<
+AnalysisHandler 'atlas13tev': Asking DelphesHandler 'atlas13tev' for cross section information
+DelphesHandler 'atlas13tev': Asking EventFile '2000_1900_1ns_matched' for cross section information
+EventFile '2000_1900_1ns_matched':  Returning cross section of 3.7846 fb
+EventFile '2000_1900_1ns_matched':  Returning cross section error of 0 fb
+AnalysisHandler 'atlas13tev': Analyses updated with sigma = 3.7846 fb and dSigma = 0 fb
+AnalysisHandler 'atlas13tev': Analyses successfully finished!
+DelphesHandler 'atlas13tev': Delphes successfully finished!
+Fritz:  >> Done <<

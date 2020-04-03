@@ -296,7 +296,7 @@
     "py8rndm": "", 
     "mg5_log": "/home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/2000_100_1ns_unmatched/mg5amcatnlo/mg5amcatnlo_output.log", 
     "pythia_cards": [
-      "/home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/2000_100_1ns_unmatched/pythia/1710_04901_test0card_0.in"
+      "/home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/2000_100_1ns_unmatched/pythia/2000_100_1ns_unmatchedcard_0.in"
     ], 
     "output_result": "/home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/2000_100_1ns_unmatched/result.txt", 
     "list_of_analyses": {
@@ -478,7 +478,7 @@
     ], 
     "bestcls": 0
   }, 
-  "identifiers": "(dp0\nS'1710_04901_test0'\np1\nccopy_reg\n_reconstructor\np2\n(cevents\nPythia8Events\np3\nc__builtin__\ndict\np4\n(dp5\ntp6\nRp7\n(dp8\nS'fritz_config_file'\np9\nS'/home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/2000_100_1ns_unmatched/fritz/1710_04901_test0.ini'\np10\nsS'maxEvents'\np11\nI10000\nsS'analysis_result_files'\np12\n(dp13\nsS'result_output_file'\np14\nS'/home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/2000_100_1ns_unmatched/evaluation/1710_04901_test0_eventsResults.txt'\np15\nsS'analysis_cutflow_files'\np16\n(dp17\nS'atlas_1710_04901'\np18\nS'/home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/2000_100_1ns_unmatched/analysis/1710_04901_test0_atlas_1710_04901_cutflow.dat'\np19\nssS'processString'\np20\nS'p p > go go'\np21\nsS'analysis_signal_files'\np22\n(dp23\ng18\nS'/home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/2000_100_1ns_unmatched/analysis/1710_04901_test0_atlas_1710_04901_signal.dat'\np24\nssS'configFile'\np25\nS'/home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/2000_100_1ns_unmatched/fritz/1710_04901_test0.ini'\np26\nsS'py8_infile'\np27\nS'/home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/2000_100_1ns_unmatched/pythia/1710_04901_test0card_0.in'\np28\nsS'processed'\np29\nI01\nsS'identifier'\np30\ng1\nsS'name'\np31\ng1\nsbs.", 
+  "identifiers": "(dp0\nS'2000_100_1ns_unmatched'\np1\nccopy_reg\n_reconstructor\np2\n(cevents\nPythia8Events\np3\nc__builtin__\ndict\np4\n(dp5\ntp6\nRp7\n(dp8\nS'fritz_config_file'\np9\nS'/home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/2000_100_1ns_unmatched/fritz/2000_100_1ns_unmatched.ini'\np10\nsS'maxEvents'\np11\nI10000\nsS'analysis_result_files'\np12\n(dp13\nsS'result_output_file'\np14\nS'/home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/2000_100_1ns_unmatched/evaluation/2000_100_1ns_unmatched_eventsResults.txt'\np15\nsS'analysis_cutflow_files'\np16\n(dp17\nS'atlas_1710_04901'\np18\nS'/home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/2000_100_1ns_unmatched/analysis/2000_100_1ns_unmatched_atlas_1710_04901_cutflow.dat'\np19\nssS'processString'\np20\nS'p p > go go'\np21\nsS'analysis_signal_files'\np22\n(dp23\ng18\nS'/home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/2000_100_1ns_unmatched/analysis/2000_100_1ns_unmatched_atlas_1710_04901_signal.dat'\np24\nssS'configFile'\np25\nS'/home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/2000_100_1ns_unmatched/fritz/2000_100_1ns_unmatched.ini'\np26\nsS'py8_infile'\np27\nS'/home/wzeren/Desktop/Research/HEP_Softwares/checkmate2/results/2000_100_1ns_unmatched/pythia/2000_100_1ns_unmatchedcard_0.in'\np28\nsS'processed'\np29\nI01\nsS'identifier'\np30\ng1\nsS'name'\np31\ng1\nsbs.", 
   "flags": {
     "zsig": false, 
     "controlregions": false, 

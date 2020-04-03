@@ -818,7 +818,6 @@ bool AnalysisHandler::readParticles(int iEvent) {
         towers.push_back((Tower*)branchTower->At(i));
     branchTower->Clear();
 
-
     jets.clear();
     if (!branchJet)
         Global::abort(name, "branchJet not properly assigned!");
@@ -826,13 +825,13 @@ bool AnalysisHandler::readParticles(int iEvent) {
         jets.push_back((Jet*)branchJet->At(i));
     branchJet->Clear();
 
-
-    jets.clear();
+//    jets.clear();
     genjets.clear();
     if (!branchGenJet)
       Global::abort(name, "branchGenJet not properly assigned!");
-    for(int i = 0; i < branchGenJet->GetEntries(); i++)
-      jets.push_back((Jet*)branchGenJet->At(i));
+    for(int i = 0; i < branchGenJet->GetEntries(); i++){
+      genjets.push_back((Jet*)branchGenJet->At(i));
+    }
     branchGenJet->Clear();
 
 
@@ -1122,6 +1121,8 @@ void AnalysisHandler::linkObjects() {
         listOfAnalyses[a]->towers = tempTowers;
         std::vector<Jet*> tempJets = jets;
         listOfAnalyses[a]->jets = tempJets;
+        std::vector<Jet*> tempgenJets = genjets;
+        listOfAnalyses[a]->genjets = tempgenJets;
         std::vector<Electron*> tempElectrons = electrons;
         listOfAnalyses[a]->electrons = tempElectrons;
         std::vector<Muon*> tempMuons = muons;

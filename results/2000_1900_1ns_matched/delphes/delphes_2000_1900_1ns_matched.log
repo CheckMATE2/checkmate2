@@ -1,0 +1,80 @@
+** INFO: adding module        ParticlePropagator       ParticlePropagator       
+** INFO: adding module        Efficiency               ChargedHadronTrackingEfficiency
+** INFO: adding module        Efficiency               ElectronTrackingEfficiency
+** INFO: adding module        Efficiency               MuonTrackingEfficiency   
+** INFO: adding module        MomentumSmearing         ChargedHadronMomentumSmearing
+** INFO: adding module        MomentumSmearing         ElectronMomentumSmearing 
+** INFO: adding module        MomentumSmearing         MuonMomentumSmearing     
+** INFO: adding module        Merger                   TrackMerger              
+** INFO: adding module        SimpleCalorimeter        ECal                     
+** INFO: adding module        SimpleCalorimeter        HCal                     
+** INFO: adding module        PdgCodeFilter            ElectronFilter           
+** INFO: adding module        PdgCodeFilter            ChargedHadronFilter      
+** INFO: adding module        Merger                   Calorimeter              
+** INFO: adding module        Merger                   EFlowMerger              
+** INFO: adding module        PdgCodeFilter            EFlowFilter              
+** INFO: adding module        Efficiency               PhotonEfficiency         
+** INFO: adding module        Isolation                PhotonIsolation          
+** INFO: adding module        Efficiency               ElectronEfficiency       
+** INFO: adding module        Isolation                ElectronIsolation        
+** INFO: adding module        Efficiency               MuonEfficiency           
+** INFO: adding module        Isolation                MuonIsolation            
+** INFO: adding module        Merger                   MissingET                
+** INFO: adding module        Merger                   ScalarHT                 
+** INFO: adding module        PdgCodeFilter            NeutrinoFilter           
+** INFO: adding module        FastJetFinder            GenJetFinder             
+** INFO: adding module        Merger                   GenMissingET             
+** INFO: adding module        FastJetFinder            FastJetFinder            
+** INFO: adding module        EnergyScale              JetEnergyScale           
+** INFO: adding module        JetFlavorAssociation     JetFlavorAssociation     
+** INFO: adding module        BTagging                 BTagging                 
+** INFO: adding module        TrackCountingTauTagging  TauTagging               
+** INFO: adding module        UniqueObjectFinder       UniqueObjectFinder       
+** INFO: adding module        TreeWriter               TreeWriter               
+** INFO: initializing module  Delphes                  
+** INFO: initializing module  ParticlePropagator       
+** INFO: initializing module  ChargedHadronTrackingEfficiency
+** INFO: initializing module  ElectronTrackingEfficiency
+** INFO: initializing module  MuonTrackingEfficiency   
+** INFO: initializing module  ChargedHadronMomentumSmearing
+** INFO: initializing module  ElectronMomentumSmearing 
+** INFO: initializing module  MuonMomentumSmearing     
+** INFO: initializing module  TrackMerger              
+** INFO: initializing module  ECal                     
+** INFO: initializing module  HCal                     
+** INFO: initializing module  Calorimeter              
+** INFO: initializing module  EFlowMerger              
+** INFO: initializing module  EFlowFilter              
+** INFO: initializing module  PhotonEfficiency         
+** INFO: initializing module  PhotonIsolation          
+** INFO: initializing module  ElectronFilter           
+** INFO: initializing module  ElectronEfficiency       
+** INFO: initializing module  ElectronIsolation        
+** INFO: initializing module  ChargedHadronFilter      
+** INFO: initializing module  MuonEfficiency           
+** INFO: initializing module  MuonIsolation            
+** INFO: initializing module  MissingET                
+** INFO: initializing module  NeutrinoFilter           
+** INFO: initializing module  GenJetFinder             
+#--------------------------------------------------------------------------
+#                         FastJet release 3.2.1
+#                 M. Cacciari, G.P. Salam and G. Soyez                  
+#     A software package for jet finding and analysis at colliders      
+#                           http://fastjet.fr                           
+#	                                                                      
+# Please cite EPJC72(2012)1896 [arXiv:1111.6097] if you use this package
+# for scientific work and optionally PLB641(2006)57 [hep-ph/0512210].   
+#                                                                       
+# FastJet is provided without warranty under the terms of the GNU GPLv2.
+# It uses T. Chan's closest pair algorithm, S. Fortune's Voronoi code
+# and 3rd party plugin jet algorithms. See COPYING file for details.
+#--------------------------------------------------------------------------
+** INFO: initializing module  GenMissingET             
+** INFO: initializing module  FastJetFinder            
+** INFO: initializing module  JetEnergyScale           
+** INFO: initializing module  JetFlavorAssociation     
+** INFO: initializing module  BTagging                 
+** INFO: initializing module  TauTagging               
+** INFO: initializing module  UniqueObjectFinder       
+** INFO: initializing module  ScalarHT                 
+** INFO: initializing module  TreeWriter               
