@@ -1,5 +1,9 @@
 # current
 
+2020-04-08   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ removed python Root check due to a change in naming conventions (python->pyroot) around v6.20 
+
 2019-11-28   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
         
     ~ added atlas_conf_2019_040
