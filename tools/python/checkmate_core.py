@@ -32,8 +32,7 @@ class CheckMATE2:
             self.procList = Info.fill_processes_from_file(sys.argv[1])
         else:
             Info.fill_info_from_parameters()
-            self.procList = Info.fill_processes_from_parameters()   
-    
+            self.procList = Info.fill_processes_from_parameters()        
         if Info.parameters["outputexists"] == "add":            
             self.load(Info.files['internal_processes'])         
         for p in self.procList:               
