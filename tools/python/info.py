@@ -36,7 +36,6 @@ class Info(dict):
         flags['eff_tab'] = False
         flags['zsig'] = False
         flags['mg5'] = False
-
         parameters = dict()
         parameters['outputexists'] = "ask"
         parameters['bestcls'] = 0
@@ -46,10 +45,6 @@ class Info(dict):
         parameters['ProcessResultFileColumns'] = ['analysis', 'sr', 'signal_normevents', 'signal_err_tot']
         parameters['TotalEvaluationFileColumns'] = ['analysis', 'sr', 'o', 'b', 'db', 's', 'ds', 's95obs', 's95exp', 'robscons', 'rexpcons']
         parameters['BestPerAnalysisEvaluationFileColumns'] = ['analysis', 'sr', 'o', 'b', 'db', 's', 'ds', 's95obs', 's95exp', 'robscons', 'rexpcons']
-
-        #Flag and parameter to set custom delphes card - Mangesh S. (son.arnav95@gmail.com)
-        flags['set_custom_delphes'] = False   
-        parameters['set_custom_delphes_card'] = ""          
         
         cls.analysis_groups = {
                 "ATLAS_7TeV",
@@ -189,10 +184,6 @@ class Info(dict):
         parser.add_argument('-se', '--skip-evaluation', dest='skipevaluation', action='store_true', help='Skips evaluation step.')
         parser.add_argument('-cr', '--control-regions', dest='controlregions', action='store_true', help='Analyses control regions instead of signal regions. Sets -se automatically.')
         parser.add_argument('-rs', '--random-seed', dest='randomseed', type=int, default=0, help='Chooses fixed seed for random number generator. 0 chooses a random seed automatically.')     
-
-        # Checking if custom Delphes card is set, and adding custom delphes card - Mangesh S. (son.arnav95@gmail.com)
-        parser.add_argument('-scd', '--set-custom-delphes', dest='set_custom_delphes', action='store_true', help='For Delphes, set True if using custom card')
-        parser.add_argument('-scdc', '--set-custom-delphes-card', dest='set_custom_delphes_card', type=str, default="", help='If using custom Delphes Card, set card name') 
         
         # Parse arguments and set return parameters
         if emptyparser:
@@ -242,52 +233,6 @@ class Info(dict):
             cls.flags['write_pythia_events'] = True 
         if args.writedelphes:            
             cls.flags['write_delphes_events'] = True
-
-#########Custom delphes card flag - Mangesh S. (son.arnav95@gmail.com)##############################################
-        if args.set_custom_delphes:
-            cls.flags["set_custom_delphes"] = True
-            if args.set_custom_delphes_card != "":
-                cls.parameters["set_custom_delphes_card"] = args.set_custom_delphes_card
-
-########Code block if custom delphes card is being set - Mangesh S.(son.arnav95@gmail.com)##########################################
-        delphes_global_config = dict()
-
-        if cls.flags['set_custom_delphes'] == True :  
-
-            delphes_path = os.path.join(cls.paths['cards'], cls.parameters['set_custom_delphes_card'])
-            if not os.path.isfile(delphes_path) :
-                AdvPrint.cerr_exit("Delphes card '"+cls.parameters['set_custom_delphes_card']+"' does not exist.")
-
-            delphes_global_config["atlas"] = os.path.join(cls.paths['cards'], cls.parameters['set_custom_delphes_card'])
-            delphes_global_config["atlas7tev"] = os.path.join(cls.paths['cards'], cls.parameters['set_custom_delphes_card'])
-            delphes_global_config["atlas8tev"] = os.path.join(cls.paths['cards'], cls.parameters['set_custom_delphes_card'])
-            delphes_global_config["atlas13tev"] = os.path.join(cls.paths['cards'], cls.parameters['set_custom_delphes_card'])
-            delphes_global_config["atlas14tev_projected"] = os.path.join(cls.paths['cards'], cls.parameters['set_custom_delphes_card'])
-            delphes_global_config["atlas14tev_hl_flatbtagger"] = os.path.join(cls.paths['cards'], cls.parameters['set_custom_delphes_card'])
-            delphes_global_config["cms"] = os.path.join(cls.paths['cards'], cls.parameters['set_custom_delphes_card'])
-            delphes_global_config["cms7tev"] = os.path.join(cls.paths['cards'], cls.parameters['set_custom_delphes_card'])
-            delphes_global_config["cms8tev"] = os.path.join(cls.paths['cards'], 'delphes_CMS_test.tcl')
-            delphes_global_config["cms13tev"] = os.path.join(cls.paths['cards'], cls.parameters['set_custom_delphes_card'])
-            delphes_global_config["cms14tev_projected"] = os.path.join(cls.paths['cards'], cls.parameters['set_custom_delphes_card'])
-
-        else:
-
-            delphes_global_config["atlas"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS.tcl')
-            delphes_global_config["atlas7tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS.tcl')
-            delphes_global_config["atlas8tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS.tcl')
-            delphes_global_config["atlas13tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS_13TeV.tcl')
-            delphes_global_config["atlas14tev_projected"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS_14TeV.tcl')
-            delphes_global_config["atlas14tev_hl_flatbtagger"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS_14TeV.tcl')
-            delphes_global_config["cms"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS.tcl')
-            delphes_global_config["cms7tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS.tcl')
-            delphes_global_config["cms8tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS.tcl')
-            delphes_global_config["cms13tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS_13TeV.tcl')
-            delphes_global_config["cms14tev_projected"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS_14TeV.tcl')
-        
-        cls.files['delphes_global_config'] = delphes_global_config
-
-################################################################
-
         if args.tefc != "":
             cls.parameters["TotalEvaluationFileColumns"] = args.tefc.split(",")
         if args.prfc != "":
@@ -306,7 +251,7 @@ class Info(dict):
     @classmethod
     def fill_info_from_parameters(cls):
         args = cls.parse_arguments()
-        cls.fill_info_from_args(args)        
+        cls.fill_info_from_args(args)
         
     @classmethod
     def fill_info_from_file(cls, pfile):
@@ -380,14 +325,6 @@ class Info(dict):
                     args.name = Config.get("Parameters", "name")
                 elif optional_parameter == "analyses":
                     args.analysis = Config.get("Parameters", "analyses")
-
-                #Custom delphes card - Mangesh S. (son.arnav95@gmail.com)
-                elif optional_parameter == "setcustomdelphes":
-                    args.set_custom_delphes = Config.getboolean("Parameters", "setcustomdelphes")
-                elif optional_parameter == "setcustomdelphesname":
-                    args.set_custom_delphes_card = Config.get("Parameters", "setcustomdelphesname")
-                #Need to have an error statement for the case where Flag is set true, but invalid card or no card is given
-
                 else:
                     AdvPrint.cerr_exit("Unknown optional parameter '"+optional_parameter+"'")                    
         cls.fill_info_from_args(args)
@@ -753,21 +690,19 @@ class Info(dict):
         cls.files['mg5_run_template'] = os.path.join(cls.paths['cards'], 'mg5_default_run_card.dat')                
         cls.files['me5_configuration_template'] = os.path.join(cls.paths['cards'], 'mg5_default_me5_configuration.txt')
 
-        # delphes_global_config = dict()
-
-        # delphes_global_config["atlas"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS.tcl')
-        # delphes_global_config["atlas7tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS.tcl')
-        # delphes_global_config["atlas8tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS.tcl')
-        # delphes_global_config["atlas13tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS_13TeV.tcl')
-        # delphes_global_config["atlas14tev_projected"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS_14TeV.tcl')
-        # delphes_global_config["atlas14tev_hl_flatbtagger"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS_14TeV.tcl')
-        # delphes_global_config["cms"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS.tcl')
-        # delphes_global_config["cms7tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS.tcl')
-        # delphes_global_config["cms8tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS.tcl')
-        # delphes_global_config["cms13tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS_13TeV.tcl')
-        # delphes_global_config["cms14tev_projected"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS_14TeV.tcl')
-        
-        # cls.files['delphes_global_config'] = delphes_global_config
+        delphes_global_config = dict()
+        delphes_global_config["atlas"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS.tcl')
+        delphes_global_config["atlas7tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS.tcl')
+        delphes_global_config["atlas8tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS.tcl')
+        delphes_global_config["atlas13tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS_13TeV.tcl')
+        delphes_global_config["atlas14tev_projected"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS_14TeV.tcl')
+        delphes_global_config["atlas14tev_hl_flatbtagger"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS_14TeV.tcl')
+        delphes_global_config["cms"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS.tcl')
+        delphes_global_config["cms7tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS.tcl')
+        delphes_global_config["cms8tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS.tcl')
+        delphes_global_config["cms13tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS_13TeV.tcl')
+        delphes_global_config["cms14tev_projected"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS_14TeV.tcl')
+        cls.files['delphes_global_config'] = delphes_global_config
         
         cls.files['fritz_bin'] = os.path.join(cls.paths['fritz'], 'bin', "fritz")
         

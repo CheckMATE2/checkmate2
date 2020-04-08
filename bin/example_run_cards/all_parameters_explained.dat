@@ -39,11 +39,6 @@ Likelihood: True
 SLHAFile: testspectrum.slha
 #### If Pythia8 is used for event generation, store the intermediate .hepmc file
 WritePythiaEvents: True
-
-#### For Delphes, set True if using custom card
-SetCustomDelphes: True
-#### If using custom Delphes Card, set card name
-SetCustomDelphesName: delphes_CMS_test.tcl  
 #### If Delphes runs, store the intermediate .root file
 WriteDelphesEvents: True
 #### Tell Delphes that some new BSM particles are invisible
