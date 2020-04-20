@@ -12,6 +12,7 @@
 #include <TChain.h>
 #include <TClonesArray.h>
 #include <TH1.h>
+#include <TH2.h>
 #include <TObject.h>
 #include <TROOT.h>
 #include <TStyle.h>
