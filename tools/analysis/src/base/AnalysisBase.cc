@@ -67,6 +67,8 @@ void AnalysisBase::processEvent(int iEvent) {
 }
 
 void AnalysisBase::finish() {
+    user_xsec = xsect;
+    user_lumi = luminosity;
     finalize(); // specified by derived analysis classes
     if(!cutflowRegions.empty()) {
       int cutflowOutput = bookFile(analysis+"_cutflow.dat");

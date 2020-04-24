@@ -159,13 +159,18 @@ protected:
     std::vector<GenParticle*> true_c; //!< true c quarks to perform btagging
     std::vector<GenParticle*> true_b; //!< true b quarks to perform btagging
     std::vector<GenParticle*> true_tau; //!< true visible hadronic taus
+    std::vector<GenParticle*> true_e; //!< true electrons
+    std::vector<GenParticle*> true_mu; //!< true muons
+    std::vector<GenParticle*> true_particles; //!< All true particles
     std::vector<Track*> tracks; //!< reconstructed tracks
     std::vector<Tower*> towers; //!< reconstructed calorimeter towers
     std::vector<Jet*> jets; //!< reconstructed jets
+    std::vector<Jet*> genjets; //!< gen jets
     std::vector<Electron*> electrons; //!< true smeared electrons
     std::vector<Muon*> muons; //!< true smeared muons
     std::vector<Photon*> photons; //!< true smeared photons after some pT cut
     ETMiss* missingET; //!< reconstruced missingET without muons
+    MissingET* GenMissingET;
     /** @} */
 
     /** @defgroup tagcontainers general eventwise tag lists
@@ -309,13 +314,16 @@ private:
     // FixMe: store analysisParameters vector
 
     //! Internal ROOT objects which store the event wise information
-    TClonesArray *branchGenParticle; //!< truth particles (b, c, tau)
+    TClonesArray *branchSkimmedGenParticle; //!< truth particles (b, c, tau)
+    TClonesArray *branchGenParticle; //!< all truth particles
     TClonesArray *branchEvent; //!< general event information
     TClonesArray *branchElectron; //!< truth smeared electrons
     TClonesArray *branchMuon; //!< truth smeared muons
     TClonesArray *branchJet; //!< reconstructed jets
+    TClonesArray *branchGenJet; //!< Gen jets
     TClonesArray *branchPhoton; //!< truth smeared photons with ptmin cut
     TClonesArray *branchMissingET; //!< reconstructed ETMiss without muons
+    TClonesArray *branchGenMissingET; //!< True ETMiss
     TClonesArray *branchTrack; //!< reconstructed tracks
     TClonesArray *branchTower; //!< reconstruected calorimeter cells
 

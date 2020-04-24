@@ -59,6 +59,8 @@ void AnalysisHandlerCMS_8TeV::bookAnalysis(std::string analysisName,
         a = new Cms_sus_13_016();   
     else if(analysisName == "cms_exo_14_014")
         a = new Cms_exo_14_014();
+    else if(analysisName == "cms_susy_displaced_leptons_8tev")
+        a = new Cms_susy_displaced_leptons_8tev();
     else //@@extracode@@
         Global::abort(name,
                       "Cannot load analysis "+analysisName+

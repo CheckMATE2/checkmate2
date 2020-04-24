@@ -123,6 +123,7 @@ class AnalysisBase {
      * 
      * @{
      */
+    std::vector<GenParticle*> true_particles; //!< Container of all truth particles.
     std::vector<Electron*> electrons; //!< Container of all truth electrons after detector smearing in acceptance range.
     std::vector<Electron*> electronsLoose; //!< Container of 'electrons' objects that pass loose isolation condition.
     std::vector<Electron*> electronsMedium; //!< Container of 'electronsLoose'  objects that pass 'medium' efficiency cut.
@@ -132,12 +133,14 @@ class AnalysisBase {
     std::vector<Muon*> muonsCombinedPlus; //!< Container of  all 'muonsLoose' that pass 'CBplusST' efficiency.
     std::vector<Muon*> muonsCombined; //!< Container of 'muonsCombinedPlus'  objects that pass 'CB' efficiency.
     std::vector<Jet*> jets; //!< Container of all reconstructed jets.
+    std::vector<Jet*> genjets; //!< Container of all gen jets.
     std::vector<Photon*> photons; //!< Container of all truth photons after detector smearing.
     std::vector<Photon*> photonsLoose; //!< Container of 'photons' that pass loose isolation condition.
     std::vector<Photon*> photonsMedium; //!< Container of 'photonsLoose'  that pass medium efficiency cut
     std::vector<Track*> tracks; //!< Container of all reconstructed tracks.
     std::vector<Tower*> towers; //!< Container of all calorimeter towers.    
     ETMiss* missingET; //!< Reconstructed missingET vector excluding muons. 
+    MissingET* GenMissingET;
      /** @} */   
      
     
@@ -794,6 +797,7 @@ class AnalysisBase {
      */
     void ignore(std::string ignore_what) {}; // TODO Remove everywhere
     double weight; //!< Current event weight usable for e.g. histograms
+    double user_xsec, user_lumi;
     /** @} */
 
  private:

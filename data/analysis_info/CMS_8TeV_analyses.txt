@@ -10,3 +10,4 @@ cms_exo_14_014                 16   CMS, Heavy neutrino in 2e+2j and e+mu+2j    
 #cms_1405_7570                  57   CMS, Various chargino and neutralino                             19.5    no   
 #cms_smp_12_006                 4    CMS, WZ standard model (3 leptons + etmiss)                      19.6    no   
 #cms_sus_12_019                 4    CMS, 2 leptons, >= 2 jets + etmiss (dilep edge)                  19.4    no   
+cms_susy_displaced_leptons_8tev	3    CMS, displaced e+mu, long lived stops                            19.7    no
