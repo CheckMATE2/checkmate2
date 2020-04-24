@@ -314,7 +314,6 @@ private:
     // FixMe: store analysisParameters vector
 
     //! Internal ROOT objects which store the event wise information
-    TClonesArray *branchSkimmedGenParticle; //!< truth particles (b, c, tau)
     TClonesArray *branchGenParticle; //!< all truth particles
     TClonesArray *branchEvent; //!< general event information
     TClonesArray *branchElectron; //!< truth smeared electrons
