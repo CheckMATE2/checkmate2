@@ -128,6 +128,7 @@ libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_1909_08457.h src/an
 libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_conf_2019_040.h src/analyses/ATLAS_13TeV/atlas_conf_2019_040.cc
 libanalyses_la_SOURCES += include/analyses/CMS_8TeV/cms_susy_displaced_leptons_8tev.h src/analyses/CMS_8TeV/cms_susy_displaced_leptons_8tev.cc
 libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_1710_04901.h src/analyses/ATLAS_13TeV/atlas_1710_04901.cc
+libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2003_11956.h src/analyses/ATLAS_13TeV/atlas_2003_11956.cc
 #@@extraanalysis@@
 
 libanalyses_la_LDFLAGS = -avoid-version -shared
