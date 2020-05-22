@@ -4,6 +4,7 @@ AnalysisHandler::AnalysisHandler() {
     doJetTauTags = false;
     eventWeight = 0;
     branchGenParticle = NULL;
+    branchSkimmedParticle = NULL;
     branchEvent = NULL;
     branchElectron = NULL;
     branchMuon = NULL;
@@ -455,7 +456,8 @@ void AnalysisHandler::setup(EventFile file) {
     treeReader = new ExRootTreeReader(rootFileChain);
 
     branchEvent = treeReader->UseBranch("Event");
-    branchGenParticle = treeReader->UseBranch("Particle");
+    branchGenParticle = treeReader->UseBranch("GenParticle");
+    branchSkimmedParticle = treeReader->UseBranch("Particle");
     branchJet = treeReader->UseBranch("Jet");
     branchGenJet = treeReader->UseBranch("GenJet");
     branchTrack = treeReader->UseBranch("Track");
@@ -465,13 +467,14 @@ void AnalysisHandler::setup(EventFile file) {
     branchPhoton = treeReader->UseBranch("Photon");
     branchMissingET = treeReader->UseBranch("MissingET");
     branchGenMissingET = treeReader->UseBranch("GenMissingET");
-    if(!branchGenParticle || !branchEvent || !branchJet || !branchTrack ||
+    if( !branchSkimmedParticle || !branchGenParticle || !branchEvent || !branchJet || !branchTrack ||
        !branchTower || !branchElectron || !branchMuon || !branchPhoton || 
        !branchMissingET) {
         Global::abort(name,
                       "could not link all required branches to the "
                       +dHandler->name+" equivalents!");
     }
+
     if (branchGenJet){
         Global::print(name,
                       "Linked GenJet branch to the "
@@ -501,8 +504,10 @@ void AnalysisHandler::setup( DelphesHandler* dHandlerIn) {
     for (std::set<CMExRootTreeBranch*>::iterator it = branches.begin();
          it != branches.end();
          it++) {
-        if ((std::string)(*it)->GetData()->GetName() == "Particle")
+        if ((std::string)(*it)->GetData()->GetName() == "GenParticle")
                 branchGenParticle = (*it)->GetData();
+        else if ((std::string)(*it)->GetData()->GetName() == "Particle")
+                branchSkimmedParticle = (*it)->GetData();
         else if ((std::string)(*it)->GetData()->GetName() == "Event")
                 branchEvent= (*it)->GetData();
         else if ((std::string)(*it)->GetData()->GetName() == "Jet")
@@ -524,7 +529,7 @@ void AnalysisHandler::setup( DelphesHandler* dHandlerIn) {
         else if ((std::string)(*it)->GetData()->GetName() == "GenMissingET")
                 branchGenMissingET = (*it)->GetData();
     }
-    if(!branchGenParticle || !branchEvent || !branchJet || !branchTrack ||
+    if(!branchSkimmedParticle || !branchGenParticle || !branchEvent || !branchJet || !branchTrack ||
        !branchTower || !branchElectron || !branchMuon || !branchPhoton || 
        !branchMissingET) {
         Global::abort(name,
@@ -816,6 +821,25 @@ bool AnalysisHandler::readParticles(int iEvent) {
     true_e.clear();
     true_mu.clear();
     true_particles.clear();
+    if (!branchSkimmedParticle) {
+        Global::abort(name,
+                      "SkimmedParticleBranch not properly assigned!");
+    }
+
+    for(int i = 0; i < branchSkimmedParticle->GetEntries(); i++) {
+        if (abs( ((GenParticle*)branchSkimmedParticle->At(i))->PID)  == 5)
+            true_b.push_back((GenParticle*)branchSkimmedParticle->At(i));
+        else if (abs( ((GenParticle*)branchSkimmedParticle->At(i))->PID)  == 4)
+            true_c.push_back((GenParticle*)branchSkimmedParticle->At(i));
+        else if (abs( ((GenParticle*)branchSkimmedParticle->At(i))->PID)  == 15)
+            true_tau.push_back((GenParticle*)branchSkimmedParticle->At(i));
+        else if (abs( ((GenParticle*)branchSkimmedParticle->At(i))->PID)  == 11)
+            true_e.push_back((GenParticle*)branchSkimmedParticle->At(i));
+        else if (abs( ((GenParticle*)branchSkimmedParticle->At(i))->PID)  == 13)
+            true_mu.push_back((GenParticle*)branchSkimmedParticle->At(i));
+    }
+    branchSkimmedParticle->Clear();
+
     if (!branchGenParticle) {
         Global::abort(name,
                       "GenParticleBranch not properly assigned!");
@@ -823,16 +847,6 @@ bool AnalysisHandler::readParticles(int iEvent) {
 
     for(int i = 0; i < branchGenParticle->GetEntries(); i++) {
         true_particles.push_back((GenParticle*)branchGenParticle->At(i));
-        if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 5)
-            true_b.push_back((GenParticle*)branchGenParticle->At(i));
-        else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 4)
-            true_c.push_back((GenParticle*)branchGenParticle->At(i));
-        else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 15)
-            true_tau.push_back((GenParticle*)branchGenParticle->At(i));
-        else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 11)
-            true_e.push_back((GenParticle*)branchGenParticle->At(i));
-        else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 13)
-            true_mu.push_back((GenParticle*)branchGenParticle->At(i));
     }
     branchGenParticle->Clear();
 

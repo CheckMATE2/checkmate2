@@ -315,6 +315,7 @@ private:
 
     //! Internal ROOT objects which store the event wise information
     TClonesArray *branchGenParticle; //!< all truth particles
+    TClonesArray *branchSkimmedParticle; //!< all truth particles
     TClonesArray *branchEvent; //!< general event information
     TClonesArray *branchElectron; //!< truth smeared electrons
     TClonesArray *branchMuon; //!< truth smeared muons

@@ -129,7 +129,7 @@ void Cms_susy_displaced_leptons_8tev::analyze() {
       else M_index = M->M1;
     }
 
-    if (M_index < 0) continue;              
+    if (M_index < 0) continue;          
 
     if (abs(M->PID) < 1000000) continue;         //Disregard final state particle if it does not originate from exotic particle
 
@@ -194,8 +194,8 @@ void Cms_susy_displaced_leptons_8tev::analyze() {
 
 
   //jet overlap removal
-  // jets = overlapRemoval(jets, el, 0.1);
-  // jets = overlapRemoval(jets, mu, 0.1);
+  jets = overlapRemoval(jets, el, 0.1);
+  jets = overlapRemoval(jets, mu, 0.1);
 
   // Check isolation from jet
   if (!is_isolated_from_jet(el[0],jets,0.5)) return;

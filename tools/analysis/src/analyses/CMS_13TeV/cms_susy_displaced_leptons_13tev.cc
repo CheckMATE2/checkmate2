@@ -200,8 +200,8 @@ void Cms_susy_displaced_leptons_13tev::analyze() {
 
 
   //jet overlap removal
-  // jets = overlapRemoval(jets, el, 0.1);
-  // jets = overlapRemoval(jets, mu, 0.1);
+  jets = overlapRemoval(jets, el, 0.1);
+  jets = overlapRemoval(jets, mu, 0.1);
 
   // Check isolation from jet
   if (!is_isolated_from_jet(el[0],jets,0.5)) return;
@@ -218,9 +218,6 @@ void Cms_susy_displaced_leptons_13tev::analyze() {
 
   double e_d0 = fabs(el[0]->D0);
   double mu_d0 = fabs(mu[0]->D0);
-
-  // if (e_d0 >= 20.) e_d0 = 19.5;
-  // if (mu_d0 >= 20.) mu_d0 = 19.5;
 
   double e_d0_eff2 = elec_d0_eff_hist->GetBinContent(elec_d0_eff_hist->FindBin(e_d0));
   double e_pt_eff2 = elec_pt_eff_hist->GetBinContent(elec_pt_eff_hist->FindBin(el[0]->PT));
