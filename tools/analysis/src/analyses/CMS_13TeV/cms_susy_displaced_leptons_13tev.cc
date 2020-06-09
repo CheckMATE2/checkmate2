@@ -18,12 +18,14 @@ void Cms_susy_displaced_leptons_13tev::initialize() {
 
   // You should initialize any declared variables here
 
+  debug.open("debug.txt", ios::app);
+
   EventCount = 0;
   n_e = 0, n_mu = 0, n_tau = 0;
 
   BR = 2./3;
 
-  stop_mass = 0;
+  llp_mass = 0;
 
   xsec = 78.3; //fb
   i_lumi = 2.6; //fb-1
@@ -116,7 +118,7 @@ void Cms_susy_displaced_leptons_13tev::analyze() {
     auto part = true_particles[i];
 
     if (EventCount == 1) {
-      if (abs(part->PID) == 1000006) stop_mass = part->Mass;
+      if (abs(part->PID) == llp_pid) llp_mass = part->Mass;
     }
     
     if (part->Status != 1) continue;        //Run over only stable particles
@@ -130,14 +132,14 @@ void Cms_susy_displaced_leptons_13tev::analyze() {
     //Working backwards from final state particle to get exotic mother
     while (M_index >= 0){               //Break the loop if M_index is -1
       M = (GenParticle*)true_particles[M_index];
-      if (abs(M->PID) == 5) break;          //Break loop if stable particle emerges from b quark.
-      if (abs(M->PID) >= 1000000) break;        //Break the loop if exotic particle
+      if (abs(M->PID) == llp_pid) break;        //Break the loop if exotic particle
+      if (M->PID != part->PID) break;          //Break loop if stable particle emerges from b quark.
       else M_index = M->M1;
     }
 
     if (M_index < 0) continue;              
 
-    if (abs(M->PID) < 1000000) continue;         //Disregard final state particle if it does not originate from exotic particle
+    if (abs(M->PID) != llp_pid) continue;         //Disregard final state particle if it does not originate from exotic particle
 
     // finaldaughters.push_back(part);           //store final state daughter if originating from an exotic
     if (abs(part->PID)==11 && part->PT > 38.){  
@@ -200,19 +202,19 @@ void Cms_susy_displaced_leptons_13tev::analyze() {
 
 
   //jet overlap removal
-  jets = overlapRemoval(jets, el, 0.1);
-  jets = overlapRemoval(jets, mu, 0.1);
+  // jets = overlapRemoval(jets, el, 0.1);
+  // jets = overlapRemoval(jets, mu, 0.1);
 
   // Check isolation from jet
-  if (!is_isolated_from_jet(el[0],jets,0.5)) return;
-  if (!is_isolated_from_jet(mu[0],jets,0.5)) return;
+  // if (!is_isolated_from_jet(el[0],jets,0.5)) return;
+  // if (!is_isolated_from_jet(mu[0],jets,0.5)) return;
 
-  countCutflowEvent("Cut 4: Jet-Lepton isolation dR > 0.5");
+  // countCutflowEvent("Cut 4: Jet-Lepton isolation dR > 0.5");
 
   double dR = el[0]->P4().DeltaR(mu[0]->P4());
 
   if (dR < 0.5) return;
-  countCutflowEvent("Cut 5: Electron muon separation dR > 0.5");
+  countCutflowEvent("Cut 4: Electron muon separation dR > 0.5");
 
   //Preselection complete
 
@@ -229,7 +231,7 @@ void Cms_susy_displaced_leptons_13tev::analyze() {
   if (fabs(el[0]->D0) > 100. || fabs(mu[0]->D0) > 100.) return;
   if (fabs(el[0]->D0) < 0.2 || fabs(mu[0]->D0) < 0.2) return;
 
-  countCutflowEvent("Cut 6: lepton d0 bounds [0.2, 100] mm");
+  countCutflowEvent("Cut 5: lepton d0 bounds [0.2, 100] mm");
 
   weight = weight*evt_weight*BR;
 
@@ -241,5 +243,25 @@ void Cms_susy_displaced_leptons_13tev::analyze() {
 
 void Cms_susy_displaced_leptons_13tev::finalize() {
   // Whatever should be done after the run goes here
+
+  double scale = user_xsec*user_lumi*BR/EventCount;
+  // double scale = 1.;
+
+  // double sr[] = {0.009, 0.03, 0.27}; //CMS numbers for 1000mm
+  // double sr[] = {0.8, 1, 5.8};          //CMS numbers for 100mm
+  double SR[] = {SR1*scale, SR2*scale, SR3*scale};
+
+  // double Chi_2 = 0;
+
+  // for (int i = 0; i < 3; ++i){
+    // Chi_2+= (pow(SR[i]-sr[i],2))/SR[i];
+  // }
+
+  debug << SR[0] << " " << SR[1] << " " << SR[2] << endl;
+
+  // debug << "Chi 2: " << Chi_2 << endl;
+
+  debug.close();
+
 
 }       

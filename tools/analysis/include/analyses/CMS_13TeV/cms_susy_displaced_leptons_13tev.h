@@ -21,6 +21,10 @@ class Cms_susy_displaced_leptons_13tev : public AnalysisBase {
 
     TFile *eff_file;
 
+    ofstream debug;
+
+    int llp_pid = 1000006; 
+
     TH1F *elec_d0_eff_hist;
     TH1F *elec_pt_eff_hist;
     TH1F *muon_d0_eff_hist;
@@ -28,7 +32,7 @@ class Cms_susy_displaced_leptons_13tev : public AnalysisBase {
 
   	double SR3, SR2, SR1;
 	
-    double BR, stop_mass;
+    double BR, llp_mass;
 
   	double xsec;
   	double i_lumi;
