@@ -1,9 +1,9 @@
-#include "cms_susy_displaced_leptons_13tev.h"
+#include "cms_pas_exo_16_022.h"
 // AUTHOR: Mangesh Sonawane
 //  EMAIL: son.arnav95@gmail.com
 
-void Cms_susy_displaced_leptons_13tev::initialize() {
-  setAnalysisName("cms_susy_displaced_leptons_13tev");          
+void Cms_pas_exo_16_022::initialize() {
+  setAnalysisName("cms_pas_exo_16_022");          
   setInformation(""
     "# CMS\n"
     "# SUSY\n"
@@ -32,7 +32,7 @@ void Cms_susy_displaced_leptons_13tev::initialize() {
 
   SR1 = 0., SR2 = 0., SR3 = 0.;
 
-  eff_file = TFile::Open("../data/tables/cms_susy_displaced_leptons_13tev.root");
+  eff_file = TFile::Open("../data/tables/cms_pas_exo_16_022.root");
   if(!eff_file->IsOpen()){
     cout << "Error: Unable to open file!!!";
   }
@@ -46,7 +46,7 @@ void Cms_susy_displaced_leptons_13tev::initialize() {
 
 //User defined functions;
 
-bool Cms_susy_displaced_leptons_13tev::lep_selection(GenParticle* part, int ID, double pT, double eta, bool overlap){
+bool Cms_pas_exo_16_022::lep_selection(GenParticle* part, int ID, double pT, double eta, bool overlap){
   if (abs(part->PID) != ID) return false;
   if (part->PT < pT) return false;
   if (fabs(part->Eta) > eta) return false;
@@ -59,7 +59,7 @@ bool Cms_susy_displaced_leptons_13tev::lep_selection(GenParticle* part, int ID, 
   return true;
 }
 
-bool Cms_susy_displaced_leptons_13tev::is_isolated(GenParticle* lep, vector <GenParticle*> &stable, double epsilon, double dR_cone)
+bool Cms_pas_exo_16_022::is_isolated(GenParticle* lep, vector <GenParticle*> &stable, double epsilon, double dR_cone)
 {
   bool isol = false;
 
@@ -87,7 +87,7 @@ bool Cms_susy_displaced_leptons_13tev::is_isolated(GenParticle* lep, vector <Gen
   return isol;
 }
 
-bool Cms_susy_displaced_leptons_13tev::is_isolated_from_jet(GenParticle* lep, vector <Jet*> &jets, double dR_cone)
+bool Cms_pas_exo_16_022::is_isolated_from_jet(GenParticle* lep, vector <Jet*> &jets, double dR_cone)
 {
   //loop over all jets
   for (int i = 0; i < jets.size(); ++i){
@@ -103,7 +103,7 @@ bool Cms_susy_displaced_leptons_13tev::is_isolated_from_jet(GenParticle* lep, ve
   return true;
 }
 
-void Cms_susy_displaced_leptons_13tev::analyze() {
+void Cms_pas_exo_16_022::analyze() {
   EventCount++;
 
   missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
@@ -241,7 +241,7 @@ void Cms_susy_displaced_leptons_13tev::analyze() {
 
 }
 
-void Cms_susy_displaced_leptons_13tev::finalize() {
+void Cms_pas_exo_16_022::finalize() {
   // Whatever should be done after the run goes here
 
   double scale = user_xsec*user_lumi*BR/EventCount;

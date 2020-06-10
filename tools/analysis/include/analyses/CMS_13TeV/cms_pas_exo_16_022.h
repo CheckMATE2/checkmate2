@@ -1,14 +1,13 @@
-#ifndef CMS_SUSY_DISPLACED_LEPTONS_13TEV_H_
-#define CMS_SUSY_DISPLACED_LEPTONS_13TEV_H_
+#ifndef CMS_PAS_EXO_16_022_H_
+#define CMS_PAS_EXO_16_022_H_
 // AUTHOR: Mangesh Sonawane
 //  EMAIL: son.arnav95@gmail.com
 #include "AnalysisBase.h"
-#include <random>
 
-class Cms_susy_displaced_leptons_13tev : public AnalysisBase {
+class Cms_pas_exo_16_022 : public AnalysisBase {
   public:
-    Cms_susy_displaced_leptons_13tev() : AnalysisBase()  {}               
-    ~Cms_susy_displaced_leptons_13tev() {}
+    Cms_pas_exo_16_022() : AnalysisBase()  {}               
+    ~Cms_pas_exo_16_022() {}
   
     void initialize();
     void analyze();        
@@ -16,8 +15,8 @@ class Cms_susy_displaced_leptons_13tev : public AnalysisBase {
 
   private:
 
-  	int EventCount;
-  	int n_e, n_mu, n_tau;
+    int EventCount;
+    int n_e, n_mu, n_tau;
 
     TFile *eff_file;
 
@@ -30,14 +29,14 @@ class Cms_susy_displaced_leptons_13tev : public AnalysisBase {
     TH1F *muon_d0_eff_hist;
     TH1F *muon_pt_eff_hist;
 
-  	double SR3, SR2, SR1;
-	
+    double SR3, SR2, SR1;
+  
     double BR, llp_mass;
 
-  	double xsec;
-  	double i_lumi;
+    double xsec;
+    double i_lumi;
 
-  	vector <GenParticle*> finalleptons, el, mu, stable;
+    vector <GenParticle*> finalleptons, el, mu, stable;
 
     //User defined functions for selection and isolation
 

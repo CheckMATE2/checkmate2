@@ -19,7 +19,7 @@
 #include "cms_sus_16_039.h"
 #include "cms_sus_16_025.h"
 #include "cms_sus_16_048.h"
-#include "cms_susy_displaced_leptons_13tev.h"
+#include "cms_pas_exo_16_022.h"
 //@extraheader@
 
 
