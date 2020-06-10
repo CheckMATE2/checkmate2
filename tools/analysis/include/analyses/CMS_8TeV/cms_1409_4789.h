@@ -1,21 +1,19 @@
-#ifndef CMS_SUSY_DISPLACED_LEPTONS_8TEV_H_
-#define CMS_SUSY_DISPLACED_LEPTONS_8TEV_H_
+#ifndef CMS_1409_4789_H_
+#define CMS_1409_4789_H_
 // AUTHOR: Mangesh Sonawane
 //  EMAIL: son.arnav95@gmail.com
 #include "AnalysisBase.h"
-#include <random>
 
-class Cms_susy_displaced_leptons_8tev : public AnalysisBase {
+class Cms_1409_4789 : public AnalysisBase {
   public:
-    Cms_susy_displaced_leptons_8tev() : AnalysisBase()  {}               
-    ~Cms_susy_displaced_leptons_8tev() {}
+    Cms_1409_4789() : AnalysisBase()  {}               
+    ~Cms_1409_4789() {}
   
     void initialize();
     void analyze();        
     void finalize();
 
   private:
-
   	int EventCount;
   	int n_e, n_mu, n_tau;
 
@@ -43,4 +41,3 @@ class Cms_susy_displaced_leptons_8tev : public AnalysisBase {
 };
 
 #endif
-

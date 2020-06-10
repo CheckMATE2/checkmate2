@@ -1,13 +1,13 @@
-#Name                          NSR  Description                                                      Lumi    CR?  
-cms_1303_2985                  59   CMS, alpha_T + b-jets                                            11.7    yes  
-cms_1408_3583                  7    CMS, monojet + MET                                               19.7    no   
-cms_1502_06031                 6    CMS, 2 leptons, jets, missingET (only on-Z)                      19.4    no   
-cms_1504_03198                 1    CMS, 1 lep, >=3 j, >=1 b-j, etmiss (DM +2top)                    19.7    no   
-cms_sus_13_016                 1    CMS, OS lep 3+ b-tags                                            19.5    no 
-cms_exo_14_014                 16   CMS, Heavy neutrino in 2e+2j and e+mu+2j                         19.7    no
-#Unvalidated analyses
-#cms_1301_4698_WW               1    CMS, WW standard model measurement                               3.5     no  
-#cms_1405_7570                  57   CMS, Various chargino and neutralino                             19.5    no   
-#cms_smp_12_006                 4    CMS, WZ standard model (3 leptons + etmiss)                      19.6    no   
-#cms_sus_12_019                 4    CMS, 2 leptons, >= 2 jets + etmiss (dilep edge)                  19.4    no   
-cms_susy_displaced_leptons_8tev	3    CMS, displaced e+mu, long lived stops                            19.7    no
+#Name                              
+cms_1303_2985                      
+cms_1408_3583                      
+cms_1502_06031                     
+cms_1504_03198                     
+cms_sus_13_016                     
+cms_exo_14_014                     
+#Unvalidated analyses              
+#cms_1301_4698_WW                  
+#cms_1405_7570                     
+#cms_smp_12_006                    
+#cms_sus_12_019                    
+cms_1409_4789                      

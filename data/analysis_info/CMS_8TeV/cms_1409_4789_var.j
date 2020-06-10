@@ -1,5 +1,5 @@
 {
-  "analysis": "cms_susy_displaced_leptons_8tev", 
+  "analysis": "cms_1409_4789", 
   "author": "Mangesh Sonawane", 
   "authoremail": "son.arnav95@gmail.com", 
   "cr": "n", 
@@ -33,11 +33,7 @@
   "jets_btagging": "n", 
   "jets_tautagging": "n", 
   "long_info": [
-    "CMS", 
-    "SUSY", 
-    "displaced leptons", 
-    "e/mu", 
-    "8TeV"
+    "CMS SUSY search for displaced electron and muon with large impact paramters at 8 tev"
   ], 
   "lumi": "19.7", 
   "muon_iso_absorrel": [
@@ -74,40 +70,42 @@
   "photon_niso": 1, 
   "reference_data": {
     "SR1": {
-      "S95_exp": "12", 
-      "S95_obs": "13", 
-      "bkg": "18", 
+      "S95_exp": "12.0", 
+      "S95_obs": "12.4", 
+      "bkg": "18.0", 
       "bkg_err_stat": "0.5", 
       "bkg_err_sys": "3.8", 
       "obs": "19"
     }, 
     "SR2": {
-      "S95_exp": "3.42", 
-      "S95_obs": "2.97", 
+      "S95_exp": "3.64", 
+      "S95_obs": "3.02", 
       "bkg": "1.01", 
       "bkg_err_stat": "0.06", 
       "bkg_err_sys": "0.30", 
       "obs": "0"
     }, 
     "SR3": {
-      "S95_exp": "2.953", 
-      "S95_obs": "2.928", 
+      "S95_exp": "2.943", 
+      "S95_obs": "2.938", 
       "bkg": "0.051", 
       "bkg_err_stat": "0.015", 
       "bkg_err_sys": "0.010", 
       "obs": "0"
     }
   }, 
-  "short_info": "CMS SUSY displaced lepton search 8 TeV", 
+  "short_info": "CMS SUSY 8 TeV displaced leptons search", 
   "signal_regions": [
-    "SR3", 
+    "SR1", 
     "SR2", 
-    "SR1"
+    "SR3"
   ], 
   "tags": [
-    "stops", 
-    "opposite sign e mu", 
-    "displaced leptons", 
-    "susy"
+    "cms", 
+    "susy", 
+    "displaced e mu", 
+    "impact parameter", 
+    "8 tev", 
+    "stops"
   ]
 }

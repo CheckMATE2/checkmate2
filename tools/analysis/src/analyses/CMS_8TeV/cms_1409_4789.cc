@@ -1,9 +1,9 @@
-#include "cms_susy_displaced_leptons_8tev.h"
+#include "cms_1409_4789.h"
 // AUTHOR: Mangesh Sonawane
 //  EMAIL: son.arnav95@gmail.com
 
-void Cms_susy_displaced_leptons_8tev::initialize() {
-  setAnalysisName("cms_susy_displaced_leptons_8tev");          
+void Cms_1409_4789::initialize() {
+  setAnalysisName("cms_1409_4789");          
   setInformation(""
     "# CMS\n"
     "# SUSY\n"
@@ -28,7 +28,7 @@ void Cms_susy_displaced_leptons_8tev::initialize() {
 
   SR1 = 0., SR2 = 0., SR3 = 0.;
 
-  eff_file = TFile::Open("../data/tables/cms_susy_displaced_leptons_8tev.root");
+  eff_file = TFile::Open("../data/tables/cms_1409_4789.root");
   if(!eff_file->IsOpen()){
     cout << "Error: Unable to open file!!!";
   }
@@ -41,7 +41,7 @@ void Cms_susy_displaced_leptons_8tev::initialize() {
 
 //User defined functions;
 
-bool Cms_susy_displaced_leptons_8tev::lep_selection(GenParticle* part, int ID, double pT, double eta, bool overlap){
+bool Cms_1409_4789::lep_selection(GenParticle* part, int ID, double pT, double eta, bool overlap){
   if (abs(part->PID) != ID) return false;
   if (part->PT < pT) return false;
   if (fabs(part->Eta) > eta) return false;
@@ -54,7 +54,7 @@ bool Cms_susy_displaced_leptons_8tev::lep_selection(GenParticle* part, int ID, d
   return true;
 }
 
-bool Cms_susy_displaced_leptons_8tev::is_isolated(GenParticle* lep, vector <GenParticle*> &stable, double epsilon, double dR_cone)
+bool Cms_1409_4789::is_isolated(GenParticle* lep, vector <GenParticle*> &stable, double epsilon, double dR_cone)
 {
   bool isol = false;
 
@@ -82,7 +82,7 @@ bool Cms_susy_displaced_leptons_8tev::is_isolated(GenParticle* lep, vector <GenP
   return isol;
 }
 
-bool Cms_susy_displaced_leptons_8tev::is_isolated_from_jet(GenParticle* lep, vector <Jet*> &jets, double dR_cone)
+bool Cms_1409_4789::is_isolated_from_jet(GenParticle* lep, vector <Jet*> &jets, double dR_cone)
 {
 
   //loop over all jets
@@ -99,7 +99,7 @@ bool Cms_susy_displaced_leptons_8tev::is_isolated_from_jet(GenParticle* lep, vec
   return true;
 }
 
-void Cms_susy_displaced_leptons_8tev::analyze() {
+void Cms_1409_4789::analyze() {
   EventCount++;
 
   missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
@@ -235,7 +235,7 @@ void Cms_susy_displaced_leptons_8tev::analyze() {
 
 }
 
-void Cms_susy_displaced_leptons_8tev::finalize() {
+void Cms_1409_4789::finalize() {
   // Whatever should be done after the run goes here
 
 }       
