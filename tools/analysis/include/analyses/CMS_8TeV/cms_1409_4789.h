@@ -28,10 +28,8 @@ class Cms_1409_4789 : public AnalysisBase {
 
     double BR;
 
-  	double xsec;
-  	double i_lumi;
-
   	vector <GenParticle*> finalleptons, el, mu, stable;
+  	vector <Jet*> gen_jets;
 
   	//User defined functions for selection and isolation
 

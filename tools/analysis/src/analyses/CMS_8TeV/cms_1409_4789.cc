@@ -23,9 +23,6 @@ void Cms_1409_4789::initialize() {
 
   BR = 2./3;
 
-  xsec = 85.6; //fb
-  i_lumi = 19.7; //fb-1
-
   SR1 = 0., SR2 = 0., SR3 = 0.;
 
   eff_file = TFile::Open("../data/tables/cms_1409_4789.root");
@@ -108,6 +105,7 @@ void Cms_1409_4789::analyze() {
   stable.clear();
   el.clear();
   mu.clear();
+  gen_jets.clear();
 
   //loop over all true particles
   for (int i = 0 ; i < true_particles.size(); ++i){
@@ -192,14 +190,20 @@ void Cms_1409_4789::analyze() {
   if (el[0]->Charge*mu[0]->Charge != -1) return;
   countCutflowEvent("Cut 3: e mu opposite sign");
 
+  // //Loop over gen jets
+  for (int i = 0; i < genjets.size(); ++i){
+  	Jet* jet = (Jet*) genjets[i];
+  	if (jet->PT > 10.) gen_jets.push_back(jet);
+  }
+
 
   //jet overlap removal
-  jets = overlapRemoval(jets, el, 0.1);
-  jets = overlapRemoval(jets, mu, 0.1);
+  gen_jets = overlapRemoval(gen_jets, el, 0.01);
+  gen_jets = overlapRemoval(gen_jets, mu, 0.01);
 
   // Check isolation from jet
-  if (!is_isolated_from_jet(el[0],jets,0.5)) return;
-  if (!is_isolated_from_jet(mu[0],jets,0.5)) return;
+  if (!is_isolated_from_jet(el[0],gen_jets,0.5)) return;
+  if (!is_isolated_from_jet(mu[0],gen_jets,0.5)) return;
   
   countCutflowEvent("Cut 4: Jet-Lepton isolation dR > 0.5");
 
