@@ -99,6 +99,9 @@ double acceffmap[12][8][8] = {{{0.2802,0.2851,0.2774,0.2655,0.1954,0.2125,0.1364
 
   missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
 
+  
+//   cout << "Event" << "\n";
+//  cout << "PID         Px       X        Y      Z        D0       DZ" << "\n";
   countCutflowEvent("1_initial");
   //       A: Missing ET cut
   TLorentzVector metVec = missingET->P4();
@@ -141,6 +144,7 @@ double acceffmap[12][8][8] = {{{0.2802,0.2851,0.2774,0.2655,0.1954,0.2125,0.1364
      }
     }
     if(!motherintooLLg)metVec=metVec+part->P4();
+//    cout <<  true_particles[i]->PID << "   " << true_particles[i]->Px << "   " << true_particles[i]->X << "   " << true_particles[i]->Y << "   " << true_particles[i]->Z << "   " << true_particles[i]->D0 << "   " << true_particles[i]->DZ << "\n";
    }
 //   if(abs(part->PID)==1000021){
 //    auto daughter=true_particles[part->D1];

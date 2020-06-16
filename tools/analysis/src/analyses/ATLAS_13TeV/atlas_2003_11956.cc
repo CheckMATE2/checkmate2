@@ -58,9 +58,14 @@ void Atlas_2003_11956::selection(int muons_count, double muon_ptmin, double muon
 //  countCutflowEvent(sr+"_04_trigger_match");
 
   cout << "Event" << "\n";
+//  cout << "PID         Px       X        Y      Z        D0       DZ" << "\n";
   std::vector<GenParticle*> selected_muons;
-  for(int i = 0; i < true_particles.size(); ++i)  { cout <<  true_particles[i]->PID << "   " << true_particles[i]->PT << "\n";;           
-    if( abs(true_particles[i]->PID) == 13  )  selected_muons.push_back(true_particles[i]);}
+  for(int i = 0; i < true_particles.size(); ++i)  { //cout <<  true_particles[i]->PID << "   " << true_particles[i]->PT << "\n";;           
+    if( abs(true_particles[i]->PID) == 13 and true_particles[i]->Status == 1 and true_particles[i]->PT > muon_ptmin and fabs(true_particles[i]->Eta) < muon_etamax  ) { selected_muons.push_back(true_particles[i]);
+//    cout <<  true_particles[i]->PID << "   " << true_particles[i]->Px << "   " << true_particles[i]->X << "   " << true_particles[i]->Y << "   " << true_particles[i]->Z << "   " << true_particles[i]->D0 << "   " << true_particles[i]->DZ << "\n";  
+    }
+        
+    }
   
   if (selected_muons.size() == 0 ) return; 
   countCutflowEvent(sr+"_04_trigger_match");
@@ -74,6 +79,7 @@ void Atlas_2003_11956::selection(int muons_count, double muon_ptmin, double muon
           if (fabs(selected_muons[i]->DZ) < 500.) {
               z0_check = true;
               displaced_muons.push_back(selected_muons[i]);
+              cout << "Muon " << i << "   " << selected_muons[i]->X << "    " << selected_muons[i]->Y << "    " << selected_muons[i]->Z << "\n";
           }
       }
   //efficiency here?    
@@ -101,7 +107,7 @@ void Atlas_2003_11956::selection(int muons_count, double muon_ptmin, double muon
   }
   
   if (DVs.size() < 1) return;
-  countCutflowEvent(sr+"_10_fiducial");
+  countCutflowEvent(sr+"_10_fiducial_far");
   
   for (int i = 0; i < DVs.size(); i++) {
      if ( pow(DVs[i].D0(),2) + pow(DVs[i].Z(), 2) < 16.) {
@@ -111,8 +117,13 @@ void Atlas_2003_11956::selection(int muons_count, double muon_ptmin, double muon
   }
   
   if (DVs.size() < 1) return;
-  countCutflowEvent(sr+"_11_fiducial");
+  countCutflowEvent(sr+"_11_fiducial_close");
+  
+  for (int i = 0; i < DVs.size(); i++) {
+    cout << i << "    " << DVs[i].X() << "   " << DVs[i].Y() << "   " << DVs[i].Z() << "\n";   
+  }
 
+  if (rand()/(RAND_MAX+1.) > 0.58) return; //very blunt method of the material veto
   countCutflowEvent(sr+"_12_material_veto");
   
   for (int i = 0; i < DVs.size(); i++) {
@@ -150,6 +161,10 @@ double DVertex::Z(void) {
 
 double DVertex::D0(void) {
    return impd;   
+}
+
+TLorentzVector DVertex::P4(void) {
+   return momentum;   
 }
 
 DVertex::DVertex(GenParticle* track) {
