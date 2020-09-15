@@ -1,5 +1,10 @@
 CheckMATE - Changelog
 
+2020-06-08   Mangesh Sonawane <son.arnav95@gmail.com>
+
+    ~ added analyses cms_1409_4789 (CMS 8 TeV displaced e-mu), cms_pas_exo_16_022 (CMS 13 TeV displaced e-mu) and atlas_1710_04901 (ATLAS 13 TeV Displaced Vertex + MET)
+
+
 2020-04-08   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 
     ~ removed python Root check due to a change in naming conventions (python->pyroot) around v6.20 
