@@ -73,7 +73,8 @@ class Info(dict):
                 "ATLAS": {
                     7.0: {"default": ("atlas7tev", "ATLAS_7TeV")},
                     8.0: {"default": ("atlas8tev", "ATLAS_8TeV")},
-                    13.0: {"default": ("atlas13tev", "ATLAS_13TeV")},
+                    13.0: {"default": ("atlas13tev", "ATLAS_13TeV"),
+                           "LLP": ("atlas13tevllp","ATLAS_13TeV")},
                     14.0: {
                         "projected": ("atlas14tev_projected", "ATLAS_14TeV_HighLumi"),
                         "hl_flatbtagger": ("atlas14tev_hl_flatbtagger", "ATLAS_14TeV_HighLumi")
@@ -82,7 +83,8 @@ class Info(dict):
                 "CMS": {
                     7.0: {"default": ("cms7tev", "CMS_7TeV")},
                     8.0: {"default": ("cms8tev", "CMS_8TeV")},
-                    13.0: {"default": ("cms13tev", "CMS_13TeV")},
+                    13.0: {"default": ("cms13tev", "CMS_13TeV"),
+                           "LLP": ("atlas13tevllp","CMS_13TeV")},
                     14.0: {"projected": ("cms14tev_projected", "CMS_14TeV_HighLumi")},
                     }
                 }
@@ -91,12 +93,14 @@ class Info(dict):
                 "atlas7tev": "AnalysisHandlerATLAS_7TeV",
                 "atlas8tev": "AnalysisHandlerATLAS_8TeV",
                 "atlas13tev": "AnalysisHandlerATLAS_13TeV",
+                "atlas13tevllp": "AnalysisHandlerATLAS13TeV_LLP",
                 "atlas14tev_projected": "AnalysisHandlerATLAS_14TeV_projected",
                 "atlas14tev_hl_flatbtagger": "AnalysisHandlerATLAS_14TeV_HL_FlatBtagger",
                 "cms": "AnalysisHandlerCMS",
                 "cms7tev": "AnalysisHandlerCMS_7TeV",
                 "cms8tev": "AnalysisHandlerCMS_8TeV",
                 "cms13tev": "AnalysisHandlerCMS_13TeV",
+                "cms13twvllp": "AnalysishandlerCMS_13TeV_LLP",
                 "cms14tev_projected": "AnalysisHandlerCMS_14TeV_projected",
                 }
         cls.paths = paths
