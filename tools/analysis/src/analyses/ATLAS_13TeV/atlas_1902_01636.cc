@@ -14,7 +14,7 @@ void Atlas_1902_01636::initialize() {
   // You should initialize any declared variables here
 
   SingleMuTurnOn_file = TFile::Open("../data/tables/atlas_1902_01636/SingleMuTurnOn.root");
-  EtmissTurnOn_file = TFile::Open("../data/tables/atlas_1902_01636/tmissTurnOn.root"); 
+  EtmissTurnOn_file = TFile::Open("../data/tables/atlas_1902_01636/EtmissTurnOn.root"); 
   LooseEff_file = TFile::Open("../data/tables/atlas_1902_01636/LooseEff.root"); 
   TightPromotionEff_file = TFile::Open("../data/tables/atlas_1902_01636/TightPromotionEff.root"); 
   MToFFullDet_file = TFile::Open("../data/tables/atlas_1902_01636/MToFFullDet.root"); 
