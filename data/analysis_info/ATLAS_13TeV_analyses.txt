@@ -24,6 +24,7 @@ atlas_1909_08457     5    search for squarks and gluinos with same-sign leptons 
 atlas_conf_2019_040  70   search for squarks and gluinos in MET_jet final states                                      139   no
 atlas_1710_04901     1    search for displced vertex                                                                  32.8  no 
 atlas_2003_11956     2    search for long-lived particles decaying into hadrons and at least one displaced muon       136   no
+atlas_1902_01636     8    heavy charged long-lived particles                                                          36.1  no
 
 #Superseded:
 #atlas_1602_09058     4    2 ss leptons or 3 leptons                                                                   3.2   no   
