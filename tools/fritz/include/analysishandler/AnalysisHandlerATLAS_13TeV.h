@@ -42,6 +42,8 @@
 #include "atlas_1710_04901.h"
 #include "atlas_2003_11956.h"
 #include "atlas_conf_2019_018.h"
+#include "atlas_1712_02118_ew.h"
+#include "atlas_1712_02118_strong.h"
 //@extraheader@
 #include "AnalysisBase.h"
 
