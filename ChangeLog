@@ -1,5 +1,9 @@
 CheckMATE - Changelog
 
+2020-09-23   Mangesh Sonawane <son.arnav95@gmail.com>
+
+	~ In AnalysisHandler.cc, removed abort condition for GenParticle branch not being linked, and replaced it with a warning.
+
 2020-09-15   Mangesh Sonawane <son.arnav95@gmail.com>
 
     ~ added analysis atlas_2003_11956 (ATLAS 13 TeV Displaced Vertex + mu) and atlas_1902_01636 (ATLAS 13 TeV Heavy Charged LLP)
