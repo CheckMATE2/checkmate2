@@ -1,5 +1,9 @@
 CheckMATE - Changelog
-
+Ver 2.0.27
+---------
+2020-09-27   Manimala Chakraborti, Ipsita Saha
+    ~ added atlas_conf_2019_020
+	
 2020-04-08   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 
     ~ removed python Root check due to a change in naming conventions (python->pyroot) around v6.20 
