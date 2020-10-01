@@ -1095,6 +1095,8 @@ void AnalysisHandler::linkObjects() {
     for(int a = 0; a < listOfAnalyses.size(); a++) {
         // important: as many analyses cut on the containers,
         //  every analysis must use its own container
+        std::vector<GenParticle*> tempTrueB = true_b;
+        listOfAnalyses[a]->true_b = tempTrueB;        
         std::vector<Track*> tempTracks = tracks;
         listOfAnalyses[a]->tracks = tempTracks;
         std::vector<Tower*> tempTowers = towers;

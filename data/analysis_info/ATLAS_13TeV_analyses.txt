@@ -21,6 +21,7 @@ atlas_conf_2019_018  2    Search for direct stau production in events with two h
 atlas_1908_08215     16   charginos/sleptons, 2 leptons + MET                                                         139   no                 
 atlas_1909_08457     5    search for squarks and gluinos with same-sign leptons                                       139   no
 atlas_conf_2019_040  70   search for squarks and gluinos in MET_jet final states                                      139   no
+atlas_2004_14060     9    stops, leptoquarks, 0 lepton                                                                139   no 
 
 #Superseded:
 #atlas_1602_09058     4    2 ss leptons or 3 leptons                                                                   3.2   no   
@@ -29,5 +30,3 @@ atlas_conf_2019_040  70   search for squarks and gluinos in MET_jet final states
 #atlas_1605_04285     7    1 lepton + jets + Etmiss                                                                    3.3   no   
 #atlas_1606_03903     3    1-lepton + jets + etmiss (stop)                                                             3.2   no   
 #atlas_conf_2016_078  13   2-6 jets + etmiss (squarks and gluino)                                                      13.3  no   
-
-   

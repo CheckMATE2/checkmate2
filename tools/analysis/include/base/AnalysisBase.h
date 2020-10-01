@@ -138,6 +138,7 @@ class AnalysisBase {
     std::vector<Track*> tracks; //!< Container of all reconstructed tracks.
     std::vector<Tower*> towers; //!< Container of all calorimeter towers.    
     ETMiss* missingET; //!< Reconstructed missingET vector excluding muons. 
+    std::vector<GenParticle*> true_b;
      /** @} */   
      
     
