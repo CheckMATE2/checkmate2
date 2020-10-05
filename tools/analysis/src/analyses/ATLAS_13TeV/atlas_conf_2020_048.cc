@@ -1,6 +1,10 @@
 #include "atlas_conf_2020_048.h"
 // AUTHOR: K. Rolbiecki
 //  EMAIL: krolb@fuw.edu.pl
+
+std::string Atlas_conf_2020_048::signal_regions [26] = {"IM00","IM01","IM02","IM03","IM04","IM05","IM06","IM07","IM08","IM09","IM10","IM11","IM12","EM00","EM01","EM02","EM03","EM04","EM05","EM06","EM07","EM08","EM09","EM10","EM11","EM12"};
+int Atlas_conf_2020_048::signal_region_borders [26][2] = {{200,10000},{250,10000},{300,10000},{350,10000},{400,10000},{500,10000},{600,10000},{700,10000},{800,10000},{900,10000},{1000,10000},{1100,10000},{1200,10000},{200,250},{250,300},{300,350},{350,400},{400,500},{500,600},{600,700},{700,800},{800,900},{900,1000},{1000,1100},{1100,1200},{1200,10000}};
+
 void Atlas_conf_2020_048::initialize() {
   setAnalysisName("atlas_conf_2020_048");          
   setInformation(""
@@ -96,6 +100,9 @@ void Atlas_conf_2020_048::analyze() {
   
   if (fabs(sigjets[0]->Eta) > 2.4) return;
   countCutflowEvent("10_eta<2.4");
+  
+  for(int i = 0; i < 26; i++)
+    if (met > signal_region_borders[i][0] and met < signal_region_borders[i][1]) countSignalEvent(signal_regions[i]);
 
   return;
 }

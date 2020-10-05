@@ -18,6 +18,8 @@ class Atlas_conf_2020_048 : public AnalysisBase {
       bool check_nTrack_jet(Jet* jet, std::vector<Track*> tracks, int nTracksMin);
       std::vector<Jet*> overlapRemoval_muon_jet_tracks(std::vector<Jet*> cand_jets, std::vector<Muon*> cand_muons, double deltaR, int nTracks);
       static bool sortByPT(Jet *i, Jet *j);
+      static std::string signal_regions[26];
+      static int signal_region_borders[26][2];
 };
 
 #endif
