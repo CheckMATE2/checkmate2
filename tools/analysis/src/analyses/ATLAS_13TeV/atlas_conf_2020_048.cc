@@ -62,6 +62,42 @@ void Atlas_conf_2020_048::analyze() {
   sigjets.insert(sigjets.end(), bjets.begin(), bjets.end());
   std::sort(sigjets.begin(), sigjets.end(), Atlas_conf_2020_048::sortByPT );   
   
+  countCutflowEvent("00_all");
+  
+  double met = missingET->P4().Et() ;
+  if ( met < 110.) return;
+  countCutflowEvent("01_trigger");
+  
+  if( sigjets.size() < 1 ) return;
+  countCutflowEvent("02_1jet");  
+  
+  if( sigjets.size() > 4 ) return;
+  countCutflowEvent("03_4jets");    
+  
+  if( electronsLoose.size() + muonsCombined.size() > 0) return;
+  countCutflowEvent("04_leptonveto");
+  
+  if ( taus.size() > 0) return;
+  countCutflowEvent("05_tauveto");
+  
+  if ( photonsCand.size() > 0) return;
+  countCutflowEvent("06_photonveto");  
+  
+  if ( met < 200.) return;
+  countCutflowEvent("07_met>200");
+  
+  double dphi = (met < 250.) ? 0.6 : 0.4;
+  for (int i = 0; i < sigjets.size(); i++)
+      if ( fabs(missingET->P4().DeltaPhi(sigjets[i]->P4())) < dphi ) return;
+  countCutflowEvent("08_dphi");
+  
+  if (sigjets[0]->PT < 150.) return;
+  countCutflowEvent("09_pt>150");
+  
+  if (fabs(sigjets[0]->Eta) > 2.4) return;
+  countCutflowEvent("10_eta<2.4");
+
+  return;
 }
 
 void Atlas_conf_2020_048::finalize() {
