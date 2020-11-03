@@ -1,0 +1,11 @@
+SR           obs  bkg   bkg_err  S95_obs  S95_exp  
+SR-Gtt-1L-B  0    0.64  0.34     2.87     2.94     
+SR-Gtt-0L-M  9    6.6   2.6      10.2     8.6      
+SR-Gtt-1L-M  0    1.1   0.4      2.9      3.5      
+SR-Gtt-1L-C  5    5.1   2.2      6.8      6.8      
+SR-Gtt-0L-B  5    3     1.1      8        6        
+SR-Gtt-0L-C  50   54    17       27       29       
+SR-Gbb-B     4    4.9   1.5      5.7      6.3      
+SR-Gbb-M     5    6.3   2.6      6.3      7.3      
+SR-Gbb-C     7    9.7   3.5      6.9      8.8      
+SR-Gbb-VC    8    7     4        10       9        
