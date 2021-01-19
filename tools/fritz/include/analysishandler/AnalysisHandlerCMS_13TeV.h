@@ -5,8 +5,8 @@
  *      Author: daschm
  */
 
-#ifndef ANALYSISHANDLERCMS_13TEV_H_
-#define ANALYSISHANDLERCMS_13TEV_H_
+#ifndef ANALYSISHANDLERCMS_13TEV_LLP_H_
+#define ANALYSISHANDLERCMS_13TEV_LLP_H_
 
 #include <math.h>
 
@@ -23,7 +23,7 @@
 //@extraheader@
 
 
-class AnalysisHandlerCMS_13TeV : public AnalysisHandler {
+class AnalysisHandlerCMS_13TeV_LLP : public AnalysisHandler {
     //! Function pointer for 2dim tagging efficiencies
     typedef double (*Eff_Fun_Ptr2)(double x,
                                    double y);
@@ -34,10 +34,10 @@ class AnalysisHandlerCMS_13TeV : public AnalysisHandler {
                                    double z);
 public:
     //! Standard Constructor
-    AnalysisHandlerCMS_13TeV();
+    AnalysisHandlerCMS_13TeV_LLP();
 
     //! Standard Destructor
-    ~AnalysisHandlerCMS_13TeV();
+    ~AnalysisHandlerCMS_13TeV_LLP();
 
 protected:
     //! CMS specific initialisation (currently empty)
@@ -192,4 +192,4 @@ private:
 
 };
 
-#endif /* ANALYSISHANDLERCMS_13TEV_H_ */
+#endif /* ANALYSISHANDLERCMS_13TEV_LLP_H_ */

@@ -1,78 +1,94 @@
 /*
- * AnalysisHandlerCMS_8TeV.h
+ * AnalysisHandlerATLAS_13TeV.h
  *
  *  Created on: Feb 23, 2015
  *      Author: daschm
  */
 
-#ifndef ANALYSISHANDLERCMS_8TEV_LLP_H_
-#define ANALYSISHANDLERCMS_8TEV_LLP_H_
-
-#include <math.h>
-
-
-#include "Global.h"
+#ifndef ANALYSISHANDLERATLAS_13TEV_LLP_H_
+#define ANALYSISHANDLERATLAS_13TEV_LLP_H_
 
 #include "AnalysisHandler.h"
 
-#include "cms_1301_4698_WW.h"
-#include "cms_1303_2985.h"
-#include "cms_1405_7570.h"
-#include "cms_1408_3583.h"
-#include "cms_1502_06031.h"
-#include "cms_1504_03198.h"
-#include "cms_smp_12_006.h"
-#include "cms_sus_12_019.h"
-#include "cms_sus_13_016.h"
-#include "cms_exo_14_014.h"
-#include "cms_1409_4789.h"
+#include "atlas_1602_09058.h"
+#include "atlas_1604_07773.h"
+#include "atlas_1604_01306.h"
+#include "atlas_1605_03814.h"
+#include "atlas_1605_04285.h"
+#include "atlas_1605_09318.h"
+#include "atlas_1606_03903.h"
+#include "atlas_1609_01599.h"
+#include "atlas_1704_03848.h"
+#include "atlas_1709_04183.h"
+#include "atlas_conf_2015_082.h"
+#include "atlas_conf_2016_013.h"
+#include "atlas_conf_2016_050.h"
+#include "atlas_conf_2016_054.h"
+#include "atlas_conf_2016_076.h"
+#include "atlas_conf_2016_078.h"
+#include "atlas_conf_2016_096.h"
+#include "atlas_1712_08119.h"
+#include "atlas_1712_02332.h"
+#include "atlas_1802_03158.h"
+#include "atlas_1708_07875.h"
+#include "atlas_conf_2016_066.h"
+#include "atlas_conf_2017_060.h"
+#include "atlas_1706_03731.h"
+#include "atlas_1902_01636.h"
+
+#include "atlas_1908_08215.h"
+#include "atlas_1909_08457.h"
+#include "atlas_conf_2019_040.h"
+#include "atlas_1710_04901.h"
+#include "atlas_2003_11956.h"
+#include "atlas_conf_2019_018.h"
 //@extraheader@
+#include "AnalysisBase.h"
 
+#include "Global.h"
 
-class AnalysisHandlerCMS_8TeV_LLP : public AnalysisHandler {
-    //! Function pointer for 2dim tagging efficiencies
-    typedef double (*Eff_Fun_Ptr2)(double x,
-                                   double y);
-
-    //! Function pointer for 3dim tagging efficiencies
-    typedef double (*Eff_Fun_Ptr3)(double x,
-                                   double y,
-                                   double z);
+class AnalysisHandlerATLAS_13TeV_LLP : public AnalysisHandler {
+   //! Function pointer for 2dim tagging efficiencies
+   typedef double (*Eff_Fun_Ptr2)(double x,
+                                  double y);
+   //! Function pointer for 3dim tagging efficiencies
+   typedef double (*Eff_Fun_Ptr3)(double x,
+                                  double y,
+                                  double z);
 public:
     //! Standard Constructor
-    AnalysisHandlerCMS_8TeV_LLP();
+    AnalysisHandlerATLAS_13TeV_LLP();
 
     //! Standard Destructor
-    ~AnalysisHandlerCMS_8TeV_LLP();
+    ~AnalysisHandlerATLAS_13TeV_LLP();
 
 protected:
-    //! CMS specific initialisation (currently empty)
+    //! ATLAS specific initialisation (currently empty)
     void initialize();
-
-    //! CMS specific finalisation (currently empty)
+    //! ATLAS specific finalisation (currently empty)
     void finalize();
 
-    //! booking of CMS analyses
+    //! booking of ATLAS analyses
     void bookAnalysis(std::string analysisName,
                       Tag_Map whichTags,
                       Param_Map eventParameters);
 
-    //! Applies CMS reconstructions on electrons, muons, photons, jets
+    //! Applies ATLAS reconstructions on electrons, muons, photons, jets
     void postProcessParticles();
 
-    //! links CMS specific particle vectors to CMS analyses
+    //! links ATLAS specific particle vectors to ATLAS analyses
     void linkObjects();
 
 private:
-    //! Apply CMS photon identification efficiencies
+    //! Apply ATLAS photon identification efficiencies
     void identifyPhotons();
-    //! Apply CMS electron identification efficiencies
+    //! Apply ATLAS electron identification efficiencies
     void identifyElectrons();
-    //! Apply CNS muon identification efficiencies
+    //! Apply ATLAS muon identification efficiencies
     void identifyMuons();
-    //! Apply CNS b tagging efficiencies
+    //! Apply ATLAS b tagging efficiencies
     void tagBJets();
-    //! Apply CMS tau tagging efficiencies
+    //! Apply ATLAS tau tagging efficiencies
     void tagTauJets();
 
     //! ATLAS photon identification efficiency, medium
@@ -83,6 +99,9 @@ private:
     static double electronRecEff(double pt,
                                  double eta);
 
+    //! ATLAS electron identification efficiency, loose
+    static double electronIDEffLoose(double pt,
+                                    double eta);    
     //! ATLAS electron identification efficiency, medium
     static double electronIDEffMedium(double pt,
                                     double eta);
@@ -97,59 +116,58 @@ private:
     static double muonEffCombOverCombPlus(double phi,
                                           double eta);
 
-
-    //! CMS tautagging signal efficiency, loose, 1 prong
+    //! ATLAS tautagging signal efficiency, loose, 1 prong
     static double tauSigEffSingleLoose(double pt,
                                        double eta);
-    //! CMS tautagging signal efficiency, medium, 1 prong
+    //! ATLAS tautagging signal efficiency, medium, 1 prong
     static double tauSigEffSingleMedium(double pt,
                                         double eta);
-    //! CMS tautagging signal efficiency, tight, 1 prong
+    //! ATLAS tautagging signal efficiency, tight, 1 prong
     static double tauSigEffSingleTight(double pt,
                                        double eta);
-    //! CMS tautagging signal efficiency, loose, >1 prong
+    //! ATLAS tautagging signal efficiency, loose, >1 prong
     static double tauSigEffMultiLoose(double pt,
                                       double eta);
-    //! CMS tautagging signal efficiency, medium, >1 prong
+    //! ATLAS tautagging signal efficiency, medium, >1 prong
     static double tauSigEffMultiMedium(double pt,
                                        double eta);
-    //! CMS tautagging signal efficiency, tight, >1 prong
+    //! ATLAS tautagging signal efficiency, tight, >1 prong
     static double tauSigEffMultiTight(double pt,
                                       double eta);
-    //! CMS tautagging background efficiency, loose, 1 prong
+    //! ATLAS tautagging background efficiency, loose, 1 prong
     static double tauBkgEffSingleLoose(double pt,
                                        double eta);
-    //! CMS tautagging background efficiency, medium, 1 prong
+    //! ATLAS tautagging background efficiency, medium, 1 prong
     static double tauBkgEffSingleMedium(double pt,
                                         double eta);
-    //! CMS tautagging background efficiency, tight, 1 prong
+    //! ATLAS tautagging background efficiency, tight, 1 prong
     static double tauBkgEffSingleTight(double pt,
                                        double eta);
-    //! CMS tautagging background efficiency, loose, >1 prong
+    //! ATLAS tautagging background efficiency, loose, >1 prong
     static double tauBkgEffMultiLoose(double pt,
                                       double eta);
-    //! CMS tautagging background efficiency, medium, >1 prong
+    //! ATLAS tautagging background efficiency, medium, >1 prong
     static double tauBkgEffMultiMedium(double pt,
                                        double eta);
-    //! CMS tautagging background efficiency, tight, >1 prong
+    //! ATLAS tautagging background efficiency, tight, >1 prong
     static double tauBkgEffMultiTight(double pt,
                                       double eta);
 
-    //! CMS btagging signal efficiency (eff in percent!)
+    //! ATLAS btagging signal efficiency (eff in percent!)
     static double bSigEff(double pt,
                           double eta,
                           double eff);
-    //! CMS btagging background c jet efficiency
+    //! ATLAS btagging background c jet efficiency
     static double bBkgCJetEff(double pt,
                               double eta,
                               double eff);
-    //! CMS btagging background light jet efficiency
+    //! ATLAS btagging background light jet efficiency
     static double bBkgLJetEff(double pt,
                               double eta,
                               double eff);
-    //! CMS btagging background c jet rejection
+    //! ATLAS btagging background c jet rejection
     static double bBkgCJetRej(double eff);
-    //! CMS btagging background light jet efficiency
+    //! ATLAS btagging background light jet efficiency
     static double bBkgLJetRej(double eff);
 
     //! DR(jet, track) for tracks to be associated to tau candidate
@@ -163,7 +181,8 @@ private:
     static const double ETAMAX_TAU_TRUTH;
     //! ptmin for truth taus to be considered for matching
     static const double PTMIN_TAU_TRUTH;
-         //! DR(jet, b) for b quarks to be associated to jet candidate
+
+    //! DR(jet, b) for b quarks to be associated to jet candidate
     static const double DR_B_TRUTH;
     //! maximum eta for truth b quarks to be considered for matching
     static const double ETAMAX_B_TRUTH;
@@ -179,23 +198,26 @@ private:
     //! ATLAS muon detector map, phi positions in array
     static const double phiProj[53];
 
-    //! list of loose reconstructed CMS electrons
+    //! list of loose reconstructed ATLAS electrons
     std::vector<Electron*> electronsLoose;
     //! list of medium reconstructed ATLAS electrons
     std::vector<Electron*> electronsMedium;
     //! list of tight reconstructed ATLAS electrons
     std::vector<Electron*> electronsTight;
-    //! list of loose reconstructed CMS muons
+    //! list of loose reconstructed ATLAS muons
     std::vector<Muon*> muonsLoose;
-    //! list of 'combined' reconstructed CMS muons
+    //! list of 'combined' reconstructed ATLAS muons
     std::vector<Muon*> muonsCombined;
-    //! list of 'combined + SA' reconstructed CMS muons
+    //! list of 'combined + SA' reconstructed ATLAS muons
     std::vector<Muon*> muonsCombinedPlus;
-    //! list of 'loose' reconstructed CMS photons
+    //! list of 'loose' reconstructed ATLAS photons
     std::vector<Photon*> photonsLoose;
-    //! list of 'medium' reconstructed CMS photons
+    //! list of 'medium' reconstructed ATLAS photons
     std::vector<Photon*> photonsMedium;
 
+    //! list of PDG ids for LLPs
+    std::vecttor<int> LLPids
+  
 };
 
-#endif /* ANALYSISHANDLERCMS_8TEV_LLP_H_ */
+#endif /* ANALYSISHANDLERATLAS_13TEV_LLP_H_ */

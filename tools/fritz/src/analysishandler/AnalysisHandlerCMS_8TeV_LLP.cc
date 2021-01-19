@@ -7,31 +7,31 @@
 
 #include "AnalysisHandlerCMS_8TeV.h"
 
-const double AnalysisHandlerCMS_8TeV_LLP::DR_TAU_TRACK = 0.2;
-const double AnalysisHandlerCMS_8TeV_LLP::PTMIN_TAU_TRACK = 1.0;
+const double AnalysisHandlerCMS_8TeV::DR_TAU_TRACK = 0.2;
+const double AnalysisHandlerCMS_8TeV::PTMIN_TAU_TRACK = 1.0;
 
-const double AnalysisHandlerCMS_8TeV_LLP::DR_TAU_TRUTH = 0.2;
-const double AnalysisHandlerCMS_8TeV_LLP::ETAMAX_TAU_TRUTH = 2.5;
-const double AnalysisHandlerCMS_8TeV_LLP::PTMIN_TAU_TRUTH = 1.0;
+const double AnalysisHandlerCMS_8TeV::DR_TAU_TRUTH = 0.2;
+const double AnalysisHandlerCMS_8TeV::ETAMAX_TAU_TRUTH = 2.5;
+const double AnalysisHandlerCMS_8TeV::PTMIN_TAU_TRUTH = 1.0;
 
-const double AnalysisHandlerCMS_8TeV_LLP::DR_B_TRUTH = 0.4;
-const double AnalysisHandlerCMS_8TeV_LLP::ETAMAX_B_TRUTH = 2.5;
-const double AnalysisHandlerCMS_8TeV_LLP::PTMIN_B_TRUTH = 1.0;
+const double AnalysisHandlerCMS_8TeV::DR_B_TRUTH = 0.4;
+const double AnalysisHandlerCMS_8TeV::ETAMAX_B_TRUTH = 2.5;
+const double AnalysisHandlerCMS_8TeV::PTMIN_B_TRUTH = 1.0;
 
 
-AnalysisHandlerCMS_8TeV_LLP::AnalysisHandlerCMS_8TeV_LLP() : AnalysisHandler() {
+AnalysisHandlerCMS_8TeV::AnalysisHandlerCMS_8TeV() : AnalysisHandler() {
 }
 
-AnalysisHandlerCMS_8TeV_LLP::~AnalysisHandlerCMS_8TeV_LLP() {
+AnalysisHandlerCMS_8TeV::~AnalysisHandlerCMS_8TeV() {
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::initialize() {
+void AnalysisHandlerCMS_8TeV::initialize() {
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::finalize() {
+void AnalysisHandlerCMS_8TeV::finalize() {
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::bookAnalysis(std::string analysisName,
+void AnalysisHandlerCMS_8TeV::bookAnalysis(std::string analysisName,
                                       Tag_Map whichTags,
                                       Param_Map eventParameters) {
     Global::print(name, "Loading Analysis "+analysisName);
@@ -72,7 +72,7 @@ void AnalysisHandlerCMS_8TeV_LLP::bookAnalysis(std::string analysisName,
                   "Successfully loaded analysis "+analysisName);
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::postProcessParticles() {
+void AnalysisHandlerCMS_8TeV::postProcessParticles() {
     // First do all the mother handler processions
     AnalysisHandler::postProcessParticles();
 
@@ -84,7 +84,7 @@ void AnalysisHandlerCMS_8TeV_LLP::postProcessParticles() {
     tagTauJets();
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::identifyPhotons() {
+void AnalysisHandlerCMS_8TeV::identifyPhotons() {
     double pEffMed = 0;
     Photon* cand = NULL;
 
@@ -102,7 +102,7 @@ void AnalysisHandlerCMS_8TeV_LLP::identifyPhotons() {
     }
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::identifyElectrons() {
+void AnalysisHandlerCMS_8TeV::identifyElectrons() {
     double eEffMed = 0, eEffTigOvMed = 0;
     Electron* cand = NULL;
 
@@ -127,7 +127,7 @@ void AnalysisHandlerCMS_8TeV_LLP::identifyElectrons() {
     }
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::identifyMuons()  {
+void AnalysisHandlerCMS_8TeV::identifyMuons()  {
     double mEffComb = 0, mEffCombPlus = 0;
     Muon* cand = NULL;
 
@@ -151,7 +151,7 @@ void AnalysisHandlerCMS_8TeV_LLP::identifyMuons()  {
     }
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::tagBJets() {
+void AnalysisHandlerCMS_8TeV::tagBJets() {
    Jet* cand = NULL; // The to-be-checked candidate
    // The candidate's probability and its pass-limit to be tagged
    double prob = 0, pass_prob = 0;
@@ -175,7 +175,7 @@ void AnalysisHandlerCMS_8TeV_LLP::tagBJets() {
               if(true_b[b]->PT > PTMIN_B_TRUTH &&
                 fabs(true_b[b]->Eta) < ETAMAX_B_TRUTH &&
                  true_b[b]->P4().DeltaR(cand->P4()) < DR_B_TRUTH) {
-                  eff_function = &AnalysisHandlerCMS_8TeV_LLP::bSigEff;
+                  eff_function = &AnalysisHandlerCMS_8TeV::bSigEff;
                   break;
               }
           }
@@ -185,14 +185,14 @@ void AnalysisHandlerCMS_8TeV_LLP::tagBJets() {
                   if(true_c[c]->PT > PTMIN_B_TRUTH &&
                      fabs(true_c[c]->Eta) < ETAMAX_B_TRUTH &&
                      true_c[c]->P4().DeltaR(cand->P4()) < DR_B_TRUTH) {
-                      eff_function = &AnalysisHandlerCMS_8TeV_LLP::bBkgCJetEff;
+                      eff_function = &AnalysisHandlerCMS_8TeV::bBkgCJetEff;
                       break;
                   }
               }
           }
           // If no b and no c overlap, use light jet Rej
           if (eff_function == NULL)
-              eff_function = &AnalysisHandlerCMS_8TeV_LLP::bBkgLJetEff;
+              eff_function = &AnalysisHandlerCMS_8TeV::bBkgLJetEff;
 
           // Now that we know the right function to use, lets tag
           for(int btag = 0; btag < listOfJetBTags.size(); btag++) {
@@ -207,7 +207,7 @@ void AnalysisHandlerCMS_8TeV_LLP::tagBJets() {
       }
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::tagTauJets() {
+void AnalysisHandlerCMS_8TeV::tagTauJets() {
     Jet* cand = NULL; // currently tested jet candidate
     // pointer to the right efficiency functions
     Eff_Fun_Ptr2 effFunLoose = NULL, effFunMedium = NULL, effFunTight = NULL;
@@ -256,14 +256,14 @@ void AnalysisHandlerCMS_8TeV_LLP::tagTauJets() {
               fabs(true_tau[t]->Eta) < ETAMAX_TAU_TRUTH  &&
               cand->P4().DeltaR(true_tau[t]->P4()) < DR_TAU_TRUTH) {
                if(prongs > 1) {
-                   effFunLoose = &AnalysisHandlerCMS_8TeV_LLP::tauSigEffMultiLoose;
-                   effFunMedium = &AnalysisHandlerCMS_8TeV_LLP::tauSigEffMultiMedium;
-                   effFunTight = &AnalysisHandlerCMS_8TeV_LLP::tauSigEffMultiTight;
+                   effFunLoose = &AnalysisHandlerCMS_8TeV::tauSigEffMultiLoose;
+                   effFunMedium = &AnalysisHandlerCMS_8TeV::tauSigEffMultiMedium;
+                   effFunTight = &AnalysisHandlerCMS_8TeV::tauSigEffMultiTight;
                }
                else {
-                   effFunLoose = &AnalysisHandlerCMS_8TeV_LLP::tauSigEffSingleLoose;
-                   effFunMedium = &AnalysisHandlerCMS_8TeV_LLP::tauSigEffSingleMedium;
-                   effFunTight = &AnalysisHandlerCMS_8TeV_LLP::tauSigEffSingleTight;
+                   effFunLoose = &AnalysisHandlerCMS_8TeV::tauSigEffSingleLoose;
+                   effFunMedium = &AnalysisHandlerCMS_8TeV::tauSigEffSingleMedium;
+                   effFunTight = &AnalysisHandlerCMS_8TeV::tauSigEffSingleTight;
                }
                break;
            }
@@ -271,14 +271,14 @@ void AnalysisHandlerCMS_8TeV_LLP::tagTauJets() {
        // In case no overlap was found, use background efficiencies
        if(effFunLoose == NULL) {
            if(prongs > 1) {
-               effFunLoose = &AnalysisHandlerCMS_8TeV_LLP::tauBkgEffMultiLoose;
-               effFunMedium = &AnalysisHandlerCMS_8TeV_LLP::tauBkgEffMultiMedium;
-               effFunTight = &AnalysisHandlerCMS_8TeV_LLP::tauBkgEffMultiTight;
+               effFunLoose = &AnalysisHandlerCMS_8TeV::tauBkgEffMultiLoose;
+               effFunMedium = &AnalysisHandlerCMS_8TeV::tauBkgEffMultiMedium;
+               effFunTight = &AnalysisHandlerCMS_8TeV::tauBkgEffMultiTight;
            }
            else {
-               effFunLoose = &AnalysisHandlerCMS_8TeV_LLP::tauBkgEffSingleLoose;
-               effFunMedium = &AnalysisHandlerCMS_8TeV_LLP::tauBkgEffSingleMedium;
-               effFunTight = &AnalysisHandlerCMS_8TeV_LLP::tauBkgEffSingleTight;
+               effFunLoose = &AnalysisHandlerCMS_8TeV::tauBkgEffSingleLoose;
+               effFunMedium = &AnalysisHandlerCMS_8TeV::tauBkgEffSingleMedium;
+               effFunTight = &AnalysisHandlerCMS_8TeV::tauBkgEffSingleTight;
            }
        }
        // Now that we know the right function to use, lets tag
@@ -298,7 +298,7 @@ void AnalysisHandlerCMS_8TeV_LLP::tagTauJets() {
    }
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::linkObjects() {
+void AnalysisHandlerCMS_8TeV::linkObjects() {
     AnalysisHandler::linkObjects();
     // Linking Particle Objects and run analyses
     for (int a = 0; a < listOfAnalyses.size(); a++) {
@@ -329,7 +329,7 @@ void AnalysisHandlerCMS_8TeV_LLP::linkObjects() {
 }
 
 
-double AnalysisHandlerCMS_8TeV_LLP::photonEffMedium(double pt,
+double AnalysisHandlerCMS_8TeV::photonEffMedium(double pt,
                                              double eta) {
     // TODO: Implement proper function (currently this is standard Delphes)
     return  (fabs(eta) <= 1.5) * (pt > 10.0)  * (0.95) +
@@ -337,7 +337,7 @@ double AnalysisHandlerCMS_8TeV_LLP::photonEffMedium(double pt,
 }
 
 
-double AnalysisHandlerCMS_8TeV_LLP::electronRecEff(double pt,
+double AnalysisHandlerCMS_8TeV::electronRecEff(double pt,
                                             double eta) {
     const double r1 = 0.98741;
     const double r2 = 0.0127525;
@@ -350,7 +350,7 @@ double AnalysisHandlerCMS_8TeV_LLP::electronRecEff(double pt,
     return (fabs(eta) < 2.5)*(pt>7.0)*rec_eff;
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::electronIDEffMedium(double pt,
+double AnalysisHandlerCMS_8TeV::electronIDEffMedium(double pt,
                                                double eta) {
     const double m1 = 0.766841;
     const double m2 = 0.1509;
@@ -362,7 +362,7 @@ double AnalysisHandlerCMS_8TeV_LLP::electronIDEffMedium(double pt,
     return id_eff_medium;
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::electronIDEffTightOverMedium(double pt,
+double AnalysisHandlerCMS_8TeV::electronIDEffTightOverMedium(double pt,
                                                         double eta) {
 
     const double u1 = 0.674979;
@@ -389,7 +389,7 @@ double AnalysisHandlerCMS_8TeV_LLP::electronIDEffTightOverMedium(double pt,
 }
 
 
-double AnalysisHandlerCMS_8TeV_LLP::muonEffCombOverCombPlus(double phi,
+double AnalysisHandlerCMS_8TeV::muonEffCombOverCombPlus(double phi,
                                                      double eta) {
     // TODO This is to ensure compatibility with CM1, but should
     // be retested and removed at some point
@@ -430,7 +430,7 @@ double AnalysisHandlerCMS_8TeV_LLP::muonEffCombOverCombPlus(double phi,
     return 0;
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::muonEffCombPlus(double phi,
+double AnalysisHandlerCMS_8TeV::muonEffCombPlus(double phi,
                                              double eta) {
     // TODO This is to ensure compatibility with CM1, but should
     // be retested and removed at some point
@@ -474,7 +474,7 @@ double AnalysisHandlerCMS_8TeV_LLP::muonEffCombPlus(double phi,
 }
 
 
-double AnalysisHandlerCMS_8TeV_LLP::tauSigEffSingleLoose(double pt,
+double AnalysisHandlerCMS_8TeV::tauSigEffSingleLoose(double pt,
                                                   double eta) {
     double eff_s1loose_eta;
     {
@@ -533,7 +533,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauSigEffSingleLoose(double pt,
           //((fabs(eta)<=1.5)*0.95 + (fabs(eta)>1.5)*0.85);
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::tauSigEffSingleMedium(double pt,
+double AnalysisHandlerCMS_8TeV::tauSigEffSingleMedium(double pt,
                                                    double eta) {
     double eff_s1medium_eta;
     {
@@ -592,7 +592,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauSigEffSingleMedium(double pt,
           //((fabs(eta)<=1.5)*0.95 + (fabs(eta)>1.5)*0.85);
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::tauSigEffSingleTight(double pt,
+double AnalysisHandlerCMS_8TeV::tauSigEffSingleTight(double pt,
                                                   double eta) {
     double eff_s1tight_eta;
     {
@@ -654,7 +654,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauSigEffSingleTight(double pt,
 }
 
 
-double AnalysisHandlerCMS_8TeV_LLP::tauSigEffMultiLoose(double pt,
+double AnalysisHandlerCMS_8TeV::tauSigEffMultiLoose(double pt,
                                                  double eta) {
     const double x0 = 15;
     const double A1 = 0.594;
@@ -676,7 +676,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauSigEffMultiLoose(double pt,
            (pt >= 80. + 2./C2)*C1*pow(2./C2,2)*exp(-2.);
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::tauSigEffMultiMedium(double pt,
+double AnalysisHandlerCMS_8TeV::tauSigEffMultiMedium(double pt,
                                                   double eta) {
     const double x0 = 15;
     const double A1 = 0.510;
@@ -698,7 +698,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauSigEffMultiMedium(double pt,
            (pt >= 80. + 2./C2)*C1*pow(2./C2,2)*exp(-2.);
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::tauSigEffMultiTight(double pt,
+double AnalysisHandlerCMS_8TeV::tauSigEffMultiTight(double pt,
                                                  double eta) {
     const double x0 = 15;
     const double A1 = 0.324;
@@ -721,7 +721,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauSigEffMultiTight(double pt,
 }
 
 
-double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffSingleLoose(double pt,
+double AnalysisHandlerCMS_8TeV::tauBkgEffSingleLoose(double pt,
                                                   double eta) {
     const double A1 = 0.717;
     const double B1 = 0.0789;
@@ -737,7 +737,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffSingleLoose(double pt,
           //((fabs(eta)<=1.5)*0.95 + (fabs(eta)>1.5)*0.85);
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffSingleMedium(double pt,
+double AnalysisHandlerCMS_8TeV::tauBkgEffSingleMedium(double pt,
                                                    double eta) {
     const double A1 = 0.301;
     const double B1 = 0.0720;
@@ -752,7 +752,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffSingleMedium(double pt,
           //((fabs(eta)<=1.5)*0.95 + (fabs(eta)>1.5)*0.85);
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffSingleTight(double pt,
+double AnalysisHandlerCMS_8TeV::tauBkgEffSingleTight(double pt,
                                                   double eta) {
     const double A1 = 0.117;
     const double B1 = 0.0742;
@@ -769,7 +769,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffSingleTight(double pt,
 }
 
 
-double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffMultiLoose(double pt,
+double AnalysisHandlerCMS_8TeV::tauBkgEffMultiLoose(double pt,
                                                  double eta) {
     const double A1 = 0.265;
     const double B1 = 0.0827;
@@ -781,7 +781,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffMultiLoose(double pt,
            (pt >= 80)*(D1*(1.-1./(1.+exp(E1*(pt-F1)))));
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffMultiMedium(double pt,
+double AnalysisHandlerCMS_8TeV::tauBkgEffMultiMedium(double pt,
                                                   double eta) {
     const double A1 = 0.154;
     const double B1 = 0.0832;
@@ -793,7 +793,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffMultiMedium(double pt,
            (pt >= 80)*(D1*(1.-1./(1.+exp(E1*(pt-F1)))));
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffMultiTight(double pt,
+double AnalysisHandlerCMS_8TeV::tauBkgEffMultiTight(double pt,
                                                  double eta) {
     const double A1 = 0.0579;
     const double B1 = 0.0880;
@@ -806,7 +806,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffMultiTight(double pt,
 }
 
 
-double AnalysisHandlerCMS_8TeV_LLP::bSigEff(double pt,
+double AnalysisHandlerCMS_8TeV::bSigEff(double pt,
                                      double eta,
                                      double eff) {
     const double y0 = 0.5523;
@@ -818,7 +818,7 @@ double AnalysisHandlerCMS_8TeV_LLP::bSigEff(double pt,
            ((pt>100)*(1.+(pt-100.)*(-0.0007))+(pt<=100)*1);
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::bBkgCJetRej(double eff) {
+double AnalysisHandlerCMS_8TeV::bBkgCJetRej(double eff) {
     const double A = 29.2836;
     const double c = -4.57183;
     const double d = 8.49607;
@@ -828,14 +828,14 @@ double AnalysisHandlerCMS_8TeV_LLP::bBkgCJetRej(double eff) {
                           f*pow(eff,4)+g*pow(eff,5))));
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::bBkgCJetEff(double pt,
+double AnalysisHandlerCMS_8TeV::bBkgCJetEff(double pt,
                                          double eta,
                                          double eff) {
     return 0.4*(0.460622*1./(1.+exp(-0.0463993*(pt-20.4359))))*
            bBkgCJetRej(0.7)/bBkgCJetRej(eff);
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::bBkgLJetRej(double eff) {
+double AnalysisHandlerCMS_8TeV::bBkgLJetRej(double eff) {
     const double A  = 54.3809;
     const double c  = -4.15601;
     const double d  = 7.59943;
@@ -855,7 +855,7 @@ double AnalysisHandlerCMS_8TeV_LLP::bBkgLJetRej(double eff) {
     }
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::bBkgLJetEff(double pt,
+double AnalysisHandlerCMS_8TeV::bBkgLJetEff(double pt,
                                          double eta,
                                          double eff) {
     const double f0 = 0.0105802;
@@ -870,7 +870,7 @@ double AnalysisHandlerCMS_8TeV_LLP::bBkgLJetEff(double pt,
 }
 
 
-const AnalysisHandlerCMS_8TeV_LLP::muonDetector AnalysisHandlerCMS_8TeV_LLP::detMap[53][21] = {{cscla, endla, endla, endla, endla, endla, endla, trans, barla, barla, barla, barla, barla, trans, endla, endla, endla, endla, endla, endla, cscla},
+const AnalysisHandlerCMS_8TeV::muonDetector AnalysisHandlerCMS_8TeV::detMap[53][21] = {{cscla, endla, endla, endla, endla, endla, endla, trans, barla, barla, barla, barla, barla, trans, endla, endla, endla, endla, endla, endla, cscla},
         {cscsm, endsm, endsm, endsm, endsm, endsm, endsm, trans, barla, barla, barla, barla, barla, trans, endsm, endsm, endsm, endsm, endsm, endsm, cscsm},
         {cscsm, cscsm, endsm, endsm, endsm, endsm, trans, trans, barov, barov, barov, barov, barov, trans, trans, endsm, endsm, endsm, endsm, cscsm, cscsm},
         {cscsm, cscsm, endsm, bee, endsm, trans, trans, trans, barsm, barsm, barsm, barsm, barsm, trans, trans, trans, endsm, bee, endsm, cscsm, cscsm},
@@ -923,6 +923,6 @@ const AnalysisHandlerCMS_8TeV_LLP::muonDetector AnalysisHandlerCMS_8TeV_LLP::det
         {cscsm, cscsm, endsm, endsm, endsm, endsm, trans, trans, barov, barov, barov, barov, barov, trans, trans, endsm, endsm, endsm, endsm, cscsm, cscsm},
         {cscsm, endsm, endsm, endsm, endsm, endsm, endsm, trans, barla, barla, barla, barla, barla, trans, endsm, endsm, endsm, endsm, endsm, endsm, cscsm},
         {cscla, endla, endla, endla, endla, endla, endla, trans, barla, barla, barla, barla, barla, trans, endla, endla, endla, endla, endla, endla, cscla}};
-const double AnalysisHandlerCMS_8TeV_LLP::etaProj[21] = {-2.005, -1.955, -1.709, -1.411, -1.238, -1.163, -1.113, -0.965, -0.817, -0.519, 0.519, 0.817, 0.965, 1.113, 1.163, 1.238, 1.411, 1.709, 1.955, 2.005, 2.500};
-const double AnalysisHandlerCMS_8TeV_LLP::phiProj[53] = {3.142, 3.009, 2.948, 2.849, 2.629, 2.529, 2.471, 2.210, 2.174, 2.065, 1.855, 1.745, 1.695, 1.436, 1.386, 1.276, 1.066, 0.957, 0.916, 0.657, 0.596, 0.496, 0.277, 0.178, 0.142, -0.142, -0.178, -0.277, -0.496, -0.596, -0.657, -0.916, -0.957, -1.018, -1.066, -1.276, -1.357, -1.386, -1.436, -1.695, -1.745, -1.797, -1.855, -2.065, -2.134, -2.174, -2.210, -2.471, -2.529, -2.629, -2.849, -2.948, -3.009};
+const double AnalysisHandlerCMS_8TeV::etaProj[21] = {-2.005, -1.955, -1.709, -1.411, -1.238, -1.163, -1.113, -0.965, -0.817, -0.519, 0.519, 0.817, 0.965, 1.113, 1.163, 1.238, 1.411, 1.709, 1.955, 2.005, 2.500};
+const double AnalysisHandlerCMS_8TeV::phiProj[53] = {3.142, 3.009, 2.948, 2.849, 2.629, 2.529, 2.471, 2.210, 2.174, 2.065, 1.855, 1.745, 1.695, 1.436, 1.386, 1.276, 1.066, 0.957, 0.916, 0.657, 0.596, 0.496, 0.277, 0.178, 0.142, -0.142, -0.178, -0.277, -0.496, -0.596, -0.657, -0.916, -0.957, -1.018, -1.066, -1.276, -1.357, -1.386, -1.436, -1.695, -1.745, -1.797, -1.855, -2.065, -2.134, -2.174, -2.210, -2.471, -2.529, -2.629, -2.849, -2.948, -3.009};
 

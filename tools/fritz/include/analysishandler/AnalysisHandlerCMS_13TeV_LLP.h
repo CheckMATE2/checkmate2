@@ -1,12 +1,12 @@
 /*
- * AnalysisHandlerCMS_8TeV.h
+ * AnalysisHandlerCMS_13TeV.h
  *
  *  Created on: Feb 23, 2015
  *      Author: daschm
  */
 
-#ifndef ANALYSISHANDLERCMS_8TEV_LLP_H_
-#define ANALYSISHANDLERCMS_8TEV_LLP_H_
+#ifndef ANALYSISHANDLERCMS_13TEV_H_
+#define ANALYSISHANDLERCMS_13TEV_H_
 
 #include <math.h>
 
@@ -15,21 +15,15 @@
 
 #include "AnalysisHandler.h"
 
-#include "cms_1301_4698_WW.h"
-#include "cms_1303_2985.h"
-#include "cms_1405_7570.h"
-#include "cms_1408_3583.h"
-#include "cms_1502_06031.h"
-#include "cms_1504_03198.h"
-#include "cms_smp_12_006.h"
-#include "cms_sus_12_019.h"
-#include "cms_sus_13_016.h"
-#include "cms_exo_14_014.h"
-#include "cms_1409_4789.h"
+#include "cms_pas_sus_15_011.h"
+#include "cms_sus_16_039.h"
+#include "cms_sus_16_025.h"
+#include "cms_sus_16_048.h"
+#include "cms_pas_exo_16_022.h"
 //@extraheader@
 
 
-class AnalysisHandlerCMS_8TeV_LLP : public AnalysisHandler {
+class AnalysisHandlerCMS_13TeV : public AnalysisHandler {
     //! Function pointer for 2dim tagging efficiencies
     typedef double (*Eff_Fun_Ptr2)(double x,
                                    double y);
@@ -40,10 +34,10 @@ class AnalysisHandlerCMS_8TeV_LLP : public AnalysisHandler {
                                    double z);
 public:
     //! Standard Constructor
-    AnalysisHandlerCMS_8TeV_LLP();
+    AnalysisHandlerCMS_13TeV();
 
     //! Standard Destructor
-    ~AnalysisHandlerCMS_8TeV_LLP();
+    ~AnalysisHandlerCMS_13TeV();
 
 protected:
     //! CMS specific initialisation (currently empty)
@@ -196,6 +190,9 @@ private:
     //! list of 'medium' reconstructed CMS photons
     std::vector<Photon*> photonsMedium;
 
+    //! list of PDG ids for LLPs
+    std::vecttor<int> LLPids
+
 };
 
-#endif /* ANALYSISHANDLERCMS_8TEV_LLP_H_ */
+#endif /* ANALYSISHANDLERCMS_13TEV_H_ */

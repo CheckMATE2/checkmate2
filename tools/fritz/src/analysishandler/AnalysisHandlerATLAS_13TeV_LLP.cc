@@ -1,66 +1,105 @@
 /*
- * AnalysisHandlerCMS_8TeV.cc
+ * AnalysisHandlerATLAS_13TeV.cc
  *
  *  Created on: Feb 23, 2015
  *      Author: daschm
  */
 
-#include "AnalysisHandlerCMS_8TeV.h"
+#include "AnalysisHandlerATLAS_13TeV_LLP.h"
 
-const double AnalysisHandlerCMS_8TeV_LLP::DR_TAU_TRACK = 0.2;
-const double AnalysisHandlerCMS_8TeV_LLP::PTMIN_TAU_TRACK = 1.0;
+const double AnalysisHandlerATLAS_13TeV::DR_TAU_TRACK = 0.2;
+const double AnalysisHandlerATLAS_13TeV_LLP::PTMIN_TAU_TRACK = 1.0;
 
-const double AnalysisHandlerCMS_8TeV_LLP::DR_TAU_TRUTH = 0.2;
-const double AnalysisHandlerCMS_8TeV_LLP::ETAMAX_TAU_TRUTH = 2.5;
-const double AnalysisHandlerCMS_8TeV_LLP::PTMIN_TAU_TRUTH = 1.0;
+const double AnalysisHandlerATLAS_13TeV_LLP::DR_TAU_TRUTH = 0.2;
+const double AnalysisHandlerATLAS_13TeV_LLP::ETAMAX_TAU_TRUTH = 2.5;
+const double AnalysisHandlerATLAS_13TeV_LLP::PTMIN_TAU_TRUTH = 10.0;
 
-const double AnalysisHandlerCMS_8TeV_LLP::DR_B_TRUTH = 0.4;
-const double AnalysisHandlerCMS_8TeV_LLP::ETAMAX_B_TRUTH = 2.5;
-const double AnalysisHandlerCMS_8TeV_LLP::PTMIN_B_TRUTH = 1.0;
+const double AnalysisHandlerATLAS_13TeV_LLP::DR_B_TRUTH = 0.4;
+const double AnalysisHandlerATLAS_13TeV_LLP::ETAMAX_B_TRUTH = 2.5;
+const double AnalysisHandlerATLAS_13TeV_LLP::PTMIN_B_TRUTH = 1.0;
 
-
-AnalysisHandlerCMS_8TeV_LLP::AnalysisHandlerCMS_8TeV_LLP() : AnalysisHandler() {
+AnalysisHandlerATLAS_13TeV_LLP::AnalysisHandlerATLAS_13TeV_LLP() : AnalysisHandler() {
 }
 
-AnalysisHandlerCMS_8TeV_LLP::~AnalysisHandlerCMS_8TeV_LLP() {
+AnalysisHandlerATLAS_13TeV_LLP::~AnalysisHandlerATLAS_13TeV_LLP() {
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::initialize() {
+void AnalysisHandlerATLAS_13TeV_LLP::initialize() {
+  // Add reading of PDGids of LLPs
+  
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::finalize() {
+void AnalysisHandlerATLAS_13TeV_LLP::finalize() {
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::bookAnalysis(std::string analysisName,
-                                      Tag_Map whichTags,
-                                      Param_Map eventParameters) {
+void AnalysisHandlerATLAS_13TeV_LLP::bookAnalysis(std::string analysisName,
+                                        Tag_Map whichTags,
+                                        Param_Map eventParameters) {
     Global::print(name, "Loading Analysis "+analysisName);
 
     AnalysisBase* a = NULL;
-    if(analysisName == "cms_1303_2985")
-        a = new Cms_1303_2985();
-    else if(analysisName == "cms_1303_2985_CR")
-        a = new Cms_1303_2985_CR();
-    else if(analysisName == "cms_1301_4698_WW")
-        a = new Cms_1301_4698_ww();
-    else if(analysisName == "cms_1405_7570")
-        a = new Cms_1405_7570();
-    else if(analysisName == "cms_1408_3583")
-        a = new Cms_1408_3583();
-    else if(analysisName == "cms_1502_06031")
-        a = new Cms_1502_06031();
-    else if(analysisName == "cms_1504_03198")
-        a = new Cms_1504_03198();
-    else if(analysisName == "cms_smp_12_006")
-        a = new Cms_smp_12_006();
-    else if(analysisName == "cms_sus_12_019")
-        a = new Cms_sus_12_019();
-    else if(analysisName == "cms_sus_13_016")
-        a = new Cms_sus_13_016();   
-    else if(analysisName == "cms_exo_14_014")
-        a = new Cms_exo_14_014();
-    else if(analysisName == "cms_1409_4789")
-        a = new Cms_1409_4789();
+    if(analysisName == "atlas_1602_09058")
+        a = new Atlas_1602_09058();
+    else if(analysisName == "atlas_1604_01306")
+        a = new Atlas_1604_01306();
+    else if(analysisName == "atlas_1604_07773")
+        a = new Atlas_1604_07773();
+    else if(analysisName == "atlas_1605_03814")
+        a = new Atlas_1605_03814();
+    else if(analysisName == "atlas_1605_04285")
+        a = new Atlas_1605_04285();
+    else if(analysisName == "atlas_1605_09318")
+        a = new Atlas_1605_09318();
+    else if(analysisName == "atlas_1606_03903")
+        a = new Atlas_1606_03903();
+    else if(analysisName == "atlas_1609_01599")
+        a = new Atlas_1609_01599();
+    else if(analysisName == "atlas_1704_03848")
+        a = new Atlas_1704_03848();
+    else if(analysisName == "atlas_1709_04183")
+        a = new Atlas_1709_04183();
+    else if(analysisName == "atlas_conf_2015_082")
+        a = new Atlas_conf_2015_082();
+    else if(analysisName == "atlas_conf_2016_013")
+        a = new Atlas_conf_2016_013();
+    else if(analysisName == "atlas_conf_2016_050")
+        a = new Atlas_conf_2016_050();
+    else if(analysisName == "atlas_conf_2016_054")
+        a = new Atlas_conf_2016_054();
+    else if(analysisName == "atlas_conf_2016_076")
+        a = new Atlas_conf_2016_076();
+    else if(analysisName == "atlas_conf_2016_078")
+        a = new Atlas_conf_2016_078();
+    else if(analysisName == "atlas_conf_2016_096")
+        a = new Atlas_conf_2016_096();
+    else if(analysisName == "atlas_1712_08119")
+        a = new Atlas_1712_08119();
+    else if(analysisName == "atlas_1712_02332")
+        a = new Atlas_1712_02332();
+    else if(analysisName == "atlas_1802_03158")
+        a = new Atlas_1802_03158();
+    else if(analysisName == "atlas_1708_07875")
+        a = new Atlas_1708_07875();
+    else if(analysisName == "atlas_conf_2016_066")
+        a = new Atlas_conf_2016_066();
+    else if(analysisName == "atlas_conf_2017_060")
+        a = new Atlas_conf_2017_060();
+    else if(analysisName == "atlas_1706_03731")
+        a = new Atlas_1706_03731();
+    else if(analysisName == "atlas_1902_01636")
+        a = new Atlas_1902_01636();
+    else if(analysisName == "atlas_1908_08215")
+        a = new Atlas_1908_08215();
+    else if(analysisName == "atlas_1909_08457")
+        a = new Atlas_1909_08457();
+    else if(analysisName == "atlas_conf_2019_040")
+        a = new Atlas_conf_2019_040();
+    else if(analysisName == "atlas_1710_04901")
+        a = new Atlas_1710_04901();
+    else if(analysisName == "atlas_2003_11956")
+        a = new Atlas_2003_11956();
+    else if(analysisName == "atlas_conf_2019_018")
+        a = new Atlas_conf_2019_018();
     else //@@extracode@@
         Global::abort(name,
                       "Cannot load analysis "+analysisName+
@@ -72,7 +111,8 @@ void AnalysisHandlerCMS_8TeV_LLP::bookAnalysis(std::string analysisName,
                   "Successfully loaded analysis "+analysisName);
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::postProcessParticles() {
+
+void AnalysisHandlerATLAS_13TeV_LLP::postProcessParticles() {
     // First do all the mother handler processions
     AnalysisHandler::postProcessParticles();
 
@@ -84,7 +124,7 @@ void AnalysisHandlerCMS_8TeV_LLP::postProcessParticles() {
     tagTauJets();
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::identifyPhotons() {
+void AnalysisHandlerATLAS_13TeV_LLP::identifyPhotons() {
     double pEffMed = 0;
     Photon* cand = NULL;
 
@@ -102,8 +142,8 @@ void AnalysisHandlerCMS_8TeV_LLP::identifyPhotons() {
     }
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::identifyElectrons() {
-    double eEffMed = 0, eEffTigOvMed = 0;
+void AnalysisHandlerATLAS_13TeV_LLP::identifyElectrons() {
+    double eEffMed = 0, eEffTigOvMed = 0, eEffLoo = 0;
     Electron* cand = NULL;
 
     electronsLoose.clear();
@@ -113,9 +153,11 @@ void AnalysisHandlerCMS_8TeV_LLP::identifyElectrons() {
         cand = electrons[e];
         // tag 0 is the loose isolation condition
         if (electronIsolationTags[cand][0]) {
+	  eEffLoo = electronRecEff(cand->PT, cand->Eta) *
+                      electronIDEffLoose(cand->PT, cand->Eta);
+	  if (rand()/(RAND_MAX+1.) <  eEffLoo) {
             electronsLoose.push_back(cand);
-            eEffMed = electronRecEff(cand->PT, cand->Eta) *
-                      electronIDEffMedium(cand->PT, cand->Eta);
+            eEffMed = electronIDEffMedium(cand->PT, cand->Eta);
             if (rand()/(RAND_MAX+1.) <  eEffMed) {
                 electronsMedium.push_back(cand);
                 eEffTigOvMed = electronIDEffTightOverMedium(cand->PT,
@@ -123,11 +165,12 @@ void AnalysisHandlerCMS_8TeV_LLP::identifyElectrons() {
                 if (rand()/(RAND_MAX+1.) <  eEffTigOvMed)
                     electronsTight.push_back(cand);
             }
+	  }  
         }
     }
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::identifyMuons()  {
+void AnalysisHandlerATLAS_13TeV_LLP::identifyMuons()  {
     double mEffComb = 0, mEffCombPlus = 0;
     Muon* cand = NULL;
 
@@ -151,7 +194,10 @@ void AnalysisHandlerCMS_8TeV_LLP::identifyMuons()  {
     }
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::tagBJets() {
+static double bBkg_l_eff(double pt, double eta, double wp);
+static double bBkg_c_eff(double pt, double eta, double wp);
+
+void AnalysisHandlerATLAS_13TeV_LLP::tagBJets() {
    Jet* cand = NULL; // The to-be-checked candidate
    // The candidate's probability and its pass-limit to be tagged
    double prob = 0, pass_prob = 0;
@@ -175,7 +221,7 @@ void AnalysisHandlerCMS_8TeV_LLP::tagBJets() {
               if(true_b[b]->PT > PTMIN_B_TRUTH &&
                 fabs(true_b[b]->Eta) < ETAMAX_B_TRUTH &&
                  true_b[b]->P4().DeltaR(cand->P4()) < DR_B_TRUTH) {
-                  eff_function = &AnalysisHandlerCMS_8TeV_LLP::bSigEff;
+                  eff_function = &AnalysisHandlerATLAS_13TeV_LLP::bSigEff;
                   break;
               }
           }
@@ -185,29 +231,31 @@ void AnalysisHandlerCMS_8TeV_LLP::tagBJets() {
                   if(true_c[c]->PT > PTMIN_B_TRUTH &&
                      fabs(true_c[c]->Eta) < ETAMAX_B_TRUTH &&
                      true_c[c]->P4().DeltaR(cand->P4()) < DR_B_TRUTH) {
-                      eff_function = &AnalysisHandlerCMS_8TeV_LLP::bBkgCJetEff;
+                      eff_function = &bBkg_c_eff;
                       break;
                   }
               }
           }
           // If no b and no c overlap, use light jet Rej
-          if (eff_function == NULL)
-              eff_function = &AnalysisHandlerCMS_8TeV_LLP::bBkgLJetEff;
+          if (eff_function == NULL) {
+              eff_function = &bBkg_l_eff;
+	  }
 
           // Now that we know the right function to use, lets tag
           for(int btag = 0; btag < listOfJetBTags.size(); btag++) {
               pass_prob = (*eff_function)(cand->PT, cand->Eta,
                                                 listOfJetBTags[btag]->eff);
-              if (prob < pass_prob)
+              if (fabs(cand->P4().Eta()) < ETAMAX_B_TRUTH && prob < pass_prob) {
                       bTags.push_back(true);
-              else
+	      } else {
                   bTags.push_back(false);
+	      }
           }
           jetBTags[jets[j]] = bTags;
       }
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::tagTauJets() {
+void AnalysisHandlerATLAS_13TeV_LLP::tagTauJets() {
     Jet* cand = NULL; // currently tested jet candidate
     // pointer to the right efficiency functions
     Eff_Fun_Ptr2 effFunLoose = NULL, effFunMedium = NULL, effFunTight = NULL;
@@ -256,14 +304,14 @@ void AnalysisHandlerCMS_8TeV_LLP::tagTauJets() {
               fabs(true_tau[t]->Eta) < ETAMAX_TAU_TRUTH  &&
               cand->P4().DeltaR(true_tau[t]->P4()) < DR_TAU_TRUTH) {
                if(prongs > 1) {
-                   effFunLoose = &AnalysisHandlerCMS_8TeV_LLP::tauSigEffMultiLoose;
-                   effFunMedium = &AnalysisHandlerCMS_8TeV_LLP::tauSigEffMultiMedium;
-                   effFunTight = &AnalysisHandlerCMS_8TeV_LLP::tauSigEffMultiTight;
+                   effFunLoose = &AnalysisHandlerATLAS_13TeV_LLP::tauSigEffMultiLoose;
+                   effFunMedium = &AnalysisHandlerATLAS_13TeV_LLP::tauSigEffMultiMedium;
+                   effFunTight = &AnalysisHandlerATLAS_13TeV_LLP::tauSigEffMultiTight;
                }
                else {
-                   effFunLoose = &AnalysisHandlerCMS_8TeV_LLP::tauSigEffSingleLoose;
-                   effFunMedium = &AnalysisHandlerCMS_8TeV_LLP::tauSigEffSingleMedium;
-                   effFunTight = &AnalysisHandlerCMS_8TeV_LLP::tauSigEffSingleTight;
+                   effFunLoose = &AnalysisHandlerATLAS_13TeV_LLP::tauSigEffSingleLoose;
+                   effFunMedium = &AnalysisHandlerATLAS_13TeV_LLP::tauSigEffSingleMedium;
+                   effFunTight = &AnalysisHandlerATLAS_13TeV_LLP::tauSigEffSingleTight;
                }
                break;
            }
@@ -271,14 +319,14 @@ void AnalysisHandlerCMS_8TeV_LLP::tagTauJets() {
        // In case no overlap was found, use background efficiencies
        if(effFunLoose == NULL) {
            if(prongs > 1) {
-               effFunLoose = &AnalysisHandlerCMS_8TeV_LLP::tauBkgEffMultiLoose;
-               effFunMedium = &AnalysisHandlerCMS_8TeV_LLP::tauBkgEffMultiMedium;
-               effFunTight = &AnalysisHandlerCMS_8TeV_LLP::tauBkgEffMultiTight;
+               effFunLoose = &AnalysisHandlerATLAS_13TeV_LLP::tauBkgEffMultiLoose;
+               effFunMedium = &AnalysisHandlerATLAS_13TeV_LLP::tauBkgEffMultiMedium;
+               effFunTight = &AnalysisHandlerATLAS_13TeV_LLP::tauBkgEffMultiTight;
            }
            else {
-               effFunLoose = &AnalysisHandlerCMS_8TeV_LLP::tauBkgEffSingleLoose;
-               effFunMedium = &AnalysisHandlerCMS_8TeV_LLP::tauBkgEffSingleMedium;
-               effFunTight = &AnalysisHandlerCMS_8TeV_LLP::tauBkgEffSingleTight;
+               effFunLoose = &AnalysisHandlerATLAS_13TeV_LLP::tauBkgEffSingleLoose;
+               effFunMedium = &AnalysisHandlerATLAS_13TeV_LLP::tauBkgEffSingleMedium;
+               effFunTight = &AnalysisHandlerATLAS_13TeV_LLP::tauBkgEffSingleTight;
            }
        }
        // Now that we know the right function to use, lets tag
@@ -298,7 +346,7 @@ void AnalysisHandlerCMS_8TeV_LLP::tagTauJets() {
    }
 }
 
-void AnalysisHandlerCMS_8TeV_LLP::linkObjects() {
+void AnalysisHandlerATLAS_13TeV_LLP::linkObjects() {
     AnalysisHandler::linkObjects();
     // Linking Particle Objects and run analyses
     for (int a = 0; a < listOfAnalyses.size(); a++) {
@@ -329,152 +377,74 @@ void AnalysisHandlerCMS_8TeV_LLP::linkObjects() {
 }
 
 
-double AnalysisHandlerCMS_8TeV_LLP::photonEffMedium(double pt,
+double AnalysisHandlerATLAS_13TeV_LLP::photonEffMedium(double pt,
                                              double eta) {
-    // TODO: Implement proper function (currently this is standard Delphes)
-    return  (fabs(eta) <= 1.5) * (pt > 10.0)  * (0.95) +
-            (fabs(eta) > 1.5)*(fabs(eta) <= 2.5)*(pt > 10.0) * (0.85);
+    // TODO: Implement proper function 
+    //  https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PLOTS/EGAM-2016-003/fig_02.pdf
+    // (converted)
+    //  not verified with MC 
+    return  (pt > 35.0)  * 0.95 +
+            (pt > 30.0) * (pt < 35.) * 0.90 +
+	    (pt > 25.0) * (pt < 30.) * 0.85 +
+	    (pt > 20.0) * (pt < 25.) * 0.78 +
+	    (pt > 15.0) * (pt < 20.) * 0.66;
 }
 
 
-double AnalysisHandlerCMS_8TeV_LLP::electronRecEff(double pt,
+double AnalysisHandlerATLAS_13TeV_LLP::electronRecEff(double pt,
                                             double eta) {
-    const double r1 = 0.98741;
-    const double r2 = 0.0127525;
-    const double r3 = -0.0175679;
-    const double r4 = 0.00521283;
-    const double r5 = -0.000449114;
-    // Reconstruction: ATL-COM-PHYS-2013-1287
-    double rec_eff = r1+r2*pow(eta, 2)+r3*pow(eta, 4)+
-                        r4*pow(eta, 6)+r5*pow(eta, 8);
-    return (fabs(eta) < 2.5)*(pt>7.0)*rec_eff;
+    // https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/CONFNOTES/ATLAS-CONF-2016-024/
+    // takes into account intial Delphes inefficiency
+    return 1.0;
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::electronIDEffMedium(double pt,
+
+double AnalysisHandlerATLAS_13TeV_LLP::electronIDEffLoose(double pt,
                                                double eta) {
-    const double m1 = 0.766841;
-    const double m2 = 0.1509;
-    const double m3 = 0.145237;
-    const double m4 = 29.1152;
-    // Identification: ATL-COM-PHYS-2013-1287
-    double id_eff_medium = (pt<80)*(m1+m2/(1.+exp(-m3*(pt-m4))))+
-                           (pt>80)*0.945052;
-    return id_eff_medium;
+    // tuned to https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PLOTS/EGAM-2016-002/fig_01.png
+    // https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/CONFNOTES/ATLAS-CONF-2016-024/
+    double id_eff_loose = 0.976 - 0.0614*exp(1.-pt/29.1) 
+                    +  0.024;		//shift for Delphes correction	   
+    return id_eff_loose;
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::electronIDEffTightOverMedium(double pt,
+double AnalysisHandlerATLAS_13TeV_LLP::electronIDEffMedium(double pt,
+                                               double eta) {
+    // tuned to https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PLOTS/EGAM-2016-002/fig_01.png
+    // https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/CONFNOTES/ATLAS-CONF-2016-024/
+    double id_eff_loose = 0.976 - 0.0614*exp(1.-pt/29.1); //truth function without correction
+    double id_eff_medium = 0.937 - 0.109*exp(1.-pt/21.);			   
+    return id_eff_medium/id_eff_loose;
+}
+
+double AnalysisHandlerATLAS_13TeV_LLP::electronIDEffTightOverMedium(double pt,
                                                         double eta) {
-
-    const double u1 = 0.674979;
-    const double u2 = 0.160224;
-    const double u3 = 1.91773;
-    double id_eff_tight_eta = (u1+u2*exp(-pow(eta/u3, 2)))/0.776796;
-
-    const double t1 = 0.564986;
-    const double t2 = 0.279235;
-    const double t3 = 0.078647;
-    const double t4 = 22.2707;
-    // Identification_Tight: ATL-COM-PHYS-2013-1287
-    //double id_eff_tight_ET = (pt<80)*(t1+t2/(1.+exp(-t3*(pt-t4))))+
-    //                         (pt>80)*0.883427;
-    //return id_eff_tight_ET*id_eff_tight_eta/electronIDEffMedium(pt, eta);
-
-    // TODO The following version is a buggy version which was present in
-    // CM1 and is kept for compatibility. It should be tested and
-    // maybe set to the actual version above at some point
-
-    double id_eff_tight_ET = (pt<80)*(t1+t2/(1.+exp(-t3*(pt-t4))))+
-                             (pt>80)*0.883427*id_eff_tight_eta;
-    return id_eff_tight_ET/electronIDEffMedium(pt, eta);
+    // tuned to https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PLOTS/EGAM-2016-002/fig_01.png
+    // https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/CONFNOTES/ATLAS-CONF-2016-024/
+    double id_eff_medium = 0.937 - 0.109*exp(1.-pt/21.);
+    double id_eff_tight = 0.8885 - 0.138*exp(1.-pt/27.45);			     
+    return id_eff_tight/id_eff_medium;
 }
 
 
-double AnalysisHandlerCMS_8TeV_LLP::muonEffCombOverCombPlus(double phi,
+double AnalysisHandlerATLAS_13TeV_LLP::muonEffCombOverCombPlus(double phi,
                                                      double eta) {
-    // TODO This is to ensure compatibility with CM1, but should
-    // be retested and removed at some point
-    phi = 0;
-    // Reconstruction efficiency mainly depends on position in MS
-    // {CMS-CONF-2011-063}
-    if(fabs(eta) > 2.5)
-        return 0;
-    if(fabs(phi) > M_PI)
-        return 0;
-    if(fabs(eta) < 0.1)
-        return 1;
-
-    // Determine position in discrete eta-phi-map [Fig 2]
-    int eta_i, phi_i;
-    for(eta_i = 0; eta_i < 21; eta_i++) {
-        if(etaProj[eta_i] >= eta)
-            break;
-    }
-    for(phi_i = 0; phi_i < 53; phi_i++) {
-        if(phiProj[phi_i] < phi)
-            break;
-    }
-    phi_i--;
-    // [ Fig 6b) ] divided by CombinedPlus
-    switch(detMap[phi_i][eta_i]) {
-    case cscsm: return 0.959972/0.983203;
-    case cscla: return 0.966359/0.988252;
-    case bee: return 0.967215/0.993096;
-    case endsm: return 0.975844/0.994126;
-    case endla: return 0.969557/0.992271;
-    case trans: return 0.968593/0.992683;
-    case feet: return 0.943484/0.959913;
-    case barov: return 0.943484/0.959913;
-    case barsm: return 0.977322/0.993508;
-    case barla: return  0.919635/0.926731;
-    }
-    return 0;
+    // https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/PERF-2015-10/fig_03b.png
+    // tuned to MC
+    return 0.98;
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::muonEffCombPlus(double phi,
+double AnalysisHandlerATLAS_13TeV_LLP::muonEffCombPlus(double phi,
                                              double eta) {
-    // TODO This is to ensure compatibility with CM1, but should
-    // be retested and removed at some point
-    phi = 0;
-
-    // Reconstruction efficiency mainly depends on position in MS
-    // {CMS-CONF-2011-063}
-    if(fabs(eta) > 2.5)
-        return 0;
-    if(fabs(phi) > M_PI)
-        return 0;
-    if(fabs(eta) < 0.1)
-        return 0.83; // [Fig 6 f)]
-
-    // Determine position in discrete eta-phi-map [Fig 2]
-    int eta_i, phi_i;
-    for(eta_i = 0; eta_i < 21; eta_i++) {
-        if(etaProj[eta_i] >= eta)
-            break;
-    }
-    for(phi_i = 0; phi_i < 53; phi_i++) {
-        if(phiProj[phi_i] < phi)
-            break;
-    }
-    phi_i--;
-
-    // [ Fig 6b) ]
-        switch(detMap[phi_i][eta_i]) {
-        case cscsm: return 0.983203;
-        case cscla: return 0.988252;
-        case bee: return 0.993096;
-        case endsm: return 0.994126;
-        case endla: return 0.992271;
-        case trans: return 0.992683;
-        case feet: return 0.984439;
-        case barov: return 0.959913;
-        case barsm: return 0.993508;
-        case barla: return 0.926731;
-        }
-        return 0;
+    // https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/PERF-2015-10/fig_03a.png
+    // https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/PERF-2015-10/
+    // ignore pt dependence https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/PERF-2015-10/fig_06.png
+    if (fabs(eta) < 0.1 ) return 0.6;
+    return 1.;
 }
 
 
-double AnalysisHandlerCMS_8TeV_LLP::tauSigEffSingleLoose(double pt,
+double AnalysisHandlerATLAS_13TeV_LLP::tauSigEffSingleLoose(double pt,
                                                   double eta) {
     double eff_s1loose_eta;
     {
@@ -533,7 +503,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauSigEffSingleLoose(double pt,
           //((fabs(eta)<=1.5)*0.95 + (fabs(eta)>1.5)*0.85);
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::tauSigEffSingleMedium(double pt,
+double AnalysisHandlerATLAS_13TeV_LLP::tauSigEffSingleMedium(double pt,
                                                    double eta) {
     double eff_s1medium_eta;
     {
@@ -592,7 +562,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauSigEffSingleMedium(double pt,
           //((fabs(eta)<=1.5)*0.95 + (fabs(eta)>1.5)*0.85);
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::tauSigEffSingleTight(double pt,
+double AnalysisHandlerATLAS_13TeV_LLP::tauSigEffSingleTight(double pt,
                                                   double eta) {
     double eff_s1tight_eta;
     {
@@ -654,7 +624,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauSigEffSingleTight(double pt,
 }
 
 
-double AnalysisHandlerCMS_8TeV_LLP::tauSigEffMultiLoose(double pt,
+double AnalysisHandlerATLAS_13TeV_LLP::tauSigEffMultiLoose(double pt,
                                                  double eta) {
     const double x0 = 15;
     const double A1 = 0.594;
@@ -676,7 +646,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauSigEffMultiLoose(double pt,
            (pt >= 80. + 2./C2)*C1*pow(2./C2,2)*exp(-2.);
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::tauSigEffMultiMedium(double pt,
+double AnalysisHandlerATLAS_13TeV_LLP::tauSigEffMultiMedium(double pt,
                                                   double eta) {
     const double x0 = 15;
     const double A1 = 0.510;
@@ -698,7 +668,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauSigEffMultiMedium(double pt,
            (pt >= 80. + 2./C2)*C1*pow(2./C2,2)*exp(-2.);
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::tauSigEffMultiTight(double pt,
+double AnalysisHandlerATLAS_13TeV_LLP::tauSigEffMultiTight(double pt,
                                                  double eta) {
     const double x0 = 15;
     const double A1 = 0.324;
@@ -721,7 +691,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauSigEffMultiTight(double pt,
 }
 
 
-double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffSingleLoose(double pt,
+double AnalysisHandlerATLAS_13TeV_LLP::tauBkgEffSingleLoose(double pt,
                                                   double eta) {
     const double A1 = 0.717;
     const double B1 = 0.0789;
@@ -737,7 +707,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffSingleLoose(double pt,
           //((fabs(eta)<=1.5)*0.95 + (fabs(eta)>1.5)*0.85);
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffSingleMedium(double pt,
+double AnalysisHandlerATLAS_13TeV_LLP::tauBkgEffSingleMedium(double pt,
                                                    double eta) {
     const double A1 = 0.301;
     const double B1 = 0.0720;
@@ -752,7 +722,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffSingleMedium(double pt,
           //((fabs(eta)<=1.5)*0.95 + (fabs(eta)>1.5)*0.85);
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffSingleTight(double pt,
+double AnalysisHandlerATLAS_13TeV_LLP::tauBkgEffSingleTight(double pt,
                                                   double eta) {
     const double A1 = 0.117;
     const double B1 = 0.0742;
@@ -769,7 +739,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffSingleTight(double pt,
 }
 
 
-double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffMultiLoose(double pt,
+double AnalysisHandlerATLAS_13TeV_LLP::tauBkgEffMultiLoose(double pt,
                                                  double eta) {
     const double A1 = 0.265;
     const double B1 = 0.0827;
@@ -781,7 +751,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffMultiLoose(double pt,
            (pt >= 80)*(D1*(1.-1./(1.+exp(E1*(pt-F1)))));
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffMultiMedium(double pt,
+double AnalysisHandlerATLAS_13TeV_LLP::tauBkgEffMultiMedium(double pt,
                                                   double eta) {
     const double A1 = 0.154;
     const double B1 = 0.0832;
@@ -793,7 +763,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffMultiMedium(double pt,
            (pt >= 80)*(D1*(1.-1./(1.+exp(E1*(pt-F1)))));
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffMultiTight(double pt,
+double AnalysisHandlerATLAS_13TeV_LLP::tauBkgEffMultiTight(double pt,
                                                  double eta) {
     const double A1 = 0.0579;
     const double B1 = 0.0880;
@@ -805,8 +775,7 @@ double AnalysisHandlerCMS_8TeV_LLP::tauBkgEffMultiTight(double pt,
            (pt >= 80)*(D1*(1.-1./(1.+exp(E1*(pt-F1)))));
 }
 
-
-double AnalysisHandlerCMS_8TeV_LLP::bSigEff(double pt,
+double AnalysisHandlerATLAS_13TeV_LLP::bSigEff(double pt,
                                      double eta,
                                      double eff) {
     const double y0 = 0.5523;
@@ -814,63 +783,303 @@ double AnalysisHandlerCMS_8TeV_LLP::bSigEff(double pt,
     const double A = 0.2102;
     const double k = 0.1258;
     const double r = 308.197;
-    return eff/0.82*(y0+A*1./(1.+exp(-k*(pt-x0))))*(0.7+0.05*exp(-pt/r))/0.75*
+    return 1.1*eff/0.82*(y0+A*1./(1.+exp(-k*(pt-x0))))*(0.7+0.05*exp(-pt/r))/0.75*
            ((pt>100)*(1.+(pt-100.)*(-0.0007))+(pt<=100)*1);
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::bBkgCJetRej(double eff) {
-    const double A = 29.2836;
-    const double c = -4.57183;
-    const double d = 8.49607;
-    const double f = -7.25358;
-    const double g = 2.33026;
-    return pow(10,(A*(eff+c*pow(eff,2)+d*pow(eff,3)+
-                          f*pow(eff,4)+g*pow(eff,5))));
+//! Scaling behavior of the efficiency to tag a c-jet as a b-jet with
+//! the working point of the b-tagger
+//! This function was fitted to Fig. 11(b) (MV2c20 Run-2) from
+//! ATL-PHYS-PUB-2015-022
+static double bBkg_c_scale_function(double wp) {
+	double quadratic = 7.38943;
+	double linear = -19.695;
+	double constant = 12.3817;
+	return exp(quadratic*pow(wp,2) + linear*wp + constant);
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::bBkgCJetEff(double pt,
-                                         double eta,
-                                         double eff) {
-    return 0.4*(0.460622*1./(1.+exp(-0.0463993*(pt-20.4359))))*
-           bBkgCJetRej(0.7)/bBkgCJetRej(eff);
+//! Dependence of the efficiency to tag a c-jet as a b-jet on the
+//! pseudo rapidity
+//! This function was fitted to Fig. 10(b), 14(b), 15(b), 16(b)
+//! (c-jets) from ATL-PHYS-PUB-2015-022
+static double bBkg_c_eff_eta(double eta, double wp) {
+	double wp_quadratic = 1.11636810e+02;
+	double wp_linear =  -1.42894910e+02;
+	double eta_quadratic = 1.28569172e-04;
+	double eta_linear = -2.15249612e-06;
+	double eta_constant = -2.97456434e-03;
+	double aeta = fabs(eta);
+	return (
+		bBkg_c_scale_function(0.7) / bBkg_c_scale_function(wp)
+		* (eta_quadratic*pow(aeta,2) + eta_linear*aeta + eta_constant)
+		* (wp_quadratic*pow(wp,2) + wp_linear*wp + 1)
+		);
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::bBkgLJetRej(double eff) {
-    const double A  = 54.3809;
-    const double c  = -4.15601;
-    const double d  = 7.59943;
-    const double f  = -6.72996;
-    const double g  = 2.28954;
-    const double A2 = 5806.98;
-    const double B2 = -24674.2;
-    const double C2 = 39321.6;
-    const double D2 = -27849.7;
-    const double E2 = 7395.3;
-    if (eff < 0.86) {
-        return pow(10, (A*(eff+c*pow(eff, 2)+d*pow(eff, 3)+
-                               f*pow(eff, 4)+g*pow(eff, 5))));
-    }
-    else {
-        return pow(10, A2+B2*eff+C2*pow(eff, 2)+D2*pow(eff,3)+E2*pow(eff,4));
-    }
+static double bBkg_c_pt_piece_1_constant(double wp) {
+	double constant_constant = -0.03287989;
+	double constant_linear = 0.37516101;
+	double constant_quadratic = -0.28836324;
+	return constant_constant + constant_linear*wp + constant_quadratic*pow(wp,2);
 }
 
-double AnalysisHandlerCMS_8TeV_LLP::bBkgLJetEff(double pt,
-                                         double eta,
-                                         double eff) {
-    const double f0 = 0.0105802;
-    const double f1 = 6.46503e-06;
-    const double f2 = 4.02822e-08;
-    const double g0 = 0.00661067;
-    const double g1 = 6.48582e-05;
-    const double g2 = -3.123e-08;
-    return 0.8*((fabs(eta)<=1.3)*(f0+f1*pt+f2*pt*pt)+
-                (fabs(eta)>1.3)*(fabs(eta)<2.5)*(g0+g1*pt+g2*pt*pt)
-               )*bBkgLJetRej(0.7)/bBkgLJetRej(eff);
+static double bBkg_c_pt_piece_1_linear(double wp) {
+	double linear_constant = 1.02399891e-3;
+	double linear_linear = -2.0949067e-4;
+	double linear_quadratic = -4.9999636e-5;
+	return linear_constant + linear_linear*wp + linear_quadratic*pow(wp,2);
 }
 
+static double bBkg_c_pt_piece_1(double pt, double wp) {
+	return bBkg_c_pt_piece_1_constant(wp) + pt * bBkg_c_pt_piece_1_linear(wp);
+}
 
-const AnalysisHandlerCMS_8TeV_LLP::muonDetector AnalysisHandlerCMS_8TeV_LLP::detMap[53][21] = {{cscla, endla, endla, endla, endla, endla, endla, trans, barla, barla, barla, barla, barla, trans, endla, endla, endla, endla, endla, endla, cscla},
+static double bBkg_c_pt_piece_2_constant(double wp) {
+	double constant_constant = 0.51295139;
+	double constant_linear = -0.94078135;
+	double constant_quadratic = 0.57573368;
+	return constant_constant + constant_linear*wp + constant_quadratic*pow(wp, 2);
+}
+
+static double bBkg_c_pt_piece_2_linear(double wp) {
+	double linear_constant = 0.21311996e-3;
+	double linear_linear = -3.51827713e-4;
+	double linear_quadratic = -5.19590178e-5;
+	return linear_constant + linear_linear*wp + linear_quadratic*pow(wp, 2);
+}
+
+static double bBkg_c_pt_piece_2(double pt, double wp) {
+	return bBkg_c_pt_piece_2_constant(wp) + pt * bBkg_c_pt_piece_2_linear(wp);
+}
+
+static double bBkg_c_pt_piece_3_constant(double wp) {
+	double constant_constant = 1.31136903;
+	double constant_linear = -2.67236013;
+	double constant_quadratic = 1.50970306;
+	return constant_constant + constant_linear*wp + constant_quadratic*pow(wp, 2);
+}
+
+static double bBkg_c_pt_piece_3_linear(double wp) {
+	double linear_constant = -2.13367866e-3;
+	double linear_linear = 44.34881246e-4;
+	double linear_quadratic = -245.44615397e-5;
+	return linear_constant + linear_linear*wp + linear_quadratic*pow(wp, 2);
+}
+
+static double bBkg_c_pt_piece_3(double pt, double wp) {
+	return bBkg_c_pt_piece_3_constant(wp) + pt * bBkg_c_pt_piece_3_linear(wp);
+}
+
+//! Pt dependence of the efficiency to tag a c-jet as a b-jet
+//! This function was fitted to Fig. 10(a), 14(a), 15(a), 16(a)
+//! (c-jets) from ATL-PHYS-PUB-2015-022
+// The result is a piecewise function, where each piece can change its
+// shape with the working point, because the shape of the data points
+// that were fitted changes with the working point.
+static double bBkg_c_eff_pt(double pt, double wp) {
+	double scale_factor = bBkg_c_scale_function(0.7) / bBkg_c_scale_function(wp);
+
+	// The scaling of the 3 pieces only works for working points between
+	// 60 and 85%. For working points outside of this range the pieces
+	// are fixed to working points of either 60 or 85, and are scaled
+	// with the scale factor.
+	double wp_reg = fmax(0.6, fmin(0.85, wp));
+
+	// Intersection points between the 3 different pieces
+	double int12 = (bBkg_c_pt_piece_1_constant(wp_reg)-bBkg_c_pt_piece_2_constant(wp_reg)) / (bBkg_c_pt_piece_2_linear(wp_reg) - bBkg_c_pt_piece_1_linear(wp_reg));
+	double int23 = (bBkg_c_pt_piece_2_constant(wp_reg)-bBkg_c_pt_piece_3_constant(wp_reg)) / (bBkg_c_pt_piece_3_linear(wp_reg) - bBkg_c_pt_piece_2_linear(wp_reg));
+
+	if (pt < int12) {
+		return scale_factor * bBkg_c_pt_piece_1(pt, wp_reg);
+	} else if (pt < int23) {
+		return scale_factor * bBkg_c_pt_piece_2(pt, wp_reg);
+	} else {
+		return scale_factor * bBkg_c_pt_piece_3(pt, wp_reg);
+	}
+}
+
+//! Compute the efficiency to tag a c-jet as a b-jet
+//!
+//! \param pt The pt of the c jet
+//! \param eta The pseudorapidity of the c jet
+//! \param wp The b-tagger working point (between 0 and 1)
+//!
+//! \return The c-jet efficiency for this specific point
+static double bBkg_c_eff(double pt, double eta, double wp) {
+	// The scale_function and the "anomalous" scaling are necessary,
+	// because the functions for pt and eta are both normalized to match the
+	// results from the paper.
+	// Their product therefore obviously is much to low, because each function
+	// is (sort of) normalized to the correct efficiency, so the product is
+	// (again sort of) proportional to the square of the correct normalization.
+	return (bBkg_c_eff_pt(pt, wp) * bBkg_c_eff_eta(eta, wp)
+			* bBkg_c_scale_function(wp)/bBkg_c_scale_function(0.7)
+			* 7.5*(1+(100*wp-60)/130));
+}
+
+static double bBkg_l_scale_function(double wp) {
+	double quadratic = -21.8718;
+	double linear = 14.4912;
+	double constant = 7.01694;
+	return exp(quadratic*pow(wp, 2) + linear*wp + constant);
+}
+
+//! Dependence of the efficiency to tag a light-jet as a b-jet on the
+//! pseudo rapidity
+//! This function was fitted to Fig. 10(b), 14(b), 15(b), 16(b)
+//! (Light-flavour jets) from ATL-PHYS-PUB-2015-022
+static double bBkg_l_eff_eta(double eta, double wp) {
+	double eta_quadratic = 6.77267369e-06;
+	double eta_linear = -9.85698520e-06;
+	double eta_constant = 2.79421560e-05;
+	double wp_quadratic = -1.98927123e+02;
+	double wp_linear = 2.49660023e+02;
+	return (bBkg_l_scale_function(0.7) / bBkg_l_scale_function(wp)
+			* (wp_quadratic*pow(wp, 2) + wp_linear*wp + 1)
+			* (eta_quadratic*pow(eta, 2) + eta_linear*eta + eta_constant));
+}
+
+static double bBkg_l_pt_piece_1_constant(double wp) {
+	double constant_constant = -0.00636633;
+	double constant_linear = 0.02279642;
+	double constant_quadratic = -0.01518515;
+	return constant_constant + constant_linear*wp + constant_quadratic*pow(wp, 2);
+}
+
+static double bBkg_l_pt_piece_1_linear(double wp) {
+	double linear_constant = 0.00038402;
+	double linear_linear = -0.00102704;
+	double linear_quadratic = 0.00068438;
+	return linear_constant + linear_linear*wp + linear_quadratic*pow(wp, 2);
+}
+
+static double bBkg_l_pt_piece_1(double pt, double wp) {
+	return bBkg_l_pt_piece_1_constant(wp) + (pt-30) * bBkg_l_pt_piece_1_linear(wp);
+}
+
+static double bBkg_l_pt_piece_2_constant(double wp) {
+	double constant_constant = 2.69621921e-03;
+	double constant_linear = -2.56834349e-03;
+	double constant_quadratic = 2.97800726e-03;
+	return constant_constant + constant_linear*wp + constant_quadratic*pow(wp, 2);
+}
+
+static double bBkg_l_pt_piece_2_linear(double wp) {
+	double linear_constant = 2.25854439e-05;
+	double linear_linear = -1.63662972e-05;
+	double linear_quadratic = -2.63208760e-05;
+	return linear_constant + linear_linear*wp + linear_quadratic*pow(wp, 2);
+}
+
+static double bBkg_l_pt_piece_2(double pt, double wp) {
+	return bBkg_l_pt_piece_2_constant(wp) + pt * bBkg_l_pt_piece_2_linear(wp);
+}
+
+static double bBkg_l_pt_piece_3_constant(double wp) {
+	double constant_constant = -4.30612912e-04;
+	double constant_linear = 2.39758489e-03;
+	return constant_constant + constant_linear*wp;
+}
+
+static double bBkg_l_pt_piece_3_linear(double wp) {
+	double linear_constant = 3.52623884e-05;
+	double linear_linear = -1.63456737e-05;
+	double linear_quadratic = -3.04310741e-05;
+	return linear_constant + linear_linear*wp + linear_quadratic*pow(wp, 2);
+}
+
+static double bBkg_l_pt_piece_3(double pt, double wp) {
+	return bBkg_l_pt_piece_3_constant(wp) + pt * bBkg_l_pt_piece_3_linear(wp);
+}
+
+static double bBkg_l_pt_piece_4_constant(double wp) {
+	double constant_constant = -5.38258976e-03;
+	double constant_linear = 7.41930035e-03;
+	return constant_constant + constant_linear*wp;
+}
+
+static double bBkg_l_pt_piece_4_linear(double wp) {
+	double linear_constant = 1.13092746e-04;
+	double linear_linear = -1.82133209e-04;
+	double linear_quadratic = 6.20045880e-05;
+	return linear_constant + linear_linear*wp + linear_quadratic*pow(wp, 2);
+}
+
+static double bBkg_l_pt_piece_4(double pt, double wp) {
+	return bBkg_l_pt_piece_4_constant(wp) + pt * bBkg_l_pt_piece_4_linear(wp);
+}
+
+static double bBkg_l_pt_piece_5_constant(double wp) {
+	double constant_constant = 0.0147271;
+	double constant_linear = -0.01530835;
+	return constant_constant + constant_linear*wp;
+}
+
+static double bBkg_l_pt_piece_5_linear(double wp) {
+	double linear_constant = 1.42521897e-5;
+	double linear_linear = -2.32021032e-5;
+	double linear_quadratic = 0.73802226e-5;
+	return linear_constant + linear_linear*wp + linear_quadratic*pow(wp, 2);
+}
+
+static double bBkg_l_pt_piece_5(double pt, double wp) {
+	return bBkg_l_pt_piece_5_constant(wp) + pt * bBkg_l_pt_piece_5_linear(wp);
+}
+
+//! Pt dependence of the efficiency to tag a light jet as a b-jet
+//! This function was fitted to Fig. 10(a), 14(a), 15(a), 16(a)
+//! (Light-flavour jets) from ATL-PHYS-PUB-2015-022
+// The result is a piecewise function, where each piece can change its
+// shape with the working point, because the shape of the data points
+// that were fitted changes with the working point.
+static double bBkg_l_eff_pt(double pt, double wp) {
+	double scale_factor = bBkg_l_scale_function(0.7) / bBkg_l_scale_function(wp);
+
+	// The scaling of the 5 pieces only works for working points between
+	// 60 and 85%. For working points outside of this range the pieces
+	// are fixed to working points of either 60 or 85, and are scaled
+	// with the scale factor.
+	double wp_reg = fmax(0.6, fmin(0.85, wp));
+
+	// Intersection points between the 5 different pieces
+	double int12 = (bBkg_l_pt_piece_1_constant(wp_reg)-30*bBkg_l_pt_piece_1_linear(wp_reg)-bBkg_l_pt_piece_2_constant(wp_reg)) / (bBkg_l_pt_piece_2_linear(wp_reg) - bBkg_l_pt_piece_1_linear(wp_reg));
+	double int23 = (bBkg_l_pt_piece_2_constant(wp_reg)-bBkg_l_pt_piece_3_constant(wp_reg)) / (bBkg_l_pt_piece_3_linear(wp_reg) - bBkg_l_pt_piece_2_linear(wp_reg));
+	double int34 = (bBkg_l_pt_piece_3_constant(wp_reg)-bBkg_l_pt_piece_4_constant(wp_reg)) / (bBkg_l_pt_piece_4_linear(wp_reg) - bBkg_l_pt_piece_3_linear(wp_reg));
+	double int45 = (bBkg_l_pt_piece_4_constant(wp_reg)-bBkg_l_pt_piece_5_constant(wp_reg)) / (bBkg_l_pt_piece_5_linear(wp_reg) - bBkg_l_pt_piece_4_linear(wp_reg));
+
+	if (pt < int12) {
+		return scale_factor*bBkg_l_pt_piece_1(pt, wp_reg);
+	} else if (pt < int23) {
+		return scale_factor*bBkg_l_pt_piece_2(pt, wp_reg);
+	} else if (pt < int34) {
+		return scale_factor*bBkg_l_pt_piece_3(pt, wp_reg);
+	} else if (pt < int45) {
+		return scale_factor*bBkg_l_pt_piece_4(pt, wp_reg);
+	} else {
+		return scale_factor*bBkg_l_pt_piece_5(pt, wp_reg);
+	}
+}
+
+//! Compute the efficiency to tag a c-jet as a b-jet
+//!
+//! \param pt The pt of the c jet
+//! \param eta The pseudorapidity of the c jet
+//! \param wp The b-tagger working point (between 0 and 1)
+//!
+//! \return The c-jet efficiency for this specific point
+static double bBkg_l_eff(double pt, double eta, double wp) {
+	// The scale_function and the "anomalous" scaling are necessary,
+	// because the functions for pt and eta are both normalized to match the
+	// results from the paper.
+	// Their product therefore obviously is much to low, because each function
+	// is (sort of) normalized to the correct efficiency, so the product is
+	// (again sort of) proportional to the square of the correct normalization.
+	return (bBkg_l_eff_pt(pt, wp) * bBkg_l_eff_eta(eta, wp)
+			* bBkg_l_scale_function(wp) / bBkg_l_scale_function(0.7)
+			*75*6*(1+(100*wp-60)*0.003));
+}
+
+const AnalysisHandlerATLAS_13TeV_LLP::muonDetector AnalysisHandlerATLAS_13TeV_LLP::detMap[53][21] = {{cscla, endla, endla, endla, endla, endla, endla, trans, barla, barla, barla, barla, barla, trans, endla, endla, endla, endla, endla, endla, cscla},
         {cscsm, endsm, endsm, endsm, endsm, endsm, endsm, trans, barla, barla, barla, barla, barla, trans, endsm, endsm, endsm, endsm, endsm, endsm, cscsm},
         {cscsm, cscsm, endsm, endsm, endsm, endsm, trans, trans, barov, barov, barov, barov, barov, trans, trans, endsm, endsm, endsm, endsm, cscsm, cscsm},
         {cscsm, cscsm, endsm, bee, endsm, trans, trans, trans, barsm, barsm, barsm, barsm, barsm, trans, trans, trans, endsm, bee, endsm, cscsm, cscsm},
@@ -923,6 +1132,6 @@ const AnalysisHandlerCMS_8TeV_LLP::muonDetector AnalysisHandlerCMS_8TeV_LLP::det
         {cscsm, cscsm, endsm, endsm, endsm, endsm, trans, trans, barov, barov, barov, barov, barov, trans, trans, endsm, endsm, endsm, endsm, cscsm, cscsm},
         {cscsm, endsm, endsm, endsm, endsm, endsm, endsm, trans, barla, barla, barla, barla, barla, trans, endsm, endsm, endsm, endsm, endsm, endsm, cscsm},
         {cscla, endla, endla, endla, endla, endla, endla, trans, barla, barla, barla, barla, barla, trans, endla, endla, endla, endla, endla, endla, cscla}};
-const double AnalysisHandlerCMS_8TeV_LLP::etaProj[21] = {-2.005, -1.955, -1.709, -1.411, -1.238, -1.163, -1.113, -0.965, -0.817, -0.519, 0.519, 0.817, 0.965, 1.113, 1.163, 1.238, 1.411, 1.709, 1.955, 2.005, 2.500};
-const double AnalysisHandlerCMS_8TeV_LLP::phiProj[53] = {3.142, 3.009, 2.948, 2.849, 2.629, 2.529, 2.471, 2.210, 2.174, 2.065, 1.855, 1.745, 1.695, 1.436, 1.386, 1.276, 1.066, 0.957, 0.916, 0.657, 0.596, 0.496, 0.277, 0.178, 0.142, -0.142, -0.178, -0.277, -0.496, -0.596, -0.657, -0.916, -0.957, -1.018, -1.066, -1.276, -1.357, -1.386, -1.436, -1.695, -1.745, -1.797, -1.855, -2.065, -2.134, -2.174, -2.210, -2.471, -2.529, -2.629, -2.849, -2.948, -3.009};
+const double AnalysisHandlerATLAS_13TeV_LLP::etaProj[21] = {-2.005, -1.955, -1.709, -1.411, -1.238, -1.163, -1.113, -0.965, -0.817, -0.519, 0.519, 0.817, 0.965, 1.113, 1.163, 1.238, 1.411, 1.709, 1.955, 2.005, 2.500};
+const double AnalysisHandlerATLAS_13TeV_LLP::phiProj[53] = {3.142, 3.009, 2.948, 2.849, 2.629, 2.529, 2.471, 2.210, 2.174, 2.065, 1.855, 1.745, 1.695, 1.436, 1.386, 1.276, 1.066, 0.957, 0.916, 0.657, 0.596, 0.496, 0.277, 0.178, 0.142, -0.142, -0.178, -0.277, -0.496, -0.596, -0.657, -0.916, -0.957, -1.018, -1.066, -1.276, -1.357, -1.386, -1.436, -1.695, -1.745, -1.797, -1.855, -2.065, -2.134, -2.174, -2.210, -2.471, -2.529, -2.629, -2.849, -2.948, -3.009};
 
