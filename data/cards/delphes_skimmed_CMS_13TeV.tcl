@@ -19,10 +19,6 @@ set ExecutionPath {
   
   MissingET
 
-  NeutrinoFilter
-  GenJetFinder
-  GenMissingET
-
   FastJetFinder
   
   JetEnergyScale
@@ -312,54 +308,7 @@ module Merger MissingET {
   set MomentumOutputArray momentum
 }
 
-#####################
-# Neutrino Filter
-#####################
 
-module PdgCodeFilter NeutrinoFilter {
-
-  set InputArray Delphes/stableParticles
-  set OutputArray filteredParticles
-
-  set PTMin 0.0
-
-  add PdgCode {12}
-  add PdgCode {14}
-  add PdgCode {16}
-  add PdgCode {-12}
-  add PdgCode {-14}
-  add PdgCode {-16}
-  add PdgCode {1000022}
-  add PdgCode {-1000022}
-
-}
-
-
-#####################
-# MC truth jet finder
-#####################
-
-module FastJetFinder GenJetFinder {
-  set InputArray NeutrinoFilter/filteredParticles
-
-  set OutputArray jets
-
-  # algorithm: 1 CDFJetClu, 2 MidPoint, 3 SIScone, 4 kt, 5 Cambridge/Aachen, 6 antikt
-  set JetAlgorithm 6
-  set ParameterR 0.4
-
-  set JetPTMin 20.0
-}
-
-#########################
-# Gen Missing ET merger
-########################
-
-module Merger GenMissingET {
-# add InputArray InputArray
-  add InputArray NeutrinoFilter/filteredParticles
-  set MomentumOutputArray momentum
-}
 
 ############
 # Jet finder
@@ -430,13 +379,9 @@ module Merger FinalTrackMerger {
 module TreeWriter TreeWriter {
 # add Branch InputArray BranchName BranchClass
   add Branch TagSkimmer/particles Particle GenParticle
-  add Branch Delphes/allParticles GenParticle GenParticle
 
   add Branch TrackMerger/tracks Track Track
   add Branch EFlowMerger/eflow Tower Tower
-
-  add Branch GenJetFinder/jets GenJet Jet
-  add Branch GenMissingET/momentum GenMissingET MissingET
 
   add Branch JetEnergyScale/jets Jet Jet
   add Branch ElectronEnergySmearing/electrons Electron Electron

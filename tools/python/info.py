@@ -708,13 +708,17 @@ class Info(dict):
         delphes_global_config["atlas"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS.tcl')
         delphes_global_config["atlas7tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS.tcl')
         delphes_global_config["atlas8tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS.tcl')
+        delphes_global_config["atlas8tevllp"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS_LLP.tcl')
         delphes_global_config["atlas13tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS_13TeV.tcl')
+        delphes_global_config["atlas13tevllp"] = os.path.join(cls.paths['cards'], 'delphes_ATLAS_13TeV_LLP.tcl')
         delphes_global_config["atlas14tev_projected"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS_14TeV.tcl')
         delphes_global_config["atlas14tev_hl_flatbtagger"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS_14TeV.tcl')
         delphes_global_config["cms"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS.tcl')
         delphes_global_config["cms7tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS.tcl')
         delphes_global_config["cms8tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS.tcl')
+        delphes_global_config["cms8tevllp"] = os.path.join(cls.paths['cards'], 'delphes_CMS_LLP.tcl')
         delphes_global_config["cms13tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS_13TeV.tcl')
+        delphes_global_config["cms13tevllp"] = os.path.join(cls.paths['cards'], 'delphes_CMS_13TeV_LLP.tcl')
         delphes_global_config["cms14tev_projected"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS_14TeV.tcl')
         cls.files['delphes_global_config'] = delphes_global_config
         
