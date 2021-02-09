@@ -51,10 +51,13 @@ class Info(dict):
                 "ATLAS_7TeV",
                 "ATLAS_8TeV",
                 "ATLAS_13TeV",
+                "ATLAS_13TeV_LLP",
                 "ATLAS_14TeV_HighLumi",
                 "CMS_7TeV",
                 "CMS_8TeV",
+                "CMS_8TeV_LLP"
                 "CMS_13TeV",
+                "CMS_13TeV_LLP",
                 "CMS_14TeV_HighLumi"           
         }
         cls.experiments = {
@@ -62,12 +65,15 @@ class Info(dict):
                 "atlas7tev",
                 "atlas8tev",
                 "atlas13tev",
+                "atlas13tevllp",
                 "atlas14tev_projected",
                 "atlas14tev_hl_flatbtagger",
                 "cms",
                 "cms7tev",
                 "cms8tev",
                 "cms13tev",
+                "cms8tevllp",
+                "cms13tevllp",
                 "cms14tev_projected"
                 }
         cls.detector_setups = {
@@ -315,8 +321,8 @@ class Info(dict):
                     args.odir = Config.get("Parameters", "outputdirectory")
                 elif optional_parameter == "invisiblepids":
                     args.invpids = Config.get("Parameters", "invisiblepids")
-                elif optional_parameter == "llpepids":
-                    args.invpids = Config.get("Parameters", "llppids")
+                elif optional_parameter == "llppids":
+                    args.llppids = Config.get("Parameters", "llppids")
                 elif optional_parameter == "slhafile":
                     args.slhafile = Config.get("Parameters", "slhafile")
                 elif optional_parameter == "mgprocess":
@@ -777,9 +783,12 @@ class Info(dict):
         cls.files['pythia_cards'] = list()
         cls.files['pythia_events'] = list()
         cls.files['delphes_events'] = list()
-        
+
         cls.files['internal_info'] = os.path.join(cls.paths['output_internal'], "info.j")
         cls.files['internal_processes'] = os.path.join(cls.paths['output_internal'], "processes.j")
+
+        #Settings file to be read in by AnalysisHandler is necessary
+        cls.files['analysis_info'] = os.path.join(cls.paths['output_internal'], "analysis_info.in")
         
         cls.files['delphes_log'] = os.path.join(cls.paths['output_delphes'], "delphes_output.log")
         cls.files['pythia_log'] = os.path.join(cls.paths['output_pythia'], "pythia_output.log")

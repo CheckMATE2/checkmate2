@@ -199,6 +199,8 @@ void Fritz::setupAnalysisHandler(Config conf) {
             aHandler = new AnalysisHandlerATLAS_8TeV();
         } else if (type == "atlas13tev") {
             aHandler = new AnalysisHandlerATLAS_13TeV();
+        } else if (type == "atlas13tevllp") {
+            aHandler = new AnalysisHandlerATLAS_13TeV_LLP();
         } else if (type == "atlas14tev_projected") {
             aHandler = new AnalysisHandlerATLAS_14TeV_projected();
         } else if (type == "atlas14tev_hl_flatbtagger") {
@@ -211,7 +213,11 @@ void Fritz::setupAnalysisHandler(Config conf) {
             aHandler = new AnalysisHandlerCMS_8TeV();
         } else if (type == "cms13tev") {
             aHandler = new AnalysisHandlerCMS_13TeV();
-        } else if (type == "cms14tev_projected") {
+        } else if (type == "cms8tevllp") {
+            aHandler = new AnalysisHandlerCMS_8TeV_LLP();
+        } else if (type == "cms13tevllp") {
+            aHandler = new AnalysisHandlerCMS_13TeV_LLP();
+	} else if (type == "cms14tev_projected") {
             aHandler = new AnalysisHandlerCMS_14TeV_projected();
         } else {
             Global::abort("Fritz", "Unknown analysis type "+type);

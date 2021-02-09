@@ -19,12 +19,15 @@ class DetectorSettings:
     def init(cls):
         pass
 
-    # Add invisible PIDs to detector card, if needed
+    # Add invisible PIDs to detector card, if needed;
+    # Also all LLPs are assumed to not contribute to MET
     @classmethod
     def _update_delphes_invpids(cls, line):
         if Info.parameters['invisiblePIDs'] != [] and "  #@@newInvisibles@@" in line:
             line = ""
             for pid in Info.parameters['invisiblePIDs']:
+                line += "  add EnergyFraction {"+str(pid)+"} {0.0 0.0}\n"
+            for pid in Info.parameters['LLPPIDs']:
                 line += "  add EnergyFraction {"+str(pid)+"} {0.0 0.0}\n"
         return line
 
