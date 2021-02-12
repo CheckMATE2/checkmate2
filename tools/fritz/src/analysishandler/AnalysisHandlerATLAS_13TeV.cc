@@ -101,6 +101,8 @@ void AnalysisHandlerATLAS_13TeV::bookAnalysis(std::string analysisName,
         a = new Atlas_2101_01629();
     else if(analysisName == "atlas_conf_2020_048")
         a = new Atlas_conf_2020_048();
+    else if(analysisName == "atlas_2004_14060")
+        a = new Atlas_2004_14060();
     else //@@extracode@@
         Global::abort(name,
                       "Cannot load analysis "+analysisName+

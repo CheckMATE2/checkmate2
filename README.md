@@ -1,5 +1,6 @@
 # current
 
+
 2020-11-03   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
         
     ~ added atlas_conf_2018_041
@@ -19,6 +20,10 @@
 2020-09-27   Manimala Chakraborti, Ipsita Saha
 
     ~ added atlas_conf_2019_020
+
+2020-09-29   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+        
+    ~ added atlas_2004_14060
 
 2020-04-08   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 

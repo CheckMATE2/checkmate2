@@ -27,6 +27,7 @@ atlas_conf_2018_041  10   search for gluinos decaying via 3rd gen; multi b-jets 
 atlas_2101_01629     32   squarks/gluinos, 1 lepton, jets, MET                                                        139   no
 atlas_1803_02762     20   Search for electroweakino production in final states with two or three leptons	          36.1  no
 atlas_conf_2020_048  26   Search for dark matter with monojets                                                        139   no
+atlas_2004_14060     9    stops, leptoquarks, 0 lepton                                                                139   no 
 
 
 #Superseded:
@@ -36,4 +37,7 @@ atlas_conf_2020_048  26   Search for dark matter with monojets                  
 #atlas_1605_04285     7    1 lepton + jets + Etmiss                                                                    3.3   no   
 #atlas_1606_03903     3    1-lepton + jets + etmiss (stop)                                                             3.2   no   
 #atlas_conf_2016_078  13   2-6 jets + etmiss (squarks and gluino)                                                      13.3  no   
+<<<<<<< HEAD
 
+=======
+>>>>>>> atlas_2004_14060
