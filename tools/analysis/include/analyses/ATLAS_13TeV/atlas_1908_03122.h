@@ -14,6 +14,9 @@ class Atlas_1908_03122 : public AnalysisBase {
     void finalize();
 
   private:
+      
+    void rotateXY(TMatrix &mat, TMatrix &mat_new, double phi);  
+    double calcMETSignificance(std::vector<Jet*> jets);
 };
 
 #endif

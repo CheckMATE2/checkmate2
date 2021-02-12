@@ -1,5 +1,5 @@
 #include "atlas_1908_03122.h"
-// AUTHOR: Marvin M. Flores
+// AUTHOR: Marvin M. Flores, Krzysztof Rolbiecki
 //  EMAIL: mflores@nip.upd.edu.ph
 void Atlas_1908_03122::initialize() {
   setAnalysisName("atlas_1908_03122");          
@@ -19,46 +19,6 @@ void Atlas_1908_03122::initialize() {
 }
 
 void Atlas_1908_03122::analyze() {
-  // Your eventwise analysis code goes here
-  // The following objects are always defined unless they are 'ignored' above. They form std::vector objects of the respective Delphes class type (except for Etmiss which is a single object)
-  // All std::vector members and etmiss have the common properties PT, Eta, Phi and P4() with the latter giving access to the full ROOT TLorentzVector.
-  // Within a std::vector, all members are ordered with highest pt coming first.
-
-  // electronsLoose, electronsMedium, electronsTight   are list of electrons that passed respective efficiency and reconstruction cuts
-  // muonsCombinedPlus, muonsCombined                  as above for muons
-  // photonsMedium                                     as above for photons
-  // jets are all reconstructed jets                   as above for jets. Note that electrons are most certainly also reconstructed as a jet -> overlap removal do avoid double counting necessary!
-  // tracks, towers                                    calorimeter and tracker information. Usually not needed.
-  // missingET                                         rec missing ET EXCLUDING muons.
-
-  
-  // Here is a couple of useful functions and lines:  
-  //------------Phase Space Cuts (defined for jets, electronsXYZ, muonsXYZ, photonsXYZ)
-  // jets = filterPhaseSpace(jets, 20., -2.8, 2.8)  // The vector 'jets' only contains jets with pt >= 20 GeV and -2.8 < eta < 2.8. This function is applicable to other particles too (electronsMedium, ... ).
-  // jets = overlapRemoval(jets, electronsLoose, 0.2) Removes all jets for which there exists any electron in 'electronsLoose' with deltaR < 0.2.
-  // jets = overlapRemovel(jets, 0.2) If two jets overlap within deltaR < 0.2, only the harder jet is stored.
-  
-  //------------Isolation Checks (defined for electronsXYZ, muonsXYZ, photonsXYZ
-  //------------        For each object, if the user entered N isolation conditions, they can be
-  //------------        checked individually be the second argument (running from 0 to N-1).
-  // electronsMedium = filterIsolation(electronsMedium, 0)            Removes electrons that do not pass the first isolation condition entered into the AnalysisManager by the user
-  // std::vector<int> flags; flags.push_back(0); flags.push_back(2);
-  // electronsMedium = filterIsolation(electronsMedium, flags)        Same as above, but both the first and the third condition have to be fulfilled
-  // electronsMedium = filterIsolation(electronsMedium)               Same as above, but all conditions have to be fulfilled.
-  
-  //-----------Flavour Tag Checks (defined for jets only)
-  //----------          Tau tags "loose", "medium" or "tight" can be individually checked if the user enabled tau tagging in the AM.
-  //----------          For b-tags, if N working points have been defined, the ith condition can be tested by putting i-1 into the second argument (if there is only one, the argument can be omitted)
-  // if checkTauTag(jets[0], "tight") leadingJetIsTagged = True;
-  // if checkBTag(jets[0], 0) leadingJetIsBTagged = True;
-
-
-  //-----------Auxiliary Information
-  // - Always ensure that you don't access vectors out of bounds. E.g. 'if(jets[1]->PT > 150)' should rather be if (jets.size() > 1 && jets[1]->PT > 150). 
-  // - Use rand()/(RAND_MAX+1.) for random numbers between 0 and 1. The random seed is determined from system time or by the RandomSeed parameter in CheckMATE.
-  // - The 'return' statement will end this function for the current event and hence should be called whenever the current event is to be vetoed.
-  // - Many advanced kinematical functions like mT2 are implemented. Check the manual for more information.
-  // - If you need output to be stored in other files than the cutflow/signal files we provide, check the manual for how to do this conveniently.  
 
   missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
   //electronsLoose = filterPhaseSpace(electronsLoose, 4.5, -2.47, 2.47);
@@ -255,12 +215,13 @@ void Atlas_1908_03122::analyze() {
   double metsig_HT =-99;
   //METSig
   if (signalJets.size()>0){
-    metsig_HT = missingET->P4().Et()/sqrt(HT);
+//    metsig_HT = missingET->P4().Et()/sqrt(HT);
+      metsig_HT = calcMETSignificance(signalJets);
   }
   
   
   //Signal Region A
-  if (missingET->P4().Et() > 115.) { //SRA1
+  if (missingET->P4().Et() > 240.) { //SRA1
     countCutflowEvent("SRA_01_trigger_etmiss");
     if (baselineElectrons.size() + baselineMuons.size() == 0) { //SRA2
       countCutflowEvent("SRA_02_N_baseline_leptons");
@@ -311,7 +272,7 @@ void Atlas_1908_03122::analyze() {
   } //SRA1
   
   //Signal Region B
-  if (missingET->P4().Et() > 250.) { //SRB1
+  if (missingET->P4().Et() > 150.) { //SRB1
     countCutflowEvent("SRB_01_trigger_etmiss");
     if (baselineElectrons.size() + baselineMuons.size() == 0) { //SRB2
       countCutflowEvent("SRB_02_N_baseline_leptons");
@@ -350,6 +311,8 @@ void Atlas_1908_03122::analyze() {
   } //SRB1
   
   //Signal Region C
+  if (missingET->P4().Et() > 150.) { //SRA1
+      countCutflowEvent("SRC_00_trigger");
   if (baselineElectrons.size() + baselineMuons.size() == 0) { //SRC1
     countCutflowEvent("SRC_01_N_baseline_leptons");
     if (signalJets.size() >= 4) { //SRC2
@@ -385,10 +348,65 @@ void Atlas_1908_03122::analyze() {
       } //SRC3
     } //SRC2
   } //SRC1
-    
+  }  
   
 }
 
 void Atlas_1908_03122::finalize() {
   // Whatever should be done after the run goes here
 }       
+
+// code from ATLAS
+void Atlas_1908_03122::rotateXY(TMatrix &mat, TMatrix &mat_new, double phi) {
+  double c = cos(phi);
+  double s = sin(phi);
+  double cc = c*c;
+  double ss = s*s;
+  double cs = c*s;
+
+  mat_new(0,0) = mat(0,0)*cc + mat(1,1)*ss - cs*(mat(1,0) + mat(0,1));
+  mat_new(0,1) = mat(0,1)*cc - mat(1,0)*ss + cs*(mat(0,0) - mat(1,1));
+  mat_new(1,0) = mat(1,0)*cc - mat(0,1)*ss + cs*(mat(0,0) - mat(1,1));
+  mat_new(1,1) = mat(0,0)*ss + mat(1,1)*cc + cs*(mat(1,0) + mat(0,1));
+}
+
+double Atlas_1908_03122::calcMETSignificance(std::vector<Jet*> jets) {
+
+  TMatrix cov_sum(2,2);
+
+  TLorentzVector softVec = missingET->P4();
+  
+  TMatrix particle_u(2,2),particle_u_rot(2,2);
+  for( int i = 0; i < jets.size(); i++ ) {
+    softVec += jets[i]->P4();  // soft term is everything not included in hard objects
+    //double pt_reso = 0.77*pow(jets[i]->PT, -0.39);
+    //double pt_reso = jets[i]->PT < 200 ? 1.85*pow(jets[i]->PT, -0.71) : 0.05;  //cf. https://cds.cern.ch/record/2630948/files/ATLAS-CONF-2018-038.pdf Fig. 3
+    double pt_reso = 1.05729 - 0.452141*log(jets[i]->PT) + 0.067873*pow(log(jets[i]->PT),2) - 0.00343522*pow(log(jets[i]->PT),3);
+    double phi_reso = jets[i]->PT < 100 ? 1.23*pow(jets[i]->PT, -0.95) : 0.017;
+    particle_u(0,0) = pow(pt_reso*jets[i]->PT, 2);
+    particle_u(1,1) = pow(phi_reso*jets[i]->PT,2);
+    rotateXY(particle_u, particle_u_rot, missingET->P4().DeltaPhi(jets[i]->P4()));
+    cov_sum += particle_u_rot;
+  }
+  
+ //add soft term resolution (fixed 10 GeV)
+  particle_u(0,0) = 10*10;
+  particle_u(1,1) = 10*10;
+  rotateXY(particle_u, particle_u_rot, missingET->P4().DeltaPhi(softVec));
+  cov_sum+=particle_u_rot;  
+
+  //calculate significance
+  double varL = cov_sum(0,0);
+  double varT = cov_sum(1,1);
+  double covLT = cov_sum(0,1);
+
+  double significance = 0;
+  double rho = 0;
+  if( varL != 0 ){
+    rho = covLT / sqrt( varL * varT ) ;
+    if (fabs( rho ) >= 0.9 ) rho = 0; //too large - ignore it
+    significance = missingET->P4().Et()/sqrt((varL*(1-pow(rho,2))));
+  }
+  return significance;  
+    
+}
