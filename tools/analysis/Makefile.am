@@ -130,6 +130,7 @@ libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_conf_2019_020.h src
 libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_1803_02762.h src/analyses/ATLAS_13TeV/atlas_1803_02762.cc
 libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_conf_2018_041.h src/analyses/ATLAS_13TeV/atlas_conf_2018_041.cc
 libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2101_01629.h src/analyses/ATLAS_13TeV/atlas_2101_01629.cc
+libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_conf_2020_048.h src/analyses/ATLAS_13TeV/atlas_conf_2020_048.cc
 #@@extraanalysis@@
 
 libanalyses_la_LDFLAGS = -avoid-version -shared
