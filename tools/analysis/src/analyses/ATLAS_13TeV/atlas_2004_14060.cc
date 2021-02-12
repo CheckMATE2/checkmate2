@@ -81,8 +81,8 @@ void Atlas_2004_14060::analyze() {
   // COSMIC MUONS, BAD JETS, ETC.
 //  if (  rand()/(RAND_MAX+1.) > 0.975 ) return;
   
-  //met = missingET->P4().Et();
-  met = pTmiss.Perp();
+  met = missingET->P4().Et();
+  //met = pTmiss.Perp();
   if (met < 250.) return;
   countCutflowEvent("02_MET>250");  
 
@@ -207,9 +207,9 @@ bool Atlas_2004_14060::SRA( std::vector<Jet*> jets, std::vector<Jet*> bjets, std
   if ( largeR08.size() == 0 or largeR08[0].m() < 60. ) return false;  
   if  (cf != "") countCutflowEvent(cf+"_16_m0j0.8");  
     
-//  if (met/sqrt(ht) < 25.) return false;   //OK substitute here a simple significance aka "event-based"
+  if (met/sqrt(ht) < 23.) return false;   //OK substitute here a simple significance aka "event-based"
 //  if (met/sqrt(resolution) < 25.) return false;
-  if (calcMETSignificance(jets) < 25.) return false;
+//  if (calcMETSignificance(jets) < 25.) return false;
   if  (cf != "") countCutflowEvent(cf+"_17_S>25");
   
   TLorentzVector jet12 = TLorentzVector( largeR12[0].px(), largeR12[0].py(), largeR12[0].pz(), largeR12[0].e() );
@@ -648,8 +648,9 @@ double Atlas_2004_14060::calcMETSignificance(std::vector<Jet*> jets) {
   for( int i = 0; i < jets.size(); i++ ) {
     softVec += jets[i]->P4();  // soft term is everything not included in hard objects
     //double pt_reso = 0.77*pow(jets[i]->PT, -0.39);
-    double pt_reso = jets[i]->PT < 200 ? 1.85*pow(jets[i]->PT, -0.71) : 0.05;  //cf. https://cds.cern.ch/record/2630948/files/ATLAS-CONF-2018-038.pdf Fig. 3
-    double phi_reso = jets[i]->PT < 100 ? 1.23*pow(jets[i]->PT, -0.95) : 0.015;
+//    double pt_reso = jets[i]->PT < 200 ? 1.85*pow(jets[i]->PT, -0.71) : 0.05;  //cf. https://cds.cern.ch/record/2630948/files/ATLAS-CONF-2018-038.pdf Fig. 3
+    double pt_reso = 1.05729 - 0.452141*log(jets[i]->PT) + 0.067873*pow(log(jets[i]->PT),2) - 0.00343522*pow(log(jets[i]->PT),3);
+    double phi_reso = jets[i]->PT < 100 ? 1.23*pow(jets[i]->PT, -0.95) : 0.017;
     particle_u(0,0) = pow(pt_reso*jets[i]->PT, 2);
     particle_u(1,1) = pow(phi_reso*jets[i]->PT,2);
     rotateXY(particle_u, particle_u_rot, missingET->P4().DeltaPhi(jets[i]->P4()));
