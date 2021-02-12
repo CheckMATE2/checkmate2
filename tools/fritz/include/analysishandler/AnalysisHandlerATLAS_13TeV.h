@@ -34,19 +34,16 @@
 #include "atlas_conf_2016_066.h"
 #include "atlas_conf_2017_060.h"
 #include "atlas_1706_03731.h"
-
+#include "atlas_conf_2019_018.h"
 #include "atlas_1908_08215.h"
 #include "atlas_1909_08457.h"
 #include "atlas_conf_2019_040.h"
-<<<<<<< HEAD
 #include "atlas_conf_2019_020.h"
 #include "atlas_1803_02762.h"
 #include "atlas_conf_2018_041.h"
 #include "atlas_2101_01629.h"
 #include "atlas_conf_2020_048.h"
-=======
 #include "atlas_2004_14060.h"
->>>>>>> atlas_2004_14060
 #include "atlas_1908_03122.h"
 //@extraheader@
 #include "AnalysisBase.h"
