@@ -182,7 +182,7 @@ void AnalysisHandlerATLAS_13TeV::identifyMuons()  {
             mEffCombPlus = muonEffCombPlus(muons[m]->PT, muons[m]->Eta);
             if (rand()/((double)RAND_MAX+1) < mEffCombPlus ) {
                 muonsCombinedPlus.push_back(muons[m]);
-                mEffComb = muonEffCombOverCombPlus(muons[m]->Phi, muons[m]->Eta);
+                mEffComb = muonEffCombOverCombPlus(muons[m]->PT, muons[m]->Eta);
                 if (rand()/((double)RAND_MAX+1) < mEffComb ) {
                     muonsCombined.push_back(muons[m]);
                 }
@@ -429,7 +429,7 @@ double AnalysisHandlerATLAS_13TeV::muonEffCombOverCombPlus(double pt,
     // old: https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/PERF-2015-10/fig_03b.png
     // tuned to MC
     //https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/SUSY-2018-16/fig_03.png
-    return (pt < 3.5)*0.5 + (pt > 3.5)*(pt < 4.5)*0.65 + (pt > 4.5)*(pt < 8.)*0.72 + (pt > 8.)*(pt < 15.)*0.77 + (pt > 15.)*(pt < 20.)*0.82 + (pt > 20.)*(pt < 30.)*0.86 + (pt > 30.)*0.94;
+    return (pt > 3.0)*(pt < 3.5)*0.5 + (pt > 3.5)*(pt < 4.5)*0.65 + (pt > 4.5)*(pt < 8.)*0.72 + (pt > 8.)*(pt < 15.)*0.77 + (pt > 15.)*(pt < 20.)*0.82 + (pt > 20.)*(pt < 30.)*0.86 + (pt > 30.)*0.94;
 }
 
 double AnalysisHandlerATLAS_13TeV::muonEffCombPlus(double pt,
