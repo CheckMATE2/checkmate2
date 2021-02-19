@@ -142,13 +142,15 @@ void Atlas_1911_12606::analyze() {
   else if (muons_signal.size() == 2) flavour = 2;
   else flavour = 0;
   
-  Pass_Preselection() ;
+  if (Pass_Preselection()) {
   
   Pass_EW_high();
   
   Pass_S_high();
   
   Pass_S_low();
+  
+  }
   
   return;
   
