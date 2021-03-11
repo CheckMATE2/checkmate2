@@ -20,11 +20,15 @@ class Atlas_1911_12606 : public AnalysisBase {
     std::vector<FinalStateObject*> leptons;
     std::vector<Track*> signal_tracks;
     std::vector<Jet*> signal_jets;
+    std::vector<Electron> electrons_soft_true;
+    std::vector<Muon> muons_soft_true;
     int nb, flavour;
-    double mll, mlt, met;
+    double mll, mlt, met, mt2;
     bool Pass_Cuts_1L1T();
     bool Pass_Preselection();
     bool Pass_EW_high();
+    bool Pass_EW_med();
+    bool Pass_EW_low();
     bool Pass_S_high();
     bool Pass_S_low();
     double mtautau(std::vector<FinalStateObject*> lep);

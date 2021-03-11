@@ -20,14 +20,73 @@ void Atlas_1911_12606::analyze() {
   missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
   
   electronsLoose = filterPhaseSpace(electronsLoose, 4.5, -2.47, 2.47);
-  electronsTight = filterPhaseSpace(electronsTight, 4.5, -2.47, 2.47); //Tight fits efficiency better
-  muonsCombined = filterPhaseSpace(muonsCombined, 3., -2.5, 2.5);  
+//  electronsTight = filterPhaseSpace(electronsTight, 4.5, -2.47, 2.47); //Tight fits efficiency better
+//  muonsCombined = filterPhaseSpace(muonsCombined, 3., -2.5, 2.5);  
+  electronsTight = filterPhaseSpace(electronsTight, 8., -2.47, 2.47); //Tight fits efficiency better
+  muonsCombined = filterPhaseSpace(muonsCombined, 8., -2.5, 2.5);    
   jets = filterPhaseSpace(jets, 20., -4.5, 4.5); 
   signal_tracks = filterPhaseSpace(tracks, 2., -2.5, 2.5); 
   signal_tracks = filterLeptons(signal_tracks);
   
+  int nel = 0; int nmu = 0;
+  for (int t = 0; t < tracks.size(); t++ ) {
+    if ( abs(tracks[t]->PID) == 11) nel++;
+    if ( abs(tracks[t]->PID) == 13) nmu++;
+  }
+  
+  std::vector<Electron*> electrons_soft;
+  electrons_soft_true.clear();
+  std::vector<Muon*> muons_soft;
+  muons_soft_true.clear();
+  int nel_true = 0; int nmu_true = 0;
+  for (int t = 0; t < true_particles.size(); t++ ) {
+    if ( abs(true_particles[t]->PID) == 11 and true_particles[t]->Status == 1 ) {
+        nel_true++;
+        double eff = rand()/(RAND_MAX + 1.);
+        double pt = true_particles[t]->PT;
+        if (eff < 0. + (pt > 4.5)*(pt < 5.0)*0.23 + (pt > 5)*(pt < 6.0)*0.38 + (pt > 6)*(pt < 8.0)*0.50 and fabs(true_particles[t]->Eta) < 2.47) {
+              Electron ele = Electron();
+              ele.PT = pt;
+              ele.Phi = true_particles[t]->Phi;
+              ele.Eta = true_particles[t]->Eta;
+              ele.P4() = true_particles[t]->P4();
+              //cout << "Mom: " << ele.P4().X() << "\n";
+              ele.Particle = true_particles[t];
+              ele.Charge = true_particles[t]->Charge;
+              electrons_soft_true.push_back(ele);
+              electrons_soft.push_back(&(*(electrons_soft_true.end()-1)));
+              electronsTight.push_back(&(*(electrons_soft_true.end()-1)));
+              //cout << "Mom: " << electrons_soft[electrons_soft.size()-1]->P4().X() << "\n";
+        }
+    }
+    if ( abs(true_particles[t]->PID) == 13 and true_particles[t]->Status == 1 ) {
+        nmu_true++;;
+        double eff = rand()/(RAND_MAX + 1.);
+        double pt = true_particles[t]->PT;
+        if (eff < 0. + (pt > 3.0)*(pt < 3.5)*0.5 + (pt > 3.5)*(pt < 4.5)*0.65 + (pt > 4.5)*(pt < 8.)*0.72 and fabs(true_particles[t]->Eta) < 2.5 ) {
+              Muon muo = Muon();
+              muo.PT = pt;
+              muo.Phi = true_particles[t]->Phi;
+              muo.Eta = true_particles[t]->Eta;
+              muo.P4() = true_particles[t]->P4();
+              muo.Particle = true_particles[t];
+              muo.Charge = true_particles[t]->Charge;
+              muons_soft_true.push_back(muo);
+              muons_soft.push_back(&(*(muons_soft_true.end()-1)));
+              muonsCombined.push_back(&(*(muons_soft_true.end()-1)));
+        }
+    }
+  }  
+  
   n++;
   cout << "Event: " << n << "\n";
+  //cout << "True_part: " << true_particles.size() << "\n";
+  //cout << "electronsTight: " << electronsTight.size() << "\n";
+  //cout << "electronTracks: " << nel << "\n";
+  //cout << "electronTrue: " << nel_true << "\n";
+  //cout << "muonsCombined: " << muonsCombined.size() << "\n";
+  //cout << "muonTracks: " << nmu << "\n";
+  //cout << "muonTrue: " << nmu_true << "\n";
 //  cout << "tracks: " << tracks.size() << "\n"; 
 //  cout << "signal_tracks: " << signal_tracks.size() << "\n";    
   
@@ -52,17 +111,17 @@ void Atlas_1911_12606::analyze() {
   signal_tracks = overlapRemoval(signal_tracks, lightjets, 0.5, "y");
   
   pTmiss = TLorentzVector(0., 0., 0., 0.);
-/*  for (int i = 0; i < lightjets.size(); i++) 
+  for (int i = 0; i < lightjets.size(); i++) 
     pTmiss -= lightjets[i]->P4();      
   
   for (int i = 0; i < bjets.size(); i++) 
     pTmiss -= bjets[i]->P4();        
   
-  for (int i = 0; i < muonsCombined.size(); i++) 
+/*  for (int i = 0; i < muonsCombined.size(); i++) 
     pTmiss -= muonsCombined[i]->P4();      
   
   for (int i = 0; i < electronsLoose.size(); i++) 
-    pTmiss -= electronsLoose[i]->P4();      
+    pTmiss -= electronsLoose[i]->P4();      */
   
   TLorentzVector pTmiss_soft = TLorentzVector(0., 0., 0., 0.);
   for (std::vector<Track*>::iterator it=tracks.begin(); it!=tracks.end(); it++) {
@@ -77,7 +136,7 @@ void Atlas_1911_12606::analyze() {
     //softtracks.push_back(*it);
   }
   
-//  pTmiss += pTmiss_soft;  */
+  pTmiss += pTmiss_soft;  
   
   std::vector<Electron*> electrons_base = electronsLoose;
   std::vector<Muon*> muons_base = muonsCombined;
@@ -86,7 +145,8 @@ void Atlas_1911_12606::analyze() {
   std::vector<Muon*> muons_signal = Isolate_leptons_with_inverse_track_isolation_cone(muonsCombined,  tracks, towers, 0.3, 10., 0.2, 0.06, 0.06, false);
   signal_tracks = Isolate_tracks(signal_tracks, 0.3, 0.5);
   
-//  cout << "muonsSignal: " << muons_signal.size() << "\n";
+  cout << "muonsSignal: " << muons_signal.size() << "\n";
+  cout << "electronsSignal: " << electrons_signal.size() << "\n";
   
   lightjets = filterPhaseSpace(lightjets, 30., -2.8, 2.8);
   
@@ -96,7 +156,7 @@ void Atlas_1911_12606::analyze() {
   
   countCutflowEvent("00_all");
   
-  met = missingET->P4().Et();
+  met = missingET->P4().Perp();
 //  met = pTmiss.Perp();
   if (met < 80. ) return;
   countCutflowEvent("01_trigger");
@@ -114,8 +174,8 @@ void Atlas_1911_12606::analyze() {
 
 //  cout << "leptons: " << leptons.size() << "\n";
 
-  for (int i = 0; i < signal_jets.size(); i++) 
-    pTmiss -= signal_jets[i]->P4(); 
+//  for (int i = 0; i < signal_jets.size(); i++) 
+//    pTmiss -= signal_jets[i]->P4(); 
   for (int i = 0; i < leptons.size(); i++) 
     pTmiss -= leptons[i]->P4(); 
   
@@ -137,6 +197,7 @@ void Atlas_1911_12606::analyze() {
   if ( leptons.size() == 2 ) countCutflowEvent("2L_02_2L"); else return; 
   
   mll = sqrt(leptons[0]->P4().Dot(leptons[1]->P4()));
+  mt2 = 0.;
   flavour = -1;
   if (electrons_signal.size() == 2) flavour = 1;
   else if (muons_signal.size() == 2) flavour = 2;
@@ -144,11 +205,29 @@ void Atlas_1911_12606::analyze() {
   
   if (Pass_Preselection()) {
   
-  Pass_EW_high();
+    if (Pass_EW_high() or Pass_EW_med() or Pass_EW_low()) {
+      if ( mll < 1.) countSignalEvent("E-inc-01");   
+      if ( mll < 2.) countSignalEvent("E-inc-02"); 
+      if ( mll < 3.) countSignalEvent("E-inc-03"); 
+      if ( mll < 5.) countSignalEvent("E-inc-05"); 
+      if ( mll < 10.) countSignalEvent("E-inc-10");
+      if ( mll < 20.) countSignalEvent("E-inc-20"); 
+      if ( mll < 30.) countSignalEvent("E-inc-30"); 
+      if ( mll < 40.) countSignalEvent("E-inc-40"); 
+      if ( mll < 60.) countSignalEvent("E-inc-60"); 
+    }
   
-  Pass_S_high();
+    if (Pass_S_high() or   Pass_S_low()) {
+      if ( mt2 < 100.5) countSignalEvent("S-inc-00");   
+      if ( mt2 < 101.) countSignalEvent("S-inc-01"); 
+      if ( mt2 < 102.) countSignalEvent("S-inc-02"); 
+      if ( mt2 < 105.) countSignalEvent("S-inc-05"); 
+      if ( mt2 < 110.) countSignalEvent("S-inc-10");
+      if ( mt2 < 120.) countSignalEvent("S-inc-20"); 
+      if ( mt2 < 130.) countSignalEvent("S-inc-30");         
+      if ( mt2 < 140.) countSignalEvent("S-inc-40");         
+    }
   
-  Pass_S_low();
   
   }
   
@@ -261,20 +340,137 @@ bool Atlas_1911_12606::Pass_EW_high() {
 
     double mT = AnalysisBase::mT(leptons[0]->P4(), missingET->P4());
     if (mT > 60.) return false;
-    countCutflowEvent("2L_Ehigh_14_mT<60");
+    countCutflowEvent("2L_E-high_14_mT<60");
     
     if (met < 200.) return false;
-    countCutflowEvent("2L_Ehigh_15_met>200");
+    countCutflowEvent("2L_E-high_15_met>200");
     
-    if (met/signal_jets[0]->PT < std::max(0.85, 0.98 - 0.02*mll) or met/signal_jets[0]->PT > 1.) return false;//cheating
-    countCutflowEvent("2L_Ehigh_16_cheatingISR");    
+    TLorentzVector ISR(0.,0.,0.,0.);
+    for (int i = 0; i < signal_jets.size(); i++)
+      ISR += signal_jets[i]->P4();     
+    TVector3 pTjet(ISR.X(), ISR.Y(), 0.);
+    double RISR2 = fabs(pTmiss.Vect().Dot(pTjet.Unit()))/ISR.Perp();
+    cout << "RISR2: " << RISR2  << "\n"; 
+    
+    if (RISR2 < std::max(0.85, 0.98 - 0.02*mll) or RISR2 > 1.1) return false;//cheating
+    countCutflowEvent("2L_E-high_16_RISR");    
     
     if (leptons[1]->PT < std::min(10.,2.+mll/3.) ) return false;
-    countCutflowEvent("2L_Ehigh_17_lepton2PT"); 
+    countCutflowEvent("2L_E-high_17_lepton2PT"); 
+
+    if (flavour==1) {
+        if (mll < 5.) countSignalEvent("E-high-ee-05");
+        else if (mll < 10.) countSignalEvent("E-high-ee-10");
+        else if (mll < 20.) countSignalEvent("E-high-ee-20");
+        else if (mll < 30.) countSignalEvent("E-high-ee-30");
+        else if (mll < 40.) countSignalEvent("E-high-ee-40");
+        else if (mll < 60.) countSignalEvent("E-high-ee-60");
+        else return false;
+    }
+    
+    if (flavour==2) {
+        if (mll < 2.) countSignalEvent("E-high-mm-02");
+        else if (mll < 3.) countSignalEvent("E-high-mm-03");
+        else if (mll < 5.) countSignalEvent("E-high-mm-05");
+        else if (mll < 10.) countSignalEvent("E-high-mm-10");
+        else if (mll < 20.) countSignalEvent("E-high-mm-20");
+        else if (mll < 30.) countSignalEvent("E-high-mm-30");
+        else if (mll < 40.) countSignalEvent("E-high-mm-40");
+        else if (mll < 60.) countSignalEvent("E-high-mm-60");
+        else return false;
+    }    
     
     return true;
 
 }
+
+
+bool Atlas_1911_12606::Pass_EW_med() {
+    
+    if (met < 120. or met > 200.) return false;
+    countCutflowEvent("2L_E-med_14_met<200");
+    
+    double htlep = leptons[0]->PT + leptons[1]->PT;  
+    if (met/htlep < 10.) return false;
+    countCutflowEvent("2L_E-med_15_HTlep");
+    
+    double mT = AnalysisBase::mT(leptons[0]->P4()+leptons[1]->P4(), missingET->P4());
+    if (mT > 50.) return false;
+    countCutflowEvent("2L_E-med_16_mT<50");
+    
+    if (flavour==1) {
+        if (mll < 5.) countSignalEvent("E-med-ee-05");
+        else if (mll < 10.) countSignalEvent("E-med-ee-10");
+        else if (mll < 20.) countSignalEvent("E-med-ee-20");
+        else if (mll < 30.) countSignalEvent("E-med-ee-30");
+        else return false;
+    }
+    
+    if (flavour==2) {
+        if (mll < 2.) countSignalEvent("E-med-mm-02");
+        else if (mll < 3.) countSignalEvent("E-med-mm-03");
+        else if (mll < 5.) countSignalEvent("E-med-mm-05");
+        else if (mll < 10.) countSignalEvent("E-med-mm-10");
+        else if (mll < 20.) countSignalEvent("E-med-mm-20");
+        else if (mll < 30.) countSignalEvent("E-med-mm-30");
+        else return false;
+    }    
+    
+    return true;
+
+}
+
+
+bool Atlas_1911_12606::Pass_EW_low() {
+    
+    if (met < 120. or met > 200.) return false;
+    countCutflowEvent("2L_E-low_14_met<200");
+    
+    double htlep = leptons[0]->PT + leptons[1]->PT;  
+    if (met/htlep < 10.) return false;
+    countCutflowEvent("2L_E-low_15_HTlep");
+    
+    TLorentzVector ISR(0.,0.,0.,0.);
+    for (int i = 0; i < signal_jets.size(); i++)
+      ISR += signal_jets[i]->P4();     
+    TVector3 pTjet(ISR.X(), ISR.Y(), 0.);
+    double RISR2 = fabs(pTmiss.Vect().Dot(pTjet.Unit()))/ISR.Perp();
+    
+    if (RISR2 < 0.8 or RISR2 > 1.) return false;//cheating
+    countCutflowEvent("2L_E-low_16_RISR");     
+    
+    if (leptons[1]->PT < 5. + mll/4.)  return false;
+    countCutflowEvent("2L_E-low_17_lepton2PT");     
+    
+    double mT = AnalysisBase::mT(leptons[0]->P4(), missingET->P4());
+    if (mT > 60. or mT < 10.) return false;
+    countCutflowEvent("2L_E-low_18_mT<60");    
+    
+    if (flavour==1) {
+        if (mll < 5.) countSignalEvent("E-low-ee-05");
+        else if (mll < 10.) countSignalEvent("E-low-ee-10");
+        else if (mll < 20.) countSignalEvent("E-low-ee-20");
+        else if (mll < 30.) countSignalEvent("E-low-ee-30");
+        else if (mll < 40.) countSignalEvent("E-low-ee-40");
+        else if (mll < 60.) countSignalEvent("E-low-ee-60");
+        else return false;
+    }
+    
+    if (flavour==2) {
+        if (mll < 2.) countSignalEvent("E-low-mm-02");
+        else if (mll < 3.) countSignalEvent("E-low-mm-03");
+        else if (mll < 5.) countSignalEvent("E-low-mm-05");
+        else if (mll < 10.) countSignalEvent("E-low-mm-10");
+        else if (mll < 20.) countSignalEvent("E-low-mm-20");
+        else if (mll < 30.) countSignalEvent("E-low-mm-30");
+        else if (mll < 40.) countSignalEvent("E-low-mm-40");
+        else if (mll < 60.) countSignalEvent("E-low-mm-60");
+        else return false;
+    }        
+    
+    
+}
+
 
 bool Atlas_1911_12606::Pass_S_high() {
        
@@ -282,33 +478,33 @@ bool Atlas_1911_12606::Pass_S_high() {
     countCutflowEvent("2L_S-high_14_met>200");
     
     //double mt2 = mT2chi2( leptons[0]->P4(), leptons[1]->P4(), 100., missingET->P4() );
-    double mt2 = mT2chi2( leptons[0]->P4(), leptons[1]->P4(), 100., pTmiss );
+    mt2 = mT2chi2( leptons[0]->P4(), leptons[1]->P4(), 100., pTmiss );
     
     TLorentzVector ISR(0.,0.,0.,0.);
     for (int i = 0; i < signal_jets.size(); i++)
       ISR += signal_jets[i]->P4(); 
     
-    TLorentzVector ISR2 = -missingET->P4() - leptons[0]->P4() - leptons[1]->P4();
+//    TLorentzVector ISR2 = -missingET->P4() - leptons[0]->P4() - leptons[1]->P4();
     
     TVector3 pTjet(ISR.X(), ISR.Y(), 0.);
-    TVector3 pTjet2(ISR2.X(), ISR2.Y(), 0.);
-    double RISR = fabs(missingET->P4().Vect().Dot(pTjet.Unit()))/ISR.Perp();
-    cout << "RISR: " << RISR  << "\n"; 
+//    TVector3 pTjet2(ISR2.X(), ISR2.Y(), 0.);
+//    double RISR = fabs(missingET->P4().Vect().Dot(pTjet.Unit()))/ISR.Perp();
+//    cout << "RISR: " << RISR  << "\n"; 
     double RISR2 = fabs(pTmiss.Vect().Dot(pTjet.Unit()))/ISR.Perp();
-    cout << "RISR2: " << RISR2  << "\n"; 
-    double RISR3 = fabs(missingET->P4().Vect().Dot(pTjet2.Unit()))/ISR2.Perp();
-    cout << "RISR3: " << RISR3  << "\n";     
-    if ( RISR > 1.) {
-         cout << "Momenta: " << "\n"; 
-         cout << "lep1: " << leptons[0]->P4().X() << "   " << leptons[0]->P4().Y() << "\n"; 
-         cout << "lep2: " << leptons[1]->P4().X() << "   " << leptons[1]->P4().Y() << "\n"; 
-         cout << "MET: " << missingET->P4().X() << "   " << missingET->P4().Y() << "\n"; 
-         cout << "MET2: " << pTmiss.X() << "   " << pTmiss.Y() << "\n"; 
-         for (int i = 0; i < signal_jets.size(); i++)
-             cout << "jet: " << signal_jets[i]->P4().X() << "   " << signal_jets[i]->P4().Y() << "\n"; 
-    }
-    if (RISR3  < std::max(0.85, 0.98 - 0.02*mt2) ) return false;//cheating   or met/ISR.Perp() > 1.
-    countCutflowEvent("2L_S-high_15_cheatingISR");    
+//    cout << "RISR2: " << RISR2  << "\n"; 
+//    double RISR3 = fabs(missingET->P4().Vect().Dot(pTjet2.Unit()))/ISR2.Perp();
+//    cout << "RISR3: " << RISR3  << "\n";     
+//    if ( RISR > 1.) {
+//         cout << "Momenta: " << "\n"; 
+//         cout << "lep1: " << leptons[0]->P4().X() << "   " << leptons[0]->P4().Y() << "\n"; 
+//         cout << "lep2: " << leptons[1]->P4().X() << "   " << leptons[1]->P4().Y() << "\n"; 
+//        cout << "MET: " << missingET->P4().X() << "   " << missingET->P4().Y() << "\n"; 
+//        cout << "MET2: " << pTmiss.X() << "   " << pTmiss.Y() << "\n"; 
+//         for (int i = 0; i < signal_jets.size(); i++)
+//             cout << "jet: " << signal_jets[i]->P4().X() << "   " << signal_jets[i]->P4().Y() << "\n"; 
+//    }
+    if (RISR2  < std::max(0.85, 0.98 - 0.02*mt2) or RISR2 > 1.) return false;//cheating   or met/ISR.Perp() > 1.
+    countCutflowEvent("2L_S-high_15_RISR");    
     
     if (leptons[1]->PT < std::min(20.,2.5 + (mt2 - 100.)*2.5) ) return false;
     countCutflowEvent("2L_S-high_16_lepton2PT"); 
@@ -316,7 +512,30 @@ bool Atlas_1911_12606::Pass_S_high() {
     if (mt2 > 140.) return false;
     countCutflowEvent("2L_S-high_17_mt2<140"); 
     
-    //if (falvour==1) countSignalEvent("SR_S
+    if (flavour==1) {
+        if (mt2 < 100.5) countSignalEvent("S-high-ee-00");
+        else if (mt2 < 101.) countSignalEvent("S-high-ee-01");
+        else if (mt2 < 102.) countSignalEvent("S-high-ee-02");
+        else if (mt2 < 105.) countSignalEvent("S-high-ee-05");
+        else if (mt2 < 110.) countSignalEvent("S-high-ee-10");
+        else if (mt2 < 120.) countSignalEvent("S-high-ee-20");
+        else if (mt2 < 130.) countSignalEvent("S-high-ee-30");
+        else if (mt2 < 140.) countSignalEvent("S-high-ee-40");
+        else return false;
+    }
+    
+    if (flavour==2) {
+        if (mt2 < 100.5) countSignalEvent("S-high-mm-00");
+        else if (mt2 < 101.) countSignalEvent("S-high-mm-01");
+        else if (mt2 < 102.) countSignalEvent("S-high-mm-02");
+        else if (mt2 < 105.) countSignalEvent("S-high-mm-05");
+        else if (mt2 < 110.) countSignalEvent("S-high-mm-10");
+        else if (mt2 < 120.) countSignalEvent("S-high-mm-20");
+        else if (mt2 < 130.) countSignalEvent("S-high-mm-30");
+        else if (mt2 < 140.) countSignalEvent("S-high-mm-40");
+        else return false;
+    }   
+    
     
     return true;
 }
@@ -326,39 +545,63 @@ bool Atlas_1911_12606::Pass_S_low() {
     if (met > 200. or met < 150.) return false;
     countCutflowEvent("2L_S-low_14_met<200");
     
-    double mt2 = mT2chi2( leptons[0]->P4(), leptons[1]->P4(), 100., missingET->P4() );
+    mt2 = mT2chi2( leptons[0]->P4(), leptons[1]->P4(), 100., missingET->P4() );
     
     TLorentzVector ISR(0.,0.,0.,0.);
     for (int i = 0; i < signal_jets.size(); i++)
       ISR += signal_jets[i]->P4(); 
     
-    TLorentzVector ISR2 = -missingET->P4() - leptons[0]->P4() - leptons[1]->P4();
+//    TLorentzVector ISR2 = -missingET->P4() - leptons[0]->P4() - leptons[1]->P4();
     
     TVector3 pTjet(ISR.X(), ISR.Y(), 0.);
-    TVector3 pTjet2(ISR2.X(), ISR2.Y(), 0.);
-    double RISR = fabs(missingET->P4().Vect().Dot(pTjet.Unit()))/ISR.Perp();
-    cout << "RISR: " << RISR  << "\n"; 
+//    TVector3 pTjet2(ISR2.X(), ISR2.Y(), 0.);
+//    double RISR = fabs(missingET->P4().Vect().Dot(pTjet.Unit()))/ISR.Perp();
+//    cout << "RISR: " << RISR  << "\n"; 
     double RISR2 = fabs(pTmiss.Vect().Dot(pTjet.Unit()))/ISR.Perp();
-    cout << "RISR2: " << RISR2  << "\n"; 
-    double RISR3 = fabs(missingET->P4().Vect().Dot(pTjet2.Unit()))/ISR2.Perp();
-    cout << "RISR3: " << RISR3  << "\n";         
-    if ( RISR > 1.) {
-         cout << "Momenta: " << "\n"; 
-         cout << "lep1: " << leptons[0]->P4().X() << "   " << leptons[0]->P4().Y() << "\n"; 
-         cout << "lep2: " << leptons[1]->P4().X() << "   " << leptons[1]->P4().Y() << "\n"; 
-         cout << "MET: " << missingET->P4().X() << "   " << missingET->P4().Y() << "\n"; 
-         cout << "MET2: " << pTmiss.X() << "   " << pTmiss.Y() << "\n"; 
-         for (int i = 0; i < signal_jets.size(); i++)
-             cout << "jet: " << signal_jets[i]->P4().X() << "   " << signal_jets[i]->P4().Y() << "\n"; 
-    }
-    if (RISR3 < 0.8  ) return false;//cheating or met/ISR.Perp() > 1.
-    countCutflowEvent("2L_S-low_15_cheatingISR");    
+//    cout << "RISR2: " << RISR2  << "\n"; 
+//    double RISR3 = fabs(missingET->P4().Vect().Dot(pTjet2.Unit()))/ISR2.Perp();
+//    cout << "RISR3: " << RISR3  << "\n";         
+//    if ( RISR > 1.) {
+//         cout << "Momenta: " << "\n"; 
+//         cout << "lep1: " << leptons[0]->P4().X() << "   " << leptons[0]->P4().Y() << "\n"; 
+//         cout << "lep2: " << leptons[1]->P4().X() << "   " << leptons[1]->P4().Y() << "\n"; 
+//         cout << "MET: " << missingET->P4().X() << "   " << missingET->P4().Y() << "\n"; 
+//         cout << "MET2: " << pTmiss.X() << "   " << pTmiss.Y() << "\n"; 
+//         for (int i = 0; i < signal_jets.size(); i++)
+//             cout << "jet: " << signal_jets[i]->P4().X() << "   " << signal_jets[i]->P4().Y() << "\n"; 
+//    }
+    if (RISR2 < 0.8 or RISR2 > 1.  ) return false;//cheating or met/ISR.Perp() > 1.
+    countCutflowEvent("2L_S-low_15_RISR");    
     
     if (leptons[1]->PT < std::min(20.,2.5 + (mt2 - 100.)*2.5) ) return false;
     countCutflowEvent("2L_S-low_16_lepton2PT"); 
     
     if (mt2 > 140.) return false;
     countCutflowEvent("2L_S-low_17_mt2<140"); 
+    
+    if (flavour==1) {
+        if (mt2 < 100.5) countSignalEvent("S-low-ee-00");
+        else if (mt2 < 101.) countSignalEvent("S-low-ee-01");
+        else if (mt2 < 102.) countSignalEvent("S-low-ee-02");
+        else if (mt2 < 105.) countSignalEvent("S-low-ee-05");
+        else if (mt2 < 110.) countSignalEvent("S-low-ee-10");
+        else if (mt2 < 120.) countSignalEvent("S-low-ee-20");
+        else if (mt2 < 130.) countSignalEvent("S-low-ee-30");
+        else if (mt2 < 140.) countSignalEvent("S-low-ee-40");
+        else return false;
+    }
+    
+    if (flavour==2) {
+        if (mt2 < 100.5) countSignalEvent("S-low-mm-00");
+        else if (mt2 < 101.) countSignalEvent("S-low-mm-01");
+        else if (mt2 < 102.) countSignalEvent("S-low-mm-02");
+        else if (mt2 < 105.) countSignalEvent("S-low-mm-05");
+        else if (mt2 < 110.) countSignalEvent("S-low-mm-10");
+        else if (mt2 < 120.) countSignalEvent("S-low-mm-20");
+        else if (mt2 < 130.) countSignalEvent("S-low-mm-30");
+        else if (mt2 < 140.) countSignalEvent("S-low-mm-40");
+        else return false;
+    }        
     
     return true;
 }
