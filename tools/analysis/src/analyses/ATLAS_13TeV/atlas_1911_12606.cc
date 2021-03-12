@@ -63,7 +63,7 @@ void Atlas_1911_12606::analyze() {
               electronsTight.push_back(&(*(electrons_soft_true.end()-1)));
               //cout << "Mom: " << electrons_soft[electrons_soft.size()-1]->P4().X() << "\n";
         }
-        else if ( eff2 < 0. + (pt < 2.5) *(pt > 2.) * 0.4 + (pt > 2.5) * (pt > 8.) * 0.8 and fabs(true_particles[t]->Eta) < 2.47 ) {
+        else if ( eff2 < 0. + (pt < 2.5) *(pt > 2.) * 0.4 + (pt > 2.5) * (pt < 8.) * 0.8 and fabs(true_particles[t]->Eta) < 2.47 ) {
               Electron ele = Electron();
               ele.PT = pt;
               ele.Phi = true_particles[t]->Phi;
@@ -94,7 +94,7 @@ void Atlas_1911_12606::analyze() {
               muons_soft.push_back(&(*(muons_soft_true.end()-1)));
               muonsCombined.push_back(&(*(muons_soft_true.end()-1)));
         }
-        else if ( eff2 < 0. + (pt < 2.5) *(pt > 2.) * 0.4 + (pt > 2.5) * (pt > 8.) * 0.8 and fabs(true_particles[t]->Eta) < 2.5) {
+        else if ( eff2 < 0. + (pt < 2.5) *(pt > 2.) * 0.4 + (pt > 2.5) * (pt < 8.) * 0.8 and fabs(true_particles[t]->Eta) < 2.5) {
               Muon muo = Muon();
               muo.PT = pt;
               muo.Phi = true_particles[t]->Phi;
@@ -230,7 +230,7 @@ void Atlas_1911_12606::analyze() {
   
   if ( leptons.size() == 1 and leptons_tracks.size() > 0) {
       countCutflowEvent("1L1T_02_1L1T");
-      mlt = sqrt(leptons[0]->P4().Dot(leptons_tracks[0]->P4()));
+      mlt = (leptons[0]->P4() + leptons_tracks[0]->P4()).M();
       if (Pass_Cuts_1L1T()) {
           if (mlt < 5.) {countCutflowEvent("1L1T_17_mlt<5"); if (mlt > 4.) countSignalEvent("SR-1L1T-5.0") ; }
           if (mlt < 4.) {countCutflowEvent("1L1T_18_mlt<4"); if (mlt > 3.2) countSignalEvent("SR-1L1T-4.0") ; }
@@ -244,7 +244,7 @@ void Atlas_1911_12606::analyze() {
       
   if ( leptons.size() == 2 ) countCutflowEvent("2L_02_2L"); else return; 
   
-  mll = sqrt(leptons[0]->P4().Dot(leptons[1]->P4()));
+  mll = (leptons[0]->P4() +  leptons[1]->P4()).M();
   mt2 = 0.;
   flavour = -1;
   if (electrons_signal.size() == 2) flavour = 1;
@@ -310,7 +310,7 @@ bool Atlas_1911_12606::Pass_Cuts_1L1T() {
     if (mlt < 0.5 or mlt > 5.) return false;
     countCutflowEvent("1L1T_07_mlt<5");
     
-    double deltar = leptons[0]->P4().DeltaR(signal_tracks[0]->P4());
+    double deltar = leptons[0]->P4().DeltaR(leptons_tracks[0]->P4());
     if ( deltar < 0.05) return false;
     countCutflowEvent("1L1T_08_deltaR>0.05");
     
@@ -320,7 +320,7 @@ bool Atlas_1911_12606::Pass_Cuts_1L1T() {
     if ( signal_jets[0]->PT < 100. ) return false;
     countCutflowEvent("1L1T_10_jet>100");    
     
-    double htlt = leptons[0]->PT + signal_tracks[0]->PT;
+    double htlt = leptons[0]->PT + leptons_tracks[0]->PT;
     if (met/htlt < 30.) return false;
     countCutflowEvent("1L1T_11_MET/HTl");    
     
@@ -330,13 +330,14 @@ bool Atlas_1911_12606::Pass_Cuts_1L1T() {
     if ( leptons[0]->PT > 10.) return false;
     countCutflowEvent("1L1T_13_lepton<10");    
     
-    if ( signal_tracks[0]->PT > 5.) return false;
+    if ( leptons_tracks[0]->PT > 5.) return false;
     countCutflowEvent("1L1T_14_track<5");   
     
-    if ( (leptons[0]->Type == "electron" and abs(signal_tracks[0]->PID) != 11) or (leptons[0]->Type == "muon" and abs(signal_tracks[0]->PID) != 13) ) return false;
+//    if ( (leptons[0]->Type == "electron" and abs(leptons_tracks[0]->PID) != 11) or (leptons[0]->Type == "muon" and abs(leptons_tracks[0]->PID) != 13) ) return false;
+    if ( leptons[0]->Type != leptons_tracks[0]->Type ) return false;
     countCutflowEvent("1L1T_15_SF");
     
-    if ( leptons[0]->Charge * signal_tracks[0]->Charge > 0 ) return false;
+    if ( leptons[0]->Charge * leptons_tracks[0]->Charge > 0 ) return false;
     countCutflowEvent("1L1T_16_SS");
     
     return true;
@@ -739,9 +740,9 @@ std::vector<Track*> Atlas_1911_12606::filterLeptons(std::vector<Track*> cand_tra
 std::vector<FinalStateObject*> Atlas_1911_12606::Isolate_tracks(std::vector<FinalStateObject*> cand_tracks, double dR, double mom) {
     
   std::vector<FinalStateObject*> accepted;    
-  bool accept = true;
   
-  for (int i = 0; i < cand_tracks.size(); i++ ) { 
+  for (int i = 0; i < cand_tracks.size(); i++ ) {
+    bool accept = true;  
     for (int t = 0; t < cand_tracks.size(); t++ ) 
       if ( t != i and cand_tracks[t]->PT > mom and cand_tracks[i]->P4().DeltaR(cand_tracks[t]->P4()) < dR) {
          accept = false;
