@@ -1,8 +1,9 @@
 {
-  "analysis": "atlas_1403_5294", 
-  "author": "CheckMATE", 
-  "authoremail": "checkmate@projects.hepforge.org", 
-  "cr": "y", 
+  "analysis": "atlas_1403_5294_v2", 
+  "author": "Arran Freegard", 
+  "authoremail": "acf1g14@soton.ac.uk", 
+  "cr": "n", 
+  "ecm": "8.0", 
   "ecm": 8.0, 
   "electron_iso_absorrel": [
     "r", 
@@ -231,6 +232,5 @@
   "tags": [
     "atlas", 
     "8tev"
-  ], 
-  "version": 3.0
+  ]
 }

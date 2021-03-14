@@ -19,7 +19,10 @@ atlas_conf_2013_024            3    ATLAS, 0 leptons + 6 (2 b-)jets + etmiss    
 atlas_conf_2013_049            9    ATLAS, 2 leptons + etmiss                                        20.3    yes 
 atlas_conf_2013_061            9    ATLAS, 0-1 leptons + >= 3 b-jets + etmiss                        20.1    yes  
 atlas_conf_2013_089            12   ATLAS, 2 leptons (razor)                                         20.3    yes  
-atlas_conf_2015_004            1    ATLAS, invisible Higgs decay in VBF                              20.3    no 
+atlas_conf_2015_004            1    ATLAS, invisible Higgs decay in VBF                              20.3    no
+atlas_1403_5294                13   ATLAS, 2 leptons + etmiss, (SUSY electroweak)                    20.3    yes  
+atlas_1403_5294_CR             4    ATLAS, 2 leptons + etmiss CR, (SUSY electroweak)                 20.3    yes 
+atlas_higgs_2013_03	       1   ATLAS, 2 leptons + etmiss, (invsible Higgs)                    20.3   no 
 #Superseded analyses
 #atlas_conf_2012_147           4    ATLAS, Superseded by atlas_1407_0608                             10.0    yes  
 #atlas_conf_2013_035           6    ATLAS, Superseded by atlas_1402_7029                             20.7    no   
@@ -27,8 +30,6 @@ atlas_conf_2015_004            1    ATLAS, invisible Higgs decay in VBF         
 #atlas_conf_2013_047           10   ATLAS, Superseded by atlas_1405_7875                             20.3    yes  
 #atlas_conf_2013_048           4    ATLAS, Superseded by atlas_1403_4853                             20.0    no   
 #Unvalidated analyses
-#atlas_1403_5294                13   ATLAS, 2 leptons + etmiss, (SUSY electroweak)                    20.3    yes  
-#atlas_1403_5294_CR             4    ATLAS, 2 leptons + etmiss CR, (SUSY electroweak)                 20.3    yes 
 #atlas_1407_0600                9    ATLAS, 3 b-jets + 0-1 lepton + etmiss                            20.1    no
 #atlas_conf_2013_021            4    ATLAS, WZ standard model (3 leptons + etmiss)                    13.0    no 
 #atlas_conf_2013_031            2    ATLAS: Higgs spin measurement (WW)                               20.7    no   

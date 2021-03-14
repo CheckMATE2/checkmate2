@@ -122,6 +122,8 @@ void AnalysisHandlerATLAS_8TeV::bookAnalysis(std::string analysisName,
         a = new Atlas_conf_2015_004();
     else if(analysisName == "atlas_1507_05493")
         a = new Atlas_1507_05493();
+    else if(analysisName == "atlas_higg_2013_03")
+        a = new Atlas_higg_2013_03();
     else //@@extracode@@
         Global::abort(name,
                       "Cannot load analysis "+analysisName+
