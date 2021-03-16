@@ -15,6 +15,7 @@ class Atlas_1911_12606 : public AnalysisBase {
 
   private:
       
+    TFile *hfile;  TH1F *llinv;  
     int n;  
     TLorentzVector pTmiss;
     std::vector<FinalStateObject*> leptons;
