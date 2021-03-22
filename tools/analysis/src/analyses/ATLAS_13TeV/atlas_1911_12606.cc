@@ -13,7 +13,9 @@ void Atlas_1911_12606::initialize() {
 
   // You should initialize any declared variables here
   n = 0;
-  hfile = new TFile("atlas_1911_12606.root", "RECREATE", "Saving Histograms");
+  int ifile = bookFile("atlas_1911_12606.root", true);
+  const char *rootFileName = fNames[ifile].c_str() ;
+  hfile = new TFile(rootFileName, "RECREATE", "Saving Histograms");
   llinv = new TH1F("", "mll", 20, 0., 30.);
 }
 
@@ -262,7 +264,7 @@ void Atlas_1911_12606::analyze() {
     bool med = Pass_EW_med();
     bool low = Pass_EW_low();
   
-    if (high or med or low ) {
+    if (high or med or low ) {//note that inclusive SRs include 1L1T events in ATLAS analysis
       if ( mll < 1.) countSignalEvent("E-inc-01");   
       if ( mll < 2.) countSignalEvent("E-inc-02"); 
       if ( mll < 3.) countSignalEvent("E-inc-03"); 

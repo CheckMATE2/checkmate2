@@ -24,7 +24,7 @@ atlas_1909_08457     5    search for squarks and gluinos with same-sign leptons 
 atlas_conf_2019_040  70   search for squarks and gluinos in MET_jet final states                                      139   no
 atlas_conf_2019_020  2    Search for chargino-neutralino production with mass splittings near the electroweak scale   139   no
 atlas_1803_02762     20   Search for electroweakino production in final states with two or three leptons	          36.1  no
-atlas_1911_12606     121  search for sleptons and electroweakinos with soft leptons                                   139   no
+atlas_1911_12606     87   search for sleptons and electroweakinos with soft leptons                                   139   no
 
 #Superseded:          
 #atlas_1602_09058     4    2 ss leptons or 3 leptons                                                                   3.2   no   
