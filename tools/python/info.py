@@ -227,8 +227,9 @@ class Info(dict):
         if args.llpids != "":
             try:
                 cls.parameters['longlivedPIDs'] = [int(x) for x in args.llpids.split(",")]
-                for file in cls.parameters['longlivedPIDs']:
-                    print file
+                with open("../data/longlivedPIDs.txt", "w") as output:
+                    for pdg in cls.parameters['longlivedPIDs']:
+                        output.write(str(pdg) + '\n')
             except ValueError:
                 AdvPrint.cerr_exit("long lived PIDs are in wrong format. Must be integer numbers, split by ','")
               
@@ -335,7 +336,7 @@ class Info(dict):
                 elif optional_parameter == "invisiblepids":
                     args.invpids = Config.get("Parameters", "invisiblepids")
                 elif optional_parameter == "longlivedpids":
-                    args.invpids = Config.get("Parameters", "longlivedpids")
+                    args.llpids = Config.get("Parameters", "longlivedpids")
                 elif optional_parameter == "slhafile":
                     args.slhafile = Config.get("Parameters", "slhafile")
                 elif optional_parameter == "mgprocess":
@@ -818,6 +819,7 @@ class Info(dict):
             cls.files['output_result_zsig'] = os.path.join(cls.paths['output'], "result_Zexp.txt")
             cls.files['output_bestsignificanceregions'] = os.path.join(cls.paths['output'], "evaluation", "best_significance_regions.txt")     
 
+            
         cls.files['output_evaluation_event_numbers'] = dict()
         cls.files['output_evaluation_r_limits'] = dict()
         if cls.flags["fullcls"]:
