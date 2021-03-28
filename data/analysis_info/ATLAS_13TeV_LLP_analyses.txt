@@ -1,4 +1,3 @@
 #Name                NSR  Description  Lumi  CR?  
 atlas_1712_02118_ew	 1    search for disappearing track (ew SR)                                                       36.0  no 
-atlas_1712_02118_strong	 1    search for disappearing track (strong SR)                                                   36.0  no 
 
