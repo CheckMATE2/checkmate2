@@ -33,6 +33,8 @@
 
 #include "Global.h"
 
+#include <fstream>
+
 class AnalysisHandler {
 public:
     //! Used to map tag names to list of tag values
@@ -114,6 +116,26 @@ public:
     
     //! name which is printed in logfile
     std::string name;
+
+    int getLLP(){return LLPid.size() != 0 ? LLPid[0] : 1000024;};
+
+
+    void readLLPfromData(){
+      ifstream myReadFile;
+      int temp;
+      myReadFile.open("../data/longlivedPIDs.txt");
+      if (myReadFile.is_open()) {
+	while (!myReadFile.eof()) {
+	  myReadFile >> temp;
+	  LLPid.push_back(temp);
+	}
+      }
+      myReadFile.close();
+    };
+
+    
+    void readLSPfromData();
+
     
 protected:
     
@@ -202,12 +224,6 @@ protected:
     TChain* rootFileChain;
     //! object to read .root event trees
     ExRootTreeReader* treeReader;
-
-    std::vector <int> getLLP();
-    std::vector <int> getLSP();
-
-    void readLLPfromData();
-    void readLSPfromData();
 
     
 private:
