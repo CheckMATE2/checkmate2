@@ -197,6 +197,8 @@ void Fritz::setupAnalysisHandler(Config conf) {
             aHandler = new AnalysisHandlerATLAS_7TeV();
         } else if (type == "atlas8tev") {
             aHandler = new AnalysisHandlerATLAS_8TeV();
+	} else if (type == "atlas8tev_llp") {
+	  aHandler = new AnalysisHandlerATLAS_8TeV_LLP();
         } else if (type == "atlas13tev") {
             aHandler = new AnalysisHandlerATLAS_13TeV();
 	} else if (type == "atlas13tev_llp") {
@@ -213,6 +215,10 @@ void Fritz::setupAnalysisHandler(Config conf) {
             aHandler = new AnalysisHandlerCMS_8TeV();
         } else if (type == "cms13tev") {
             aHandler = new AnalysisHandlerCMS_13TeV();
+	} else if (type == "cms8tev_llp") {
+            aHandler = new AnalysisHandlerCMS_8TeV_LLP();
+        } else if (type == "cms13tev_llp") {
+            aHandler = new AnalysisHandlerCMS_13TeV_LLP();
         } else if (type == "cms14tev_projected") {
             aHandler = new AnalysisHandlerCMS_14TeV_projected();
         } else {
