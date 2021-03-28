@@ -1,5 +1,4 @@
 #include "atlas_1712_02118_ew.h"
-
 #include <TRandom.h>
 #include <TFile.h>
 #include <TH2.h>
@@ -30,6 +29,8 @@ void Atlas_1712_02118_ew::initialize() {
   //  std::ifstream is("../data/longlivedPIDs.txt");
   //  while(is >> LLPID)
 
+  //  LLPID =  LLPid.size() != 0 ? LLPid[0] : 1000024;
+  LLPID = getLLP();
   // Read efficiency map
   if (!acceffmapFile) {
     acceffmapFile = new TFile (acceffmapFilePath);
@@ -113,9 +114,11 @@ void Atlas_1712_02118_ew::analyze() {
   
 
   //  std::cout << "-----------------NEU----------------------" << std::endl;
+
+  //  std::cout << LLPID << std::endl;
   
   for(int i=0;i<true_particles.size();i++){
-    //        std::cout << "i: " << i <<std::endl;
+    //    std::cout << "i: " << i <<std::endl;
     if( fabs(true_particles[i]->PID) == LLPID ){
       //      std::cout << true_particles[i]->Status << std::endl;
       if( true_particles[i]->Status == 62){
