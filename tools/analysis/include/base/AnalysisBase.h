@@ -60,12 +60,16 @@ class AnalysisBase {
     friend class AnalysisHandlerATLAS_7TeV; // Need access to members to set them
     friend class AnalysisHandlerATLAS_8TeV; // Need access to members to set them
     friend class AnalysisHandlerATLAS_13TeV; // Need access to members to set them
+    friend class AnalysisHandlerATLAS_8TeV_LLP; // Need access to members to set them
+    friend class AnalysisHandlerATLAS_13TeV_LLP; // Need access to members to set them
     friend class AnalysisHandlerATLAS_14TeV_projected; // Need access to members to set them
     friend class AnalysisHandlerATLAS_14TeV_HL_FlatBtagger; // Need access to members to set them
     friend class AnalysisHandlerCMS; // Need access to members to set them
     friend class AnalysisHandlerCMS_7TeV; // Need access to members to set them
     friend class AnalysisHandlerCMS_8TeV; // Need access to members to set them
     friend class AnalysisHandlerCMS_13TeV; // Need access to members to set them
+    friend class AnalysisHandlerCMS_8TeV_LLP; // Need access to members to set them
+    friend class AnalysisHandlerCMS_13TeV_LLP; // Need access to members to set them
     friend class AnalysisHandlerCMS_14TeV_projected; // Need access to members to set them
  public:
     //! Constructor function to load the Delphes ROOT file.
@@ -139,6 +143,9 @@ class AnalysisBase {
     std::vector<Tower*> towers; //!< Container of all calorimeter towers.    
     ETMiss* missingET; //!< Reconstructed missingET vector excluding muons. 
     std::vector<GenParticle*> true_b;
+    std::vector<Jet*> genjets; //!< Container of all gen jets.
+    MissingET* GenMissingET;
+    std::vector<GenParticle*> true_particles; //!< Container of all truth particles.
      /** @} */   
      
     

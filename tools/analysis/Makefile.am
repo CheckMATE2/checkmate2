@@ -3,7 +3,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 AM_CXXFLAGS = @ROOTCFLAGS@ @DELPHESCFLAGS@ -Iinclude/base -Iinclude/kinematics -Iinclude/kinematics/mctlib \
              -Iinclude/kinematics/mt2family -Iinclude/kinematics/topness -Iinclude/global \
              -Iinclude/analyses/ATLAS_7TeV -Iinclude/analyses/ATLAS_8TeV -Iinclude/analyses/ATLAS_13TeV -Iinclude/analyses/ATLAS_14TeV_HighLumi \
-             -Iinclude/analyses/CMS_7TeV -Iinclude/analyses/CMS_8TeV -Iinclude/analyses/CMS_13TeV -Iinclude/analyses/CMS_14TeV_HighLumi
+             -Iinclude/analyses/CMS_7TeV -Iinclude/analyses/CMS_8TeV -Iinclude/analyses/CMS_13TeV -Iinclude/analyses/CMS_14TeV_HighLumi -Iinclude/analyses/ATLAS_13TeV_LLP
 
 # the library names to build
 mylibdir = $(abs_top_builddir)/tools/analysis/lib
@@ -135,6 +135,7 @@ libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_conf_2020_048.h src
 libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2004_14060.h src/analyses/ATLAS_13TeV/atlas_2004_14060.cc
 libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_1908_03122.h src/analyses/ATLAS_13TeV/atlas_1908_03122.cc
 libanalyses_la_SOURCES += include/analyses/ATLAS_8TeV/atlas_higg_2013_03.h src/analyses/ATLAS_8TeV/atlas_higg_2013_03.cc
+libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV_LLP/atlas_1712_02118_ew.h src/analyses/ATLAS_13TeV_LLP/atlas_1712_02118_ew.cc
 #@@extraanalysis@@
 
 libanalyses_la_LDFLAGS = -avoid-version -shared

@@ -15,6 +15,7 @@
 #include "AnalysisHandlerATLAS_7TeV.h"
 #include "AnalysisHandlerATLAS_8TeV.h"
 #include "AnalysisHandlerATLAS_13TeV.h"
+#include "AnalysisHandlerATLAS_13TeV_LLP.h"
 #include "AnalysisHandlerATLAS_14TeV_projected.h"
 #include "AnalysisHandlerATLAS_14TeV_HL_FlatBtagger.h"
 #include "AnalysisHandlerCMS.h"

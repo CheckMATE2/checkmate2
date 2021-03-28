@@ -199,6 +199,8 @@ void Fritz::setupAnalysisHandler(Config conf) {
             aHandler = new AnalysisHandlerATLAS_8TeV();
         } else if (type == "atlas13tev") {
             aHandler = new AnalysisHandlerATLAS_13TeV();
+	} else if (type == "atlas13tev_llp") {
+	    aHandler = new AnalysisHandlerATLAS_13TeV_LLP();
         } else if (type == "atlas14tev_projected") {
             aHandler = new AnalysisHandlerATLAS_14TeV_projected();
         } else if (type == "atlas14tev_hl_flatbtagger") {

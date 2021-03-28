@@ -16,12 +16,16 @@ fritz_SOURCES = src/main.cc \
                     src/analysishandler/AnalysisHandlerATLAS_7TeV.cc include/analysishandler/AnalysisHandlerATLAS_7TeV.h \
                     src/analysishandler/AnalysisHandlerATLAS_8TeV.cc include/analysishandler/AnalysisHandlerATLAS_8TeV.h \
                     src/analysishandler/AnalysisHandlerATLAS_13TeV.cc include/analysishandler/AnalysisHandlerATLAS_13TeV.h \
+                    src/analysishandler/AnalysisHandlerATLAS_8TeV_LLP.cc include/analysishandler/AnalysisHandlerATLAS_8TeV_LLP.h \
+                    src/analysishandler/AnalysisHandlerATLAS_13TeV_LLP.cc include/analysishandler/AnalysisHandlerATLAS_13TeV_LLP.h \
                     src/analysishandler/AnalysisHandlerATLAS_14TeV_projected.cc include/analysishandler/AnalysisHandlerATLAS_14TeV_projected.h \
                     src/analysishandler/AnalysisHandlerATLAS_14TeV_HL_FlatBtagger.cc include/analysishandler/AnalysisHandlerATLAS_14TeV_HL_FlatBtagger.h \
                     src/analysishandler/AnalysisHandlerCMS.cc include/analysishandler/AnalysisHandlerCMS.h \
                     src/analysishandler/AnalysisHandlerCMS_7TeV.cc include/analysishandler/AnalysisHandlerCMS_7TeV.h \
                     src/analysishandler/AnalysisHandlerCMS_8TeV.cc include/analysishandler/AnalysisHandlerCMS_8TeV.h \
                     src/analysishandler/AnalysisHandlerCMS_13TeV.cc include/analysishandler/AnalysisHandlerCMS_13TeV.h \
+                    src/analysishandler/AnalysisHandlerCMS_8TeV_LLP.cc include/analysishandler/AnalysisHandlerCMS_8TeV_LLP.h \
+                    src/analysishandler/AnalysisHandlerCMS_13TeV_LLP.cc include/analysishandler/AnalysisHandlerCMS_13TeV_LLP.h \
                     src/analysishandler/AnalysisHandlerCMS_14TeV_projected.cc include/analysishandler/AnalysisHandlerCMS_14TeV_projected.h
 
 fritz_LDADD = -L@ROOTLIBDIR@ @ROOTGLIBS@ @ROOTLIBS@ -L@DELPHESLIBDIR@ @DELPHESLIBS@ -L$(abs_top_builddir)/tools/analysis -lanalyses
@@ -34,10 +38,14 @@ fritz_CXXFLAGS = \
         -I$(abs_top_builddir)/tools/analysis/include/analyses/ATLAS_7TeV \
         -I$(abs_top_builddir)/tools/analysis/include/analyses/ATLAS_8TeV \
         -I$(abs_top_builddir)/tools/analysis/include/analyses/ATLAS_13TeV \
+        -I$(abs_top_builddir)/tools/analysis/include/analyses/ATLAS_8TeV_LLP \
+        -I$(abs_top_builddir)/tools/analysis/include/analyses/ATLAS_13TeV_LLP \
         -I$(abs_top_builddir)/tools/analysis/include/analyses/ATLAS_14TeV_HighLumi \
         -I$(abs_top_builddir)/tools/analysis/include/analyses/CMS_7TeV \
         -I$(abs_top_builddir)/tools/analysis/include/analyses/CMS_8TeV \
         -I$(abs_top_builddir)/tools/analysis/include/analyses/CMS_13TeV \
+        -I$(abs_top_builddir)/tools/analysis/include/analyses/CMS_8TeV_LLP \
+        -I$(abs_top_builddir)/tools/analysis/include/analyses/CMS_13TeV_LLP \
         -I$(abs_top_builddir)/tools/analysis/include/analyses/CMS_14TeV_HighLumi
 
 fritz_LDFLAGS =  -R@ROOTLIBDIR@ -R@DELPHESLIBDIR@ -R$(abs_top_builddir)/tools/analysis

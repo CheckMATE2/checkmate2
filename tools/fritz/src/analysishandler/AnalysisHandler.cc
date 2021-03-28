@@ -4,12 +4,15 @@ AnalysisHandler::AnalysisHandler() {
     doJetTauTags = false;
     eventWeight = 0;
     branchGenParticle = NULL;
+    branchSkimmedParticle = NULL;
     branchEvent = NULL;
     branchElectron = NULL;
     branchMuon = NULL;
     branchJet = NULL;
+    branchGenJet = NULL;
     branchPhoton = NULL;
     branchMissingET = NULL;
+    branchGenMissingET = NULL;
     branchTrack = NULL;
     branchTower = NULL;
     dHandler = NULL;
@@ -453,21 +456,62 @@ void AnalysisHandler::setup(EventFile file) {
     treeReader = new ExRootTreeReader(rootFileChain);
 
     branchEvent = treeReader->UseBranch("Event");
-    branchGenParticle = treeReader->UseBranch("Particle");
+    branchGenParticle = treeReader->UseBranch("GenParticle");
+    branchSkimmedParticle = treeReader->UseBranch("Particle");
     branchJet = treeReader->UseBranch("Jet");
+    branchGenJet = treeReader->UseBranch("GenJet");
     branchTrack = treeReader->UseBranch("Track");
     branchTower = treeReader->UseBranch("Tower");
     branchElectron = treeReader->UseBranch("Electron");
     branchMuon = treeReader->UseBranch("Muon");
     branchPhoton = treeReader->UseBranch("Photon");
     branchMissingET = treeReader->UseBranch("MissingET");
-    if(!branchGenParticle || !branchEvent || !branchJet || !branchTrack ||
-       !branchTower || !branchElectron || !branchMuon || !branchPhoton ||
+    branchGenMissingET = treeReader->UseBranch("GenMissingET");
+    if( !branchSkimmedParticle || !branchEvent || !branchJet || !branchTrack ||
+       !branchTower || !branchElectron || !branchMuon || !branchPhoton || 
        !branchMissingET) {
         Global::abort(name,
                       "could not link all required branches to the "
                       +dHandler->name+" equivalents!");
     }
+
+    if (branchGenParticle){
+        Global::print(name,
+                      "Linked GenParticle branch to the "
+                      +dHandler->name+" equivalents!");
+    }
+
+    else {
+    	Global::print(name,
+                      "Warning!!! Unable to link GenParticle branch to the "
+                      +dHandler->name+" equivalents!");
+    }
+
+    if (branchGenJet){
+        Global::print(name,
+                      "Linked GenJet branch to the "
+                      +dHandler->name+" equivalents!");
+    }
+
+    else {
+    	Global::print(name,
+                      "Warning!!! Unable to link GenJets branch to the "
+                      +dHandler->name+" equivalents!");
+    }
+
+    if (branchGenMissingET){
+        Global::print(name,
+                      "Linked GenMissingET branch to the "
+                      +dHandler->name+" equivalents!");
+    }
+
+    else {
+    	Global::print(name,
+                      "Warning!!! Unable to link GenMissingET branch to the "
+                      +dHandler->name+" equivalents!");
+    }
+
+
     Global::print(name,
                   "successfully loaded branches in ROOT file");
 }
@@ -484,12 +528,16 @@ void AnalysisHandler::setup( DelphesHandler* dHandlerIn) {
     for (std::set<CMExRootTreeBranch*>::iterator it = branches.begin();
          it != branches.end();
          it++) {
-        if ((std::string)(*it)->GetData()->GetName() == "Particle")
+        if ((std::string)(*it)->GetData()->GetName() == "GenParticle")
                 branchGenParticle = (*it)->GetData();
+        else if ((std::string)(*it)->GetData()->GetName() == "Particle")
+                branchSkimmedParticle = (*it)->GetData();
         else if ((std::string)(*it)->GetData()->GetName() == "Event")
                 branchEvent= (*it)->GetData();
         else if ((std::string)(*it)->GetData()->GetName() == "Jet")
                 branchJet = (*it)->GetData();
+        else if ((std::string)(*it)->GetData()->GetName() == "GenJet")
+                branchGenJet = (*it)->GetData();
         else if ((std::string)(*it)->GetData()->GetName() == "Track")
                 branchTrack = (*it)->GetData();
         else if ((std::string)(*it)->GetData()->GetName() == "Tower")
@@ -502,14 +550,52 @@ void AnalysisHandler::setup( DelphesHandler* dHandlerIn) {
                 branchPhoton = (*it)->GetData();
         else if ((std::string)(*it)->GetData()->GetName() == "MissingET")
                 branchMissingET = (*it)->GetData();
+        else if ((std::string)(*it)->GetData()->GetName() == "GenMissingET")
+                branchGenMissingET = (*it)->GetData();
     }
-    if(!branchGenParticle || !branchEvent || !branchJet || !branchTrack ||
-       !branchTower || !branchElectron || !branchMuon || !branchPhoton ||
+    if(!branchSkimmedParticle || !branchEvent || !branchJet || !branchTrack ||
+       !branchTower || !branchElectron || !branchMuon || !branchPhoton || 
        !branchMissingET) {
         Global::abort(name,
-                      "could not link all required branches to the"
+                      "could not link all required branches to the "
                       +dHandler->name+" equivalents!");
     }
+    if (branchGenJet){
+        Global::print(name,
+                      "Linked GenJet branch to the "
+                      +dHandler->name+" equivalents!");
+    }
+
+    else {
+    	Global::print(name,
+                      "Warning!!! Unable to link GenJet branch to the "
+                      +dHandler->name+" equivalents!");
+    }
+
+    if (branchGenParticle){
+        Global::print(name,
+                      "Linked GenParticle branch to the "
+                      +dHandler->name+" equivalents!");
+    }
+
+    else {
+    	Global::print(name,
+                      "Warning!!! Unable to link GenParticle branch to the "
+                      +dHandler->name+" equivalents!");
+    }
+
+    if (branchGenMissingET){
+        Global::print(name,
+                      "Linked GenMissingET branch to the "
+                      +dHandler->name+" equivalents!");
+    }
+
+    else {
+    	Global::print(name,
+                      "Warning!!! Unable to link GenMissingET branch to the "
+                      +dHandler->name+" equivalents!");
+    }
+
     Global::print(name,
                   "AnalysisHandler successfully linked to "+dHandler->name);
     initialize(); // virtual, defined by derived classes
@@ -530,6 +616,7 @@ bool AnalysisHandler::processEvent(int iEvent) {
         listOfAnalyses[a]->processEvent(iEvent);
         //FIXME It must be possible to do this nicer...
         delete listOfAnalyses[a]->missingET;
+        // delete listOfAnalyses[a]->GenMissingET;
     }
     Global::unredirect_cout();
     return true;
@@ -780,21 +867,26 @@ bool AnalysisHandler::readParticles(int iEvent) {
     true_b.clear();
     true_c.clear();
     true_tau.clear();
-    if (!branchGenParticle) {
+    true_e.clear();
+    true_mu.clear();
+    if (!branchSkimmedParticle) {
         Global::abort(name,
-                      "GenParticleBranch not properly assigned!");
+                      "SkimmedParticleBranch not properly assigned!");
     }
 
-    for(int i = 0; i < branchGenParticle->GetEntries(); i++) {
-        if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 5)
-            true_b.push_back((GenParticle*)branchGenParticle->At(i));
-        else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 4)
-            true_c.push_back((GenParticle*)branchGenParticle->At(i));
-        else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 15) {
-            true_tau.push_back((GenParticle*)branchGenParticle->At(i));
-        }
+    for(int i = 0; i < branchSkimmedParticle->GetEntries(); i++) {
+        if (abs( ((GenParticle*)branchSkimmedParticle->At(i))->PID)  == 5)
+            true_b.push_back((GenParticle*)branchSkimmedParticle->At(i));
+        else if (abs( ((GenParticle*)branchSkimmedParticle->At(i))->PID)  == 4)
+            true_c.push_back((GenParticle*)branchSkimmedParticle->At(i));
+        else if (abs( ((GenParticle*)branchSkimmedParticle->At(i))->PID)  == 15)
+            true_tau.push_back((GenParticle*)branchSkimmedParticle->At(i));
+        else if (abs( ((GenParticle*)branchSkimmedParticle->At(i))->PID)  == 11)
+            true_e.push_back((GenParticle*)branchSkimmedParticle->At(i));
+        else if (abs( ((GenParticle*)branchSkimmedParticle->At(i))->PID)  == 13)
+            true_mu.push_back((GenParticle*)branchSkimmedParticle->At(i));
     }
-    branchGenParticle->Clear();
+    branchSkimmedParticle->Clear();
 
     tracks.clear();
     if (!branchTrack)
@@ -816,6 +908,26 @@ bool AnalysisHandler::readParticles(int iEvent) {
     for(int i = 0; i < branchJet->GetEntries(); i++)
         jets.push_back((Jet*)branchJet->At(i));
     branchJet->Clear();
+
+    true_particles.clear();
+    if (!branchGenParticle);
+        //Global::print(name, "Warning!!! branchGenParticle not properly assigned!");
+    else {
+        //Global::print(name, "NOTE: branchGenParticle included!");
+        for(int i = 0; i < branchGenParticle->GetEntries(); i++)
+            true_particles.push_back((GenParticle*)branchGenParticle->At(i));
+        branchGenParticle->Clear();
+    }
+
+    genjets.clear();
+    if (!branchGenJet);
+        //Global::print(name, "Warning!!! branchGenJet not properly assigned!");
+    else {
+        //Global::print(name, "NOTE: branchGenJet included!");
+        for(int i = 0; i < branchGenJet->GetEntries(); i++)
+            genjets.push_back((Jet*)branchGenJet->At(i));
+        branchGenJet->Clear();
+    }
 
     electrons.clear();
     if (!branchElectron) {
@@ -846,6 +958,14 @@ bool AnalysisHandler::readParticles(int iEvent) {
     }
     missingET = new ETMiss((MissingET*)branchMissingET->At(0));
     branchMissingET->Clear();
+
+    if (!branchGenMissingET || branchGenMissingET->GetEntries() == 0);
+        //Global::print(name, "Warning!!! branchGenMissingET not properly assigned or empty!");
+    else {
+        //Global::print(name, "NOTE: branchGenMissingET included!");
+        GenMissingET = (MissingET*) branchGenMissingET->At(0);
+        branchGenMissingET->Clear();
+    }
 
     if (!branchEvent || branchEvent->GetEntries() == 0) {
         Global::abort(name,
@@ -1095,14 +1215,16 @@ void AnalysisHandler::linkObjects() {
     for(int a = 0; a < listOfAnalyses.size(); a++) {
         // important: as many analyses cut on the containers,
         //  every analysis must use its own container
-        std::vector<GenParticle*> tempTrueB = true_b;
-        listOfAnalyses[a]->true_b = tempTrueB;        
+        std::vector<GenParticle*> temptruePart = true_particles;
+        listOfAnalyses[a]->true_particles = temptruePart;
         std::vector<Track*> tempTracks = tracks;
         listOfAnalyses[a]->tracks = tempTracks;
         std::vector<Tower*> tempTowers = towers;
         listOfAnalyses[a]->towers = tempTowers;
         std::vector<Jet*> tempJets = jets;
         listOfAnalyses[a]->jets = tempJets;
+        std::vector<Jet*> tempGenJets = genjets;
+        listOfAnalyses[a]->genjets = tempGenJets;
         std::vector<Electron*> tempElectrons = electrons;
         listOfAnalyses[a]->electrons = tempElectrons;
         std::vector<Muon*> tempMuons = muons;
@@ -1111,6 +1233,8 @@ void AnalysisHandler::linkObjects() {
         listOfAnalyses[a]->photons = tempPhotons;
         ETMiss* tempMissingET =  new ETMiss(missingET);
         listOfAnalyses[a]->missingET = tempMissingET;
+        MissingET* tempGenMET = GenMissingET;
+        listOfAnalyses[a]->GenMissingET = tempGenMET;
         listOfAnalyses[a]->weight = eventWeight;
 
         listOfAnalyses[a]->electronIsolationTags = electronIsolationTags;
