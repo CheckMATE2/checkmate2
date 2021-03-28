@@ -50,18 +50,22 @@ class Info(dict):
         cls.analysis_groups = {
                 "ATLAS_7TeV",
                 "ATLAS_8TeV",
+                "ATLAS_8TeV_LLP",
                 "ATLAS_13TeV",
                 "ATLAS_13TeV_LLP",
                 "ATLAS_14TeV_HighLumi",
                 "CMS_7TeV",
                 "CMS_8TeV",
+                "CMS_8TeV_LLP",
                 "CMS_13TeV",
+                "CMS_13TeV_LLP",
                 "CMS_14TeV_HighLumi"           
         }
         cls.experiments = {
                 "atlas",
                 "atlas7tev",
                 "atlas8tev",
+                "atlas8tev_llp",
                 "atlas13tev",
                 "atlas13tev_llp",
                 "atlas14tev_projected",
@@ -69,15 +73,19 @@ class Info(dict):
                 "cms",
                 "cms7tev",
                 "cms8tev",
+                "cms8tev_llp",
                 "cms13tev",
+                "cms13tev_llp",            
                 "cms14tev_projected"
                 }
         cls.detector_setups = {
                 "ATLAS": {
                     7.0: {"default": ("atlas7tev", "ATLAS_7TeV")},
-                    8.0: {"default": ("atlas8tev", "ATLAS_8TeV")},
+                    8.0: {"default": ("atlas8tev", "ATLAS_8TeV"),
+                          "LLP": ("atlas8tev_llp", "ATLAS_8TeV_LLP")
+                    },
                     13.0: {"default": ("atlas13tev", "ATLAS_13TeV"),
-                           "LLP": ("atlas13tev_llp", "ATLAS_13TeV_LLP")
+                           "LLP": ("atlas13tev_llp", "ATLAS_13TeV_LLP"),
                         },
                     14.0: {
                         "projected": ("atlas14tev_projected", "ATLAS_14TeV_HighLumi"),
@@ -86,8 +94,12 @@ class Info(dict):
                     },
                 "CMS": {
                     7.0: {"default": ("cms7tev", "CMS_7TeV")},
-                    8.0: {"default": ("cms8tev", "CMS_8TeV")},
-                    13.0: {"default": ("cms13tev", "CMS_13TeV")},
+                    8.0: {"default": ("cms8tev", "CMS_8TeV"),
+                          "LLP": ("cms8tev_llp", "CMS_8TeV_LLP")
+                    },
+                    13.0: {"default": ("cms13tev", "CMS_13TeV"),
+                           "LLP": ("cms13tev_llp", "CMS_13TeV_LLP")
+                    },
                     14.0: {"projected": ("cms14tev_projected", "CMS_14TeV_HighLumi")},
                     }
                 }
@@ -95,6 +107,7 @@ class Info(dict):
                 "atlas": "AnalysisHandlerATLAS",
                 "atlas7tev": "AnalysisHandlerATLAS_7TeV",
                 "atlas8tev": "AnalysisHandlerATLAS_8TeV",
+                "atlas8tev_llp": "AnalysisHandlerATLAS_8TeV_LLP",
                 "atlas13tev": "AnalysisHandlerATLAS_13TeV",
                 "atlas13tev_llp": "AnalysisHandlerATLAS_13TeV_LLP",
                 "atlas14tev_projected": "AnalysisHandlerATLAS_14TeV_projected",
@@ -102,7 +115,9 @@ class Info(dict):
                 "cms": "AnalysisHandlerCMS",
                 "cms7tev": "AnalysisHandlerCMS_7TeV",
                 "cms8tev": "AnalysisHandlerCMS_8TeV",
+                "cms8tev_llp": "AnalysisHandlerCMS_8TeV_LLP",
                 "cms13tev": "AnalysisHandlerCMS_13TeV",
+                "cms13tev_llp": "AnalysisHandlerCMS_13TeV_LLP",
                 "cms14tev_projected": "AnalysisHandlerCMS_14TeV_projected",
                 }
         cls.paths = paths
@@ -212,6 +227,8 @@ class Info(dict):
         if args.llpids != "":
             try:
                 cls.parameters['longlivedPIDs'] = [int(x) for x in args.llpids.split(",")]
+                for file in cls.parameters['longlivedPIDs']:
+                    print file
             except ValueError:
                 AdvPrint.cerr_exit("long lived PIDs are in wrong format. Must be integer numbers, split by ','")
               
@@ -710,6 +727,7 @@ class Info(dict):
         delphes_global_config["atlas"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS.tcl')
         delphes_global_config["atlas7tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS.tcl')
         delphes_global_config["atlas8tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS.tcl')
+        delphes_global_config["atlas8tev_llp"] = os.path.join(cls.paths['cards'], 'delphes_ATLAS_LLP.tcl')
         delphes_global_config["atlas13tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS_13TeV.tcl')
         delphes_global_config["atlas13tev_llp"] = os.path.join(cls.paths['cards'], 'delphes_ATLAS_13TeV_LLP.tcl')
         delphes_global_config["atlas14tev_projected"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_ATLAS_14TeV.tcl')
@@ -717,7 +735,9 @@ class Info(dict):
         delphes_global_config["cms"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS.tcl')
         delphes_global_config["cms7tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS.tcl')
         delphes_global_config["cms8tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS.tcl')
+        delphes_global_config["cms8tev_llp"] = os.path.join(cls.paths['cards'], 'delphes_CMS_LLP.tcl')
         delphes_global_config["cms13tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS_13TeV.tcl')
+        delphes_global_config["cms13tev_llp"] = os.path.join(cls.paths['cards'], 'delphes_CMS_13TeV_LLP.tcl')
         delphes_global_config["cms14tev_projected"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS_14TeV.tcl')
         cls.files['delphes_global_config'] = delphes_global_config
         
