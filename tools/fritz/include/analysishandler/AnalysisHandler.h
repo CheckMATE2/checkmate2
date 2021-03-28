@@ -194,6 +194,8 @@ protected:
     ETMiss* missingET; //!< reconstruced missingET without muons
     MissingET* GenMissingET;
     /** @} */
+    std::vector <int> LLPid;
+    std::vector <int> LSPid;
 
     /** @defgroup tagcontainers general eventwise tag lists
      *  These lists are set for each event and stores the list of tags for
@@ -227,9 +229,6 @@ protected:
 
     
 private:
-    std::vector <int> LLPid;
-    std::vector <int> LSPid;
-
     //! \brief Sets up b tagging for the AnalysisHandler handlerLabel
     //!
     //! \param conf the complete fritz configuration

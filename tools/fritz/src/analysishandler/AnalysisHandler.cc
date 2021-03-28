@@ -1,7 +1,8 @@
 #include "AnalysisHandler.h"
 
 AnalysisHandler::AnalysisHandler() {
-    doJetTauTags = false;
+
+  doJetTauTags = false;
     eventWeight = 0;
     branchGenParticle = NULL;
     branchSkimmedParticle = NULL;

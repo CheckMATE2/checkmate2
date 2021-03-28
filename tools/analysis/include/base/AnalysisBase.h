@@ -91,7 +91,31 @@ class AnalysisBase {
     void setup(std::map<std::string, std::vector<int> > whichTagsIn, std::map<std::string, std::string> eventParameters);
     void processEvent(int iEvent);
     void finish();
-//TODO Texts
+
+    int getLLP(){return LLPid.size() != 0 ? LLPid[0] : 1000024;};
+
+
+    void readLLPfromData(){
+      ifstream myReadFile;
+      int temp;
+      myReadFile.open("../data/longlivedPIDs.txt");
+      if (myReadFile.is_open()) {
+	while (!myReadFile.eof()) {
+	  myReadFile >> temp;
+	  LLPid.push_back(temp);
+	}
+      }
+      myReadFile.close();
+    };
+
+    
+    void readLSPfromData();
+
+    
+    std::vector <int> LLPid;
+    std::vector <int> LSPid;
+
+    //TODO Texts
 
  protected:
     //! Analysis functions the user has to define.

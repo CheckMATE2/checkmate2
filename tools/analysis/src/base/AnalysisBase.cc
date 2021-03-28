@@ -1,6 +1,7 @@
 #include "AnalysisBase.h"
 
 AnalysisBase::AnalysisBase() {
+    readLLPfromData();
     outputFolder = "";
     outputPrefix = "";
     analysis = "";
