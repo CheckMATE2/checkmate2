@@ -117,6 +117,22 @@ public:
     //! name which is printed in logfile
     std::string name;
 
+    int getLSP(){return LSPid.size() != 0 ? LSPid[0] : 1000022;};
+
+
+    void readLSPfromData(){
+      ifstream myReadFile;
+      int temp;
+      myReadFile.open("../data/invisiblePIDs.txt");
+      if (myReadFile.is_open()) {
+	while (!myReadFile.eof()) {
+	  myReadFile >> temp;
+	  LSPid.push_back(temp);
+	}
+      }
+      myReadFile.close();
+    };
+
     int getLLP(){return LLPid.size() != 0 ? LLPid[0] : 1000024;};
 
 
@@ -134,8 +150,6 @@ public:
     };
 
     
-    void readLSPfromData();
-
     
 protected:
     
