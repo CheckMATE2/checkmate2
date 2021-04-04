@@ -21,7 +21,7 @@
   ], 
   "electron_niso": 1, 
   "expectation_known": "y", 
-  "experiment": "atlas13tev", 
+  "experiment": "atlas13tev_llp", 
   "info_set": [
     "obs", 
     "bkg", 

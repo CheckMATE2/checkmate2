@@ -21,7 +21,7 @@
   ], 
   "electron_niso": 1, 
   "expectation_known": "y", 
-  "experiment": "cms8tev", 
+  "experiment": "cms8tev_llp", 
   "info_set": [
     "obs", 
     "bkg", 
