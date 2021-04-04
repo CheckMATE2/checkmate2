@@ -274,7 +274,7 @@ class Info(dict):
         if args.bpaefc != "":
             cls.parameters["BestPerAnalysisEvaluationFileColumns"] = args.bpaefc.split(",") 
         cls.make_flags_consistent()
-        
+
         cls.load_analyses(args.analysis)
         output_name =  args.name.replace(" ", "_")
         cls.fill_output_paths_and_files(cls.paths['results'], output_name) 
@@ -596,22 +596,54 @@ class Info(dict):
 
     @classmethod
     def load_analyses(cls, analysis_input_string):
-        """ Uses the input string from the user to load one or more analyses """    
+        """ Uses the input string from the user to load one or more analyses """
+
         analysis_input_string = analysis_input_string.lower() # to avoid capitalisation errors
         tokens = analysis_input_string.split(",")
+        #rruiz:
+        #First check whether mixing LLP with no LLP analyses
+        llp = []
+        prompt = []
+        for token in tokens:
+          token = token.strip().lower()
+          is_llp = False
+          if 'llp' in token:
+            llp.append(token)
+            is_llp = True  
+          else:
+            try:
+                if 'LLP' in  cls.analysis_group_map[token.strip()]:
+                  llp.append(token)
+                  is_llp = True
+            except:
+                pass
+            if not is_llp: 
+             prompt.append(token)
+        if len(llp) != 0 and len(prompt) != 0:
+             AdvPrint.cerr_exit("    You must not load LLP analyses and prompt ones simultaneously!")
+        sys.exit()
+             
         for token in tokens:
             any_passed = False
             token = token.strip().lower()
-         
             for a in cls.analysis_list:
                 parameters = cls.get_analysis_parameters(a)
+                #rruiz
+                if 'LLP' in  cls.analysis_group_map[a]:
+                 parameters["experiment"] += '_llp' 
                 # to avoid case issues, transform parameters to lower()
 
+                #print(parameters["experiment"], token) 
                 passed = True
+
+                #rruiz: to avoid mixing LLP and not LLP analyses
+                if ('LLP' in  cls.analysis_group_map[a]) and (not 'llp' in token) and token != a:
+                    passed = False
+
 
                 if token not in parameters["experiment"] and token != a:
                     passed = False
- 
+                                       
                 if passed:
                     any_passed = True
                     if "ecm" in cls.parameters and cls.parameters["ecm"] != 0.0 and ( abs(float(cls.parameters["ecm"]) - float(parameters["ecm"]))>0.01):
@@ -624,8 +656,8 @@ class Info(dict):
                     cls.used_experiments.add(experiment)
             if not any_passed:
                 AdvPrint.cerr_exit("Couldn't find any analyses for '"+token+"'.")
-             
-            
+        print(cls.analyses)
+        sys.exit()    
     @classmethod
     def book_events(cls, events):
         # Registers a process and gives a unique identifier
@@ -683,6 +715,7 @@ class Info(dict):
         """
         Inserts an analysis in the info class
         """
+
         if analysis_name in cls.analysis_list:
             # The analysis is already there. Don't add it twice.
             return
@@ -915,7 +948,8 @@ class Info(dict):
                         continue
                     analysis = line.split()[0]
                     analysis_list.append(analysis)
-                    groups[analysis] = group
+                    groups[analysis] = group            
+
         return (analysis_list, groups)
         
     @classmethod
