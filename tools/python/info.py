@@ -222,6 +222,10 @@ class Info(dict):
         if args.invpids != "":
            try:
               cls.parameters['invisiblePIDs'] = [int(x) for x in args.invpids.split(",")]
+              with open("../data/invisiblePIDs.txt", "w") as output:
+                  for pdg in cls.parameters['invisiblePIDs']:
+                      output.write(str(pdg) + '\n')
+
            except ValueError:
               AdvPrint.cerr_exit("invisible PIDs are in wrong format. Must be integer numbers, split by ','")
         if args.llpids != "":
