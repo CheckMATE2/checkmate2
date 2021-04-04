@@ -15,16 +15,8 @@
 
 #include "AnalysisHandler.h"
 
-#include "cms_1301_4698_WW.h"
-#include "cms_1303_2985.h"
-#include "cms_1405_7570.h"
-#include "cms_1408_3583.h"
-#include "cms_1502_06031.h"
-#include "cms_1504_03198.h"
-#include "cms_smp_12_006.h"
-#include "cms_sus_12_019.h"
-#include "cms_sus_13_016.h"
-#include "cms_exo_14_014.h"
+
+#include "cms_1409_4789.h"
 //@extraheader@
 
 

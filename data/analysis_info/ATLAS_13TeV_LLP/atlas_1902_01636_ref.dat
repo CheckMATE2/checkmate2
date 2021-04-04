@@ -1,0 +1,9 @@
+SR                    obs  bkg     bkg_err  S95_obs  S95_exp  
+SR-1Cand-FullDet-175  227  240     20       39       48       
+SR-1Cand-FullDet-375  16   17      2        10       10       
+SR-1Cand-FullDet-600  1    2.2     0.2      3.6      4.5      
+SR-1Cand-FullDet-825  0    0.48    0.07     2.94     2.92     
+SR-2Cand-FullDet-150  0    1.5     0.3      2.9      3.9      
+SR-2Cand-FullDet-350  0    0.06    0.01     2.92     2.93     
+SR-2Cand-FullDet-575  0    0.007   0.002    2.875    2.95     
+SR-2Cand-FullDet-800  0    0.0017  0.0009   2.9502   2.9546   

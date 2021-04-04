@@ -1,3 +1,5 @@
-#Name                NSR  Description  Lumi  CR?  
-atlas_1712_02118_ew	 1    search for disappearing track (ew SR)                                                       36.0  no 
-
+#Name                   NSR                                    Description                         Lumi  
+atlas_1712_02118_ew	 1				       search for disappearing track, ew   36.0		no    
+atlas_1710_04901         1				       search for displaced vertex         32.8		no  
+atlas_1902_01636         8				       heavy charged long-lived particles  36.1		no    
+atlas_2003_11956         2				       search for long-lived particles decaying into hadrons and at least one displaced muon       136   no

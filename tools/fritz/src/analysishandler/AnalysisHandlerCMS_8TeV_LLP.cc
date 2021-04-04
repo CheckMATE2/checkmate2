@@ -37,28 +37,8 @@ void AnalysisHandlerCMS_8TeV_LLP::bookAnalysis(std::string analysisName,
     Global::print(name, "Loading Analysis "+analysisName);
 
     AnalysisBase* a = NULL;
-    if(analysisName == "cms_1303_2985")
-        a = new Cms_1303_2985();
-    else if(analysisName == "cms_1303_2985_CR")
-        a = new Cms_1303_2985_CR();
-    else if(analysisName == "cms_1301_4698_WW")
-        a = new Cms_1301_4698_ww();
-    else if(analysisName == "cms_1405_7570")
-        a = new Cms_1405_7570();
-    else if(analysisName == "cms_1408_3583")
-        a = new Cms_1408_3583();
-    else if(analysisName == "cms_1502_06031")
-        a = new Cms_1502_06031();
-    else if(analysisName == "cms_1504_03198")
-        a = new Cms_1504_03198();
-    else if(analysisName == "cms_smp_12_006")
-        a = new Cms_smp_12_006();
-    else if(analysisName == "cms_sus_12_019")
-        a = new Cms_sus_12_019();
-    else if(analysisName == "cms_sus_13_016")
-        a = new Cms_sus_13_016();   
-    else if(analysisName == "cms_exo_14_014")
-        a = new Cms_exo_14_014();
+    if(analysisName == "cms_1409_4789")
+        a = new Cms_1409_4789();
     else //@@extracode@@
         Global::abort(name,
                       "Cannot load analysis "+analysisName+

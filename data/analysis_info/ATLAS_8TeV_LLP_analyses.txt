@@ -1,1 +1,3 @@
-#Name                          NSR  Description                                                      Lumi    CR?  
+#Name                NSR  Description  Lumi  CR?  
+
+
