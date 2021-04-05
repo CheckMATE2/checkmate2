@@ -1,5 +1,11 @@
 CheckMATE - Changelog
 
+Ver 2.1.02
+---------
+2021-04-05   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
+      ~ added  cms_pas_exo_16_022, bugfixes for getLLP() and getLSP() in AnalysisBase
+
+	
 Ver 2.1.01
 ---------
 2021-03-28   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
