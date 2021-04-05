@@ -2,6 +2,7 @@
 
 AnalysisBase::AnalysisBase() {
     readLLPfromData();
+    readLSPfromData();
     outputFolder = "";
     outputPrefix = "";
     analysis = "";

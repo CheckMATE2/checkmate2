@@ -92,13 +92,28 @@ class AnalysisBase {
     void processEvent(int iEvent);
     void finish();
 
-    int getLLP(){return LLPid.size() != 0 ? LLPid[0] : 1000024;};
+    const int defaultLLP = 1000024;
+    const int defaultLSP = 1000022;
 
+    bool is_empty(std::ifstream& pFile)
+    {
+      return pFile.peek() == std::ifstream::traits_type::eof();
+    }
+    
+    int getLLP(){return LLPid.size() != 0 ? LLPid[0] : 1000024;};
+    int getLSP(){return LSPid.size() != 0 ? LSPid[0] : 1000022;};
 
     void readLLPfromData(){
       ifstream myReadFile;
-      int temp;
+      int temp = defaultLLP;
+	
       myReadFile.open("../data/longlivedPIDs.txt");
+      if(is_empty(myReadFile))
+	{
+	  LLPid.push_back(temp);
+	  return;
+	}
+	
       if (myReadFile.is_open()) {
 	while (!myReadFile.eof()) {
 	  myReadFile >> temp;
@@ -108,9 +123,27 @@ class AnalysisBase {
       myReadFile.close();
     };
 
-    
-    void readLSPfromData();
+    void readLSPfromData(){
+      ifstream myReadFile;
+      int temp=defaultLSP;
+      
+      myReadFile.open("../data/invisiblePIDs.txt");
+	if(is_empty(myReadFile))
+	{
+	  LSPid.push_back(temp);
+	  return;
+	}
 
+      
+      if (myReadFile.is_open()) {
+	while (!myReadFile.eof()) {
+	  myReadFile >> temp;
+	  LSPid.push_back(temp);
+	}
+      }
+      myReadFile.close();
+    };
+    
     
     std::vector <int> LLPid;
     std::vector <int> LSPid;
