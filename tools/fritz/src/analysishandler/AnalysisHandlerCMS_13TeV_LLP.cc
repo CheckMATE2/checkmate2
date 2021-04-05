@@ -37,8 +37,8 @@ void AnalysisHandlerCMS_13TeV_LLP::bookAnalysis(std::string analysisName,
     Global::print(name, "Loading Analysis "+analysisName);
 
     AnalysisBase* a = NULL;
-    if(a==NULL)
-      return;
+    if(analysisName == "cms_pas_exo_16_022")
+        a = new Cms_pas_exo_16_022();
     else //@@extracode@@
         Global::abort(name,
                       "Cannot load analysis "+analysisName+

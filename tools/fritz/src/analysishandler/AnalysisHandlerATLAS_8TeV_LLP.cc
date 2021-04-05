@@ -37,7 +37,10 @@ void AnalysisHandlerATLAS_8TeV_LLP::bookAnalysis(std::string analysisName,
 
     AnalysisBase* a = NULL;
     if(a == NULL)
-      return;
+        Global::abort(name,
+                      "Cannot load analysis "+analysisName+
+                          " - analysis unknown.");
+
     else //@@extracode@@
         Global::abort(name,
                       "Cannot load analysis "+analysisName+

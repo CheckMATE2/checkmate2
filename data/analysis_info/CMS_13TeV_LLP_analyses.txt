@@ -1,2 +1,2 @@
-#Name               NSR  Description					Lumi	CR?
-
+#Name				NSR  Description					Lumi	CR?  
+cms_pas_exo_16_022		3    CMS SUSY 13 TeV displaced leptons search           2.6	no
