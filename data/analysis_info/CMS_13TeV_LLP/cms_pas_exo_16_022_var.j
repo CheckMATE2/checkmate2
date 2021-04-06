@@ -21,7 +21,7 @@
   ], 
   "electron_niso": 1, 
   "expectation_known": "y", 
-  "experiment": "cms13tev", 
+  "experiment": "cms13tev_llp", 
   "info_set": [
     "obs", 
     "bkg", 
