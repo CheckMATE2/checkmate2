@@ -76,7 +76,7 @@ double acceffmap[12][8][8] = {{{0.2802,0.2851,0.2774,0.2655,0.1954,0.2125,0.1364
    auto part=true_particles[i];                           // open particle
 	
    //if(abs(part->PID)==invisiblePID || abs(part->PID)==12 || abs(part->PID)==14 || abs(part->PID)==16  ){
-   if(   (std::find(invisiblePID.begin(), invisiblePID.end(), abs(part->PID)) != invisiblePID.end()) || abs(part->PID)==12 || abs(part->PID)==14 || abs(part->PID)==16  ){
+   if(   abs(part->PID) == invisiblePID || abs(part->PID)==12 || abs(part->PID)==14 || abs(part->PID)==16  ){
     if(abs(part->Charge)!=0)continue;                      // dismiss it if it is not neutral
     if(part->Status!=1)continue;                           // dismiss it if it is not stable
     metVec=metVec+part->P4();
