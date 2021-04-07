@@ -19,9 +19,9 @@ class CheckMATE2:
 
     def __del__(self):
 
-        os.path.isfile("../data/invisiblePIDs.txt"):
+        if os.path.isfile("../data/invisiblePIDs.txt"):
           os.remove("../data/invisiblePIDs.txt")
-        os.path.isfile("../data/longlivedPIDs.txt"):
+        if os.path.isfile("../data/longlivedPIDs.txt"):
           os.remove("../data/longlivedPIDs.txt")        
         
     def __init__(self):
