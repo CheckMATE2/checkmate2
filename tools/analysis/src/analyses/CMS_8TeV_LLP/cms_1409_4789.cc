@@ -214,8 +214,8 @@ void Cms_1409_4789::analyze() {
 
   //Preselection complete
 
-  double e_d0 = fabs(el[0]->D0);
-  double mu_d0 = fabs(mu[0]->D0);
+  double e_d0 = fabs(el[0]->Px*el[0]->Y - el[0]->Py*el[0]->X)/el[0]->PT;
+  double mu_d0 = fabs(mu[0]->Px*mu[0]->Y - mu[0]->Py*mu[0]->X)/mu[0]->PT;
 
   double e_d0_eff2 = elec_d0_eff_hist->GetBinContent(elec_d0_eff_hist->FindBin(e_d0));
   double e_pt_eff2 = elec_pt_eff_hist->GetBinContent(elec_pt_eff_hist->FindBin(el[0]->PT));
@@ -225,17 +225,17 @@ void Cms_1409_4789::analyze() {
 
   double evt_weight = 0.95*e_d0_eff2*e_pt_eff2*mu_d0_eff2*mu_pt_eff2;
 
-  if (fabs(el[0]->D0) > 20. || fabs(mu[0]->D0) > 20.) return;
-  if (fabs(el[0]->D0) < 0.2 || fabs(mu[0]->D0) < 0.2) return;
+  if (fabs(e_d0) > 20. || fabs(mu_d0) > 20.) return;
+  if (fabs(e_d0) < 0.2 || fabs(mu_d0) < 0.2) return;
 
   countCutflowEvent("Cut 6: lepton d0 bounds [0.2, 20] mm");
 
   weight = weight*evt_weight*BR;
 
 
-  if (fabs(el[0]->D0) > 1. && fabs(mu[0]->D0) > 1.) {SR3+=evt_weight; countSignalEvent("SR3");}
-  else if (fabs(el[0]->D0) > 0.5 && fabs(mu[0]->D0) > 0.5) {SR2+=evt_weight; countSignalEvent("SR2");}
-  else if (fabs(el[0]->D0) > 0.2 && fabs(mu[0]->D0) > 0.2) {SR1+=evt_weight; countSignalEvent("SR1");}
+  if (fabs(e_d0) > 1. && fabs(mu_d0) > 1.) {SR3+=evt_weight; countSignalEvent("SR3");}
+  else if (fabs(e_d0) > 0.5 && fabs(mu_d0) > 0.5) {SR2+=evt_weight; countSignalEvent("SR2");}
+  else if (fabs(e_d0) > 0.2 && fabs(mu_d0) > 0.2) {SR1+=evt_weight; countSignalEvent("SR1");}
 
 }
 
