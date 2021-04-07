@@ -18,8 +18,6 @@ void Cms_pas_exo_16_022::initialize() {
 
   // You should initialize any declared variables here
 
-  debug.open("debug.txt", ios::app);
-
   EventCount = 0;
   n_e = 0, n_mu = 0, n_tau = 0;
 
@@ -243,25 +241,4 @@ void Cms_pas_exo_16_022::analyze() {
 
 void Cms_pas_exo_16_022::finalize() {
   // Whatever should be done after the run goes here
-
-  double scale = user_xsec*user_lumi*BR/EventCount;
-  // double scale = 1.;
-
-  // double sr[] = {0.009, 0.03, 0.27}; //CMS numbers for 1000mm
-  // double sr[] = {0.8, 1, 5.8};          //CMS numbers for 100mm
-  double SR[] = {SR1*scale, SR2*scale, SR3*scale};
-
-  // double Chi_2 = 0;
-
-  // for (int i = 0; i < 3; ++i){
-    // Chi_2+= (pow(SR[i]-sr[i],2))/SR[i];
-  // }
-
-  debug << SR[0] << " " << SR[1] << " " << SR[2] << endl;
-
-  // debug << "Chi 2: " << Chi_2 << endl;
-
-  debug.close();
-
-
 }       
