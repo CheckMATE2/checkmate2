@@ -20,8 +20,6 @@ class Cms_pas_exo_16_022 : public AnalysisBase {
 
     TFile *eff_file;
 
-    ofstream debug;
-
     int llp_pid = 1000006; 
 
     TH1F *elec_d0_eff_hist;
