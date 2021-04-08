@@ -114,10 +114,6 @@ void Cms_pas_exo_16_022::analyze() {
   //loop over all true particles
   for (int i = 0 ; i < true_particles.size(); ++i){
     auto part = true_particles[i];
-
-    if (EventCount == 1) {
-      if (abs(part->PID) == llp_pid) llp_mass = part->Mass;
-    }
     
     if (part->Status != 1) continue;        //Run over only stable particles
 
