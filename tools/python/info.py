@@ -603,6 +603,28 @@ class Info(dict):
         """ Uses the input string from the user to load one or more analyses """    
         analysis_input_string = analysis_input_string.lower() # to avoid capitalisation errors
         tokens = analysis_input_string.split(",")
+
+        #First check whether mixing LLP with no LLP analyses
+        llp = []
+        prompt = []
+        for token in tokens:
+          token = token.strip().lower()
+          is_llp = False
+          if 'llp' in token:
+            llp.append(token)
+            is_llp = True  
+          else:
+            try:
+                if 'LLP' in  cls.analysis_group_map[token.strip()]:
+                  llp.append(token)
+                  is_llp = True
+            except:
+                pass
+            if not is_llp: 
+             prompt.append(token)
+        if len(llp) != 0 and len(prompt) != 0:
+             AdvPrint.cerr_exit("    You must not load LLP analyses and prompt ones simultaneously!")
+
         for token in tokens:
             any_passed = False
             token = token.strip().lower()
