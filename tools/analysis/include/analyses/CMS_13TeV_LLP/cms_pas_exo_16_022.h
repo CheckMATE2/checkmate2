@@ -20,8 +20,6 @@ class Cms_pas_exo_16_022 : public AnalysisBase {
 
     TFile *eff_file;
 
-    int llp_pid = 1000006; 
-
     TH1F *elec_d0_eff_hist;
     TH1F *elec_pt_eff_hist;
     TH1F *muon_d0_eff_hist;
