@@ -217,9 +217,9 @@ std::vector< DVertex > Atlas_2003_11956::DVfinder(double d0min, double ptmin, do
       
     auto part = true_particles[i];     
     if ( part->Status != 1 ) continue;                           // dismiss it if it is not stable
-    if ( abs(part->Charge) == 0 ) continue;    
-    if ( part->D0 < d0min ) continue;                               // dismiss it if it is not sufficiently displaced
-    //JJJif ( part->X < d0min ) continue;                               // dismiss it if it is not sufficiently displaced
+    if ( abs(part->Charge) == 0 ) continue; 
+    double d0 = -(part->Px* part->Y - part->Py* part->X)/ part->PT ;
+    if ( d0 < d0min ) continue;                               // dismiss it if it is not sufficiently displaced
     if ( part->PT < ptmin ) continue;                               // dismiss if too soft 
     
     bool included = false;  
