@@ -26,7 +26,7 @@ void Atlas_1911_12606::analyze() {
   electronsLoose = filterPhaseSpace(electronsLoose, 4.5, -2.47, 2.47);
 //  electronsTight = filterPhaseSpace(electronsTight, 4.5, -2.47, 2.47); //Tight fits efficiency better
 //  muonsCombined = filterPhaseSpace(muonsCombined, 3., -2.5, 2.5);  
-  electronsTight = filterPhaseSpace(electronsTight, 8., -2.47, 2.47); //Tight fits efficiency better
+  electronsMedium = filterPhaseSpace(electronsMedium, 8., -2.47, 2.47); 
   muonsCombined = filterPhaseSpace(muonsCombined, 8., -2.5, 2.5);    
   jets = filterPhaseSpace(jets, 20., -4.5, 4.5); 
   signal_tracks = filterPhaseSpace(tracks, 2., -2.5, 2.5); 
@@ -38,6 +38,7 @@ void Atlas_1911_12606::analyze() {
     if ( abs(tracks[t]->PID) == 13) nmu++;
   }
   
+  TLorentzVector missing_true = TLorentzVector(0.,0.,0.,0.);
   std::vector<Electron*> electrons_soft;
   electrons_soft_true.clear();
   std::vector<Electron*> electrons_tracks;
@@ -49,13 +50,13 @@ void Atlas_1911_12606::analyze() {
   int nel_true = 0; int nmu_true = 0;
   for (int t = 0; t < true_particles.size(); t++ ) {
     if ( abs(true_particles[t]->PID) == 11 and true_particles[t]->Status == 1 ) {
-        nel_true++;
         double eff1 = rand()/(RAND_MAX + 1.);
         double eff2 = rand()/(RAND_MAX + 1.);
         double pt = true_particles[t]->PT;
-        for (int i = 0; i < electronsTight.size(); i++)
-            if ( electronsTight[i]->Particle == true_particles[t] ) break;
-        if (eff1 < 0. + (pt > 4.5)*(pt < 5.0)*0.20 + (pt > 5)*(pt < 6.0)*0.37 + (pt > 6)*(pt < 8.0)*0.48 and fabs(true_particles[t]->Eta) < 2.47) {
+        if ( pt >  2.) nel_true++;
+        for (int i = 0; i < electronsMedium.size(); i++)
+            if ( electronsMedium[i]->Particle == true_particles[t] ) break;
+        if (eff1 < ( (pt > 4.5)*(pt < 5.0)*0.20 + (pt > 5)*(pt < 6.0)*0.37 + (pt > 6)*(pt < 8.0)*0.48 ) and fabs(true_particles[t]->Eta) < 2.47) {
               Electron ele = Electron();
               ele.PT = pt;
               ele.Phi = true_particles[t]->Phi;
@@ -66,10 +67,10 @@ void Atlas_1911_12606::analyze() {
               ele.Charge = true_particles[t]->Charge;
               electrons_soft_true.push_back(ele);
               electrons_soft.push_back(&(*(electrons_soft_true.end()-1)));
-              electronsTight.push_back(&(*(electrons_soft_true.end()-1)));
+              electronsMedium.push_back(&(*(electrons_soft_true.end()-1)));
               //cout << "Mom: " << electrons_soft[electrons_soft.size()-1]->P4().X() << "\n";
         }
-        else if ( eff2 < 0. + (pt < 2.5) *(pt > 2.) * 0.4 + (pt > 2.5) * (pt < 8.) * 0.8 and fabs(true_particles[t]->Eta) < 2.47 ) {
+        else if ( eff2 < ( (pt < 2.5) *(pt > 2.) * 0.1 + (pt > 2.5) * (pt < 8.) * 0.3 ) and fabs(true_particles[t]->Eta) < 2.47 ) {
               Electron ele = Electron();
               ele.PT = pt;
               ele.Phi = true_particles[t]->Phi;
@@ -84,13 +85,13 @@ void Atlas_1911_12606::analyze() {
         else continue;
     }
     if ( abs(true_particles[t]->PID) == 13 and true_particles[t]->Status == 1 ) {
-        nmu_true++;;
         double eff1 = rand()/(RAND_MAX + 1.);
         double eff2 = rand()/(RAND_MAX + 1.);
         double pt = true_particles[t]->PT;
+        if ( pt >  2.) nmu_true++;
         for (int i = 0; i < muonsCombined.size(); i++)
             if ( muonsCombined[i]->Particle == true_particles[t] ) break;
-        if (eff1 < 0. + (pt > 3.0)*(pt < 3.5)*0.48 + (pt > 3.5)*(pt < 4.5)*0.62 + (pt > 4.5)*(pt < 8.)*0.70  and fabs(true_particles[t]->Eta) < 2.5 ) {
+        if (eff1 < ((pt > 3.0)*(pt < 3.5)*0.48 + (pt > 3.5)*(pt < 4.5)*0.62 + (pt > 4.5)*(pt < 8.)*0.70 ) and fabs(true_particles[t]->Eta) < 2.5 ) {
               Muon muo = Muon();
               muo.PT = pt;
               muo.Phi = true_particles[t]->Phi;
@@ -102,7 +103,7 @@ void Atlas_1911_12606::analyze() {
               muons_soft.push_back(&(*(muons_soft_true.end()-1)));
               muonsCombined.push_back(&(*(muons_soft_true.end()-1)));
         }
-        else if ( eff2 < 0. + (pt < 2.5) *(pt > 2.) * 0.4 + (pt > 2.5) * (pt < 8.) * 0.8 and fabs(true_particles[t]->Eta) < 2.5) {
+        else if ( eff2 < ( (pt < 2.5) *(pt > 2.) * 0.3 + (pt > 2.5) * (pt < 8.) * 0.4 ) and fabs(true_particles[t]->Eta) < 2.5) {
               Muon muo = Muon();
               muo.PT = pt;
               muo.Phi = true_particles[t]->Phi;
@@ -116,6 +117,8 @@ void Atlas_1911_12606::analyze() {
         }
         else continue;        
     }
+    if ( (abs(true_particles[t]->PID) == 1000022 or abs(true_particles[t]->PID) == 5100022)and true_particles[t]->Status == 1 ) 
+        missing_true += true_particles[t]->P4();
   }  
   
   leptons_tracks.clear();
@@ -154,8 +157,8 @@ void Atlas_1911_12606::analyze() {
   lightjets = overlapRemoval_muon_jet_tracks(lightjets, muonsCombined, 0.4, 2); 
   electronsLoose = overlapRemoval(electronsLoose, bjets, 0.4, "y");  
   electronsLoose = overlapRemoval(electronsLoose, lightjets, 0.4, "y"); 
-  electronsTight = overlapRemoval(electronsTight, bjets, 0.4, "y");  
-  electronsTight = overlapRemoval(electronsTight, lightjets, 0.4, "y");    
+  electronsMedium = overlapRemoval(electronsMedium, bjets, 0.4, "y");  
+  electronsMedium = overlapRemoval(electronsMedium, lightjets, 0.4, "y");    
   muonsCombined = overlapRemoval(muonsCombined, bjets, 0.4, "y");  
   muonsCombined = overlapRemoval(muonsCombined, lightjets, 0.4, "y");     
 //  signal_tracks = overlapRemoval(signal_tracks, bjets, 0.5, "y");
@@ -195,7 +198,7 @@ void Atlas_1911_12606::analyze() {
   std::vector<Electron*> electrons_base = electronsLoose;
   std::vector<Muon*> muons_base = muonsCombined;
     
-  std::vector<Electron*> electrons_signal = Isolate_leptons_with_inverse_track_isolation_cone(electronsTight, tracks, towers, 0.3, 10., 0.2, 0.15, 0.2, true);
+  std::vector<Electron*> electrons_signal = Isolate_leptons_with_inverse_track_isolation_cone(electronsMedium, tracks, towers, 0.3, 10., 0.2, 0.15, 0.2, true);
   std::vector<Muon*> muons_signal = Isolate_leptons_with_inverse_track_isolation_cone(muonsCombined,  tracks, towers, 0.3, 10., 0.2, 0.06, 0.06, false);
 //  signal_tracks = Isolate_tracks(signal_tracks, 0.3, 0.5);
   leptons_tracks = Isolate_tracks(leptons_tracks, 0.3, 0.5);
@@ -228,23 +231,31 @@ void Atlas_1911_12606::analyze() {
   for (int i = 0; i < leptons.size(); i++) 
     pTmiss -= leptons[i]->P4(); 
 
-  countCutflowEvent("00_all");
+  countCutflowEvent("00_0all");
+  
+  //if ( !signal_jets.size() or signal_jets[0]->PT < 50.) return;
+  //countCutflowEvent("00_1jet50");
+  
+  //if (nel_true + nmu_true < 2 or missing_true.Perp() < 75. ) return; // generator filter 2l
+  //if (nel_true + nmu_true < 1 or missing_true.Perp() < 50. ) return; // generator filter 1l1t
+  //countCutflowEvent("00_filter");
   
   met = missingET->P4().Perp();
   met = pTmiss.Perp();
-  if (met < 80. ) return;
+  if (met < 110. ) return;
   countCutflowEvent("01_trigger");  
   
   if ( leptons.size() == 1 and leptons_tracks.size() > 0) {
+      //if (rand()/(RAND_MAX + 1.) < 0.3) return; //correction for efficiency
       countCutflowEvent("1L1T_02_1L1T");
       mlt = (leptons[0]->P4() + leptons_tracks[0]->P4()).M();
-      if (Pass_Cuts_1L1T()) { //doesn't match cautflows
-/*          if (mlt < 5.) {countCutflowEvent("1L1T_17_mlt<5"); if (mlt > 4.) countSignalEvent("SR-1L1T-5.0") ; }
+      if (Pass_Cuts_1L1T()) { //doesn't match cutflows
+          if (mlt < 5.) {countCutflowEvent("1L1T_17_mlt<5"); if (mlt > 4.) countSignalEvent("SR-1L1T-5.0") ; }
           if (mlt < 4.) {countCutflowEvent("1L1T_18_mlt<4"); if (mlt > 3.2) countSignalEvent("SR-1L1T-4.0") ; }
           if (mlt < 3.) {countCutflowEvent("1L1T_19_mlt<3"); if (mlt > 2.) countSignalEvent("SR-1L1T-3.0") ; }
           if (mlt < 2.) {countCutflowEvent("1L1T_20_mlt<2"); if (mlt > 1.5) countSignalEvent("SR-1L1T-2.0") ; }
           if (mlt < 1.5) {countCutflowEvent("1L1T_21_mlt<1.5"); if (mlt > 1.) countSignalEvent("SR-1L1T-1.5") ; }
-          if (mlt < 1.) {countCutflowEvent("1L1T_22_mlt<1"); if (mlt > 0.5) countSignalEvent("SR-1L1T-1.0") ; }*/
+          if (mlt < 1.) {countCutflowEvent("1L1T_22_mlt<1"); if (mlt > 0.5) countSignalEvent("SR-1L1T-1.0") ; }
           return;          
     }
   }
@@ -351,12 +362,15 @@ bool Atlas_1911_12606::Pass_Cuts_1L1T() {
     if ( leptons_tracks[0]->PT > 5.) return false;
     countCutflowEvent("1L1T_14_track<5");   
     
+    if ( fabs(leptons[0]->P4().DeltaPhi(pTmiss)) > 1.0 ) return false;
+    countCutflowEvent("1L1T_15_dphilep");
+    
 //    if ( (leptons[0]->Type == "electron" and abs(leptons_tracks[0]->PID) != 11) or (leptons[0]->Type == "muon" and abs(leptons_tracks[0]->PID) != 13) ) return false;
     if ( leptons[0]->Type != leptons_tracks[0]->Type ) return false;
-    countCutflowEvent("1L1T_15_SF");
+    countCutflowEvent("1L1T_16_SF");
     
     if ( leptons[0]->Charge * leptons_tracks[0]->Charge > 0 ) return false;
-    countCutflowEvent("1L1T_16_OS");
+    countCutflowEvent("1L1T_17_OS");
     
     return true;
 }
@@ -409,12 +423,12 @@ bool Atlas_1911_12606::Pass_Preselection() {
 
 bool Atlas_1911_12606::Pass_EW_high() {
 
+    if (met < 200.) return false;
+    countCutflowEvent("2L_E-high_14_met>200");
+    
     double mT = AnalysisBase::mT(leptons[0]->P4(), missingET->P4());
     if (mT > 60.) return false;
-    countCutflowEvent("2L_E-high_14_mT<60");
-    
-    if (met < 200.) return false;
-    countCutflowEvent("2L_E-high_15_met>200");
+    countCutflowEvent("2L_E-high_15_mT<60");
     
     TLorentzVector ISR(0.,0.,0.,0.);
     for (int i = 0; i < signal_jets.size(); i++)
@@ -608,10 +622,10 @@ bool Atlas_1911_12606::Pass_S_low() {
     TVector3 pTjet(ISR.X(), ISR.Y(), 0.);
     double RISR2 = fabs(pTmiss.Vect().Dot(pTjet.Unit()))/ISR.Perp();
 
-    if (RISR2 < 0.8 or RISR2 > 1.  ) return false;//approx
+    if (RISR2 < 0.8 or RISR2 > 1.1  ) return false;//approx
     countCutflowEvent("2L_S-low_15_RISR");    
     
-    if (leptons[1]->PT < std::min(20.,2.5 + (mt2 - 100.)*2.5) ) return false;
+    if (leptons[1]->PT < std::min(15.,7.5 + (mt2 - 100.)*0.75) ) return false;
     countCutflowEvent("2L_S-low_16_lepton2PT"); 
     
     if (mt2 > 140.) return false;
@@ -704,8 +718,8 @@ std::vector<Track*> Atlas_1911_12606::filterLeptons(std::vector<Track*> cand_tra
   std::vector<Track*> accepted;  
   for (int t = 0; t < cand_tracks.size(); t++ ) {
     if ( cand_tracks[t]->PT < 8. and abs(cand_tracks[t]->PID) == 11)
-        for (int i = 0; i < electronsTight.size(); i++ ) {
-            if (cand_tracks[t]->P4().DeltaR(electronsTight[i]->P4()) < 0.01) break;
+        for (int i = 0; i < electronsMedium.size(); i++ ) {
+            if (cand_tracks[t]->P4().DeltaR(electronsMedium[i]->P4()) < 0.01) break;
             double eff = rand()/(RAND_MAX + 1.);
             if (cand_tracks[t]->PT < 2.5  and eff < 0.4) accepted.push_back( cand_tracks[t]);
             if (cand_tracks[t]->PT > 2.5  and eff < 0.8) accepted.push_back( cand_tracks[t]);
