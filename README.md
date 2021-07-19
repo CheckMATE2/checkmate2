@@ -1,4 +1,9 @@
 # current
+
+2021-07-16   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+        
+    ~ added atlas_1911_12606
+
 2021-03-14   Arran Freegard <acf1g14@soton.ac.uk>
         
     ~ added atlas_1403_5294 and atlas_higg_2013_03
