@@ -46,6 +46,7 @@
 #include "atlas_2004_14060.h"
 #include "atlas_1908_03122.h"
 #include "atlas_1911_12606.h"
+#include "atlas_1807_07447.h"
 //@extraheader@
 #include "AnalysisBase.h"
 
