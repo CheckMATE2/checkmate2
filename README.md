@@ -1,5 +1,9 @@
 # current
 
+2021-08-20   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+        
+    ~ added atlas_1807_07447
+
 2021-07-16   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
         
     ~ added atlas_1911_12606
