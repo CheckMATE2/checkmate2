@@ -15,6 +15,7 @@
 #include "atlas_phys_2014_010_300.h"
 #include "atlas_phys_pub_2013_011.h"
 #include "dilepton_hl.h"
+#include "atlas_phys_2014_007.h"
 //@extraheader@
 #include "AnalysisBase.h"
 
