@@ -42,7 +42,3 @@ atlas_1911_06660     2	  search for direct stau production   	   	       	    		
 #atlas_1605_04285     7    1 lepton + jets + Etmiss                                                                    3.3   no   
 #atlas_1606_03903     3    1-lepton + jets + etmiss (stop)                                                             3.2   no   
 #atlas_conf_2016_078  13   2-6 jets + etmiss (squarks and gluino)                                                      13.3  no        
-<<<<<<< HEAD
-
-=======
->>>>>>> d4b893a17d21eda5ed989892df680ac179b045ab
