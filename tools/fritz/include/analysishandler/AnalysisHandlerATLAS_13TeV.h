@@ -45,6 +45,10 @@
 #include "atlas_conf_2020_048.h"
 #include "atlas_2004_14060.h"
 #include "atlas_1908_03122.h"
+#include "atlas_2103_11684.h"
+#include "atlas_2004_10894.h"
+#include "atlas_2106_09609.h"
+#include "atlas_1911_06660.h"
 //@extraheader@
 #include "AnalysisBase.h"
 

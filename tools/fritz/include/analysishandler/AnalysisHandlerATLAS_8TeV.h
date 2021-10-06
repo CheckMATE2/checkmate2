@@ -46,6 +46,7 @@
 #include "atlas_conf_2015_004.h"
 #include "atlas_1507_05493.h"
 #include "atlas_higg_2013_03.h"
+#include "atlas_1502_05686.h"
 //@extraheader@
 #include "AnalysisBase.h"
 

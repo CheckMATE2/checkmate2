@@ -1,4 +1,9 @@
 # current
+2021-10-06   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
+        
+    ~ added added atlas_1502_05686, atlas_2103_11684, atlas_2004_10894, atlas_2106_09609
+	atlas_1911_06660
+
 2021-03-14   Arran Freegard <acf1g14@soton.ac.uk>
         
     ~ added atlas_1403_5294 and atlas_higg_2013_03
@@ -6,7 +11,6 @@
 2021-02-12   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
         
     ~ added atlas_1908_03122
-
 
 2020-11-03   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
         

@@ -135,6 +135,11 @@ libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_conf_2020_048.h src
 libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2004_14060.h src/analyses/ATLAS_13TeV/atlas_2004_14060.cc
 libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_1908_03122.h src/analyses/ATLAS_13TeV/atlas_1908_03122.cc
 libanalyses_la_SOURCES += include/analyses/ATLAS_8TeV/atlas_higg_2013_03.h src/analyses/ATLAS_8TeV/atlas_higg_2013_03.cc
+libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2103_11684.h src/analyses/ATLAS_13TeV/atlas_2103_11684.cc
+libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2004_10894.h src/analyses/ATLAS_13TeV/atlas_2004_10894.cc
+libanalyses_la_SOURCES += include/analyses/ATLAS_8TeV/atlas_1502_05686.h src/analyses/ATLAS_8TeV/atlas_1502_05686.cc
+libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2106_09609.h src/analyses/ATLAS_13TeV/atlas_2106_09609.cc
+libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_1911_06660.h src/analyses/ATLAS_13TeV/atlas_1911_06660.cc
 #@@extraanalysis@@
 
 libanalyses_la_LDFLAGS = -avoid-version -shared

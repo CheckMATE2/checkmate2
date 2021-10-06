@@ -22,7 +22,8 @@ atlas_conf_2013_089            12   ATLAS, 2 leptons (razor)                    
 atlas_conf_2015_004            1    ATLAS, invisible Higgs decay in VBF                              20.3    no
 atlas_1403_5294                13   ATLAS, 2 leptons + etmiss, (SUSY electroweak)                    20.3    yes  
 atlas_1403_5294_CR             4    ATLAS, 2 leptons + etmiss CR, (SUSY electroweak)                 20.3    yes 
-atlas_higg_2013_03	       1   ATLAS, 2 leptons + etmiss, (invsible Higgs)                    20.3   no 
+atlas_higg_2013_03	       1   ATLAS, 2 leptons + etmiss, (invsible Higgs)                       20.3   no
+atlas_1502_05686	       11  ATLAS, search for massive sparticles decaying to many jets	     20.3   no	
 #Superseded analyses
 #atlas_conf_2012_147           4    ATLAS, Superseded by atlas_1407_0608                             10.0    yes  
 #atlas_conf_2013_035           6    ATLAS, Superseded by atlas_1402_7029                             20.7    no   
