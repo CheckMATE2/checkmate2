@@ -46,6 +46,8 @@ void AnalysisHandlerATLAS_14TeV_projected::bookAnalysis(std::string analysisName
         a = new Atlas_phys_pub_2013_011();
     else if(analysisName == "dilepton_hl")
         a = new Dilepton_hl();
+    else if(analysisName == "atlas_phys_2014_007")
+        a = new Atlas_phys_2014_007();
     else //@@extracode@@
         Global::abort(name,
                       "Cannot load analysis "+analysisName+

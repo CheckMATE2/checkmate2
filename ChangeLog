@@ -6,8 +6,26 @@ Ver 2.0.33
 	~ added atlas_1502_05686, atlas_2103_11684, atlas_2004_10894, atlas_2106_09609
 	atlas_1911_06660
 
-
 	
+Ver 2.0.32
+---------
+2021-08-23   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ added atlas_phys_2014_007
+    ~ fixed problem with 14 YeV .tcl card
+
+Ver 2.0.31
+---------
+2021-08-20   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ added atlas_1807_07447
+
+Ver 2.0.30
+---------
+2021-07-16   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ added atlas_1911_12606
+
 Ver 2.0.29
 ---------
 2021-03-14   Arran Freegard <acf1g14@soton.ac.uk>

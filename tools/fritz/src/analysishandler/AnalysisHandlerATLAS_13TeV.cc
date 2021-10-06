@@ -114,6 +114,10 @@ void AnalysisHandlerATLAS_13TeV::bookAnalysis(std::string analysisName,
         a = new Atlas_2106_09609();
     else if(analysisName == "atlas_1911_06660")
         a = new Atlas_1911_06660();
+    else if(analysisName == "atlas_1911_12606")
+        a = new Atlas_1911_12606();
+    else if(analysisName == "atlas_1807_07447")
+        a = new Atlas_1807_07447();
     else //@@extracode@@
         Global::abort(name,
                       "Cannot load analysis "+analysisName+
@@ -196,10 +200,10 @@ void AnalysisHandlerATLAS_13TeV::identifyMuons()  {
         cand = muons[m];
         if (muonIsolationTags[muons[m]][0]) {
             muonsLoose.push_back(muons[m]);
-            mEffCombPlus = muonEffCombPlus(muons[m]->Phi, muons[m]->Eta);
+            mEffCombPlus = muonEffCombPlus(muons[m]->PT, muons[m]->Eta);
             if (rand()/((double)RAND_MAX+1) < mEffCombPlus ) {
                 muonsCombinedPlus.push_back(muons[m]);
-                mEffComb = muonEffCombOverCombPlus(muons[m]->Phi, muons[m]->Eta);
+                mEffComb = muonEffCombOverCombPlus(muons[m]->PT, muons[m]->Eta);
                 if (rand()/((double)RAND_MAX+1) < mEffComb ) {
                     muonsCombined.push_back(muons[m]);
                 }
@@ -437,18 +441,19 @@ double AnalysisHandlerATLAS_13TeV::electronIDEffTightOverMedium(double pt,
     // https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/CONFNOTES/ATLAS-CONF-2016-024/
     double id_eff_medium = 0.937 - 0.109*exp(1.-pt/21.);
     double id_eff_tight = 0.8885 - 0.138*exp(1.-pt/27.45);			     
-    return id_eff_tight/id_eff_medium;
+    return ((pt>10.)*id_eff_tight + (pt > 4.5)*(pt < 5.0)*0.23 + (pt > 5)*(pt < 6.0)*0.38 + (pt > 6)*(pt < 8.0)*0.50 + (pt > 8)*(pt < 10.0)*0.60)/id_eff_medium;
 }
 
 
-double AnalysisHandlerATLAS_13TeV::muonEffCombOverCombPlus(double phi,
+double AnalysisHandlerATLAS_13TeV::muonEffCombOverCombPlus(double pt,
                                                      double eta) {
-    // https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/PERF-2015-10/fig_03b.png
+    // old: https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/PERF-2015-10/fig_03b.png
     // tuned to MC
-    return 0.98;
+    //https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/SUSY-2018-16/fig_03.png
+    return (pt > 3.0)*(pt < 3.5)*0.5 + (pt > 3.5)*(pt < 4.5)*0.65 + (pt > 4.5)*(pt < 8.)*0.72 + (pt > 8.)*(pt < 15.)*0.77 + (pt > 15.)*(pt < 20.)*0.82 + (pt > 20.)*(pt < 30.)*0.86 + (pt > 30.)*0.94;
 }
 
-double AnalysisHandlerATLAS_13TeV::muonEffCombPlus(double phi,
+double AnalysisHandlerATLAS_13TeV::muonEffCombPlus(double pt,
                                              double eta) {
     // https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/PERF-2015-10/fig_03a.png
     // https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/PERF-2015-10/

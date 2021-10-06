@@ -1,7 +1,8 @@
-#Name                          NSR  Description                                               Lumi    CR?  
-atlas_phys_pub_2013_011        4    1 lep + jets + Etmiss (Stop)                              3000.0  no
-atlas_2014_010_hl_3l           1    3 leptons + Etmiss (char+neut)                            3000.0  no 
-atlas_phys_2014_010_300        10   2-6 jets + Etmiss                                         300.0   no   
-atlas_phys_2014_010_sq_hl      10   2-6 jets + Etmiss                                         3000.0  no 
-atl_phys_pub_2014_010_sbottom  6    0 leptons + 2 b-jets + Etmiss                             300.0   no     
-dilepton_hl                    9    Custom slepton/chargino dilepton search                   3000.0  no   
+#Name                          NSR  Description                              Lumi    CR?  
+atlas_phys_pub_2013_011        4    1 lep + jets + Etmiss (Stop)             3000.0  no   
+atlas_2014_010_hl_3l           1    3 leptons + Etmiss (char+neut)           3000.0  no   
+atlas_phys_2014_010_300        10   2-6 jets + Etmiss                        300.0   no   
+atlas_phys_2014_010_sq_hl      10   2-6 jets + Etmiss                        3000.0  no   
+atl_phys_pub_2014_010_sbottom  6    0 leptons + 2 b-jets + Etmiss            300.0   no   
+dilepton_hl                    9    Custom slepton/chargino dilepton search  3000.0  no   
+atlas_phys_2014_007            21   monojet                                  3000.0  no   
