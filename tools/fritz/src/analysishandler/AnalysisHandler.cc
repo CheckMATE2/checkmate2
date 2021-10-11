@@ -453,7 +453,7 @@ void AnalysisHandler::setup(EventFile file) {
     treeReader = new ExRootTreeReader(rootFileChain);
 
     branchEvent = treeReader->UseBranch("Event");
-    branchGenParticle = treeReader->UseBranch("GenParticle");
+    branchGenParticle = treeReader->UseBranch("Particle");
     branchJet = treeReader->UseBranch("Jet");
     branchTrack = treeReader->UseBranch("Track");
     branchTower = treeReader->UseBranch("Tower");
@@ -484,7 +484,7 @@ void AnalysisHandler::setup( DelphesHandler* dHandlerIn) {
     for (std::set<CMExRootTreeBranch*>::iterator it = branches.begin();
          it != branches.end();
          it++) {
-        if ((std::string)(*it)->GetData()->GetName() == "GenParticle")
+        if ((std::string)(*it)->GetData()->GetName() == "Particle")
                 branchGenParticle = (*it)->GetData();
         else if ((std::string)(*it)->GetData()->GetName() == "Event")
                 branchEvent= (*it)->GetData();
@@ -794,7 +794,7 @@ bool AnalysisHandler::readParticles(int iEvent) {
             true_tau.push_back((GenParticle*)branchGenParticle->At(i));
         }
     }
-    //branchGenParticle->Clear();
+    branchGenParticle->Clear();
 
     tracks.clear();
     if (!branchTrack)
@@ -816,16 +816,6 @@ bool AnalysisHandler::readParticles(int iEvent) {
     for(int i = 0; i < branchJet->GetEntries(); i++)
         jets.push_back((Jet*)branchJet->At(i));
     branchJet->Clear();
-    
-    true_particles.clear();
-    if (!branchGenParticle);
-        //Global::print(name, "Warning!!! branchGenParticle not properly assigned!");
-    else {
-        //Global::print(name, "NOTE: branchGenParticle included!");
-        for(int i = 0; i < branchGenParticle->GetEntries(); i++)
-            true_particles.push_back((GenParticle*)branchGenParticle->At(i));
-        branchGenParticle->Clear();
-    }    
 
     electrons.clear();
     if (!branchElectron) {
@@ -1105,10 +1095,6 @@ void AnalysisHandler::linkObjects() {
     for(int a = 0; a < listOfAnalyses.size(); a++) {
         // important: as many analyses cut on the containers,
         //  every analysis must use its own container
-        std::vector<GenParticle*> tempTrueB = true_b;
-        listOfAnalyses[a]->true_b = tempTrueB;        
-        std::vector<GenParticle*> temptruePart = true_particles;
-        listOfAnalyses[a]->true_particles = temptruePart;
         std::vector<Track*> tempTracks = tracks;
         listOfAnalyses[a]->tracks = tempTracks;
         std::vector<Tower*> tempTowers = towers;

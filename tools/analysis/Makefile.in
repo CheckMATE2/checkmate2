@@ -250,7 +250,11 @@ am_libanalyses_la_OBJECTS = src/global/Global.lo \
 	src/analyses/ATLAS_13TeV/atlas_2004_10894.lo \
 	src/analyses/ATLAS_8TeV/atlas_1502_05686.lo \
 	src/analyses/ATLAS_13TeV/atlas_2106_09609.lo \
-	src/analyses/ATLAS_13TeV/atlas_1911_06660.lo
+	src/analyses/ATLAS_13TeV/atlas_1911_06660.lo \
+	src/analyses/ATLAS_13TeV/atlas_1911_12606.lo \
+	src/analyses/ATLAS_13TeV/atlas_1807_07447.lo \
+	src/analyses/ATLAS_14TeV_HighLumi/atlas_phys_2014_007.lo \
+	src/analyses/CMS_13TeV/cms1703_01651.lo
 libanalyses_la_OBJECTS = $(am_libanalyses_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -747,7 +751,15 @@ libanalyses_la_SOURCES = src/global/Global.cc src/include/Global.h \
 	include/analyses/ATLAS_13TeV/atlas_2106_09609.h \
 	src/analyses/ATLAS_13TeV/atlas_2106_09609.cc \
 	include/analyses/ATLAS_13TeV/atlas_1911_06660.h \
-	src/analyses/ATLAS_13TeV/atlas_1911_06660.cc
+	src/analyses/ATLAS_13TeV/atlas_1911_06660.cc \
+	include/analyses/ATLAS_13TeV/atlas_1911_12606.h \
+	src/analyses/ATLAS_13TeV/atlas_1911_12606.cc \
+	include/analyses/ATLAS_13TeV/atlas_1807_07447.h \
+	src/analyses/ATLAS_13TeV/atlas_1807_07447.cc \
+	include/analyses/ATLAS_14TeV_HighLumi/atlas_phys_2014_007.h \
+	src/analyses/ATLAS_14TeV_HighLumi/atlas_phys_2014_007.cc \
+	include/analyses/CMS_13TeV/cms1703_01651.h \
+	src/analyses/CMS_13TeV/cms1703_01651.cc
 #@@extraanalysis@@
 libanalyses_la_LDFLAGS = -avoid-version -shared
 #-module 
@@ -1250,6 +1262,18 @@ src/analyses/ATLAS_13TeV/atlas_2106_09609.lo:  \
 src/analyses/ATLAS_13TeV/atlas_1911_06660.lo:  \
 	src/analyses/ATLAS_13TeV/$(am__dirstamp) \
 	src/analyses/ATLAS_13TeV/$(DEPDIR)/$(am__dirstamp)
+src/analyses/ATLAS_13TeV/atlas_1911_12606.lo:  \
+	src/analyses/ATLAS_13TeV/$(am__dirstamp) \
+	src/analyses/ATLAS_13TeV/$(DEPDIR)/$(am__dirstamp)
+src/analyses/ATLAS_13TeV/atlas_1807_07447.lo:  \
+	src/analyses/ATLAS_13TeV/$(am__dirstamp) \
+	src/analyses/ATLAS_13TeV/$(DEPDIR)/$(am__dirstamp)
+src/analyses/ATLAS_14TeV_HighLumi/atlas_phys_2014_007.lo:  \
+	src/analyses/ATLAS_14TeV_HighLumi/$(am__dirstamp) \
+	src/analyses/ATLAS_14TeV_HighLumi/$(DEPDIR)/$(am__dirstamp)
+src/analyses/CMS_13TeV/cms1703_01651.lo:  \
+	src/analyses/CMS_13TeV/$(am__dirstamp) \
+	src/analyses/CMS_13TeV/$(DEPDIR)/$(am__dirstamp)
 
 libanalyses.la: $(libanalyses_la_OBJECTS) $(libanalyses_la_DEPENDENCIES) $(EXTRA_libanalyses_la_DEPENDENCIES) 
 	$(AM_V_CXXLD)$(libanalyses_la_LINK) -rpath $(mylibdir) $(libanalyses_la_OBJECTS) $(libanalyses_la_LIBADD) $(LIBS)
@@ -1300,10 +1324,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_13TeV/$(DEPDIR)/atlas_1712_08119.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_13TeV/$(DEPDIR)/atlas_1802_03158.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_13TeV/$(DEPDIR)/atlas_1803_02762.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_13TeV/$(DEPDIR)/atlas_1807_07447.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_13TeV/$(DEPDIR)/atlas_1908_03122.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_13TeV/$(DEPDIR)/atlas_1908_08215.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_13TeV/$(DEPDIR)/atlas_1909_08457.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_13TeV/$(DEPDIR)/atlas_1911_06660.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_13TeV/$(DEPDIR)/atlas_1911_12606.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_13TeV/$(DEPDIR)/atlas_2004_10894.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_13TeV/$(DEPDIR)/atlas_2004_14060.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_13TeV/$(DEPDIR)/atlas_2101_01629.Plo@am__quote@
@@ -1325,6 +1351,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_13TeV/$(DEPDIR)/atlas_conf_2020_048.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_14TeV_HighLumi/$(DEPDIR)/atl_phys_pub_2014_010_sbottom.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_14TeV_HighLumi/$(DEPDIR)/atlas_2014_010_hl_3l.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_14TeV_HighLumi/$(DEPDIR)/atlas_phys_2014_007.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_14TeV_HighLumi/$(DEPDIR)/atlas_phys_2014_010_300.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_14TeV_HighLumi/$(DEPDIR)/atlas_phys_2014_010_sq_hl.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_14TeV_HighLumi/$(DEPDIR)/atlas_phys_pub_2013_011.Plo@am__quote@
@@ -1377,6 +1404,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_8TeV/$(DEPDIR)/atlas_conf_2014_056.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_8TeV/$(DEPDIR)/atlas_conf_2015_004.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/ATLAS_8TeV/$(DEPDIR)/atlas_higg_2013_03.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/analyses/CMS_13TeV/$(DEPDIR)/cms1703_01651.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/CMS_13TeV/$(DEPDIR)/cms_pas_sus_15_011.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/CMS_13TeV/$(DEPDIR)/cms_sus_16_025.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/analyses/CMS_13TeV/$(DEPDIR)/cms_sus_16_039.Plo@am__quote@
