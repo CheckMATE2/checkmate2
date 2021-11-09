@@ -14,7 +14,7 @@ void Cms_sus_16_025::initialize() {
 
   bookSignalRegions("SR1_weakino_1low_mll_1;SR1_weakino_1low_mll_2;SR1_weakino_1low_mll_3;SR1_weakino_1low_mll_4;SR1_weakino_2high_mll_1;SR1_weakino_2high_mll_2;SR1_weakino_2high_mll_3;SR1_weakino_2high_mll_4;SR2_stop_1low_pt_1;SR2_stop_1low_pt_2;SR2_stop_1low_pt_3;SR2_stop_2high_pt_1;SR2_stop_2high_pt_2;SR2_stop_2high_pt_3");
 
-  fout1.open("log");
+  /*fout1.open("log");
 
   h1 = new TH1F("h1", "mll", 100, 0, 100);
   h2 = new TH1F("h2", "leading lepton pt", 100, 0, 100);
@@ -22,7 +22,7 @@ void Cms_sus_16_025::initialize() {
   h4 = new TH1F("h4", "misset", 100, 0, 500);
   h5 = new TH1F("h5", "mll_met>200", 100, 0, 100);
 
-  f1 = new TFile("log.root", "RECREATE");
+  f1 = new TFile("log.root", "RECREATE");*/
   //f1 = new TFile("bin/log.root", "UPDATE");
   
   i1 = i2 = i3 = i4 = 0;
@@ -85,7 +85,7 @@ void Cms_sus_16_025::analyze() {
 
   double mET = missingET->PT;
   
-  h4->Fill(mET);
+  //h4->Fill(mET);
   fout1 << "muon.size()=" << muons.size() << std::endl;
   fout1 << mET << ", " << mET_no_muon << std::endl;
   
@@ -135,7 +135,7 @@ void Cms_sus_16_025::analyze() {
     ht += jets[i]->PT;
   }
 
-  h3->Fill(ht);
+  //h3->Fill(ht);
 /*  //trick for 10.1fb^-1 for low mET and 12.9fb^-1 for high mET regions
   double triggerRatio = (double) rand() / (double) (RAND_MAX + 1.);
   if(mET->PT<200) {
@@ -157,7 +157,7 @@ void Cms_sus_16_025::analyze() {
   //for two leptons at the trigger level
   if(leptons.size() < 2) return;
 
-  h2->Fill(leptons[0]->PT);
+  //h2->Fill(leptons[0]->PT);
 
   if(leptons[0]->PT < 3. or leptons[1]->PT < 3.) return;
 
@@ -217,7 +217,7 @@ void Cms_sus_16_025::analyze() {
   if (leptons.size() != 2) return;
   double mll = ( leptons[0]->P4()+leptons[1]->P4() ).M();
 
-  h1->Fill(mll);
+  //h1->Fill(mll);
 
   if ( mll > 50.) return;
 
@@ -296,7 +296,7 @@ void Cms_sus_16_025::analyze() {
       }
 
     } else {
-      h5->Fill(mll);
+      //h5->Fill(mll);
       if (mll < 10.) {
         countCutflowEvent("SR1_weakino_2high_mll_1");
         countSignalEvent("SR1_weakino_2high_mll_1");
@@ -347,7 +347,7 @@ void Cms_sus_16_025::analyze() {
 void Cms_sus_16_025::finalize() {
   // Whatever should be done after the run goes here
 
-    int n4 = h1->FindBin(4);
+  /*  int n4 = h1->FindBin(4);
   int n10 = h1->FindBin(10);
   int n20 = h1->FindBin(20);
   int n30 = h1->FindBin(30);
@@ -367,6 +367,6 @@ void Cms_sus_16_025::finalize() {
 
   f1->Write();
 
-  fout1.close();
+  fout1.close();*/
   
 }       
