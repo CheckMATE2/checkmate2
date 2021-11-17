@@ -58,14 +58,17 @@ void Atlas_2004_10894::analyze() {
 
   missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
 
-  photons = filterPhaseSpace(photons, 25., -2.37, 2.37, true);
+  photonsLoose = filterPhaseSpace(photonsLoose, 25., -2.37, 2.37, true);
+
   electronsMedium = filterPhaseSpace(electronsMedium, 20., -2.47, 2.47);
   muonsCombined = filterPhaseSpace(muonsCombined, 20., -2.7, 2.7);
   jets = filterPhaseSpace(jets, 25., -4.4, 4.4);
 
-  photons = overlapRemoval(photons, electronsMedium, 0.01);
+  photonsLoose = overlapRemoval(photonsLoose, electronsMedium, 0.01);
   
-  jets = overlapRemoval(jets, photons, 0.4);
+  jets = overlapRemoval(jets, photonsLoose, 0.4);
+  electronsMedium = overlapRemoval(electronsMedium, photonsLoose, 0.4);
+  muonsCombined = overlapRemoval(muonsCombined, photonsLoose, 0.4);
   jets = overlapRemoval(jets, muonsCombined, 0.4);
   jets = overlapRemoval(jets, electronsMedium, 0.4); 
 
@@ -74,16 +77,16 @@ void Atlas_2004_10894::analyze() {
 
   //JJJ: define signal final states
 
-  auto signal_photons = photons;
+  auto signal_photonsLoose = photonsLoose;
   auto signal_electrons = electronsMedium;
   auto signal_muons = muonsCombined;
   auto signal_jets = jets;
 
   double sumet = 0;
 
-  for(int i=0; i < signal_photons.size(); ++i)
+  for(int i=0; i < signal_photonsLoose.size(); ++i)
     {
-      sumet += signal_photons[i]->PT;
+      sumet += signal_photonsLoose[i]->PT;
     }
   
   for(int i=0; i < signal_muons.size(); ++i)
@@ -102,16 +105,16 @@ void Atlas_2004_10894::analyze() {
 
   
   
-  if (signal_photons.size() < 2)
+  if (signal_photonsLoose.size() < 2)
     return;
 
-  double mgammagamma = (signal_photons[0]->P4()+signal_photons[1]->P4()).M();
+  double mgammagamma = (signal_photonsLoose[0]->P4()+signal_photonsLoose[1]->P4()).M();
 
   if(mgammagamma < 105. || mgammagamma > 160.)
     return;
   
-  if (signal_photons[0]->PT < mgammagamma*0.35) return;
-  if (signal_photons[1]->PT < mgammagamma*0.25) return;
+  if (signal_photonsLoose[0]->PT < mgammagamma*0.35) return;
+  if (signal_photonsLoose[1]->PT < mgammagamma*0.25) return;
 
   int n_leptons=signal_muons.size()+signal_electrons.size();
   int n_jets=signal_jets.size();

@@ -1,6 +1,9 @@
 CheckMATE - Changelog
-Ver 2.0.33
+Ver 2.0.34
 ---------
+2021-11-17   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
+	~ bugfix for atlas_2004_10894
+
 2021-10-06   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
         
 	~ added atlas_1502_05686, atlas_2103_11684, atlas_2004_10894, atlas_2106_09609
