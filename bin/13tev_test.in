@@ -1,6 +1,6 @@
 [Parameters]
 Name: 13TeV-test
-Analyses: cms13TeV
+Analyses: atlas13TeV
 SLHAFile: ./example_run_cards/auxiliary/testspectrum.slha
 
 [13TeV-test]

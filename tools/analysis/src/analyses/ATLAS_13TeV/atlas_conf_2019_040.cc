@@ -55,20 +55,20 @@ void Atlas_conf_2019_040::analyze() {
   if (Passes_Cuts(sigjets, 200., 75.,  6, 2.0, 0.4, 0.2, 16., 0.08, 2200., true, "6j-2200") ) countSignalEvent("SR-6j-2200");
   if (Passes_Cuts(sigjets, 200., 75.,  6, 2.0, 0.4, 0.2, 10., 0.08, 3400., true, "6j-3400") ) countSignalEvent("SR-6j-3400");  
   
-  if (Passes_Cuts_MB(sigjets, 200., 100., 2, 3, 2.0, 0.8, 0.4, 10., 16., 0.,   1000., 1600., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-1000-10");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 2, 3, 2.0, 0.8, 0.4, 16., 22., 0.,   1000., 1600., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-1000-16");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 2, 3, 2.0, 0.8, 0.4, 22., -1., 0.,   1000., 1600., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-1000-22");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 2, 3, 2.0, 0.8, 0.4, 10., 16., 0.,   1600., -1.0 , false, "MB-SSd") ) countSignalEvent("MB-SSd-2-1600-10");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 2, 3, 2.0, 0.8, 0.4, 16., 22., 0.,   1600., 2200., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-1600-16");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 2, 3, 2.0, 0.8, 0.4, 22., -1., 0.,   1600., 2200., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-1600-22");  
-  if (Passes_Cuts_MB(sigjets, 200., 100., 2, 3, 2.0, 0.8, 0.4, 16., 22., 0.,   2200., 2800., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-2200-16");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 2, 3, 2.0, 0.8, 0.4, 22., -1., 0.,   2200., 2800., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-2200-22");    
-  if (Passes_Cuts_MB(sigjets, 200., 100., 2, 3, 2.0, 0.8, 0.4, 16., 22., 0.,   2800., -1.0 , false, "MB-SSd") ) countSignalEvent("MB-SSd-2-2800-16");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 2, 3, 2.0, 0.8, 0.4, 22., -1., 0.,   2800., 3400., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-2800-22");  
-  if (Passes_Cuts_MB(sigjets, 200., 100., 2, 3, 2.0, 0.8, 0.4, 22., 28., 0.,   3400., 4000., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-3400-22");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 2, 3, 2.0, 0.8, 0.4, 28., -1., 0.,   3400., 4000., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-3400-28");    
-  if (Passes_Cuts_MB(sigjets, 200., 100., 2, 3, 2.0, 0.8, 0.4, 22., 28., 0.,   4000., -1.0 , false, "MB-SSd") ) countSignalEvent("MB-SSd-2-4000-22");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 2, 3, 2.0, 0.8, 0.4, 28., -1., 0.,   4000., -1.0 , false, "MB-SSd") ) countSignalEvent("MB-SSd-2-4000-28"); 
+  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 10., 16., 0.,   1000., 1600., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-1000-10");
+  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 16., 22., 0.,   1000., 1600., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-1000-16");
+  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 22., -1., 0.,   1000., 1600., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-1000-22");
+  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 10., 16., 0.,   1600., -1.0 , false, "MB-SSd") ) countSignalEvent("MB-SSd-2-1600-10");
+  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 16., 22., 0.,   1600., 2200., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-1600-16");
+  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 22., -1., 0.,   1600., 2200., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-1600-22");  
+  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 16., 22., 0.,   2200., 2800., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-2200-16");
+  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 22., -1., 0.,   2200., 2800., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-2200-22");    
+  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 16., 22., 0.,   2800., -1.0 , false, "MB-SSd") ) countSignalEvent("MB-SSd-2-2800-16");
+  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 22., -1., 0.,   2800., 3400., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-2800-22");  
+  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 22., 28., 0.,   3400., 4000., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-3400-22");
+  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 28., -1., 0.,   3400., 4000., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-3400-28");    
+  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 22., 28., 0.,   4000., -1.0 , false, "MB-SSd") ) countSignalEvent("MB-SSd-2-4000-22");
+  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 28., -1., 0.,   4000., -1.0 , false, "MB-SSd") ) countSignalEvent("MB-SSd-2-4000-28"); 
   
   if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 10., 16., 0.,   1000., 1600., false, "MB-SSd") ) countSignalEvent("MB-SSd-4-1000-10");
   if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 16., 22., 0.,   1000., 1600., false, "MB-SSd") ) countSignalEvent("MB-SSd-4-1000-16");

@@ -1,6 +1,10 @@
 CheckMATE - Changelog
 Ver 2.0.34
 ---------
+2022-02-09   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ bugfix for atlas_conf_2019_040
+
 2021-11-17   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
 	~ bugfix for atlas_2004_10894
 
