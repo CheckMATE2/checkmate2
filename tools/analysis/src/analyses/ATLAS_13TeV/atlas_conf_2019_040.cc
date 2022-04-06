@@ -7,7 +7,7 @@ void Atlas_conf_2019_040::initialize() {
     "# search for squarks and gluinos in MET_jet final states\n"
   "");
   setLuminosity(139.0*units::INVFB);      
-  bookSignalRegions("MB-SSd-2-1000-10;MB-SSd-2-1000-16;MB-SSd-2-1000-22;MB-SSd-2-1600-10;MB-SSd-2-1600-16;MB-SSd-2-1600-22;MB-SSd-2-2200-16;MB-SSd-2-2200-22;MB-SSd-2-2800-16;MB-SSd-2-2800-22;MB-SSd-2-3400-22;MB-SSd-2-3400-28;MB-SSd-2-4000-22;MB-SSd-2-4000-28;MB-SSd-4-1000-10;MB-SSd-4-1000-16;MB-SSd-4-1000-22;MB-SSd-4-1600-10;MB-SSd-4-1600-16;MB-SSd-4-1600-22;MB-SSd-4-2200-16;MB-SSd-4-2200-22;MB-SSd-2-2800-16;MB-SSd-2-2800-22;MB-GGd-4-1000-10;MB-GGd-4-1000-16;MB-GGd-4-1000-22;MB-GGd-4-1600-10;MB-GGd-4-1600-16;MB-GGd-4-1600-22;MB-GGd-4-2200-10;MB-GGd-4-2200-16;MB-GGd-4-2200-22;MB-GGd-4-2800-10;MB-GGd-4-2800-16;MB-GGd-4-2800-22;MB-GGd-4-3400-10;MB-GGd-4-3400-16;MB-GGd-4-3400-22;MB-GGd-4-4000-10;MB-GGd-4-4000-16;MB-GGd-4-4000-22;MB-C-2-1600-16;MB-C-2-1600-22;MB-C-2-2200-16;MB-C-2-2200-22;MB-C-2-2800-16;MB-C-2-2800-22;MB-C-4-1600-16;MB-C-4-1600-22;MB-C-4-2200-16;MB-C-4-2200-22;MB-C-4-2800-16;MB-C-4-2800-22;MB-C-5-1600-16;MB-C-5-1600-22;MB-C-5-2200-16;MB-C-5-2200-22;MB-C-5-2800-16;MB-C-5-2800-22;SR-2j-1600;SR-2j-2200;SR-2j-2800;SR-4j-1000;SR-4j-2200;SR-4j-3400;SR-5j-1600;SR-6j-1000;SR-6j-2200;SR-6j-3400");
+  bookSignalRegions("MB-SSd-2-1000-10;MB-SSd-2-1000-16;MB-SSd-2-1000-22;MB-SSd-2-1600-10;MB-SSd-2-1600-16;MB-SSd-2-1600-22;MB-SSd-2-2200-16;MB-SSd-2-2200-22;MB-SSd-2-2800-16;MB-SSd-2-2800-22;MB-SSd-2-3400-22;MB-SSd-2-3400-28;MB-SSd-2-4000-22;MB-SSd-2-4000-28;MB-SSd-4-1000-10;MB-SSd-4-1000-16;MB-SSd-4-1000-22;MB-SSd-4-1600-10;MB-SSd-4-1600-16;MB-SSd-4-1600-22;MB-SSd-4-2200-16;MB-SSd-4-2200-22;MB-SSd-4-2800-16;MB-SSd-4-2800-22;MB-GGd-4-1000-10;MB-GGd-4-1000-16;MB-GGd-4-1000-22;MB-GGd-4-1600-10;MB-GGd-4-1600-16;MB-GGd-4-1600-22;MB-GGd-4-2200-10;MB-GGd-4-2200-16;MB-GGd-4-2200-22;MB-GGd-4-2800-10;MB-GGd-4-2800-16;MB-GGd-4-2800-22;MB-GGd-4-3400-10;MB-GGd-4-3400-16;MB-GGd-4-3400-22;MB-GGd-4-4000-10;MB-GGd-4-4000-16;MB-GGd-4-4000-22;MB-C-2-1600-16;MB-C-2-1600-22;MB-C-2-2200-16;MB-C-2-2200-22;MB-C-2-2800-16;MB-C-2-2800-22;MB-C-4-1600-16;MB-C-4-1600-22;MB-C-4-2200-16;MB-C-4-2200-22;MB-C-4-2800-16;MB-C-4-2800-22;MB-C-5-1600-16;MB-C-5-1600-22;MB-C-5-2200-16;MB-C-5-2200-22;MB-C-5-2800-16;MB-C-5-2800-22;SR-2j-1600;SR-2j-2200;SR-2j-2800;SR-4j-1000;SR-4j-2200;SR-4j-3400;SR-5j-1600;SR-6j-1000;SR-6j-2200;SR-6j-3400");
   // You can also book cutflow regions with bookCutflowRegions("CR1;CR2;..."). Note that the regions are
   //  always ordered alphabetically in the cutflow output files.
 
@@ -65,10 +65,10 @@ void Atlas_conf_2019_040::analyze() {
   if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 22., -1., 0.,   2200., 2800., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-2200-22");    
   if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 16., 22., 0.,   2800., -1.0 , false, "MB-SSd") ) countSignalEvent("MB-SSd-2-2800-16");
   if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 22., -1., 0.,   2800., 3400., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-2800-22");  
-  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 22., 28., 0.,   3400., 4000., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-3400-22");
-  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 28., -1., 0.,   3400., 4000., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-3400-28");    
-  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 22., 28., 0.,   4000., -1.0 , false, "MB-SSd") ) countSignalEvent("MB-SSd-2-4000-22");
-  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 28., -1., 0.,   4000., -1.0 , false, "MB-SSd") ) countSignalEvent("MB-SSd-2-4000-28"); 
+  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 0, 2.0, 0.8, 0.4, 22., 28., 0.,   3400., 4000., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-3400-22");
+  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 0, 2.0, 0.8, 0.4, 28., -1., 0.,   3400., 4000., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-3400-28");    
+  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 0, 2.0, 0.8, 0.4, 22., 28., 0.,   4000., -1.0 , false, "MB-SSd") ) countSignalEvent("MB-SSd-2-4000-22");
+  if (Passes_Cuts_MB(sigjets, 250., 250., 2, 0, 2.0, 0.8, 0.4, 28., -1., 0.,   4000., -1.0 , false, "MB-SSd") ) countSignalEvent("MB-SSd-2-4000-28"); 
   
   if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 10., 16., 0.,   1000., 1600., false, "MB-SSd") ) countSignalEvent("MB-SSd-4-1000-10");
   if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 16., 22., 0.,   1000., 1600., false, "MB-SSd") ) countSignalEvent("MB-SSd-4-1000-16");
@@ -79,7 +79,7 @@ void Atlas_conf_2019_040::analyze() {
   if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 16., 22., 0.,   2200., 2800., false, "MB-SSd") ) countSignalEvent("MB-SSd-4-2200-16");
   if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 22., -1., 0.,   2200., 2800., false, "MB-SSd") ) countSignalEvent("MB-SSd-4-2200-22");   
   if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 16., 22., 0.,   2800., -1.0 , false, "MB-SSd") ) countSignalEvent("MB-SSd-4-2800-16");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 22., -1., 0.,   2800., -1.0 , false, "MB-SSd") ) countSignalEvent("MB-SSd-4-2800-22");    
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 22., -1., 0.,   2800., 3400 , false, "MB-SSd") ) countSignalEvent("MB-SSd-4-2800-22");    
   
   if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 16., 0.04,   1000., 1600., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-1000-10");
   if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 16., 22., 0.04,   1000., 1600., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-1000-16");
