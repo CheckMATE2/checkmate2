@@ -1,44 +1,45 @@
-#Name                NSR  Description                                                                                 Lumi  CR?  
-atlas_1604_01306     1    photon + MET search at 13 TeV                                                               3.2   no   
-atlas_1605_09318     8    >= 3 b-jets + 0-1 lepton + Etmiss                                                           3.3   no   
-atlas_1609_01599     9    ttV cross section measurement at 13 TeV                                                     3.2   no   
-atlas_1704_03848     5    monophoton dark matter search                                                               36.1  no   
-atlas_conf_2015_082  1    leptonic Z + jets + Etmiss                                                                  3.2   no   
-atlas_conf_2016_013  10   4 top quark (1 lepton + jets, vector like quark search)                                     3.2   no   
-atlas_conf_2016_050  5    1-lepton + jets + etmiss (stop)                                                             13.3  no   
-atlas_conf_2016_054  10   1-lepton + jets + etmiss (squarks and gluino)                                               14.8  no   
-atlas_conf_2016_076  6    2 leptons + jets + etmiss                                                                   13.3  no   
-atlas_conf_2016_096  8    2-3 leptons + etmiss (electroweakino)                                                       13.3  no       
-atlas_conf_2017_060  20   monojet search                                                                              36.1  no   
-atlas_conf_2016_066  2    search for photons, jets and met                                                            13.3  no    
-atlas_1712_08119     39   electroweakinos search with soft leptons                                                    36.1  no   
-atlas_1712_02332     24   squarks and gluinos, 0 lepton, 2-6 jets                                                     36.1  no   
-atlas_1709_04183     14   stop pair production, 0 leptons                                                             36.1  no   
-atlas_1802_03158     7    search for GMSB with photons                                                                36.1  no   
-atlas_1708_07875     2    electroweakino search with taus and MET                                                     36.1  no   
-atlas_1706_03731     19   same-sign or 3 leptons RPC and RPV SUSY                                                     36.1  no   
-#atlas_conf_2019_018  2    Search for direct stau production in events with two hadronic tau leptons                  139   no
-atlas_1908_08215     16   charginos/sleptons, 2 leptons + MET                                                         139   no                 
-atlas_1909_08457     5    search for squarks and gluinos with same-sign leptons                                       139   no
-atlas_conf_2019_040  70   search for squarks and gluinos in MET_jet final states                                      139   no
-atlas_conf_2019_020  2    Search for chargino-neutralino production with mass splittings near the electroweak scale   139   no
-atlas_1803_02762     20   Search for electroweakino production in final states with two or three leptons	          36.1  no
-atlas_conf_2018_041  10   search for gluinos decaying via 3rd gen; multi b-jets and MET                               79.8  no
-atlas_2101_01629     32   squarks/gluinos, 1 lepton, jets, MET                                                        139   no
-atlas_conf_2020_048  26   Search for dark matter with monojets                                                        139   no
-atlas_2004_14060     9    stops, leptoquarks, 0 lepton                                                                139   no 
-atlas_1908_03122     10   0 leptons, 3 or more b-jets, sbottoms                                                       139   no
-atlas_1911_12606     87   search for sleptons and electroweakinos with soft leptons                                   139   no
-atlas_1807_07447     633  general search for new phenomena                                                            3.2   no
-atlas_2103_11684     2	  Search for SUSY in events with four or more leptons (gravitino SR)			      139   no
-atlas_2004_10894     12	  EWino search in Higgs (diphoton) and met    	      		 			      139   no
-atlas_2106_09609     21	  Search for RPV SUSY in final states with leptons and many jets			      139   no
-atlas_1911_06660     2	  search for direct stau production   	   	       	    				      139   no
+#Name                 
+atlas_1604_01306      
+atlas_1605_09318      
+atlas_1609_01599      
+atlas_1704_03848      
+atlas_conf_2015_082   
+atlas_conf_2016_013   
+atlas_conf_2016_050   
+atlas_conf_2016_054   
+atlas_conf_2016_076   
+atlas_conf_2016_096   
+atlas_conf_2017_060   
+atlas_conf_2016_066   
+atlas_1712_08119      
+atlas_1712_02332      
+atlas_1709_04183      
+atlas_1802_03158      
+atlas_1708_07875      
+atlas_1706_03731      
+#atlas_conf_2019_018  
+atlas_1908_08215      
+atlas_1909_08457      
+atlas_conf_2019_040   
+atlas_conf_2019_020   
+atlas_1803_02762      
+atlas_conf_2018_041   
+atlas_2101_01629      
+atlas_conf_2020_048   
+atlas_2004_14060      
+atlas_1908_03122      
+atlas_1911_12606      
+atlas_1807_07447      
+atlas_2103_11684      
+atlas_2004_10894      
+atlas_2106_09609      
+atlas_1911_06660      
 
 #Superseded:          
-#atlas_1602_09058     4    2 ss leptons or 3 leptons                                                                   3.2   no   
-#atlas_1604_07773     13   monojet                                                                                     3.2   no   
-#atlas_1605_03814     7    2-6 jets + Etmiss                                                                           3.2   no   
-#atlas_1605_04285     7    1 lepton + jets + Etmiss                                                                    3.3   no   
-#atlas_1606_03903     3    1-lepton + jets + etmiss (stop)                                                             3.2   no   
-#atlas_conf_2016_078  13   2-6 jets + etmiss (squarks and gluino)                                                      13.3  no        
+#atlas_1602_09058     
+#atlas_1604_07773     
+#atlas_1605_03814     
+#atlas_1605_04285     
+#atlas_1606_03903     
+#atlas_conf_2016_078  
+cms_pas_top_20_005    
