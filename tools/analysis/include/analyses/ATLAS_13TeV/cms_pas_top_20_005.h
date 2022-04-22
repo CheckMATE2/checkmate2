@@ -14,6 +14,7 @@ class Cms_pas_top_20_005 : public AnalysisBase {
     void finalize();
 
   private:
+    TFile *hfile;  TH1F *chi2_hist; TH1F *chi2_hist2;  
 };
 
 #endif
