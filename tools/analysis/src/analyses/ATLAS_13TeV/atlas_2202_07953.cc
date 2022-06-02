@@ -7,7 +7,7 @@ void Atlas_2202_07953::initialize() {
     "# invisible Higgs decays in VBF from ATLAS-EXOT\n"
   "");
   setLuminosity(139.0*units::INVFB);      
-  bookSignalRegions("SR;Bin01;Bin02;Bin03;Bin04;Bin05;Bin06;Bin07;Bin08;Bin09;Bin10;Bin11;Bin12;Bin13;Bin14;Bin15;Bin16");
+  bookSignalRegions("SR00;Bin01;Bin02;Bin03;Bin04;Bin05;Bin06;Bin07;Bin08;Bin09;Bin10;Bin11;Bin12;Bin13;Bin14;Bin15;Bin16");
   // You can also book cutflow regions with bookCutflowRegions("CR1;CR2;..."). Note that the regions are
   //  always ordered alphabetically in the cutflow output files.
 
@@ -48,7 +48,14 @@ void Atlas_2202_07953::analyze() {
 	}
     if (!used)  pTmiss_soft -= (*it)->P4();
   }
-    
+
+// uncomment for validation only!
+  GenParticle* higgs;
+  for(int i = 0; i < true_particles.size(); ++i)   //cout <<  true_particles[i]->PID << "   " << true_particles[i]->PT << "\n";;           
+    if( true_particles[i]->PID == 25 and true_particles[true_particles[i]->D1]->PID != 25 ) 
+      higgs = true_particles[i];
+  
+  if (higgs->PT < 75.) return;  
   countCutflowEvent("01_pTH>75");  
     
   if (sigjets.size() < 2 or sigjets[0]->PT < 50. or sigjets[1]->PT < 40. or fabs(sigjets[0]->Eta - sigjets[1]->Eta) < 2.) return;  
@@ -118,18 +125,18 @@ void Atlas_2202_07953::analyze() {
   countCutflowEvent("17_eta1*eta2<0");  
   
   if ( fabs(sigjets[0]->Eta - sigjets[1]->Eta) < 3.8 ) return;
-  countCutflowEvent("17_Detajj>3.8");
+  countCutflowEvent("18_Detajj>3.8");
 
   if (mjj < 800.) return;
-  countCutflowEvent("18_mjj>800");  
+  countCutflowEvent("19_mjj>800");  
   
   if (sigjets.size() > 2 and mjj < 1500.) return;
-  countCutflowEvent("19_mjj(3,4)>1500");  
+  countCutflowEvent("20_mjj(3,4)>1500");  
   
   if (met < 200. and mjj < 1500.) return;
-  countCutflowEvent("19_mjj(met)>1500");  
+  countCutflowEvent("21_mjj(met)>1500");  
   
-  countSignalEvent("SR");
+  countSignalEvent("SR00");
   
   if (met < 200. and sigjets.size() == 2 ) {
       if (mjj  <  2000. ) countSignalEvent("Bin14");

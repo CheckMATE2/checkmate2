@@ -189,7 +189,7 @@
       "bkg_err": "7.3", 
       "obs": "76"
     }, 
-    "SR": {
+    "SR00": {
       "S95_exp": "5249", 
       "S95_obs": "5992", 
       "bkg": "14990", 
@@ -199,7 +199,7 @@
   }, 
   "short_info": "invisible Higgs decays in VBF", 
   "signal_regions": [
-    "SR", 
+    "SR00", 
     "Bin01", 
     "Bin02", 
     "Bin03", 
