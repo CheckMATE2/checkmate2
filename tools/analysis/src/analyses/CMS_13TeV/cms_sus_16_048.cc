@@ -360,7 +360,7 @@ void Cms_sus_16_048::analyze() {
 
 void Cms_sus_16_048::finalize() {
   // Whatever should be done after the run goes here
-    int n4 = h1->FindBin(4);
+/*    int n4 = h1->FindBin(4);
   int n10 = h1->FindBin(10);
   int n20 = h1->FindBin(20);
   int n30 = h1->FindBin(30);
@@ -380,6 +380,6 @@ void Cms_sus_16_048::finalize() {
 
   f1->Write();
 
-  fout1.close();
+  fout1.close();*/
 
 }       

@@ -1,17 +1,3 @@
-#Name                 
-atlas_1604_01306      
-atlas_1605_09318      
-atlas_1609_01599      
-atlas_1704_03848      
-atlas_conf_2015_082   
-atlas_conf_2016_013   
-atlas_conf_2016_050   
-atlas_conf_2016_054   
-atlas_conf_2016_076   
-atlas_conf_2016_096   
-atlas_conf_2017_060   
-atlas_conf_2016_066   
-atlas_1712_08119      
 #Name                NSR  Description                                                                                 Lumi  CR?  
 atlas_1604_01306     1    photon + MET search at 13 TeV                                                               3.2   no   
 atlas_1605_09318     8    >= 3 b-jets + 0-1 lepton + Etmiss                                                           3.3   no   
