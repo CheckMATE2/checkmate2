@@ -15,7 +15,7 @@ void Cms_sus_16_048::initialize() {
 
   bookSignalRegions("SR1_weakino_1low_mll_1;SR1_weakino_1low_mll_2;SR1_weakino_1low_mll_3;SR1_weakino_1low_mll_4;SR1_weakino_2media_mll_1;SR1_weakino_2media_mll_2;SR1_weakino_2media_mll_3;SR1_weakino_2media_mll_4;SR1_weakino_3high_mll_1;SR1_weakino_3high_mll_2;SR1_weakino_3high_mll_3;SR1_weakino_3high_mll_4;SR2_stop_1low_pt_1;SR2_stop_1low_pt_2;SR2_stop_1low_pt_3;SR2_stop_2media_pt_1;SR2_stop_2media_pt_2;SR2_stop_2media_pt_3;SR2_stop_3high_pt_1;SR2_stop_3high_pt_2;SR2_stop_3high_pt_3");
 
-  fout1.open("log");
+/*  fout1.open("log");
 
   h1 = new TH1F("h1", "mll", 100, 0, 100);
   h2 = new TH1F("h2", "leading lepton pt", 100, 0, 100);
@@ -23,7 +23,7 @@ void Cms_sus_16_048::initialize() {
   h4 = new TH1F("h4", "misset", 100, 0, 500);
   h5 = new TH1F("h5", "mll_met>200", 100, 0, 100);
 
-  f1 = new TFile("log.root", "RECREATE");
+  f1 = new TFile("log.root", "RECREATE");*/
   //f1 = new TFile("bin/log.root", "UPDATE");
   
   i1 = i2 = i3 = i4 = 0;
@@ -87,7 +87,7 @@ void Cms_sus_16_048::analyze() {
 
   double mET = missingET->PT;
 
-  h4->Fill(mET);
+  //h4->Fill(mET);
   //fout1 << "muon.size()=" << muons.size() << std::endl;
   //fout1 << mET << ", " << mET_no_muon << std::endl;
 
@@ -296,7 +296,7 @@ void Cms_sus_16_048::analyze() {
         countSignalEvent("SR1_weakino_2media_mll_4");
       }
     } else {
-      h5->Fill(mll);
+      //h5->Fill(mll);
       if (mll < 10.) {
         countCutflowEvent("SR1_weakino_3high_mll_1");
         countSignalEvent("SR1_weakino_3high_mll_1");
@@ -360,7 +360,7 @@ void Cms_sus_16_048::analyze() {
 
 void Cms_sus_16_048::finalize() {
   // Whatever should be done after the run goes here
-    int n4 = h1->FindBin(4);
+/*    int n4 = h1->FindBin(4);
   int n10 = h1->FindBin(10);
   int n20 = h1->FindBin(20);
   int n30 = h1->FindBin(30);
@@ -380,6 +380,6 @@ void Cms_sus_16_048::finalize() {
 
   f1->Write();
 
-  fout1.close();
+  fout1.close();*/
 
 }       
