@@ -329,7 +329,7 @@ bool LHAupMadgraph::launch() {
   if (!pythia) return false;
   fstream config((dir + "/launch.py").c_str(), ios::out);
   if (!override[Launch]) {
-    config << "launch " << dir << " -n run \n";
+    config << "launch " << dir << " -n run \nupdate missing\n";
   }
 
   // Write the user settings.
