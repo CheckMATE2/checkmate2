@@ -1,4 +1,12 @@
 CheckMATE - Changelog
+
+Ver 2.0.35
+---------
+2022-09-08   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ Root::TMVA functionality
+
+
 Ver 2.0.34
 ---------
 2022-02-09   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
