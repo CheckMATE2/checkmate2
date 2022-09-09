@@ -32,6 +32,7 @@ class Atlas_conf_2019_040 : public AnalysisBase {
     double HT(std::vector<Jet*> jets);
     bool Passes_Cuts(std::vector<Jet*> jets, double PT1Cut, double PT2Cut, int NJet, double EtaCut, double dPhiCut1, double dPhiCut2, double METHTCut, double AplanarityCut, double MeffCut, bool cutflow, std::string sr); 
     bool Passes_Cuts_MB(std::vector<Jet*> jets, double PT1Cut, double PT2Cut, int NJetMin, int NJetMax, double EtaCut, double dPhiCut1, double dPhiCut2, double METHTMin, double METHTMax, double AplanarityCut, double MeffCutMin, double MeffCutMax, bool cutflow, std::string sr);
+    bool Passes_Cuts_BDT(std::vector<Jet*> jets, int NJetMin, double dPhiCut1, double dPhiCut2, double METMeff, double MeffMin, double BDTscore, bool cutflow, std::string sr);
 };
 
 #endif

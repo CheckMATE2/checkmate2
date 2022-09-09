@@ -1,4 +1,9 @@
 #include "atlas_conf_2019_040.h"
+#include "TMVA/Tools.h"
+#include "TMVA/Reader.h"
+
+using namespace TMVA;
+
 // AUTHOR: K. Rolbiecki
 //  EMAIL: krolb@fuw.edu.pl
 void Atlas_conf_2019_040::initialize() {
@@ -38,22 +43,23 @@ void Atlas_conf_2019_040::analyze() {
   if (met < 300.) return;
   if ( sigjets.size() < 2 || sigjets[0]->PT < 200. ) return;
   if ( M_eff(sigjets, 0) < 800. ) return;
+
   
   countCutflowEvent("01_Preselection");
   
 //  if( dPhi(sigjets, 0) < 0.4 ) return;
  
 //                        PTj1  PTj2  Nj  Eta Phi1 Phi2 ET/HT Apl   Meff
-  if (Passes_Cuts(sigjets, 250., 250., 2, 2.0, 0.8, 0.4, 16., 0.,   1600., true, "2j-1600") ) countSignalEvent("SR-2j-1600");
-  if (Passes_Cuts(sigjets, 600., 50.,  2, 2.8, 0.4, 0.2, 16., 0.,   2200., true, "2j-2200") ) countSignalEvent("SR-2j-2200");  
-  if (Passes_Cuts(sigjets, 250., 250., 2, 1.2, 0.8, 0.4, 16., 0.,   2800., true, "2j-2800") ) countSignalEvent("SR-2j-2800");    
-  if (Passes_Cuts(sigjets, 200., 100., 4, 2.0, 0.4, 0.4, 16., 0.04, 1000., true, "4j-1000") ) countSignalEvent("SR-4j-1000");
-  if (Passes_Cuts(sigjets, 200., 100., 4, 2.0, 0.4, 0.4, 16., 0.04, 2200., true, "4j-2200") ) countSignalEvent("SR-4j-2200");
-  if (Passes_Cuts(sigjets, 200., 100., 4, 2.0, 0.4, 0.4, 10., 0.04, 3400., true, "4j-3400") ) countSignalEvent("SR-4j-3400");  
-  if (Passes_Cuts(sigjets, 600., 50.,  5, 2.8, 0.4, 0.2, 16., 0.,   1600., true, "5j-1600") ) countSignalEvent("SR-5j-1600");  
-  if (Passes_Cuts(sigjets, 200., 75.,  6, 2.0, 0.4, 0.2, 16., 0.08, 1000., true, "6j-1000") ) countSignalEvent("SR-6j-1000");  
-  if (Passes_Cuts(sigjets, 200., 75.,  6, 2.0, 0.4, 0.2, 16., 0.08, 2200., true, "6j-2200") ) countSignalEvent("SR-6j-2200");
-  if (Passes_Cuts(sigjets, 200., 75.,  6, 2.0, 0.4, 0.2, 10., 0.08, 3400., true, "6j-3400") ) countSignalEvent("SR-6j-3400");  
+  if (Passes_Cuts(sigjets, 250., 250., 2, 2.0, 0.8, 0.4, 16., 0.,   1600., false, "2j-1600") ) countSignalEvent("SR-2j-1600");
+  if (Passes_Cuts(sigjets, 600., 50.,  2, 2.8, 0.4, 0.2, 16., 0.,   2200., false, "2j-2200") ) countSignalEvent("SR-2j-2200");  
+  if (Passes_Cuts(sigjets, 250., 250., 2, 1.2, 0.8, 0.4, 16., 0.,   2800., false, "2j-2800") ) countSignalEvent("SR-2j-2800");    
+  if (Passes_Cuts(sigjets, 200., 100., 4, 2.0, 0.4, 0.4, 16., 0.04, 1000., false, "4j-1000") ) countSignalEvent("SR-4j-1000");
+  if (Passes_Cuts(sigjets, 200., 100., 4, 2.0, 0.4, 0.4, 16., 0.04, 2200., false, "4j-2200") ) countSignalEvent("SR-4j-2200");
+  if (Passes_Cuts(sigjets, 200., 100., 4, 2.0, 0.4, 0.4, 10., 0.04, 3400., false, "4j-3400") ) countSignalEvent("SR-4j-3400");  
+  if (Passes_Cuts(sigjets, 600., 50.,  5, 2.8, 0.4, 0.2, 16., 0.,   1600., false, "5j-1600") ) countSignalEvent("SR-5j-1600");  
+  if (Passes_Cuts(sigjets, 200., 75.,  6, 2.0, 0.4, 0.2, 16., 0.08, 1000., false, "6j-1000") ) countSignalEvent("SR-6j-1000");  
+  if (Passes_Cuts(sigjets, 200., 75.,  6, 2.0, 0.4, 0.2, 16., 0.08, 2200., false, "6j-2200") ) countSignalEvent("SR-6j-2200");
+  if (Passes_Cuts(sigjets, 200., 75.,  6, 2.0, 0.4, 0.2, 10., 0.08, 3400., false, "6j-3400") ) countSignalEvent("SR-6j-3400");  
   
   if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 10., 16., 0.,   1000., 1600., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-1000-10");
   if (Passes_Cuts_MB(sigjets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 16., 22., 0.,   1000., 1600., false, "MB-SSd") ) countSignalEvent("MB-SSd-2-1000-16");
@@ -119,7 +125,10 @@ void Atlas_conf_2019_040::analyze() {
   if (Passes_Cuts_MB(sigjets, 600.,  50., 5, 0, 2.8, 0.4, 0.2, 16., 22., 0.0,   2200., 2800., false, "MB-C") ) countSignalEvent("MB-C-5-2200-16");    
   if (Passes_Cuts_MB(sigjets, 600.,  50., 5, 0, 2.8, 0.4, 0.2, 22., -1., 0.0,   2200., 2800., false, "MB-C") ) countSignalEvent("MB-C-5-2200-22");    
   if (Passes_Cuts_MB(sigjets, 600.,  50., 5, 0, 2.8, 0.4, 0.2, 16., 22., 0.0,   2800., -1.0 , false, "MB-C") ) countSignalEvent("MB-C-5-2800-16");    
-  if (Passes_Cuts_MB(sigjets, 600.,  50., 5, 0, 2.8, 0.4, 0.2, 22., -1., 0.0,   2800., -1.0 , false, "MB-C") ) countSignalEvent("MB-C-5-2800-22");        
+  if (Passes_Cuts_MB(sigjets, 600.,  50., 5, 0, 2.8, 0.4, 0.2, 22., -1., 0.0,   2800., -1.0 , false, "MB-C") ) countSignalEvent("MB-C-5-2800-22");     
+  
+  //                         N_j , DPhi13, DPhi4, MET/Meff, Meff,  BDT
+  if (Passes_Cuts_BDT(sigjets, 4,   0.4,    0.4,     0.2,   1400., 0.97, true, "BDT-GGd") ) countSignalEvent("BDT-GGd1");        
   
   return;  
   
@@ -357,6 +366,65 @@ bool Atlas_conf_2019_040::Passes_Cuts_MB(std::vector<Jet*> jets, double PT1Cut, 
   if( M_eff(jets, 0) < MeffMin) return false;
   if( MeffMax > 0. and M_eff(jets, 0) > MeffMax) return false;
   if (cutflow) countCutflowEvent(sr+"_09_Meff");  
+  
+  return true;
+}
+
+
+bool Atlas_conf_2019_040::Passes_Cuts_BDT(std::vector<Jet*> jets, int NJetMin, double dPhiCut1, double dPhiCut2, double METMeff, double MeffMin, double BDTscore, bool cutflow, std::string sr) {
+  
+  Float_t met, meff, Ap, jetPt0, jetPt1, jetPt2, jetPt3, jetEta0, jetEta1, jetEta2, jetEta3;
+  
+  if ( jets.size() < NJetMin ) return false;  
+  if (cutflow) countCutflowEvent(sr+"_02_jetmulti");  
+  
+  if( dPhi(jets, 0) < dPhiCut1 ) return false;
+  if (cutflow) countCutflowEvent(sr+"_03_dPhilow");  
+  
+  if( dPhi(jets, 1) < dPhiCut2 ) return false;
+  if (cutflow) countCutflowEvent(sr+"_04_dPhihigh");    
+  
+  met = missingET->P4().Et();
+  meff = M_eff(jets, NJetMin);  
+  
+  if ( met/meff < METMeff ) return false;
+  if (cutflow) countCutflowEvent(sr+"_05_METMeff");
+  
+  if( meff < MeffMin) return false;
+  if (cutflow) countCutflowEvent(sr+"_06_Meff");    
+  
+  TMVA::Reader *reader = new TMVA::Reader( "!Color:!Silent" );
+
+  reader->AddVariable( "met", &met );
+  reader->AddVariable( "meff", &meff );
+  reader->AddVariable( "Ap", &Ap );
+  reader->AddVariable( "jetPt0", &jetPt0 );
+  reader->AddVariable( "jetPt1", &jetPt1 );
+  reader->AddVariable( "jetPt2", &jetPt2 );
+  reader->AddVariable( "jetPt3", &jetPt3 );
+  reader->AddVariable( "jetEta0", &jetEta0 );
+  reader->AddVariable( "jetEta1", &jetEta1 );
+  reader->AddVariable( "jetEta2", &jetEta2 );
+  reader->AddVariable( "jetEta3", &jetEta3 );
+  
+  reader->BookMVA( "BDT", "/home/krolb/tools/CheckMATE/TMVA/data/ZeroLepton2018-SRBDT-GGd1_weight1.xml" );
+  
+  Ap = aplanarity(jets);
+  jetPt0 = jets[0]->PT;
+  jetPt1 = jets[1]->PT;
+  jetPt2 = jets[2]->PT;
+  jetPt3 = jets[3]->PT;
+  jetEta0 = jets[0]->Eta;
+  jetEta1 = jets[1]->Eta;
+  jetEta2 = jets[2]->Eta;
+  jetEta3 = jets[3]->Eta;
+  
+  double bdt = reader->EvaluateMVA( "BDT" );
+  
+  if (bdt < BDTscore) return false;
+  if (cutflow) countCutflowEvent(sr+"_07_BDT");    
+  
+  delete reader;
   
   return true;
 }
