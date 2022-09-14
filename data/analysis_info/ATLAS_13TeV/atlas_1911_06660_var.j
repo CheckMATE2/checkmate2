@@ -29,8 +29,7 @@
   "experiment": "atlas13tev", 
   "info_set": [
     "bkg", 
-    "bkg_errp", 
-    "bkg_errm", 
+    "bkg_err",  
     "obs", 
     "S95_obs", 
     "S95_exp"
@@ -84,20 +83,18 @@
   "photon_niso": 1, 
   "reference_data": {
     "SRhighMass": {
-      "S95_exp": "2.927", 
-      "S95_obs": "2.928", 
-      "bkg": "0.065", 
-      "bkg_errm": "0.019", 
-      "bkg_errp": "0.025", 
-      "obs": "0.05"
+      "S95_exp": "8.6", 
+      "S95_obs": "6.7", 
+      "bkg": "10.2", 
+      "bkg_err": "3.3",  
+      "obs": "7"
     }, 
     "SRlowMass": {
-      "S95_exp": "2.976", 
-      "S95_obs": "2.937", 
-      "bkg": "0.055", 
-      "bkg_errm": "0.014", 
-      "bkg_errp": "0.025", 
-      "obs": "0.08"
+      "S95_exp": "7.8", 
+      "S95_obs": "11.2", 
+      "bkg": "6", 
+      "bkg_err": "1.7",  
+      "obs": "10"
     }
   }, 
   "short_info": "search for direct stau production", 
