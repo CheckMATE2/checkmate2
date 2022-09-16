@@ -1,5 +1,4 @@
 #include "atlas_conf_2019_040.h"
-#include "TMVA/Tools.h"
 #include "TMVA/Reader.h"
 
 using namespace TMVA;
@@ -12,11 +11,140 @@ void Atlas_conf_2019_040::initialize() {
     "# search for squarks and gluinos in MET_jet final states\n"
   "");
   setLuminosity(139.0*units::INVFB);      
-  bookSignalRegions("MB-SSd-2-1000-10;MB-SSd-2-1000-16;MB-SSd-2-1000-22;MB-SSd-2-1600-10;MB-SSd-2-1600-16;MB-SSd-2-1600-22;MB-SSd-2-2200-16;MB-SSd-2-2200-22;MB-SSd-2-2800-16;MB-SSd-2-2800-22;MB-SSd-2-3400-22;MB-SSd-2-3400-28;MB-SSd-2-4000-22;MB-SSd-2-4000-28;MB-SSd-4-1000-10;MB-SSd-4-1000-16;MB-SSd-4-1000-22;MB-SSd-4-1600-10;MB-SSd-4-1600-16;MB-SSd-4-1600-22;MB-SSd-4-2200-16;MB-SSd-4-2200-22;MB-SSd-4-2800-16;MB-SSd-4-2800-22;MB-GGd-4-1000-10;MB-GGd-4-1000-16;MB-GGd-4-1000-22;MB-GGd-4-1600-10;MB-GGd-4-1600-16;MB-GGd-4-1600-22;MB-GGd-4-2200-10;MB-GGd-4-2200-16;MB-GGd-4-2200-22;MB-GGd-4-2800-10;MB-GGd-4-2800-16;MB-GGd-4-2800-22;MB-GGd-4-3400-10;MB-GGd-4-3400-16;MB-GGd-4-3400-22;MB-GGd-4-4000-10;MB-GGd-4-4000-16;MB-GGd-4-4000-22;MB-C-2-1600-16;MB-C-2-1600-22;MB-C-2-2200-16;MB-C-2-2200-22;MB-C-2-2800-16;MB-C-2-2800-22;MB-C-4-1600-16;MB-C-4-1600-22;MB-C-4-2200-16;MB-C-4-2200-22;MB-C-4-2800-16;MB-C-4-2800-22;MB-C-5-1600-16;MB-C-5-1600-22;MB-C-5-2200-16;MB-C-5-2200-22;MB-C-5-2800-16;MB-C-5-2800-22;SR-2j-1600;SR-2j-2200;SR-2j-2800;SR-4j-1000;SR-4j-2200;SR-4j-3400;SR-5j-1600;SR-6j-1000;SR-6j-2200;SR-6j-3400");
+  bookSignalRegions("MB-SSd-2-1000-10;MB-SSd-2-1000-16;MB-SSd-2-1000-22;MB-SSd-2-1600-10;MB-SSd-2-1600-16;MB-SSd-2-1600-22;MB-SSd-2-2200-16;MB-SSd-2-2200-22;MB-SSd-2-2800-16;MB-SSd-2-2800-22;MB-SSd-2-3400-22;MB-SSd-2-3400-28;MB-SSd-2-4000-22;MB-SSd-2-4000-28;MB-SSd-4-1000-10;MB-SSd-4-1000-16;MB-SSd-4-1000-22;MB-SSd-4-1600-10;MB-SSd-4-1600-16;MB-SSd-4-1600-22;MB-SSd-4-2200-16;MB-SSd-4-2200-22;MB-SSd-4-2800-16;MB-SSd-4-2800-22;MB-GGd-4-1000-10;MB-GGd-4-1000-16;MB-GGd-4-1000-22;MB-GGd-4-1600-10;MB-GGd-4-1600-16;MB-GGd-4-1600-22;MB-GGd-4-2200-10;MB-GGd-4-2200-16;MB-GGd-4-2200-22;MB-GGd-4-2800-10;MB-GGd-4-2800-16;MB-GGd-4-2800-22;MB-GGd-4-3400-10;MB-GGd-4-3400-16;MB-GGd-4-3400-22;MB-GGd-4-4000-10;MB-GGd-4-4000-16;MB-GGd-4-4000-22;MB-C-2-1600-16;MB-C-2-1600-22;MB-C-2-2200-16;MB-C-2-2200-22;MB-C-2-2800-16;MB-C-2-2800-22;MB-C-4-1600-16;MB-C-4-1600-22;MB-C-4-2200-16;MB-C-4-2200-22;MB-C-4-2800-16;MB-C-4-2800-22;MB-C-5-1600-16;MB-C-5-1600-22;MB-C-5-2200-16;MB-C-5-2200-22;MB-C-5-2800-16;MB-C-5-2800-22;SR-2j-1600;SR-2j-2200;SR-2j-2800;SR-4j-1000;SR-4j-2200;SR-4j-3400;SR-5j-1600;SR-6j-1000;SR-6j-2200;SR-6j-3400;BDT-GGd1;BDT-GGd2;BDT-GGd3;BDT-GGd4;BDT-GGo1;BDT-GGo2;BDT-GGo3;BDT-GGo4");
   // You can also book cutflow regions with bookCutflowRegions("CR1;CR2;..."). Note that the regions are
   //  always ordered alphabetically in the cutflow output files.
 
   // You should initialize any declared variables here
+  //Float_t met_aux, meff_aux, Ap, jetPt0, jetPt1, jetPt2, jetPt3, jetPt4, jetPt5, jetEta0, jetEta1, jetEta2, jetEta3, jetEta4, jetEta5;
+  met_aux = 0.; meff_aux = 0.; Ap = 0.; jetPt0 = 0.; jetPt1 = 0.; jetPt2 = 0.; jetPt3 = 0.; jetPt4 = 0.; jetPt5 = 0.; jetEta0 = 0.; jetEta1 = 0.; jetEta2 = 0.; jetEta3 = 0.; jetEta4  = 0.; jetEta5  = 0.;
+  
+  for (int i = 0; i < 2; i++) {
+    reader[0][i] = new TMVA::Reader(  );
+    reader[0][i]->AddVariable( "met", &met_aux );
+    reader[0][i]->AddVariable( "meff", &meff_aux );
+    reader[0][i]->AddVariable( "Ap", &Ap );
+    reader[0][i]->AddVariable( "jetPt0", &jetPt0 );
+    reader[0][i]->AddVariable( "jetPt1", &jetPt1 );
+    reader[0][i]->AddVariable( "jetPt2", &jetPt2 );
+    reader[0][i]->AddVariable( "jetPt3", &jetPt3 );
+    reader[0][i]->AddVariable( "jetEta0", &jetEta0 );
+    reader[0][i]->AddVariable( "jetEta1", &jetEta1 );
+    reader[0][i]->AddVariable( "jetEta2", &jetEta2 );
+    reader[0][i]->AddVariable( "jetEta3", &jetEta3 );
+    reader[0][i]->BookMVA( "BDT", "/home/krolb/tools/CheckMATE/TMVA/data/ZeroLepton2018-SRBDT-GGd1_weight" + std::to_string(i+1) +".xml" );
+  }
+  
+  for (int i = 0; i < 2; i++) {
+    reader[1][i] = new TMVA::Reader(  );
+    reader[1][i]->AddVariable( "meff", &meff_aux );
+    reader[1][i]->AddVariable( "Ap", &Ap );
+    reader[1][i]->AddVariable( "jetPt0", &jetPt0 );
+    reader[1][i]->AddVariable( "jetPt1", &jetPt1 );
+    reader[1][i]->AddVariable( "jetPt2", &jetPt2 );
+    reader[1][i]->AddVariable( "jetPt3", &jetPt3 );
+    reader[1][i]->AddVariable( "jetEta0", &jetEta0 );
+    reader[1][i]->AddVariable( "jetEta1", &jetEta1 );
+    reader[1][i]->AddVariable( "jetEta2", &jetEta2 );
+    reader[1][i]->AddVariable( "jetEta3", &jetEta3 );
+    reader[1][i]->BookMVA( "BDT", "/home/krolb/tools/CheckMATE/TMVA/data/ZeroLepton2018-SRBDT-GGd2_weight" + std::to_string(i+1) +".xml" );
+  }
+  
+  for (int i = 0; i < 2; i++) {
+    reader[2][i] = new TMVA::Reader(  );
+    reader[2][i]->AddVariable( "met", &met_aux );
+    reader[2][i]->AddVariable( "meff", &meff_aux );
+    reader[2][i]->AddVariable( "Ap", &Ap );
+    reader[2][i]->AddVariable( "jetPt0", &jetPt0 );
+    reader[2][i]->AddVariable( "jetPt1", &jetPt1 );
+    reader[2][i]->AddVariable( "jetPt2", &jetPt2 );
+    reader[2][i]->AddVariable( "jetPt3", &jetPt3 );
+    reader[2][i]->AddVariable( "jetEta0", &jetEta0 );
+    reader[2][i]->AddVariable( "jetEta1", &jetEta1 );
+    reader[2][i]->AddVariable( "jetEta2", &jetEta2 );
+    reader[2][i]->AddVariable( "jetEta3", &jetEta3 );
+    reader[2][i]->BookMVA( "BDT", "/home/krolb/tools/CheckMATE/TMVA/data/ZeroLepton2018-SRBDT-GGd3_weight" + std::to_string(i+1) +".xml" );
+  }
+  
+  for (int i = 0; i < 2; i++) {
+    reader[3][i] = new TMVA::Reader(  );
+    reader[3][i]->AddVariable( "met", &met_aux );
+    reader[3][i]->AddVariable( "meff", &meff_aux );
+    reader[3][i]->AddVariable( "jetPt0", &jetPt0 );
+    reader[3][i]->AddVariable( "jetPt1", &jetPt1 );
+    reader[3][i]->AddVariable( "jetPt2", &jetPt2 );
+    reader[3][i]->AddVariable( "jetPt3", &jetPt3 );
+    reader[3][i]->AddVariable( "jetEta0", &jetEta0 );
+    reader[3][i]->AddVariable( "jetEta1", &jetEta1 );
+    reader[3][i]->AddVariable( "jetEta2", &jetEta2 );
+    reader[3][i]->AddVariable( "jetEta3", &jetEta3 );
+    reader[3][i]->BookMVA( "BDT", "/home/krolb/tools/CheckMATE/TMVA/data/ZeroLepton2018-SRBDT-GGd4_weight" + std::to_string(i+1) +".xml" );  
+  }
+  
+  for (int i = 0; i < 2; i++) {
+    reader[4][i] = new TMVA::Reader(  );
+    reader[4][i]->AddVariable( "meff", &meff_aux );
+    reader[4][i]->AddVariable( "Ap", &Ap );
+    reader[4][i]->AddVariable( "jetPt0", &jetPt0 );
+    reader[4][i]->AddVariable( "jetPt1", &jetPt1 );
+    reader[4][i]->AddVariable( "jetPt2", &jetPt2 );
+    reader[4][i]->AddVariable( "jetPt3", &jetPt3 );
+    reader[4][i]->AddVariable( "jetPt4", &jetPt4 );
+    reader[4][i]->AddVariable( "jetEta0", &jetEta0 );
+    reader[4][i]->AddVariable( "jetEta1", &jetEta1 );
+    reader[4][i]->AddVariable( "jetEta2", &jetEta2 );
+    reader[4][i]->AddVariable( "jetEta3", &jetEta3 );
+    reader[4][i]->AddVariable( "jetEta4", &jetEta4 );
+    reader[4][i]->BookMVA( "BDT", "/home/krolb/tools/CheckMATE/TMVA/data/ZeroLepton2018-SRBDT-GGo1_weight" + std::to_string(i+1) +".xml" );  
+  }  
+  
+  for (int i = 0; i < 2; i++) {
+    reader[5][i] = new TMVA::Reader(  );
+    reader[5][i]->AddVariable( "meff", &meff_aux );
+    reader[5][i]->AddVariable( "Ap", &Ap );
+    reader[5][i]->AddVariable( "jetPt0", &jetPt0 );
+    reader[5][i]->AddVariable( "jetPt1", &jetPt1 );
+    reader[5][i]->AddVariable( "jetPt2", &jetPt2 );
+    reader[5][i]->AddVariable( "jetPt3", &jetPt3 );
+    reader[5][i]->AddVariable( "jetEta0", &jetEta0 );
+    reader[5][i]->AddVariable( "jetEta1", &jetEta1 );
+    reader[5][i]->AddVariable( "jetEta2", &jetEta2 );
+    reader[5][i]->AddVariable( "jetEta3", &jetEta3 );
+    reader[5][i]->BookMVA( "BDT", "/home/krolb/tools/CheckMATE/TMVA/data/ZeroLepton2018-SRBDT-GGo2_weight" + std::to_string(i+1) +".xml" );  
+  }    
+  
+  for (int i = 0; i < 2; i++) {
+    reader[6][i] = new TMVA::Reader(  );
+    reader[6][i]->AddVariable( "meff", &meff_aux );
+    reader[6][i]->AddVariable( "Ap", &Ap );
+    reader[6][i]->AddVariable( "jetPt0", &jetPt0 );
+    reader[6][i]->AddVariable( "jetPt1", &jetPt1 );
+    reader[6][i]->AddVariable( "jetPt2", &jetPt2 );
+    reader[6][i]->AddVariable( "jetPt4", &jetPt4 );
+    reader[6][i]->AddVariable( "jetPt5", &jetPt5 );
+    reader[6][i]->AddVariable( "jetEta0", &jetEta0 );
+    reader[6][i]->AddVariable( "jetEta1", &jetEta1 );
+    reader[6][i]->AddVariable( "jetEta2", &jetEta2 );
+    reader[6][i]->AddVariable( "jetEta4", &jetEta4 );
+    reader[6][i]->AddVariable( "jetEta5", &jetEta5 );
+    reader[6][i]->BookMVA( "BDT", "/home/krolb/tools/CheckMATE/TMVA/data/ZeroLepton2018-SRBDT-GGo3_weight" + std::to_string(i+1) +".xml" );  
+  }    
+  
+  for (int i = 0; i < 2; i++) {
+    reader[7][i] = new TMVA::Reader(  );    
+    reader[7][i]->AddVariable( "meff", &meff_aux );
+    reader[7][i]->AddVariable( "met", &met_aux );
+    reader[7][i]->AddVariable( "jetPt0", &jetPt0 );
+    reader[7][i]->AddVariable( "jetPt1", &jetPt1 );
+    reader[7][i]->AddVariable( "jetPt2", &jetPt2 );
+    reader[7][i]->AddVariable( "jetPt3", &jetPt3 );
+    reader[7][i]->AddVariable( "jetEta0", &jetEta0 );
+    reader[7][i]->AddVariable( "jetEta1", &jetEta1 );
+    reader[7][i]->AddVariable( "jetEta2", &jetEta2 );
+    reader[7][i]->AddVariable( "jetEta3", &jetEta3 );
+    reader[7][i]->BookMVA( "BDT", "/home/krolb/tools/CheckMATE/TMVA/data/ZeroLepton2018-SRBDT-GGo4_weight" + std::to_string(i+1) +".xml" );  
+  }      
+  
 }
 
 void Atlas_conf_2019_040::analyze() {
@@ -128,7 +256,14 @@ void Atlas_conf_2019_040::analyze() {
   if (Passes_Cuts_MB(sigjets, 600.,  50., 5, 0, 2.8, 0.4, 0.2, 22., -1., 0.0,   2800., -1.0 , false, "MB-C") ) countSignalEvent("MB-C-5-2800-22");     
   
   //                         N_j , DPhi13, DPhi4, MET/Meff, Meff,  BDT
-  if (Passes_Cuts_BDT(sigjets, 4,   0.4,    0.4,     0.2,   1400., 0.97, true, "BDT-GGd") ) countSignalEvent("BDT-GGd1");        
+  if (Passes_Cuts_BDT(sigjets, 4,   0.4,    0.4,     0.2,   1400., 0.97, 0, false, "BDT-GGd1") ) countSignalEvent("BDT-GGd1");
+  if (Passes_Cuts_BDT(sigjets, 4,   0.4,    0.4,     0.2,   1400., 0.94, 1, false, "BDT-GGd2") ) countSignalEvent("BDT-GGd2");
+  if (Passes_Cuts_BDT(sigjets, 4,   0.4,    0.4,     0.2,    800., 0.94, 2, false, "BDT-GGd3") ) countSignalEvent("BDT-GGd3");
+  if (Passes_Cuts_BDT(sigjets, 4,   0.4,    0.4,     0.2,    800., 0.87, 3, false, "BDT-GGd4") ) countSignalEvent("BDT-GGd4");
+  if (Passes_Cuts_BDT(sigjets, 6,   0.4,    0.4,     0.2,   1400., 0.96, 4, true, "BDT-GGo1") ) countSignalEvent("BDT-GGo1");
+  if (Passes_Cuts_BDT(sigjets, 6,   0.4,    0.4,     0.2,   1400., 0.87, 5, true, "BDT-GGo2") ) countSignalEvent("BDT-GGo2");
+  if (Passes_Cuts_BDT(sigjets, 5,   0.4,    0.4,     0.2,    800., 0.92, 6, true, "BDT-GGo3") ) countSignalEvent("BDT-GGo3");
+  if (Passes_Cuts_BDT(sigjets, 5,   0.2,    0.2,     0.2,    800., 0.84, 7, true, "BDT-GGo4") ) countSignalEvent("BDT-GGo4");  
   
   return;  
   
@@ -136,6 +271,10 @@ void Atlas_conf_2019_040::analyze() {
 
 void Atlas_conf_2019_040::finalize() {
   // Whatever should be done after the run goes here
+  for (int j = 0; j < 8; j++)
+    for (int i = 0; i < 2; i++) 
+      delete reader[j][i];
+
 }     
 
 
@@ -371,9 +510,7 @@ bool Atlas_conf_2019_040::Passes_Cuts_MB(std::vector<Jet*> jets, double PT1Cut, 
 }
 
 
-bool Atlas_conf_2019_040::Passes_Cuts_BDT(std::vector<Jet*> jets, int NJetMin, double dPhiCut1, double dPhiCut2, double METMeff, double MeffMin, double BDTscore, bool cutflow, std::string sr) {
-  
-  Float_t met, meff, Ap, jetPt0, jetPt1, jetPt2, jetPt3, jetEta0, jetEta1, jetEta2, jetEta3;
+bool Atlas_conf_2019_040::Passes_Cuts_BDT(std::vector<Jet*> jets, int NJetMin, double dPhiCut1, double dPhiCut2, double METMeff, double MeffMin, double BDTscore, int rder, bool cutflow, std::string sr) {
   
   if ( jets.size() < NJetMin ) return false;  
   if (cutflow) countCutflowEvent(sr+"_02_jetmulti");  
@@ -383,32 +520,17 @@ bool Atlas_conf_2019_040::Passes_Cuts_BDT(std::vector<Jet*> jets, int NJetMin, d
   
   if( dPhi(jets, 1) < dPhiCut2 ) return false;
   if (cutflow) countCutflowEvent(sr+"_04_dPhihigh");    
+
+  met_aux = missingET->P4().Et();
+  meff_aux = M_eff(jets, NJetMin);  
   
-  met = missingET->P4().Et();
-  meff = M_eff(jets, NJetMin);  
-  
-  if ( met/meff < METMeff ) return false;
+  if ( met_aux/meff_aux < METMeff ) return false;
   if (cutflow) countCutflowEvent(sr+"_05_METMeff");
   
-  if( meff < MeffMin) return false;
+  meff_aux = M_eff(jets, 0); 
+  if( meff_aux < MeffMin) return false;
   if (cutflow) countCutflowEvent(sr+"_06_Meff");    
-  
-  TMVA::Reader *reader = new TMVA::Reader( "!Color:!Silent" );
 
-  reader->AddVariable( "met", &met );
-  reader->AddVariable( "meff", &meff );
-  reader->AddVariable( "Ap", &Ap );
-  reader->AddVariable( "jetPt0", &jetPt0 );
-  reader->AddVariable( "jetPt1", &jetPt1 );
-  reader->AddVariable( "jetPt2", &jetPt2 );
-  reader->AddVariable( "jetPt3", &jetPt3 );
-  reader->AddVariable( "jetEta0", &jetEta0 );
-  reader->AddVariable( "jetEta1", &jetEta1 );
-  reader->AddVariable( "jetEta2", &jetEta2 );
-  reader->AddVariable( "jetEta3", &jetEta3 );
-  
-  reader->BookMVA( "BDT", "/home/krolb/tools/CheckMATE/TMVA/data/ZeroLepton2018-SRBDT-GGd1_weight1.xml" );
-  
   Ap = aplanarity(jets);
   jetPt0 = jets[0]->PT;
   jetPt1 = jets[1]->PT;
@@ -418,13 +540,27 @@ bool Atlas_conf_2019_040::Passes_Cuts_BDT(std::vector<Jet*> jets, int NJetMin, d
   jetEta1 = jets[1]->Eta;
   jetEta2 = jets[2]->Eta;
   jetEta3 = jets[3]->Eta;
+  if( jets.size() > 4 ) {
+    jetPt4 = jets[4]->PT;
+    jetEta4 = jets[4]->Eta;
+  } else {
+    jetPt4 = 0.;
+    jetEta4 = 0.;
+  }
+  if( jets.size() > 5 ) {
+    jetPt5 = jets[5]->PT;
+    jetEta5 = jets[5]->Eta;
+  } else {
+    jetPt5 = 0.; //needed for GGo3; communication with ATLAS authors
+    jetEta5 = 0.;
+  }  
+
   
-  double bdt = reader->EvaluateMVA( "BDT" );
+  double bdt = (rand()/(RAND_MAX+1.) < 0.5) ? reader[rder][0]->EvaluateMVA( "BDT" ) : reader[rder][1]->EvaluateMVA( "BDT" );; 
+  
   
   if (bdt < BDTscore) return false;
   if (cutflow) countCutflowEvent(sr+"_07_BDT");    
-  
-  delete reader;
   
   return true;
 }

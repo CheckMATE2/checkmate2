@@ -3,6 +3,7 @@
 // AUTHOR: K. Rolbiecki
 //  EMAIL: krolb@fuw.edu.pl
 #include "AnalysisBase.h"
+#include "TMVA/Reader.h"
 
 class Atlas_conf_2019_040 : public AnalysisBase {
   public:
@@ -32,7 +33,11 @@ class Atlas_conf_2019_040 : public AnalysisBase {
     double HT(std::vector<Jet*> jets);
     bool Passes_Cuts(std::vector<Jet*> jets, double PT1Cut, double PT2Cut, int NJet, double EtaCut, double dPhiCut1, double dPhiCut2, double METHTCut, double AplanarityCut, double MeffCut, bool cutflow, std::string sr); 
     bool Passes_Cuts_MB(std::vector<Jet*> jets, double PT1Cut, double PT2Cut, int NJetMin, int NJetMax, double EtaCut, double dPhiCut1, double dPhiCut2, double METHTMin, double METHTMax, double AplanarityCut, double MeffCutMin, double MeffCutMax, bool cutflow, std::string sr);
-    bool Passes_Cuts_BDT(std::vector<Jet*> jets, int NJetMin, double dPhiCut1, double dPhiCut2, double METMeff, double MeffMin, double BDTscore, bool cutflow, std::string sr);
+    bool Passes_Cuts_BDT(std::vector<Jet*> jets, int NJetMin, double dPhiCut1, double dPhiCut2, double METMeff, double MeffMin, double BDTscore, int rder, bool cutflow, std::string sr);
+    
+    Float_t met_aux, meff_aux, Ap, jetPt0, jetPt1, jetPt2, jetPt3, jetPt4, jetPt5, jetEta0, jetEta1, jetEta2, jetEta3, jetEta4, jetEta5;
+    TMVA::Reader *reader[8][2];
+
 };
 
 #endif
