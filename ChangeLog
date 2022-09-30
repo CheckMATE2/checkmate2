@@ -1,4 +1,12 @@
 CheckMATE - Changelog
+
+Ver 2.0.35
+---------
+2022-09-30   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ implementation of NN method in atlas_2106_09609
+
+
 Ver 2.0.34
 ---------
 2022-02-09   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
