@@ -1,8 +1,12 @@
 #include "atlas_2106_09609.h"
 #include <limits.h>
 #include <float.h>
+#include </home/krolb/tools/CheckMATE/ONNX/tools/onnxruntime-linux-x64-1.12.1/include/onnxruntime_cxx_api.h>
 // AUTHOR: JSK
 //  EMAIL: jsk@th.physik.uni-bonn.de
+// NN AUTHOR: K. Rolbiecki
+//  EMAIL: krolb@fuw.edu.pl
+
 void Atlas_2106_09609::initialize() {
   setAnalysisName("atlas_2106_09609");          
   setInformation(""
@@ -14,70 +18,64 @@ void Atlas_2106_09609::initialize() {
   //  always ordered alphabetically in the cutflow output files.
 
   // You should initialize any declared variables here
+  
+  Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "EWK_SR");
+  Ort::SessionOptions session_options;
+  session_4j = new Ort::Session(env, "/home/krolb/tools/CheckMATE/ONNX/data/SUSY-2019-04_4jets.onnx", session_options);
+  
+  OrtAllocator* allocator;
+//  char* name = session_4j->GetInputName(0, allocator);
+//  cout << name;
+  size_t ninp = session_4j->GetInputCount();
+  cout << ninp;
+  /*std::vector<std::string> input_names = session_4j->GetInputNames();
+  std::vector<std::vector<int64_t> > input_shapes = session_4j->GetInputShapes();
+  cout << "Input Node Name/Shape (" << input_names.size() << "):" << endl;
+  for (size_t i = 0; i < input_names.size(); i++) {
+    cout << "\t" << input_names[i] << " : " << print_shape(input_shapes[i]) << endl;
+  }
+  
+  std::vector<std::string> output_names = session_4j->GetOutputNames();
+  std::vector<std::vector<int64_t> > output_shapes = session_4j->GetOutputShapes();
+  cout << "Output Node Name/Shape (" << output_names.size() << "):" << endl;
+  for (size_t i = 0; i < output_names.size(); i++) {
+    cout << "\t" << output_names[i] << " : " << print_shape(output_shapes[i]) << endl;
+  } */ 
+  
 }
 
 void Atlas_2106_09609::analyze() {
-  // Your eventwise analysis code goes here
-  // The following objects are always defined unless they are 'ignored' above. They form std::vector objects of the respective Delphes class type (except for Etmiss which is a single object)
-  // All std::vector members and etmiss have the common properties PT, Eta, Phi and P4() with the latter giving access to the full ROOT TLorentzVector.
-  // Within a std::vector, all members are ordered with highest pt coming first.
-
-  // electronsLoose, electronsMedium, electronsTight   are list of electrons that passed respective efficiency and reconstruction cuts
-  // muonsCombinedPlus, muonsCombined                  as above for muons
-  // photonsMedium                                     as above for photons
-  // jets are all reconstructed jets                   as above for jets. Note that electrons are most certainly also reconstructed as a jet -> overlap removal do avoid double counting necessary!
-  // tracks, towers                                    calorimeter and tracker information. Usually not needed.
-  // missingET                                         rec missing ET EXCLUDING muons.
-
-  
-  // Here is a couple of useful functions and lines:  
-  //------------Phase Space Cuts (defined for jets, electronsXYZ, muonsXYZ, photonsXYZ)
-  // jets = filterPhaseSpace(jets, 20., -2.8, 2.8)  // The vector 'jets' only contains jets with pt >= 20 GeV and -2.8 < eta < 2.8. This function is applicable to other particles too (electronsMedium, ... ).
-  // jets = overlapRemoval(jets, electronsLoose, 0.2) Removes all jets for which there exists any electron in 'electronsLoose' with deltaR < 0.2.
-  // jets = overlapRemovel(jets, 0.2) If two jets overlap within deltaR < 0.2, only the harder jet is stored.
-  
-  //------------Isolation Checks (defined for electronsXYZ, muonsXYZ, photonsXYZ
-  //------------        For each object, if the user entered N isolation conditions, they can be
-  //------------        checked individually be the second argument (running from 0 to N-1).
-  // electronsMedium = filterIsolation(electronsMedium, 0)            Removes electrons that do not pass the first isolation condition entered into the AnalysisManager by the user
-  // std::vector<int> flags; flags.push_back(0); flags.push_back(2);
-  // electronsMedium = filterIsolation(electronsMedium, flags)        Same as above, but both the first and the third condition have to be fulfilled
-  // electronsMedium = filterIsolation(electronsMedium)               Same as above, but all conditions have to be fulfilled.
-  
-  //-----------Flavour Tag Checks (defined for jets only)
-  //----------          Tau tags "loose", "medium" or "tight" can be individually checked if the user enabled tau tagging in the AM.
-  //----------          For b-tags, if N working points have been defined, the ith condition can be tested by putting i-1 into the second argument (if there is only one, the argument can be omitted)
-  // if checkTauTag(jets[0], "tight") leadingJetIsTagged = True;
-  // if checkBTag(jets[0], 0) leadingJetIsBTagged = True;
-
-
-  //-----------Auxiliary Information
-  // - Always ensure that you don't access vectors out of bounds. E.g. 'if(jets[1]->PT > 150)' should rather be if (jets.size() > 1 && jets[1]->PT > 150). 
-  // - Use rand()/(RAND_MAX+1.) for random numbers between 0 and 1. The random seed is determined from system time or by the RandomSeed parameter in CheckMATE.
-  // - The 'return' statement will end this function for the current event and hence should be called whenever the current event is to be vetoed.
-  // - Many advanced kinematical functions like mT2 are implemented. Check the manual for more information.
-  // - If you need output to be stored in other files than the cutflow/signal files we provide, check the manual for how to do this conveniently.  
 
   missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
 
+  electronsMedium = filterPhaseSpace(electronsMedium, 10., -2.47, 2.47);
   electronsTight = filterPhaseSpace(electronsTight, 15., -2.47, 2.47);
-  muonsCombined = filterPhaseSpace(muonsCombined, 15., -2.7, 2.7);
-  auto storeOriginalJets = filterPhaseSpace(jets, 20., -4.5, 4.5);
-  jets = filterPhaseSpace(jets, 20., -4.5, 4.5);
-
-  
-  electronsTight = overlapRemoval(electronsTight, muonsCombined, 0.01);
-  jets = overlapRemoval(jets, electronsTight, 0.2);
-  electronsTight = overlapRemoval(electronsTight, jets, 0.04);
-  jets = overlapRemoval(jets, muonsCombined, 0.2);
-  muonsCombined = overlapRemoval(muonsCombined, jets, 0.04);
+  muonsCombined = filterPhaseSpace(muonsCombined, 10., -2.5, 2.5);
+  //auto storeOriginalJets = filterPhaseSpace(jets, 20., -4.5, 4.5);
+  jets = filterPhaseSpace(jets, 20., -2.5, 2.5);
 
   std::vector<Jet*> bjets;
   std::vector<Jet*> nonbjets;
   for (int i = 0; i < jets.size(); i++)
     if ( fabs(jets[i]->Eta) < 2.5 and checkBTag(jets[i]) ) 
       bjets.push_back(jets[i]);
-    else nonbjets.push_back(jets[i]);  
+    else nonbjets.push_back(jets[i]);    
+  
+  electronsTight = overlapRemoval(electronsTight, muonsCombined, 0.01);
+  nonbjets = overlapRemoval(nonbjets, electronsMedium, 0.2);
+  nonbjets = overlapRemoval_muon_jet_tracks(nonbjets, muonsCombined, 0.4, 2); 
+
+  std::vector<Jet*> sigjets = nonbjets;
+  sigjets.insert(sigjets.end(), bjets.begin(), bjets.end());
+  std::sort(sigjets.begin(), sigjets.end(), Atlas_2106_09609::jetsortByPT );     
+  
+  electronsMedium = specialoverlap(electronsMedium, sigjets);
+  electronsTight = specialoverlap(electronsTight, sigjets);
+  muonsCombined = specialoverlap(muonsCombined, sigjets); 
+  
+  muonsCombined = filterPhaseSpace(muonsCombined, 15., -2.7, 2.7);
+  auto storeOriginalJets = sigjets;
+  auto storeOriginalBJets = bjets;  
 
   std::vector<FinalStateObject*> leptons;
   for(int e = 0; e < electronsTight.size(); e++) {
@@ -88,6 +86,8 @@ void Atlas_2106_09609::analyze() {
     FinalStateObject* lep = newFinalStateObject(muonsCombined[m]);
     leptons.push_back(lep);
   }
+  
+  std::sort( leptons.begin(), leptons.end(), sortByPT );
   /*
   electronsTight=removeLowMassResonances(electronsTight, 81.2, 101.2);
   muonsCombined=removeLowMassResonances(muonsCombined, 81.2, 101.2);
@@ -104,7 +104,7 @@ void Atlas_2106_09609::analyze() {
   if(leptons[0]->PT < 27)
     return;
 
-  countCutflowEvent("02_lepton[0]->PT>27");
+  countCutflowEvent("02_leadLep_PT>27");
   
   bool twoLeptonSC = false;
   bool oneLepton = false;
@@ -157,13 +157,13 @@ void Atlas_2106_09609::analyze() {
   
   if( twoLeptonSC )
     {
-      for(int i=0; i < jets.size(); ++i)
+      for(int i=0; i < sigjets.size(); ++i)
 	{
-	  for(int j=i+1; j < jets.size(); ++j)
+	  for(int j=i+1; j < sigjets.size(); ++j)
 	    {
-	      TLorentzVector pair = leptons[0]->P4() + jets[i]->P4();
+	      TLorentzVector pair = leptons[0]->P4() + sigjets[i]->P4();
 	      mlj1=pair.M();
-	      pair=leptons[0]->P4() + jets[j]->P4();
+	      pair=leptons[0]->P4() + sigjets[j]->P4();
 	      mlj2=pair.M();
 	      tempMlj=std::max(mlj1,mlj2);
 	      if(tempMlj < mlj)
@@ -209,90 +209,267 @@ void Atlas_2106_09609::analyze() {
   
   countCutflowEvent("05_no 1l or 2lSC candidates");
 
-  countCutflowEvent("06_pT>20: " + std::to_string(jets.size()));
+  if ( oneLepton ) {
+    
+    if ( sigjets.size() >=6 ) {
+      countCutflowEvent("07_1l_pT>20l_06j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>20_>2b_06j");
+    }
+    if ( sigjets.size() >=8 ) {
+      countCutflowEvent("07_1l_pT>20_08j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>20_>2b_08j");
+    }
+    if ( sigjets.size() >=10 ) {
+      countCutflowEvent("07_1l_pT>20_10j"); 
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>20_>2b_10j");
+    }
+    if ( sigjets.size() >=11 ) {
+      countCutflowEvent("07_1l_pT>20_11j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>20_>2b_11j");
+    }  
+    if ( sigjets.size() >=12 ) {
+      countCutflowEvent("07_1l_pT>20_12j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>20_>2b_12j");
+    } 
+    if ( sigjets.size() >=15 ) {
+      countCutflowEvent("07_1l_pT>20_15j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>20_>2b_15j");
+    } 
+    
   
-  if(jets.size() >= 15 && oneLepton && bjets.size() == 0)
-    countSignalEvent("SR1");
-
-  if(jets.size() >= 15 && oneLepton && bjets.size() >= 3)
-    countSignalEvent("SR2");
-
-  jets = filterPhaseSpace(jets, 40., -4.5, 4.5);
-
-  if(jets.size() >= 12 && oneLepton && bjets.size() == 0)
-    countSignalEvent("SR3");
-
-  if(jets.size() >= 12 && oneLepton && bjets.size() >= 3)
-    countSignalEvent("SR4");
+    if(sigjets.size() == 4 ) {
+      countCutflowEvent("06_EW_1l_4j");
+      if ( bjets.size() >= 4) countCutflowEvent("06_EW_1l_4b_4j");
+    }
+    if(sigjets.size() == 5) {
+      countCutflowEvent("06_EW_1l_5j");
+      if ( bjets.size() >= 4) countCutflowEvent("06_EW_1l_4b_5j");
+    }
+    if(sigjets.size() == 6) {
+      countCutflowEvent("06_EW_1l_6j");
+      if ( bjets.size() >= 4) countCutflowEvent("06_EW_1l_4b_6j");
+    }
+    if(sigjets.size() == 7) {
+      countCutflowEvent("06_EW_1l_7j");
+      if ( bjets.size() >= 4) countCutflowEvent("06_EW_1l_4b_7j");
+    }
+    if(sigjets.size() == 8) {
+      countCutflowEvent("06_EW_1l_8j");
+      if ( bjets.size() >= 4) countCutflowEvent("06_EW_1l_4b_8j"); 
+    }
+                                       
   
-  jets = filterPhaseSpace(jets, 60., -4.5, 4.5);
+    if(sigjets.size() >= 15 && oneLepton && bjets.size() == 0)
+      countSignalEvent("SR1");
 
-  if(jets.size() >= 11 && oneLepton && bjets.size() == 0)
-    countSignalEvent("SR5");
+    if(sigjets.size() >= 15 && oneLepton && bjets.size() >= 3)
+      countSignalEvent("SR2");
 
-  if(jets.size() >= 11 && oneLepton && bjets.size() >= 3)
-    countSignalEvent("SR6");
+    sigjets = filterPhaseSpace(sigjets, 40., -2.5, 2.5);
+    bjets = filterPhaseSpace(bjets, 40., -2.5, 2.5);
+    
+    if ( sigjets.size() >=6 ) {
+      countCutflowEvent("07_1l_pT>40_06j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>40_>2b_06j");
+    }
+    if ( sigjets.size() >=8 ) {
+      countCutflowEvent("07_1l_pT>40_08j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>40_>2b_08j");
+    }
+    if ( sigjets.size() >=10 ) {
+      countCutflowEvent("07_1l_pT>40_10j"); 
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>40_>2b_10j");
+    }
+    if ( sigjets.size() >=11 ) {
+      countCutflowEvent("07_1l_pT>40_11j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>40_>2b_11j");
+    }  
+    if ( sigjets.size() >=12 ) {
+      countCutflowEvent("07_1l_pT>40_12j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>40_>2b_12j");
+    } 
 
-  jets = filterPhaseSpace(jets, 80., -4.5, 4.5);
+    if(sigjets.size() >= 12 && oneLepton && bjets.size() == 0)
+      countSignalEvent("SR3");
 
-  if(jets.size() >= 10 && oneLepton && bjets.size() == 0)
-    countSignalEvent("SR7");
-
-  if(jets.size() >= 10 && oneLepton && bjets.size() >= 3)
-    countSignalEvent("SR8");
-
-  jets = filterPhaseSpace(jets, 100., -4.5, 4.5);
-
-  if(jets.size() >= 8 && oneLepton && bjets.size() == 0)
-    countSignalEvent("SR9");
-
-  if(jets.size() >= 8 && oneLepton && bjets.size() >= 3)
-    countSignalEvent("SR10");
-
-  jets = storeOriginalJets;
-
-  countCutflowEvent("07_pT>20_2lSC: " + std::to_string(jets.size()));
+    if(sigjets.size() >= 12 && oneLepton && bjets.size() >= 3)
+      countSignalEvent("SR4");
   
-  if(jets.size() == 6 && twoLeptonSC && bjets.size() >= 3)// && mlj < 155.)
-    countSignalEvent("SR11");
+    sigjets = filterPhaseSpace(sigjets, 60., -2.5, 2.5);
+    bjets = filterPhaseSpace(bjets, 60., -2.5, 2.5);
+    
+    if ( sigjets.size() >=6 ) {
+      countCutflowEvent("07_1l_pT>60_06j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>60_>2b_06j");
+    }
+    if ( sigjets.size() >=8 ) {
+      countCutflowEvent("07_1l_pT>60_08j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>60_>2b_08j");
+    }
+    if ( sigjets.size() >=10 ) {
+      countCutflowEvent("07_1l_pT>60_10j"); 
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>60_>2b_10j");
+    }
+    if ( sigjets.size() >=11 ) {
+      countCutflowEvent("07_1l_pT>60_11j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>60_>2b_11j");
+    }      
+
+    if(sigjets.size() >= 11 && oneLepton && bjets.size() == 0)
+      countSignalEvent("SR5");
+
+    if(sigjets.size() >= 11 && oneLepton && bjets.size() >= 3)
+      countSignalEvent("SR6");
+
+    sigjets = filterPhaseSpace(sigjets, 80., -2.5, 2.5);
+    bjets = filterPhaseSpace(bjets, 80., -2.5, 2.5);
+    
+    if ( sigjets.size() >=6 ) {
+      countCutflowEvent("07_1l_pT>80_06j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>80_>2b_06j");
+    }
+    if ( sigjets.size() >=8 ) {
+      countCutflowEvent("07_1l_pT>80_08j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>80_>2b_08j");
+    }
+    if ( sigjets.size() >=10 ) {
+      countCutflowEvent("07_1l_pT>80_10j"); 
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>80_>2b_10j");
+    }
+
+    if(sigjets.size() >= 10 && oneLepton && bjets.size() == 0)
+      countSignalEvent("SR7");
+
+    if(sigjets.size() >= 10 && oneLepton && bjets.size() >= 3)
+      countSignalEvent("SR8");
+
+    sigjets = filterPhaseSpace(sigjets, 100., -2.5, 2.5);
+    bjets = filterPhaseSpace(bjets, 100., -2.5, 2.5);
+    
+    if ( sigjets.size() >=6 ) {
+      countCutflowEvent("07_1l_pT>100_06j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>100_>2b_06j");
+    }
+    if ( sigjets.size() >=8 ) {
+      countCutflowEvent("07_1l_pT>100_08j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>100_>2b_08j");
+    }
+
+    if(sigjets.size() >= 8 && oneLepton && bjets.size() == 0)
+      countSignalEvent("SR9");
+
+    if(sigjets.size() >= 8 && oneLepton && bjets.size() >= 3)
+      countSignalEvent("SR10");
+  }
+
+  sigjets = storeOriginalJets;
+  bjets = storeOriginalBJets;
+
+  if ( twoLeptonSC ) {
+    
+    if ( sigjets.size() >=6 ) {
+      countCutflowEvent("07_2lSC_pT>20_6j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>20_>2b_6j");
+    }
+    if ( sigjets.size() >=7 ) {
+      countCutflowEvent("07_2lSC_pT>20_7j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>20_>2b_7j");
+    }
+    if ( sigjets.size() >=8 ) {
+      countCutflowEvent("07_2lSC_pT>20_8j"); 
+      if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>20_>2b_8j");
+    }
+    if ( sigjets.size() >=10 ) {
+      countCutflowEvent("07_2lSC_pT>20_10j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>20_>2b_10j");
+    }
+    
+    if (mlj < 155. and sigjets.size() >= 4 and sigjets.size() < 9 ) {
+      countCutflowEvent("07_EW_2lSC_" + std::to_string(sigjets.size()) + "j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_EW_2lSC_>2b_" + std::to_string(sigjets.size()) + "j");
+    }
   
-  if(jets.size() >= 10 && twoLeptonSC && bjets.size() == 0)
-    countSignalEvent("SR12");
-
-  if(jets.size() >= 10 && twoLeptonSC && bjets.size() >= 3)
-    countSignalEvent("SR13");
-
-  jets = filterPhaseSpace(jets, 40., -4.5, 4.5);
-
-  if(jets.size() >= 8 && twoLeptonSC && bjets.size() == 0)
-    countSignalEvent("SR14");
-
-  if(jets.size() >= 8 && twoLeptonSC && bjets.size() >= 3)
-    countSignalEvent("SR15");
+    if(sigjets.size() == 6 && bjets.size() >= 3 && mlj < 155.)
+      countSignalEvent("SR11");
   
-  jets = filterPhaseSpace(jets, 60., -4.5, 4.5);
+    if(sigjets.size() >= 10  && bjets.size() == 0 )
+      countSignalEvent("SR12");
 
-  if(jets.size() >= 7 && twoLeptonSC && bjets.size() == 0)
-    countSignalEvent("SR16");
+    if(sigjets.size() >= 10  && bjets.size() >= 3 )
+      countSignalEvent("SR13");
 
-  if(jets.size() >= 7 && twoLeptonSC && bjets.size() >= 3)
-    countSignalEvent("SR17");
+    sigjets = filterPhaseSpace(sigjets, 40., -2.5, 2.5);
+    bjets = filterPhaseSpace(bjets, 40., -2.5, 2.5);
+    
+    if ( sigjets.size() >=6 ) {
+      countCutflowEvent("07_2lSC_pT>40_6j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>40_>2b_6j");
+    }
+    if ( sigjets.size() >=7 ) {
+      countCutflowEvent("07_2lSC_pT>40_7j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>40_>2b_7j");
+    }
+    if ( sigjets.size() >=8 ) {
+      countCutflowEvent("07_2lSC_pT>40_8j"); 
+      if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>40_>2b_8j");
+    }    
 
-  jets = filterPhaseSpace(jets, 80., -4.5, 4.5);
+    if(sigjets.size() >= 8  && bjets.size() == 0 )
+      countSignalEvent("SR14");
 
-  if(jets.size() >= 7 && twoLeptonSC && bjets.size() == 0)
-    countSignalEvent("SR18");
+    if(sigjets.size() >= 8  && bjets.size() >= 3 )
+      countSignalEvent("SR15");
+  
+    sigjets = filterPhaseSpace(sigjets, 60., -2.5, 2.5);
+    bjets = filterPhaseSpace(bjets, 60., -2.5, 2.5);
+    
+    if ( sigjets.size() >=6 ) {
+      countCutflowEvent("07_2lSC_pT>60_6j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>60_>2b_6j");
+    }
+    if ( sigjets.size() >=7 ) {
+      countCutflowEvent("07_2lSC_pT>60_7j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>60_>2b_7j");
+    }    
 
-  if(jets.size() >= 7 && twoLeptonSC && bjets.size() >= 3)
-    countSignalEvent("SR19");
+    if(sigjets.size() >= 7  && bjets.size() == 0 )
+      countSignalEvent("SR16");
 
-  jets = filterPhaseSpace(jets, 100., -4.5, 4.5);
+    if(sigjets.size() >= 7  && bjets.size() >= 3 )
+      countSignalEvent("SR17");
 
-  if(jets.size() >= 6 && twoLeptonSC && bjets.size() == 0)
-    countSignalEvent("SR20");
+    sigjets = filterPhaseSpace(sigjets, 80., -2.5, 2.5);
+    bjets = filterPhaseSpace(bjets, 80., -2.5, 2.5);
+    
+    if ( sigjets.size() >=6 ) {
+      countCutflowEvent("07_2lSC_pT>80_6j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>80_>2b_6j");
+    }
+    if ( sigjets.size() >=7 ) {
+      countCutflowEvent("07_2lSC_pT>80_7j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>80_>2b_7j");
+    }        
 
-  if(jets.size() >= 6 && twoLeptonSC && bjets.size() >= 3)
-    countSignalEvent("SR21");
+    if(sigjets.size() >= 7  && bjets.size() == 0 )
+      countSignalEvent("SR18");
+
+    if(sigjets.size() >= 7 && bjets.size() >= 3 )
+      countSignalEvent("SR19");
+
+    sigjets = filterPhaseSpace(sigjets, 100., -2.5, 2.5);
+    bjets = filterPhaseSpace(bjets, 100., -2.5, 2.5);
+    
+    if ( sigjets.size() >=6 ) {
+      countCutflowEvent("07_2lSC_pT>100_6j");
+      if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>100_>2b_6j");
+    }    
+
+    if(sigjets.size() >= 6  && bjets.size() == 0 )
+      countSignalEvent("SR20");
+
+    if(sigjets.size() >= 6  && bjets.size() >= 3 )
+      countSignalEvent("SR21");
+  }
     
 }
 
@@ -388,4 +565,62 @@ void Atlas_2106_09609::findZ(std::vector<X*> candidates, std::vector <std::pair<
     }//for
   }//for
   return;
+}
+
+std::vector<Jet*> Atlas_2106_09609::overlapRemoval_muon_jet_tracks(std::vector<Jet*> cand_jets, std::vector<Muon*> cand_muons, double deltaR, int nTracks){
+  
+  std::vector<Jet*> passed;
+  for (std::vector<Jet*>::iterator jet = cand_jets.begin(); jet != cand_jets.end(); jet++) {
+  
+    if (check_nTrack_jet(*jet, tracks, nTracks)) {
+      passed.push_back(*jet);
+      continue;
+    }
+    double dR = deltaR;
+    bool iso = true;
+        
+    for (std::vector<Muon*>::iterator mu=cand_muons.begin(); mu!=cand_muons.end(); mu++) 
+      if ((*jet)->P4().DeltaR((*mu)->P4()) < dR) {
+	iso = false;
+	break;
+      }
+        		    
+    if (iso) passed.push_back(*jet);
+  }
+  
+  return passed;
+}
+
+template <class X, class Y>
+std::vector<X*> Atlas_2106_09609::specialoverlap(std::vector<X*> candidates, std::vector<Y*> neighbours) {
+      // If neighbours are empty, return candidates
+      if(neighbours.size() == 0)
+        return candidates;
+      std::vector<X*> passed_candidates;
+      // Loop over candidates
+      for(int i = 0; i < candidates.size(); i++) {
+        bool overlap = false;
+        // If a neighbour is too close, declare overlap, break and don't save candidate
+        for(int j = 0; j < neighbours.size(); j++) {
+          if (candidates[i]->P4().DeltaR(neighbours[j]->P4()) > 0.2 and candidates[i]->P4().DeltaR(neighbours[j]->P4()) < std::min(0.4, 0.04 + 10./candidates[i]->PT) ) {
+            overlap = true;
+            break;
+          }
+        }
+        if (!overlap)
+          passed_candidates.push_back(candidates[i]);
+      }
+      return passed_candidates;
+    }
+    
+bool Atlas_2106_09609::jetsortByPT(Jet *i, Jet *j) { return (i->PT > j->PT); }    
+
+bool Atlas_2106_09609::check_nTrack_jet(Jet* jet, std::vector<Track*> tracks, int nTracksMin) {
+  
+  int nTracks = 0;
+  for (std::vector<Track*>::iterator it=tracks.begin(); it!=tracks.end(); it++) 
+    for (int part = 0; part < jet->Particles.GetEntries(); part++)
+      if (jet->Particles.At(part) == (*it)->Particle && (*it)->PT > 0.5) nTracks++;
+
+    return nTracks > nTracksMin;
 }
