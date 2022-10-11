@@ -76,6 +76,10 @@ void Atlas_2106_09609::analyze() {
   muonsCombined = filterPhaseSpace(muonsCombined, 15., -2.7, 2.7);
   auto storeOriginalJets = sigjets;
   auto storeOriginalBJets = bjets;  
+  
+  muonsCombined = filterIsolation(muonsCombined);
+  muonsCombined = Isolate_leptons_with_inverse_track_isolation_cone(muonsCombined, tracks, towers, 0.3, 10., 0.2, 0.06, 0.2, false);
+  electronsTight = filterIsolation(electronsTight);
 
   std::vector<FinalStateObject*> leptons;
   for(int e = 0; e < electronsTight.size(); e++) {
@@ -212,28 +216,34 @@ void Atlas_2106_09609::analyze() {
   if ( oneLepton ) {
     
     if ( sigjets.size() >=6 ) {
-      countCutflowEvent("07_1l_pT>20l_06j");
+      countCutflowEvent("07_1l_pT>20_06j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>20_>2b_06j");
+      if ( !bjets.size() ) countCutflowEvent("07_1l_pT>20_0b_06j");
     }
     if ( sigjets.size() >=8 ) {
       countCutflowEvent("07_1l_pT>20_08j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>20_>2b_08j");
+      if ( !bjets.size() ) countCutflowEvent("07_1l_pT>20_0b_08j");
     }
     if ( sigjets.size() >=10 ) {
       countCutflowEvent("07_1l_pT>20_10j"); 
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>20_>2b_10j");
+      if ( !bjets.size() ) countCutflowEvent("07_1l_pT>20_0b_10j");
     }
     if ( sigjets.size() >=11 ) {
       countCutflowEvent("07_1l_pT>20_11j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>20_>2b_11j");
+      if ( !bjets.size() ) countCutflowEvent("07_1l_pT>20_0b_11j");
     }  
     if ( sigjets.size() >=12 ) {
       countCutflowEvent("07_1l_pT>20_12j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>20_>2b_12j");
+      if ( !bjets.size() ) countCutflowEvent("07_1l_pT>20_0b_12j");
     } 
     if ( sigjets.size() >=15 ) {
       countCutflowEvent("07_1l_pT>20_15j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>20_>2b_15j");
+      if ( !bjets.size() ) countCutflowEvent("07_1l_pT>20_0b_15j");
     } 
     
   
@@ -259,10 +269,10 @@ void Atlas_2106_09609::analyze() {
     }
                                        
   
-    if(sigjets.size() >= 15 && oneLepton && bjets.size() == 0)
+    if(sigjets.size() >= 15 && bjets.size() == 0)
       countSignalEvent("SR1");
 
-    if(sigjets.size() >= 15 && oneLepton && bjets.size() >= 3)
+    if(sigjets.size() >= 15 && bjets.size() >= 3)
       countSignalEvent("SR2");
 
     sigjets = filterPhaseSpace(sigjets, 40., -2.5, 2.5);
@@ -271,28 +281,33 @@ void Atlas_2106_09609::analyze() {
     if ( sigjets.size() >=6 ) {
       countCutflowEvent("07_1l_pT>40_06j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>40_>2b_06j");
+      if (!bjets.size()  ) countCutflowEvent("07_1l_pT>40_0b_06j");
     }
     if ( sigjets.size() >=8 ) {
       countCutflowEvent("07_1l_pT>40_08j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>40_>2b_08j");
+      if (!bjets.size() ) countCutflowEvent("07_1l_pT>40_0b_08j");
     }
     if ( sigjets.size() >=10 ) {
       countCutflowEvent("07_1l_pT>40_10j"); 
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>40_>2b_10j");
+      if (!bjets.size()  ) countCutflowEvent("07_1l_pT>40_0b_10j");
     }
     if ( sigjets.size() >=11 ) {
       countCutflowEvent("07_1l_pT>40_11j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>40_>2b_11j");
+      if (!bjets.size()  ) countCutflowEvent("07_1l_pT>40_0b_11j");
     }  
     if ( sigjets.size() >=12 ) {
       countCutflowEvent("07_1l_pT>40_12j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>40_>2b_12j");
+      if (!bjets.size()  ) countCutflowEvent("07_1l_pT>40_0b_12j");
     } 
 
-    if(sigjets.size() >= 12 && oneLepton && bjets.size() == 0)
+    if(sigjets.size() >= 12 && bjets.size() == 0)
       countSignalEvent("SR3");
 
-    if(sigjets.size() >= 12 && oneLepton && bjets.size() >= 3)
+    if(sigjets.size() >= 12 && bjets.size() >= 3)
       countSignalEvent("SR4");
   
     sigjets = filterPhaseSpace(sigjets, 60., -2.5, 2.5);
@@ -301,24 +316,28 @@ void Atlas_2106_09609::analyze() {
     if ( sigjets.size() >=6 ) {
       countCutflowEvent("07_1l_pT>60_06j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>60_>2b_06j");
+      if (!bjets.size() ) countCutflowEvent("07_1l_pT>60_0b_06j");
     }
     if ( sigjets.size() >=8 ) {
       countCutflowEvent("07_1l_pT>60_08j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>60_>2b_08j");
+      if (!bjets.size() ) countCutflowEvent("07_1l_pT>60_0b_08j");
     }
     if ( sigjets.size() >=10 ) {
       countCutflowEvent("07_1l_pT>60_10j"); 
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>60_>2b_10j");
+      if (!bjets.size() ) countCutflowEvent("07_1l_pT>60_0b_10j");
     }
     if ( sigjets.size() >=11 ) {
       countCutflowEvent("07_1l_pT>60_11j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>60_>2b_11j");
+      if (!bjets.size() ) countCutflowEvent("07_1l_pT>60_0b_11j");
     }      
 
-    if(sigjets.size() >= 11 && oneLepton && bjets.size() == 0)
+    if(sigjets.size() >= 11 && bjets.size() == 0)
       countSignalEvent("SR5");
 
-    if(sigjets.size() >= 11 && oneLepton && bjets.size() >= 3)
+    if(sigjets.size() >= 11 && bjets.size() >= 3)
       countSignalEvent("SR6");
 
     sigjets = filterPhaseSpace(sigjets, 80., -2.5, 2.5);
@@ -327,20 +346,23 @@ void Atlas_2106_09609::analyze() {
     if ( sigjets.size() >=6 ) {
       countCutflowEvent("07_1l_pT>80_06j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>80_>2b_06j");
+      if (!bjets.size() ) countCutflowEvent("07_1l_pT>80_0b_06j");
     }
     if ( sigjets.size() >=8 ) {
       countCutflowEvent("07_1l_pT>80_08j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>80_>2b_08j");
+      if (!bjets.size() ) countCutflowEvent("07_1l_pT>80_0b_08j");
     }
     if ( sigjets.size() >=10 ) {
       countCutflowEvent("07_1l_pT>80_10j"); 
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>80_>2b_10j");
+      if (!bjets.size() ) countCutflowEvent("07_1l_pT>80_0b_10j");
     }
 
-    if(sigjets.size() >= 10 && oneLepton && bjets.size() == 0)
+    if(sigjets.size() >= 10 && bjets.size() == 0)
       countSignalEvent("SR7");
 
-    if(sigjets.size() >= 10 && oneLepton && bjets.size() >= 3)
+    if(sigjets.size() >= 10 && bjets.size() >= 3)
       countSignalEvent("SR8");
 
     sigjets = filterPhaseSpace(sigjets, 100., -2.5, 2.5);
@@ -349,16 +371,18 @@ void Atlas_2106_09609::analyze() {
     if ( sigjets.size() >=6 ) {
       countCutflowEvent("07_1l_pT>100_06j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>100_>2b_06j");
+      if (!bjets.size() ) countCutflowEvent("07_1l_pT>100_0b_06j");
     }
     if ( sigjets.size() >=8 ) {
       countCutflowEvent("07_1l_pT>100_08j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_1l_pT>100_>2b_08j");
+      if (!bjets.size() ) countCutflowEvent("07_1l_pT>100_0b_08j");
     }
 
-    if(sigjets.size() >= 8 && oneLepton && bjets.size() == 0)
+    if(sigjets.size() >= 8 && bjets.size() == 0)
       countSignalEvent("SR9");
 
-    if(sigjets.size() >= 8 && oneLepton && bjets.size() >= 3)
+    if(sigjets.size() >= 8 && bjets.size() >= 3)
       countSignalEvent("SR10");
   }
 
@@ -370,18 +394,22 @@ void Atlas_2106_09609::analyze() {
     if ( sigjets.size() >=6 ) {
       countCutflowEvent("07_2lSC_pT>20_6j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>20_>2b_6j");
+      if (!bjets.size() ) countCutflowEvent("07_2lSC_pT>20_0b_6j");
     }
     if ( sigjets.size() >=7 ) {
       countCutflowEvent("07_2lSC_pT>20_7j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>20_>2b_7j");
+      if (!bjets.size() ) countCutflowEvent("07_2lSC_pT>20_0b_7j");
     }
     if ( sigjets.size() >=8 ) {
       countCutflowEvent("07_2lSC_pT>20_8j"); 
       if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>20_>2b_8j");
+      if (!bjets.size() ) countCutflowEvent("07_2lSC_pT>20_0b_8j");
     }
     if ( sigjets.size() >=10 ) {
       countCutflowEvent("07_2lSC_pT>20_10j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>20_>2b_10j");
+      if (!bjets.size() ) countCutflowEvent("07_2lSC_pT>20_0b_10j");
     }
     
     if (mlj < 155. and sigjets.size() >= 4 and sigjets.size() < 9 ) {
@@ -404,14 +432,17 @@ void Atlas_2106_09609::analyze() {
     if ( sigjets.size() >=6 ) {
       countCutflowEvent("07_2lSC_pT>40_6j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>40_>2b_6j");
+      if (!bjets.size() ) countCutflowEvent("07_2lSC_pT>40_0b_6j");
     }
     if ( sigjets.size() >=7 ) {
       countCutflowEvent("07_2lSC_pT>40_7j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>40_>2b_7j");
+      if (!bjets.size() ) countCutflowEvent("07_2lSC_pT>40_0b_7j");
     }
     if ( sigjets.size() >=8 ) {
       countCutflowEvent("07_2lSC_pT>40_8j"); 
       if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>40_>2b_8j");
+      if (!bjets.size() ) countCutflowEvent("07_2lSC_pT>40_0b_8j");
     }    
 
     if(sigjets.size() >= 8  && bjets.size() == 0 )
@@ -426,10 +457,12 @@ void Atlas_2106_09609::analyze() {
     if ( sigjets.size() >=6 ) {
       countCutflowEvent("07_2lSC_pT>60_6j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>60_>2b_6j");
+      if (!bjets.size() ) countCutflowEvent("07_2lSC_pT>60_0b_6j");
     }
     if ( sigjets.size() >=7 ) {
       countCutflowEvent("07_2lSC_pT>60_7j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>60_>2b_7j");
+      if (!bjets.size() ) countCutflowEvent("07_2lSC_pT>60_0b_7j");
     }    
 
     if(sigjets.size() >= 7  && bjets.size() == 0 )
@@ -444,10 +477,12 @@ void Atlas_2106_09609::analyze() {
     if ( sigjets.size() >=6 ) {
       countCutflowEvent("07_2lSC_pT>80_6j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>80_>2b_6j");
+      if (!bjets.size() ) countCutflowEvent("07_2lSC_pT>80_0b_6j");
     }
     if ( sigjets.size() >=7 ) {
       countCutflowEvent("07_2lSC_pT>80_7j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>80_>2b_7j");
+      if (!bjets.size() ) countCutflowEvent("07_2lSC_pT>80_0b_7j");
     }        
 
     if(sigjets.size() >= 7  && bjets.size() == 0 )
@@ -462,6 +497,7 @@ void Atlas_2106_09609::analyze() {
     if ( sigjets.size() >=6 ) {
       countCutflowEvent("07_2lSC_pT>100_6j");
       if (bjets.size() >= 3 ) countCutflowEvent("07_2lSC_pT>100_>2b_6j");
+      if (!bjets.size() ) countCutflowEvent("07_2lSC_pT>100_0b_6j");
     }    
 
     if(sigjets.size() >= 6  && bjets.size() == 0 )
