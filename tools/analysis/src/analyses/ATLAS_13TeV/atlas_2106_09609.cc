@@ -680,6 +680,8 @@ bool Atlas_2106_09609::check_nTrack_jet(Jet* jet, std::vector<Track*> tracks, in
 
 double Atlas_2106_09609::Passes_Cuts_NNSR(std::vector<Jet*> jets,  std::vector<FinalStateObject*> leptons) {
   
+  //cont: https://github.com/microsoft/onnxruntime-inference-examples/commit/67598e4bc4d8acae30007fdd72dd49c7325f1aeb
+  
   int input_tensor_size = 65;
   std::vector<double> input_tensor_values(input_tensor_size);  //input_tensor_size = 65
   auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
