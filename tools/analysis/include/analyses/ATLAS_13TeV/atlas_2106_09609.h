@@ -10,19 +10,22 @@ class Atlas_2106_09609 : public AnalysisBase {
     Atlas_2106_09609() : AnalysisBase()  {}               
     ~Atlas_2106_09609() {}
 
-    template <class X>
-      std::vector <X*> removeLowMassResonances(std::vector <X*> candidates, double pTmin, double pTMax);
-
-    template <class X>
-      void findZ(std::vector<X*> candidates, std::vector <std::pair<double, double>> & zmassdiff);
-
     
     void initialize();
     void analyze();        
     void finalize();
 
   private:
-    Ort::Session *session_4j;
+    template <class X>
+      std::vector <X*> removeLowMassResonances(std::vector <X*> candidates, double pTmin, double pTMax);
+
+    template <class X>
+      void findZ(std::vector<X*> candidates, std::vector <std::pair<double, double>> & zmassdiff);    
+    
+    Ort::Session *session[5];
+    std::vector<const char*> input_node_names[5];
+    std::vector<const char*> output_node_names[5];
+    
     std::vector<Jet*> overlapRemoval_muon_jet_tracks(std::vector<Jet*> cand_jets, std::vector<Muon*> cand_muons, double deltaR, int nTracks);
     
     template <class X, class Y>
@@ -30,6 +33,8 @@ class Atlas_2106_09609 : public AnalysisBase {
     
     static bool jetsortByPT(Jet *i, Jet *j);
     bool check_nTrack_jet(Jet* jet, std::vector<Track*> tracks, int nTracksMin);
+    
+    double Passes_Cuts_NNSR(std::vector<Jet*> jets,  std::vector<FinalStateObject*> leptons);
 };
 
 #endif

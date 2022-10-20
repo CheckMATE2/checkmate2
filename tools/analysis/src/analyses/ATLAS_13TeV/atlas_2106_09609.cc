@@ -19,28 +19,45 @@ void Atlas_2106_09609::initialize() {
 
   // You should initialize any declared variables here
   
-  Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "EWK_SR");
-  Ort::SessionOptions session_options;
-  session_4j = new Ort::Session(env, "/home/krolb/tools/CheckMATE/ONNX/data/SUSY-2019-04_4jets.onnx", session_options);
+  Ort::Env env[5];
+  for (int i = 0; i < 5; i++)
+    env[i] = Ort::Env(ORT_LOGGING_LEVEL_WARNING, "EWK_SR_"+std::to_string(i));
+
+  Ort::SessionOptions session_options[5];
+  session[0] = new Ort::Session(env[0], "/home/krolb/tools/CheckMATE/ONNX/data/SUSY-2019-04_4jets.onnx", session_options[0]);
+  session[1] = new Ort::Session(env[1], "/home/krolb/tools/CheckMATE/ONNX/data/SUSY-2019-04_5jets.onnx", session_options[1]);
+  session[2] = new Ort::Session(env[2], "/home/krolb/tools/CheckMATE/ONNX/data/SUSY-2019-04_6jets.onnx", session_options[2]);
+  session[3] = new Ort::Session(env[3], "/home/krolb/tools/CheckMATE/ONNX/data/SUSY-2019-04_7jets.onnx", session_options[3]);
+  session[3] = new Ort::Session(env[4], "/home/krolb/tools/CheckMATE/ONNX/data/SUSY-2019-04_8jets.onnx", session_options[4]);
   
-  OrtAllocator* allocator;
-//  char* name = session_4j->GetInputName(0, allocator);
-//  cout << name;
-  size_t ninp = session_4j->GetInputCount();
-  cout << ninp;
-  /*std::vector<std::string> input_names = session_4j->GetInputNames();
-  std::vector<std::vector<int64_t> > input_shapes = session_4j->GetInputShapes();
-  cout << "Input Node Name/Shape (" << input_names.size() << "):" << endl;
-  for (size_t i = 0; i < input_names.size(); i++) {
-    cout << "\t" << input_names[i] << " : " << print_shape(input_shapes[i]) << endl;
+  for (int k = 0; k < 5; k++) {
+    Ort::AllocatorWithDefaultOptions allocator;
+    const size_t num_input_nodes = session[k]->GetInputCount();
+    cout << "Number input nodes: " << num_input_nodes << endl;
+    std::vector<Ort::AllocatedStringPtr> input_names_ptr;
+    //std::vector<const char*> input_node_names;
+    input_names_ptr.reserve(num_input_nodes);
+    input_node_names[k].reserve(num_input_nodes);
+    std::vector<int64_t> input_node_dims;
+  
+    for (size_t i = 0; i < num_input_nodes; i++) {
+      auto input_name = session[k]->GetInputNameAllocated(i, allocator);
+      std::cout << "Input " << i << " : name = " << input_name.get() << std::endl;
+      input_node_names[k].push_back(input_name.get());
+      input_names_ptr.push_back(std::move(input_name));
+      auto type_info = session[k]->GetInputTypeInfo(i);
+      auto tensor_info = type_info.GetTensorTypeAndShapeInfo();
+
+      ONNXTensorElementDataType type = tensor_info.GetElementType();
+      std::cout << "Input " << i << " : type = " << type << std::endl;
+      input_node_dims = tensor_info.GetShape();
+      std::cout << "Input " << i << " : num_dims = " << input_node_dims.size() << '\n';
+      for (size_t j = 0; j < input_node_dims.size(); j++) 
+        std::cout << "Input " << i << " : dim[" << j << "] = " << input_node_dims[j] << '\n';
+      
+      std::cout << std::endl;
+    }
   }
-  
-  std::vector<std::string> output_names = session_4j->GetOutputNames();
-  std::vector<std::vector<int64_t> > output_shapes = session_4j->GetOutputShapes();
-  cout << "Output Node Name/Shape (" << output_names.size() << "):" << endl;
-  for (size_t i = 0; i < output_names.size(); i++) {
-    cout << "\t" << output_names[i] << " : " << print_shape(output_shapes[i]) << endl;
-  } */ 
   
 }
 
@@ -659,4 +676,16 @@ bool Atlas_2106_09609::check_nTrack_jet(Jet* jet, std::vector<Track*> tracks, in
       if (jet->Particles.At(part) == (*it)->Particle && (*it)->PT > 0.5) nTracks++;
 
     return nTracks > nTracksMin;
+}
+
+double Atlas_2106_09609::Passes_Cuts_NNSR(std::vector<Jet*> jets,  std::vector<FinalStateObject*> leptons) {
+  
+  int input_tensor_size = 65;
+  std::vector<double> input_tensor_values(input_tensor_size);  //input_tensor_size = 65
+  auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
+  auto input_tensor = Ort::Value::CreateTensor<float>(memory_info, input_tensor_values.data(), input_tensor_size, input_node_dims[0].data(), 4);
+  auto output_tensors = session[0]->Run(Ort::RunOptions{nullptr}, input_node_names[0].data(), &input_tensor, 1, output_node_names[0].data(), 1);
+  
+  
+  
 }
