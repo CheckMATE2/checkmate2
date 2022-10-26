@@ -13,51 +13,67 @@ void Atlas_2106_09609::initialize() {
     "# ATLAS search for RPV susy in a final state containing leptons and many jets\n"
   "");
   setLuminosity(139.0*units::INVFB);      
-  bookSignalRegions("SR1;SR2;SR3;SR4;SR5;SR6;SR7;SR8;SR9;SR10;SR11;SR12;SR13;SR14;SR15;SR16;SR17;SR18;SR19;SR20;SR21");
+  bookSignalRegions("SR0;SR1;SR2;SR3;SR4;SR5;SR6;SR7;SR8;SR9;SR10;SR11;SR12;SR13;SR14;SR15;SR16;SR17;SR18;SR19;SR20;SR21");
   // You can also book cutflow regions with bookCutflowRegions("CR1;CR2;..."). Note that the regions are
   //  always ordered alphabetically in the cutflow output files.
 
   // You should initialize any declared variables here
-  
+
+  Ort::AllocatorWithDefaultOptions allocator;
+  std::vector<const char*> input_node_names;
+  std::vector<const char*> output_node_names;
+  std::vector<int64_t> input_node_dims;
+
   Ort::Env env[5];
   for (int i = 0; i < 5; i++)
-    env[i] = Ort::Env(ORT_LOGGING_LEVEL_WARNING, "EWK_SR_"+std::to_string(i));
+    env[i] = Ort::Env(ORT_LOGGING_LEVEL_WARNING, "EWK_SR");
 
   Ort::SessionOptions session_options[5];
   session[0] = new Ort::Session(env[0], "/home/krolb/tools/CheckMATE/ONNX/data/SUSY-2019-04_4jets.onnx", session_options[0]);
   session[1] = new Ort::Session(env[1], "/home/krolb/tools/CheckMATE/ONNX/data/SUSY-2019-04_5jets.onnx", session_options[1]);
   session[2] = new Ort::Session(env[2], "/home/krolb/tools/CheckMATE/ONNX/data/SUSY-2019-04_6jets.onnx", session_options[2]);
   session[3] = new Ort::Session(env[3], "/home/krolb/tools/CheckMATE/ONNX/data/SUSY-2019-04_7jets.onnx", session_options[3]);
-  session[3] = new Ort::Session(env[4], "/home/krolb/tools/CheckMATE/ONNX/data/SUSY-2019-04_8jets.onnx", session_options[4]);
+  session[4] = new Ort::Session(env[4], "/home/krolb/tools/CheckMATE/ONNX/data/SUSY-2019-04_8jets.onnx", session_options[4]);
   
-  for (int k = 0; k < 5; k++) {
-    Ort::AllocatorWithDefaultOptions allocator;
-    const size_t num_input_nodes = session[k]->GetInputCount();
-    cout << "Number input nodes: " << num_input_nodes << endl;
-    std::vector<Ort::AllocatedStringPtr> input_names_ptr;
-    //std::vector<const char*> input_node_names;
-    input_names_ptr.reserve(num_input_nodes);
-    input_node_names[k].reserve(num_input_nodes);
-    std::vector<int64_t> input_node_dims;
+  // this shows how to get information about input nodes and tensors
+  // here assume for simplicity all nets have the same input/output; so just do that for session[0]
+  // 1 input node named "input.1" rank 2 with dimensions 1*65
+  // cf. https://github.com/microsoft/onnxruntime-inference-examples/tree/main/c_cxx
   
-    for (size_t i = 0; i < num_input_nodes; i++) {
-      auto input_name = session[k]->GetInputNameAllocated(i, allocator);
-      std::cout << "Input " << i << " : name = " << input_name.get() << std::endl;
-      input_node_names[k].push_back(input_name.get());
-      input_names_ptr.push_back(std::move(input_name));
-      auto type_info = session[k]->GetInputTypeInfo(i);
-      auto tensor_info = type_info.GetTensorTypeAndShapeInfo();
-
-      ONNXTensorElementDataType type = tensor_info.GetElementType();
-      std::cout << "Input " << i << " : type = " << type << std::endl;
-      input_node_dims = tensor_info.GetShape();
-      std::cout << "Input " << i << " : num_dims = " << input_node_dims.size() << '\n';
-      for (size_t j = 0; j < input_node_dims.size(); j++) 
+  const size_t num_input_nodes = session[0]->GetInputCount();
+  cout << "Number input nodes: " << num_input_nodes << endl;
+  input_node_names.reserve(num_input_nodes);
+  
+  for (size_t i = 0; i < num_input_nodes; i++) {
+    auto type_info = session[0]->GetInputTypeInfo(i);
+    auto tensor_info = type_info.GetTensorTypeAndShapeInfo();
+    auto input_name = session[0]->GetInputNameAllocated(i, allocator);
+    std::cout << "Input " << i << " : name = " << input_name.get() << std::endl;
+    input_node_names.push_back(input_name.get());
+    input_names.push_back(input_name.get());
+    ONNXTensorElementDataType type = tensor_info.GetElementType(); 
+    std::cout << "Input " << i << " : type = " << type << std::endl;
+    input_node_dims = tensor_info.GetShape();
+    std::cout << "Input " << i << " : num_dims = " << input_node_dims.size() << '\n';
+    for (size_t j = 0; j < input_node_dims.size(); j++) 
         std::cout << "Input " << i << " : dim[" << j << "] = " << input_node_dims[j] << '\n';
-      
-      std::cout << std::endl;
-    }
-  }
+  }   // input_tensor_size = input_node_dims[0] * input_node_dims[1] * .... 
+  
+  //asume just 1 output node 
+  
+  const size_t num_output_nodes = session[0]->GetOutputCount();
+  cout << "Number output nodes: " << num_output_nodes << endl;
+  output_node_names.reserve(num_output_nodes);
+  auto output_name = session[0]->GetOutputNameAllocated(0, allocator);
+  std::cout << "Output " << "0" << " : name = " << output_name.get() << std::endl;
+  output_node_names.push_back(output_name.get());
+  auto type_info = session[0]->GetOutputTypeInfo(0);
+  auto tensor_info = type_info.GetTensorTypeAndShapeInfo();
+  std::vector<int64_t> output_node_dims = tensor_info.GetShape();
+  std::cout << "Output " << 0 << " : num_dims = " << output_node_dims.size() << '\n';
+  for (size_t j = 0; j < input_node_dims.size(); j++) 
+    std::cout << "Output " << 0 << " : dim[" << j << "] = " << output_node_dims[j] << '\n';
+
   
 }
 
@@ -275,6 +291,7 @@ void Atlas_2106_09609::analyze() {
     if(sigjets.size() == 6) {
       countCutflowEvent("06_EW_1l_6j");
       if ( bjets.size() >= 4) countCutflowEvent("06_EW_1l_4b_6j");
+      Passes_Cuts_NNSR(sigjets, bjets, leptons);
     }
     if(sigjets.size() == 7) {
       countCutflowEvent("06_EW_1l_7j");
@@ -678,16 +695,113 @@ bool Atlas_2106_09609::check_nTrack_jet(Jet* jet, std::vector<Track*> tracks, in
     return nTracks > nTracksMin;
 }
 
-double Atlas_2106_09609::Passes_Cuts_NNSR(std::vector<Jet*> jets,  std::vector<FinalStateObject*> leptons) {
+float Atlas_2106_09609::Passes_Cuts_NNSR(const std::vector<Jet*> sigjets, const std::vector<Jet*> bjets, const std::vector<FinalStateObject*> leptons) {
   
-  //cont: https://github.com/microsoft/onnxruntime-inference-examples/commit/67598e4bc4d8acae30007fdd72dd49c7325f1aeb
+  const float Escale = 100; 
+  std::vector<float> input_tensor_values(input_tensor_size);  //input_tensor_size = 65
   
-  int input_tensor_size = 65;
-  std::vector<double> input_tensor_values(input_tensor_size);  //input_tensor_size = 65
+  assert(leptons.size());
+  assert(sigjets.size() >= 4); 
+  assert(sigjets.size() < 9); 
+  std::vector b_cat = jet_btag_category(sigjets, bjets);
+  
+  input_tensor_values.push_back(sigjets.size());
+  input_tensor_values.push_back(3); // n_bjets >= 4;
+  input_tensor_values.push_back(bjets.size()); // n_bjets
+  input_tensor_values.push_back(calc_three_jet_max_pt_mass(sigjets) / Escale);
+  input_tensor_values.push_back(HT(sigjets) / Escale);
+  input_tensor_values.push_back(HT(bjets) / Escale);
+  input_tensor_values.push_back(calc_three_jet_max_pt_mass(sigjets, leptons[0]->P4(), missingET->P4()) / Escale);
+  input_tensor_values.push_back(min_dr(sigjets, leptons[0]->P4())); // snippet and text are inconsistent on that (all leptons vs leading)
+  input_tensor_values.push_back(2.);//input_tensor_values.push_back(calc_minmax_mass(sigjets) / Escale);
+  input_tensor_values.push_back(missingET->P4().Pt() / Escale);
+  input_tensor_values.push_back(missingET->P4().Phi());
+  for (int i = 0; i < 10; i++)
+    input_tensor_values.push_back(sigjets.size() > i ? sigjets[i]->PT / Escale : 1e-7);
+  for (int i = 0; i < 10; i++)
+    input_tensor_values.push_back(sigjets.size() > i ? sigjets[i]->Eta : -5.0);
+  for (int i = 0; i < 10; i++)
+    input_tensor_values.push_back(sigjets.size() > i ? sigjets[i]->Phi : -5.0);
+  for (int i = 0; i < 10; i++)
+    input_tensor_values.push_back(sigjets.size() > i ? sigjets[i]->P4().E() / Escale : 1e-7);
+  for (int i = 0; i < 10; i++)
+    input_tensor_values.push_back(sigjets.size() > i ? b_cat[i] : 0);
+  input_tensor_values.push_back(leptons[0]->PT / Escale);
+  input_tensor_values.push_back(leptons[0]->Eta );
+  input_tensor_values.push_back(leptons[0]->Phi );
+  input_tensor_values.push_back(leptons[0]->P4().E() / Escale);
+  
+  //for (int i = 0; i < input_tensor_size; i++) input_tensor_values[i] = (float)i / (input_tensor_size + 1);
   auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
-  auto input_tensor = Ort::Value::CreateTensor<float>(memory_info, input_tensor_values.data(), input_tensor_size, input_node_dims[0].data(), 4);
-  auto output_tensors = session[0]->Run(Ort::RunOptions{nullptr}, input_node_names[0].data(), &input_tensor, 1, output_node_names[0].data(), 1);
+  auto input_tensor = Ort::Value::CreateTensor(memory_info, input_tensor_values.data(), input_tensor_size, input_dims.data(), 2); //rank = 2
+  
+  auto output_tensors = session[2]->Run(Ort::RunOptions{nullptr}, input_names.data(), &input_tensor, 1, output_names.data(), 1);
+    
+  float* output = output_tensors.front().GetTensorMutableData<float>();
+  cout << "Score: " << output[0] << std::endl;
+  
+  return output[0];
   
   
+  return 0;
+  
+}
+
+
+float Atlas_2106_09609::calc_three_jet_max_pt_mass(const std::vector<Jet*> sigjets, const TLorentzVector lepton, const TLorentzVector met)  // from Atlas snippet
+{
+    
+  TLorentzVector max_pt_system(0,0,0,0);
+
+  for (size_t i=0; i < sigjets.size(); ++i) 
+    for (size_t j=i+1; j < sigjets.size(); ++j) 
+      for (size_t k=j+1; k < sigjets.size(); ++k) {
+        TLorentzVector system = sigjets[i]->P4() + sigjets[j]->P4() + sigjets[k]->P4() + lepton + met;
+        if (system.Pt() > max_pt_system.Pt()) max_pt_system = system;
+      }
+
+  return max_pt_system.M();
+}
+
+double Atlas_2106_09609::HT(const std::vector<Jet*> sigjets) {
+  
+  double  PTSum = 0.;
+  for (int i = 0; i < sigjets.size(); i++) PTSum += sigjets[i]->PT;
+  return PTSum;
+}
+
+double Atlas_2106_09609::min_dr(const std::vector<Jet*> sigjets, TLorentzVector lepton) {
+  
+ double min = 100.; 
+ for (int i = 0; i < sigjets.size(); i++) {
+   double dr = sigjets[i]->P4().DeltaR(lepton);
+   if ( dr < min) min = dr;
+ }
+ 
+ return min;
+   
+}
+
+double Atlas_2106_09609::calc_minmax_mass(const std::vector<Jet*> sigjets) {
+  
+  
+}
+
+std::vector<double> Atlas_2106_09609::jet_btag_category(const std::vector<Jet*> sigjets, const std::vector<Jet*> bjets) {
+  
+  std::vector<double> cat;
+  int k = 0; //reduce number of loops
+  for (int i = 0; i < sigjets.size(); i++) {
+    bool btag = false;
+    for (int j = k; k < bjets.size(); j++)
+      if (sigjets[i] == bjets[j]) {
+        k++;
+        btag = true;
+        break;
+      }
+    if (btag) cat.push_back(5.); else cat.push_back(1.);
+  }
+  
+  return cat;
   
 }

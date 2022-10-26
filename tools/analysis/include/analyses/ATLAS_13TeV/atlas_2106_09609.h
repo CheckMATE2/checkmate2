@@ -23,8 +23,11 @@ class Atlas_2106_09609 : public AnalysisBase {
       void findZ(std::vector<X*> candidates, std::vector <std::pair<double, double>> & zmassdiff);    
     
     Ort::Session *session[5];
-    std::vector<const char*> input_node_names[5];
-    std::vector<const char*> output_node_names[5];
+    std::vector<int64_t> input_node_dims;
+    const int input_tensor_size = 65;
+    std::vector<const char*> input_names = {"input.1"};
+    std::vector<const char*> output_names = {"39"};
+    std::vector<int64_t> input_dims = {1, 65};
     
     std::vector<Jet*> overlapRemoval_muon_jet_tracks(std::vector<Jet*> cand_jets, std::vector<Muon*> cand_muons, double deltaR, int nTracks);
     
@@ -34,7 +37,12 @@ class Atlas_2106_09609 : public AnalysisBase {
     static bool jetsortByPT(Jet *i, Jet *j);
     bool check_nTrack_jet(Jet* jet, std::vector<Track*> tracks, int nTracksMin);
     
-    double Passes_Cuts_NNSR(std::vector<Jet*> jets,  std::vector<FinalStateObject*> leptons);
+    float Passes_Cuts_NNSR(const std::vector<Jet*>, const std::vector<Jet*>, const std::vector<FinalStateObject*>);
+    float calc_three_jet_max_pt_mass(const std::vector<Jet*>, const TLorentzVector lepton = TLorentzVector(0,0,0,0), const TLorentzVector met = TLorentzVector(0,0,0,0));
+    double HT(const std::vector<Jet*> jets);
+    double min_dr(const std::vector<Jet*> sigjets, TLorentzVector lepton);
+    double calc_minmax_mass(const std::vector<Jet*> sigjets);
+    std::vector<double> jet_btag_category(const std::vector<Jet*> sigjets, const std::vector<Jet*> bjets);
 };
 
 #endif
