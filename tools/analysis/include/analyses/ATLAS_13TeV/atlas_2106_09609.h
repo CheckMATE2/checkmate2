@@ -21,6 +21,8 @@ class Atlas_2106_09609 : public AnalysisBase {
 
     template <class X>
       void findZ(std::vector<X*> candidates, std::vector <std::pair<double, double>> & zmassdiff);    
+      
+    TFile *hfile;  TH1F *nn4j, *nn5j, *nn6j, *nn7j, *nn8j;  
     
     Ort::Session *session[5];
     std::vector<int64_t> input_node_dims;
@@ -43,6 +45,7 @@ class Atlas_2106_09609 : public AnalysisBase {
     double min_dr(const std::vector<Jet*> sigjets, TLorentzVector lepton);
     double calc_minmax_mass(const std::vector<Jet*> sigjets);
     std::vector<double> jet_btag_category(const std::vector<Jet*> sigjets, const std::vector<Jet*> bjets);
+    unsigned int countSetBits(unsigned int n);
 };
 
 #endif

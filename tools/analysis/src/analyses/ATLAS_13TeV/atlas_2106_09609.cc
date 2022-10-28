@@ -74,7 +74,14 @@ void Atlas_2106_09609::initialize() {
   for (size_t j = 0; j < input_node_dims.size(); j++) 
     std::cout << "Output " << 0 << " : dim[" << j << "] = " << output_node_dims[j] << '\n';
 
-  
+  int ifile = bookFile("atlas_2106_09609.root", true);
+  const char *rootFileName = fNames[ifile].c_str() ;
+  hfile = new TFile(rootFileName, "RECREATE", "Saving Histograms");
+  nn4j = new TH1F("", "nn", 4, 0., 1.);
+  nn5j = new TH1F("", "nn", 4, 0., 1.);
+  nn6j = new TH1F("", "nn", 4, 0., 1.);
+  nn7j = new TH1F("", "nn", 4, 0., 1.);
+  nn8j = new TH1F("", "nn", 4, 0., 1.);  
 }
 
 void Atlas_2106_09609::analyze() {
@@ -282,24 +289,51 @@ void Atlas_2106_09609::analyze() {
   
     if(sigjets.size() == 4 ) {
       countCutflowEvent("06_EW_1l_4j");
-      if ( bjets.size() >= 4) countCutflowEvent("06_EW_1l_4b_4j");
+      if ( bjets.size() >= 4) {
+        countCutflowEvent("06_EW_1l_4b_4j");
+        float outputnn = Passes_Cuts_NNSR(sigjets, bjets, leptons);
+        nn4j->Fill(outputnn, weight);
+        if (outputnn > 0.73 ) countCutflowEvent("06_EW_1l_4b_4j_NN");
+      }
     }
     if(sigjets.size() == 5) {
       countCutflowEvent("06_EW_1l_5j");
-      if ( bjets.size() >= 4) countCutflowEvent("06_EW_1l_4b_5j");
+      if ( bjets.size() >= 4) {
+        countCutflowEvent("06_EW_1l_4b_5j");
+        float outputnn = Passes_Cuts_NNSR(sigjets, bjets, leptons);
+        nn5j->Fill(outputnn, weight);
+        if (outputnn > 0.76 ) countCutflowEvent("06_EW_1l_4b_5j_NN");
+      }
     }
     if(sigjets.size() == 6) {
       countCutflowEvent("06_EW_1l_6j");
-      if ( bjets.size() >= 4) countCutflowEvent("06_EW_1l_4b_6j");
-      Passes_Cuts_NNSR(sigjets, bjets, leptons);
+      if ( bjets.size() >= 4) {
+        countCutflowEvent("06_EW_1l_4b_6j");
+        float outputnn = Passes_Cuts_NNSR(sigjets, bjets, leptons);
+        nn6j->Fill(outputnn, weight);
+        if (outputnn > 0.77 ) {
+          countCutflowEvent("06_EW_1l_4b_6j_NN");
+          countSignalEvent("SR0");
+        }
+      }
     }
     if(sigjets.size() == 7) {
       countCutflowEvent("06_EW_1l_7j");
-      if ( bjets.size() >= 4) countCutflowEvent("06_EW_1l_4b_7j");
+      if ( bjets.size() >= 4) {
+        countCutflowEvent("06_EW_1l_4b_7j");
+        float outputnn = Passes_Cuts_NNSR(sigjets, bjets, leptons);
+        nn7j->Fill(outputnn, weight);
+        if (outputnn > 0.72 ) countCutflowEvent("06_EW_1l_4b_7j_NN");
+      }
     }
     if(sigjets.size() == 8) {
       countCutflowEvent("06_EW_1l_8j");
-      if ( bjets.size() >= 4) countCutflowEvent("06_EW_1l_4b_8j"); 
+      if ( bjets.size() >= 4) {
+        countCutflowEvent("06_EW_1l_4b_8j");
+        float outputnn = Passes_Cuts_NNSR(sigjets, bjets, leptons);
+        nn8j->Fill(outputnn, weight);
+        if (outputnn > 0.73 ) countCutflowEvent("06_EW_1l_4b_8j_NN");
+      }
     }
                                        
   
@@ -545,6 +579,40 @@ void Atlas_2106_09609::analyze() {
 
 void Atlas_2106_09609::finalize() {
   // Whatever should be done after the run goes here
+  
+  TCanvas can1;
+  nn4j->Draw();
+  nn4j->SetTitle("NN output 4 jets");
+  can1.Close();
+  
+  TCanvas can2;
+  nn5j->Draw();
+  nn5j->SetTitle("NN output 5 jets");
+  can2.Close();
+  
+  TCanvas can3;
+  nn6j->Draw();
+  nn6j->SetTitle("NN output 6 jets");
+  can3.Close(); 
+  
+  TCanvas can4;
+  nn7j->Draw();
+  nn7j->SetTitle("NN output 7 jets");
+  can4.Close();  
+  
+  TCanvas can5;
+  nn8j->Draw();
+  nn8j->SetTitle("NN output 8 jets");
+  can5.Close();    
+
+  hfile->Write();
+
+  hfile->Close();
+  
+  for (int i = 0; i < 5; i++)
+    delete session[i];
+  
+  
 }       
 
 
@@ -698,7 +766,7 @@ bool Atlas_2106_09609::check_nTrack_jet(Jet* jet, std::vector<Track*> tracks, in
 float Atlas_2106_09609::Passes_Cuts_NNSR(const std::vector<Jet*> sigjets, const std::vector<Jet*> bjets, const std::vector<FinalStateObject*> leptons) {
   
   const float Escale = 100; 
-  std::vector<float> input_tensor_values(input_tensor_size);  //input_tensor_size = 65
+  std::vector<float> input_tensor_values;  //input_tensor_size = 65
   
   assert(leptons.size());
   assert(sigjets.size() >= 4); 
@@ -713,7 +781,7 @@ float Atlas_2106_09609::Passes_Cuts_NNSR(const std::vector<Jet*> sigjets, const 
   input_tensor_values.push_back(HT(bjets) / Escale);
   input_tensor_values.push_back(calc_three_jet_max_pt_mass(sigjets, leptons[0]->P4(), missingET->P4()) / Escale);
   input_tensor_values.push_back(min_dr(sigjets, leptons[0]->P4())); // snippet and text are inconsistent on that (all leptons vs leading)
-  input_tensor_values.push_back(2.);//input_tensor_values.push_back(calc_minmax_mass(sigjets) / Escale);
+  input_tensor_values.push_back(calc_minmax_mass(sigjets) / Escale);
   input_tensor_values.push_back(missingET->P4().Pt() / Escale);
   input_tensor_values.push_back(missingET->P4().Phi());
   for (int i = 0; i < 10; i++)
@@ -730,6 +798,11 @@ float Atlas_2106_09609::Passes_Cuts_NNSR(const std::vector<Jet*> sigjets, const 
   input_tensor_values.push_back(leptons[0]->Eta );
   input_tensor_values.push_back(leptons[0]->Phi );
   input_tensor_values.push_back(leptons[0]->P4().E() / Escale);
+
+//  for(int i = 0; i < 65; i++)
+//    cout << "Input " << i << ": " << input_tensor_values[i] << std::endl;
+  
+  assert(input_tensor_values.size() == 65);
   
   //for (int i = 0; i < input_tensor_size; i++) input_tensor_values[i] = (float)i / (input_tensor_size + 1);
   auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
@@ -738,7 +811,7 @@ float Atlas_2106_09609::Passes_Cuts_NNSR(const std::vector<Jet*> sigjets, const 
   auto output_tensors = session[2]->Run(Ort::RunOptions{nullptr}, input_names.data(), &input_tensor, 1, output_names.data(), 1);
     
   float* output = output_tensors.front().GetTensorMutableData<float>();
-  cout << "Score: " << output[0] << std::endl;
+//  cout << "Score: " << output[0] << std::endl;
   
   return output[0];
   
@@ -782,11 +855,6 @@ double Atlas_2106_09609::min_dr(const std::vector<Jet*> sigjets, TLorentzVector 
    
 }
 
-double Atlas_2106_09609::calc_minmax_mass(const std::vector<Jet*> sigjets) {
-  
-  
-}
-
 std::vector<double> Atlas_2106_09609::jet_btag_category(const std::vector<Jet*> sigjets, const std::vector<Jet*> bjets) {
   
   std::vector<double> cat;
@@ -804,4 +872,49 @@ std::vector<double> Atlas_2106_09609::jet_btag_category(const std::vector<Jet*> 
   
   return cat;
   
+}
+
+double Atlas_2106_09609::calc_minmax_mass(const std::vector<Jet*> sigjets) { //ATLAS routine
+  
+    const int nJets = sigjets.size();
+    const int jetdiff = 10;
+
+    //bitwise representation of all jets and for which half they are selected
+    // One bit for every jet, marking into which set they are grouped
+    const unsigned int bitmax = 1 << nJets;
+    double minmass = 999999999;
+
+    for(unsigned int bit=0; bit < bitmax; bit++){
+        const int bitcount = countSetBits(bit);
+        if (abs(nJets - 2*bitcount) > jetdiff) {
+          continue;
+        }
+
+        TLorentzVector sum1, sum2;
+        // loop through jets and assign to either sum, depending on bit
+        for(int i=0; i<nJets; i++) {
+            if (bit & (1<<i)) 
+              sum1 += jets[i]->P4();
+            else
+              sum2 += jets[i]->P4();
+        }
+        if (sum1.M() > sum2.M() && sum1.M() < minmass) 
+          minmass = sum1.M();
+        else if (sum2.M() > sum1.M() && sum2.M() < minmass)
+          minmass = sum2.M();
+    }
+
+    return minmass;  
+  
+}
+
+
+unsigned int Atlas_2106_09609::countSetBits(unsigned int n)
+{
+  unsigned int count = 0;
+  while (n) {
+    count += n & 1;
+    n >>= 1;
+  }
+  return count;
 }
