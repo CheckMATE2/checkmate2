@@ -771,6 +771,7 @@ float Atlas_2106_09609::Passes_Cuts_NNSR(const std::vector<Jet*> sigjets, const 
   assert(leptons.size());
   assert(sigjets.size() >= 4); 
   assert(sigjets.size() < 9); 
+  assert(bjets.size() >= 4);
   std::vector b_cat = jet_btag_category(sigjets, bjets);
   
   input_tensor_values.push_back(sigjets.size());
@@ -799,8 +800,8 @@ float Atlas_2106_09609::Passes_Cuts_NNSR(const std::vector<Jet*> sigjets, const 
   input_tensor_values.push_back(leptons[0]->Phi );
   input_tensor_values.push_back(leptons[0]->P4().E() / Escale);
 
-//  for(int i = 0; i < 65; i++)
-//    cout << "Input " << i << ": " << input_tensor_values[i] << std::endl;
+  for(int i = 0; i < 65; i++)
+    cout << "Input " << i << ": " << input_tensor_values[i] << std::endl;
   
   assert(input_tensor_values.size() == 65);
   
@@ -808,10 +809,10 @@ float Atlas_2106_09609::Passes_Cuts_NNSR(const std::vector<Jet*> sigjets, const 
   auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
   auto input_tensor = Ort::Value::CreateTensor(memory_info, input_tensor_values.data(), input_tensor_size, input_dims.data(), 2); //rank = 2
   
-  auto output_tensors = session[2]->Run(Ort::RunOptions{nullptr}, input_names.data(), &input_tensor, 1, output_names.data(), 1);
+  auto output_tensors = session[sigjets.size()-4]->Run(Ort::RunOptions{nullptr}, input_names.data(), &input_tensor, 1, output_names.data(), 1);
     
   float* output = output_tensors.front().GetTensorMutableData<float>();
-//  cout << "Score: " << output[0] << std::endl;
+  cout << "Score: " << output[0] << std::endl;
   
   return output[0];
   
@@ -861,13 +862,24 @@ std::vector<double> Atlas_2106_09609::jet_btag_category(const std::vector<Jet*> 
   int k = 0; //reduce number of loops
   for (int i = 0; i < sigjets.size(); i++) {
     bool btag = false;
-    for (int j = k; k < bjets.size(); j++)
+    for (int j = k; j < bjets.size(); j++)
       if (sigjets[i] == bjets[j]) {
         k++;
         btag = true;
         break;
       }
-    if (btag) cat.push_back(5.); else cat.push_back(1.);
+    //if (btag) cat.push_back(5.); else cat.push_back(1.);
+    if (btag) {
+      double tag = 1.45 + rand()/(RAND_MAX +1.) * 8.;// https://arxiv.org/pdf/1907.05120.pdf Fig. 1
+      //cat.push_back( tag);
+      cat.push_back(5.); // ATLAS simiplified_analysis snippet
+    }
+    else {
+      double  tag = -4. + rand()/(RAND_MAX +1.) * 3.;
+      //cat.push_back( tag);
+      //cat.push_back(-3.);
+      cat.push_back(1.);
+    }
   }
   
   return cat;
