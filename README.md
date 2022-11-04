@@ -1,5 +1,9 @@
 # current
 
+2022-11-04   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ providing master path for external analysis resources (like in LLP)
+
 2021-10-06   Jong Soo Kim <jsk@th.physik.uni-bonn.de>
         
     ~ added added atlas_1502_05686, atlas_2103_11684, atlas_2004_10894, atlas_2106_09609
