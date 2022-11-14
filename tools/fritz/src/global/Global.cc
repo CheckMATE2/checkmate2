@@ -16,6 +16,9 @@ int randomSeed = 0;
 std::ofstream* redirect_stream = NULL;
 std::streambuf* cout_buf = std::cout.rdbuf();
 std::streambuf* cerr_buf = std::cerr.rdbuf();
+int LLPid = 0;// std::vector <int> LLPid;
+int LSPid = 0;//std::vector <int> LSPid;
+char *maindir ;
 
 void redirect_cout(std::string filename) {
     Global::redirect_stream = new std::ofstream(filename.c_str(), std::ios::out | std::ios::app);
@@ -119,4 +122,13 @@ void printStopWatches() {
         delete iterator->second;
     }
 }
+
+void read_maindir(char* dir) {
+    Global::maindir = dir; 
+}
+
+char* get_maindir() {
+    return Global::maindir;
+}
+
 }

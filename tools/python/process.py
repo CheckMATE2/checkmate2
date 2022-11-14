@@ -168,9 +168,16 @@ class Process:
             globalconfig = Info.config
             # add process dependent global settings
             name = "Global"
-            if events.maxEvents > 0:
-                if not globalconfig.has_section(name):
+            if not globalconfig.has_section(name):
                     globalconfig.add_section(name)
+                    globalconfig.set(name, "main_dir", os.path.split(os.path.split(os.path.split(os.path.realpath(__file__))[0])[0])[0] )    
+                    if Info.parameters["invisiblePIDs"]:
+                        globalconfig.set(name, "invisiblepids", Info.parameters["invisiblePIDs"][0] )
+                    if Info.parameters["longlivedPIDs"]:
+                        globalconfig.set(name, "longlivedpids", Info.parameters["longlivedPIDs"][0] )    
+            if events.maxEvents > 0:
+#                if not globalconfig.has_section(name):
+#                    globalconfig.add_section(name)
                 globalconfig.set(name, "nevents", events.maxEvents)
             elif globalconfig.has_section("Global"):
                 globalconfig.remove_option(name, "nevents") # unfortunately this globalconfig construction is badly designed. Each event has its own maxevents but there can be only one globalconfig, so each one has to make sure that globalconfig is set correctly

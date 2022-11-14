@@ -122,6 +122,7 @@ class Fritz {
         bool haveRandomSeed; //!< Has randomSeed been set
         int randomSeed; //!< Random seed for this run
         static bool interupted; //!< set to true if interrupt signal is called
+        std::string directory;
 };
 
 #endif /* FRITZ_H_ */

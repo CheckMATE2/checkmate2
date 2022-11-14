@@ -51,6 +51,8 @@ namespace Global {
     extern std::ofstream* redirect_stream;
     extern std::streambuf* cout_buf;
     extern std::streambuf* cerr_buf;
+    void read_maindir(char* dir);
+    char* get_maindir();    
 
     void checkIfFileExistsAndRemoveAfterQuery(std::string filename); // if filename exists, prompt if the user really wants to overwrite it. If so, file is deleted
 
@@ -66,6 +68,8 @@ namespace Global {
     extern std::map<std::string, TStopwatch*> stopwatches;
     
     extern int randomSeed;
+    extern int LLPid;
+    extern int LSPid;    
 };
 
 #endif /* GLOBAL_H */

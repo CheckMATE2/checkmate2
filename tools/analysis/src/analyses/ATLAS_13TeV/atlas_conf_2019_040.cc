@@ -12,6 +12,10 @@ void Atlas_conf_2019_040::initialize() {
   //  always ordered alphabetically in the cutflow output files.
 
   // You should initialize any declared variables here
+  char *a = Global::get_maindir();
+  std::string maindir(a, strlen(a));
+  cout << maindir << endl;
+  
 }
 
 void Atlas_conf_2019_040::analyze() {

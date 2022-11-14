@@ -87,6 +87,13 @@ class AnalysisBase {
     void setup(std::map<std::string, std::vector<int> > whichTagsIn, std::map<std::string, std::string> eventParameters);
     void processEvent(int iEvent);
     void finish();
+    
+    const int defaultLLP = 1000024;
+    const int defaultLSP = 1000022;
+    
+    int getLLP(){return Global::LLPid != 0 ? Global::LLPid : 1000024;};
+    int getLSP(){return Global::LSPid != 0 ? Global::LSPid : 1000022;};    
+    
 //TODO Texts
 
  protected:

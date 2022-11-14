@@ -195,7 +195,7 @@ void DelphesHandler::setup(
     x >> firstLine;
     if(firstLine == "HepMC::Version") {
         Global::print(name, "Input File determined to be HepMC.");
-        dHepmcReader = new DelphesHepMCReader();
+        dHepmcReader = new DelphesHepMC2Reader();
         mode = HepMCMode;
     }
     else if(firstLine.find("LesHouchesEvents version") != std::string::npos){

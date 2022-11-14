@@ -21,7 +21,7 @@
 #include "modules/Delphes.h"
 #include "classes/DelphesClasses.h"
 #include "classes/DelphesFactory.h"
-#include "classes/DelphesHepMCReader.h"
+#include "classes/DelphesHepMC2Reader.h"
 #include "classes/DelphesSTDHEPReader.h"
 #include "classes/DelphesLHEFReader.h"
 
@@ -140,7 +140,7 @@ private:
     TStopwatch* procStopWatch;
 
     // only defined in hepmc read mode
-    DelphesHepMCReader*  dHepmcReader;
+    DelphesHepMC2Reader*  dHepmcReader;
 
     // only defined in stdhep read mode
     DelphesSTDHEPReader* dStdhepReader;
