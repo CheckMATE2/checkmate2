@@ -1,5 +1,11 @@
 # current
 
+2022-11-17   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ added atlas_2010_14293
+    ~ statistical combinations
+    ~ TMVA support
+
 2022-11-04   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 
     ~ providing master path for external analysis resources (like in LLP)
