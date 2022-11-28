@@ -1,5 +1,9 @@
 # current
 
+2022-11-28   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ Python3 compatibility
+
 2022-11-04   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 
     ~ providing master path for external analysis resources (like in LLP)
