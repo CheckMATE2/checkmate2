@@ -397,7 +397,7 @@ class AnalysisBase {
       */
     
     template <class X>
-    std::vector<X*> Isolate_leptons_with_inverse_track_isolation_cone(std::vector<X*> leptons,std::vector<Track*> tracks,std::vector<Tower*> towers,double dR_track_max,double pT_for_inverse_function_track,double dR_tower,double pT_amount_track,double pT_amount_tower,bool checkTower){
+    std::vector<X*> Isolate_leptons_with_inverse_track_isolation_cone(std::vector<X*> leptons, std::vector<Track*> tracks, std::vector<Tower*> towers, double dR_track_max, double pT_for_inverse_function_track, double dR_tower, double pT_amount_track, double pT_amount_tower, bool checkTower){
       std::vector<X*> filtered_leptons;
       for(int i=0;i<leptons.size();i++){
         double dR_track=0;
@@ -412,6 +412,8 @@ class AnalysisBase {
 
 	  // Ignore the lepton's track itself
           if(neighbour->Particle == leptons[i]->Particle)
+            continue;
+          if(neighbour->PT < 1.)
             continue;
           if (neighbour->P4().DeltaR(leptons[i]->P4()) > dR_track)
             continue;
