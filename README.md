@@ -3,26 +3,35 @@
 This is a brief note on how to install CheckMATE from the master branch on https://github.com/CheckMATE2/checkmate2
 
 1) Requirements
+2) 
   a) root; anything later than version 6.20 should work just fine; the precompiled root can be obtained from:
      https://root.cern/install/
+  
   b) Delphes 3.5 or later
      https://cp3.irmp.ucl.ac.be/projects/delphes/wiki/Releases
      (Should you need version 3.4 you need several changes in the code which you will figure out from compiler errors)
+  
   c) HEPMC2
      https://gitlab.cern.ch:8443/hepmc/HepMC/-/tags
   
   optional:
+  
   d) Pythia; we currently only support 8.2 series
+  
   e) MadGraph5_aMC@NLO; versions >=2.7 should work just fine; 
      with 3 series there are some hiccups but you should get the result anyway; follow the messages on screen 
      
      
 2) Installation
+  
   a) autoreconf
+  
   b) sample configuration call:
      ./configure --with-delphes=/path/to/delphes --with-hepmc=/path/to/hepmc --with-madgraph=/path/to/madgraph --with-pythia=/path/to/pythia
+  
   c) make
      (optional e.g. -j4 if you would like to compile on 4 cores)
+  
   d) to test the installation (if you linked Pythia):
      cd bin
      ./CheckMATE 13tev_test.in
