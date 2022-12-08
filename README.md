@@ -27,6 +27,7 @@ This is a brief note on how to install CheckMATE from the master branch on https
   a) autoreconf
   
   b) sample configuration call:
+  
      ./configure --with-delphes=/path/to/delphes --with-hepmc=/path/to/hepmc --with-madgraph=/path/to/madgraph --with-pythia=/path/to/pythia
   
   c) make
