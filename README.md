@@ -33,7 +33,9 @@ This is a brief note on how to install CheckMATE from the master branch on https
      (optional e.g. -j4 if you would like to compile on 4 cores)
   
   d) to test the installation (if you linked Pythia):
+
      cd bin
+
      ./CheckMATE 13tev_test.in
 
 # current
