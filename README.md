@@ -3,7 +3,7 @@
 This is a brief note on how to install CheckMATE from the master branch on https://github.com/CheckMATE2/checkmate2
 
 1) Requirements
-2) 
+
   a) root; anything later than version 6.20 should work just fine; the precompiled root can be obtained from:
      https://root.cern/install/
   
