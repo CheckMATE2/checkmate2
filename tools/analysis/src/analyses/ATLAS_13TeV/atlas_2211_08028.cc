@@ -30,8 +30,8 @@ void Atlas_2211_08028::analyze() {
   dphimin = 0.;
   
   electronsLoose = filterPhaseSpace(electronsLoose, 20, -2.47, 2.47);
-  electronsTight = filterPhaseSpace(electronsTight, 18, -2.47, 2.47);
-  muonsCombined = filterPhaseSpace(muonsCombined, 18, -2.5, 2.5);
+  electronsTight = filterPhaseSpace(electronsTight, 20, -2.47, 2.47);
+  muonsCombined = filterPhaseSpace(muonsCombined, 20, -2.5, 2.5);
   photonsLoose = filterPhaseSpace(photonsLoose, 25., -2.37, 2.37, true);
   photonsLoose = filterIsolation(photonsLoose);
     
@@ -43,7 +43,7 @@ void Atlas_2211_08028::analyze() {
       bjets.push_back(jets[i]);
     else nonbjets.push_back(jets[i]);  
     
-  cout << electrons.size() + muons.size() << "  " << electronsTight.size() + muonsCombined.size() << "  ";  
+  //cout << electrons.size() + muons.size() << "  " << electronsTight.size() + muonsCombined.size() << "  ";  
 
   nonbjets = overlapRemoval(nonbjets, electronsLoose, 0.2, "y");      
   electronsLoose = overlapRemoval(electronsLoose, bjets, 0.4, "y");      
@@ -59,23 +59,23 @@ void Atlas_2211_08028::analyze() {
   signal_jets.insert(signal_jets.end(), nonbjets.begin(), nonbjets.end());
   std::sort(signal_jets.begin(), signal_jets.end(), Atlas_2211_08028::sortByPT ); 
   
-  cout << electronsTight.size() + muonsCombined.size() << "  ";
+  //cout << electronsTight.size() + muonsCombined.size() << "  ";
   signal_el = Isolate_leptons_with_inverse_track_isolation_cone(electronsTight, tracks, towers, 0.2, 10., 0.2, 0.15, 0.2, true);
   signal_mu = Isolate_leptons_with_inverse_track_isolation_cone(muonsCombined, tracks, towers, 0.3, 10., 0.2, 0.06, 1., false);
-  cout << signal_el.size() + signal_mu.size() << "  ";
+  //cout << signal_el.size() + signal_mu.size() << "  ";
   
   for ( int i = 0; i <  signal_el.size(); i++ ) {
     FinalStateObject* lep = newFinalStateObject(signal_el[i]);
     signalLeps.push_back(lep);
-    cout << "e " ;
+    //cout << "e " ;
   }
   for ( int i = 0; i < signal_mu.size(); i++ ) {
     FinalStateObject* lep = newFinalStateObject(signal_mu[i]);
     signalLeps.push_back(lep);
-    cout << "mu " ;
+    //cout << "mu " ;
   }
   std::sort(signalLeps.begin(), signalLeps.end(), FinalStateObject::sortByPT);
-  cout << endl;
+  //cout << endl;
   
   TLorentzVector pTmiss_soft = TLorentzVector(0., 0., 0., 0.);
   for (std::vector<Track*>::iterator it=tracks.begin(); it!=tracks.end(); it++) {
