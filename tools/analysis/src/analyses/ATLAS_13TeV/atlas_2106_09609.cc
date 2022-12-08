@@ -2,6 +2,7 @@
 #include <limits.h>
 #include <float.h>
 #include </home/krolb/tools/CheckMATE/ONNX/tools/onnxruntime-linux-x64-1.12.1/include/onnxruntime_cxx_api.h>
+#include <TLegend.h>
 // AUTHOR: JSK
 //  EMAIL: jsk@th.physik.uni-bonn.de
 // NN AUTHOR: K. Rolbiecki
@@ -77,11 +78,11 @@ void Atlas_2106_09609::initialize() {
   int ifile = bookFile("atlas_2106_09609.root", true);
   const char *rootFileName = fNames[ifile].c_str() ;
   hfile = new TFile(rootFileName, "RECREATE", "Saving Histograms");
-  nn4j = new TH1F("", "nn", 4, 0., 1.);
-  nn5j = new TH1F("", "nn", 4, 0., 1.);
-  nn6j = new TH1F("", "nn", 4, 0., 1.);
-  nn7j = new TH1F("", "nn", 4, 0., 1.);
-  nn8j = new TH1F("", "nn", 4, 0., 1.);  
+  nn4j = new TH1F("nn4j", "nn", 4, 0., 1.);
+  nn5j = new TH1F("nn5j", "nn", 4, 0., 1.);
+  nn6j = new TH1F("nn6j", "nn", 4, 0., 1.);
+  nn7j = new TH1F("nn7j", "nn", 4, 0., 1.);
+  nn8j = new TH1F("nn8j", "nn", 4, 0., 1.);  
 }
 
 void Atlas_2106_09609::analyze() {
@@ -118,7 +119,9 @@ void Atlas_2106_09609::analyze() {
   auto storeOriginalBJets = bjets;  
   
   muonsCombined = filterIsolation(muonsCombined);
-  muonsCombined = Isolate_leptons_with_inverse_track_isolation_cone(muonsCombined, tracks, towers, 0.3, 10., 0.2, 0.06, 0.2, false);
+  //muonsCombined = Isolate_leptons_with_inverse_track_isolation_cone(muonsCombined, tracks, towers, 0.3, 10., 0.2, 0.06, 0.2, false); //old
+  //muonsCombined = Isolate_leptons_with_inverse_track_isolation_cone(muonsCombined, tracks, towers, 0.3, 10., 0.2, 0.15, 0.3, true); //Loose
+  muonsCombined = Isolate_leptons_with_inverse_track_isolation_cone(muonsCombined, tracks, towers, 0.3, 10., 0.2, 0.04, 0.15, true); //Tight
   electronsTight = filterIsolation(electronsTight);
 
   std::vector<FinalStateObject*> leptons;
@@ -155,22 +158,14 @@ void Atlas_2106_09609::analyze() {
   bool oneLeptonSF = false;
   
   //2 lepton same charge SR
-  if(leptons.size() == 2 && leptons[0]->Charge * leptons[1]->Charge > 0)
-    {
-      //JJJ: the following conditon cannot be applied since we do not have misidentified charges for leptons
-      /*
-      if(electronsTight.size() == 2)
-	{
-	  TLorentzVector pair = ( electronsTight[0]->P4() + electronsTight[1]->P4() );
-	  mee = pair.M();
-	  if ( fabs( mee-91.2) > 10.)
-	    {
-	      twoLeptonSC = true;
-	    }
-	}
-      */
-      twoLeptonSC = true;
-    }
+  if(leptons.size() == 2 && leptons[0]->Charge * leptons[1]->Charge > 0) {
+      if(electronsTight.size() == 2) {
+        TLorentzVector pair = ( electronsTight[0]->P4() + electronsTight[1]->P4() );
+        mee = pair.M();
+        if ( fabs( mee-91.2) > 10.) twoLeptonSC = true;
+      }
+      else twoLeptonSC = true;
+  }
 
   //JJJ: this is just used for BKG estimation
   if(false){
@@ -581,30 +576,46 @@ void Atlas_2106_09609::finalize() {
   // Whatever should be done after the run goes here
   
   TCanvas can1;
-  nn4j->Draw();
-  nn4j->SetTitle("NN output 4 jets");
-  can1.Close();
+  nn4j->DrawNormalized("hist");
+  nn4j->SetLineColor(kRed);
+  //nn4j->SetMaximum(1.);
+  //nn4j->SetMinimum(0.);
+  //nn4j->SetTitle("NN output 4 jets");
+  //can1.Close();
   
-  TCanvas can2;
-  nn5j->Draw();
-  nn5j->SetTitle("NN output 5 jets");
-  can2.Close();
+  //TCanvas can2;
+  nn5j->DrawNormalized("hist same");
+  nn5j->SetLineColor(kBlue);
+  //nn5j->SetTitle("NN output 5 jets");
+  //can2.Close();
   
-  TCanvas can3;
-  nn6j->Draw();
-  nn6j->SetTitle("NN output 6 jets");
-  can3.Close(); 
+  //TCanvas can3;
+  nn6j->DrawNormalized("hist same");
+  nn6j->SetLineColor(kBlack);
+  //nn6j->SetTitle("NN output 6 jets");
+  //can3.Close(); 
   
-  TCanvas can4;
-  nn7j->Draw();
-  nn7j->SetTitle("NN output 7 jets");
-  can4.Close();  
+  //TCanvas can4;
+  nn7j->DrawNormalized("hist same");
+  nn7j->SetLineColor(kOrange);
+  //nn7j->SetTitle("NN output 7 jets");
+  //can4.Close();  
   
-  TCanvas can5;
-  nn8j->Draw();
-  nn8j->SetTitle("NN output 8 jets");
-  can5.Close();    
+  //TCanvas can5;
+  nn8j->DrawNormalized("hist same");
+  nn8j->SetLineColor(kGreen);
+  //nn8j->SetTitle("NN output 8 jets");
+  //can5.Close();    
 
+  auto L_cth = new TLegend(0.65, 0.87, 0.92, 0.38);
+  L_cth->AddEntry(nn4j,"4j","lp");
+  L_cth->AddEntry(nn5j,"5j","lp");
+  L_cth->AddEntry(nn6j,"6j","lp");  
+  L_cth->AddEntry(nn7j,"7j","lp");
+  L_cth->AddEntry(nn8j,"8j","lp");
+  L_cth->Draw("same");
+  //can1.Print("histo1.pdf");
+  can1.Close();
   hfile->Write();
 
   hfile->Close();
