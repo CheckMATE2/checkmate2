@@ -65,8 +65,8 @@ void Atlas_2211_08028::initialize() {
   int ifile = bookFile("atlas_2211_08028.root", true);
   const char *rootFileName = fNames[ifile].c_str() ;
   hfile = new TFile(rootFileName, "RECREATE", "Saving Histograms");
-  nngtt = new TH1F("gtt", "NN score", 20, -1., 1.);  
-  
+  nngtt = new TH1F("gtt", "NN score", 20, 0., 1.);  
+  nngbb = new TH1F("gbb", "NN score", 20, 0., 1.);  
 }
 
 void Atlas_2211_08028::analyze() {
@@ -268,6 +268,21 @@ void Atlas_2211_08028::analyze() {
 
 void Atlas_2211_08028::finalize() {
   // Whatever should be done after the run goes here
+  
+  TCanvas can1;
+  //ggd1->SetMinimum(0.1);
+  can1.SetLogy();
+  nngtt->Draw("hist");
+  can1.Close();
+  
+  TCanvas can2;
+  //ggo1->SetMinimum(0.1);
+  can2.SetLogy();
+  nngbb->Draw("hist");
+  can2.Close();  
+  
+  hfile->Write();
+  hfile->Close();
 }       
 
 
@@ -476,6 +491,9 @@ bool Atlas_2211_08028::PassesCuts_NN(int Gtt, double mgluino, double mneut, doub
   cout << endl;*/
   
   countCutflowEvent(sr+"_02_dphi_common");
+  
+  if (sr == "SR-NN-Gbb-2100-1600") nngbb->Fill(result[1], weight);
+  if (sr == "SR-NN-Gtt-2300-1200") nngtt->Fill(result[0], weight);
   
   if( Gtt and result[0] > cutoff) {
     countCutflowEvent(sr+"_03_score");
