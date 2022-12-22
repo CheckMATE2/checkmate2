@@ -62,10 +62,10 @@
     "0.2"
   ], 
   "photon_iso_ptmin": [
-    "0.1"
+    "0.4"
   ], 
   "photon_iso_ptratiomax": [
-    "0.2"
+    "0.035"
   ], 
   "photon_iso_source": [
     "c"

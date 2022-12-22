@@ -18,6 +18,8 @@ class Atlas_2010_14293 : public AnalysisBase {
     
     TFile *hfile;  TH1F *ggd1, *ggo1;  
     
+    double met;
+    
     static bool sortByPT(Jet *i, Jet *j);
 //    static TMatrixD Get_Momentum_Matrix(std::vector<Jet*> jets);
 //    bool Aplanarity_Cut( std::vector<Jet*> jets, double cut);
@@ -37,6 +39,9 @@ class Atlas_2010_14293 : public AnalysisBase {
     bool Passes_Cuts(std::vector<Jet*> jets, double PT1Cut, double PT2Cut, int NJet, double EtaCut, double dPhiCut1, double dPhiCut2, double METHTCut, double AplanarityCut, double MeffCut, bool cutflow, std::string sr); 
     bool Passes_Cuts_MB(std::vector<Jet*> jets, double PT1Cut, double PT2Cut, int NJetMin, int NJetMax, double EtaCut, double dPhiCut1, double dPhiCut2, double METHTMin, double METHTMax, double AplanarityCut, double MeffCutMin, double MeffCutMax, bool cutflow, std::string sr);
     bool Passes_Cuts_BDT(std::vector<Jet*> jets, int NJetMin, double dPhiCut1, double dPhiCut2, double METMeff, double MeffMin, double BDTscore, int rder, bool cutflow, std::string sr);
+    void evaluateCRs(std::vector<Jet*> jets, std::string type);
+    bool Passes_Cuts_CRQ(std::vector<Jet*> jets, double PT1Cut, double PT2Cut, int NJetMin, int NJetMax, double EtaCut, double dPhiCut1, double dPhiCut2, double METHTMax, double AplanarityCut, double MeffMin, double MeffMax, bool cutflow, std::string sr);
+    void evaluateCRQs(std::vector<Jet*> jets);
     
     Float_t met_aux, meff_aux, Ap, jetPt0, jetPt1, jetPt2, jetPt3, jetPt4, jetPt5, jetEta0, jetEta1, jetEta2, jetEta3, jetEta4, jetEta5;
     TMVA::Reader *reader[8][2];

@@ -170,6 +170,8 @@ void Atlas_2211_08028::analyze() {
   if (electronsLoose.size() + muonsCombined.size() == 0) {
     countCutflowEvent("01_ObaseLep");
     
+    if (PassesCuts_Gtt0L(4, 3, 200., 2000., 120., 300., "")) countSignalEvent("CR-Gtt-0L-B");
+    
     if (dphimin < 0.4) return;
     countCutflowEvent("02_phimin");
     
