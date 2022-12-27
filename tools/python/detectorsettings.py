@@ -1,9 +1,15 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import map
+from builtins import str
+from builtins import range
+from builtins import object
 import os
 import pickle
 import json
 import sys
 import shutil
-import ConfigParser
+import configparser
 
 from info import Info
 
@@ -13,7 +19,7 @@ from info import Info
     time. Results are stored in analysis setup files """
 
 
-class DetectorSettings:
+class DetectorSettings(object):
     
     @classmethod
     def init(cls):
@@ -41,7 +47,7 @@ class DetectorSettings:
         if Info.parameters['invisiblePIDs'] == [] and Info.parameters['randomseed'] == 0:
             return
         oldfile_name = Info.files['delphes_global_config'][experiment]
-	newfile_name = os.path.join(Info.paths['output_delphes'], "modified_"+experiment+"_card.tcl") 
+        newfile_name = os.path.join(Info.paths['output_delphes'], "modified_"+experiment+"_card.tcl") 
         Info.files['delphes_global_config'][experiment] = newfile_name
         with open(oldfile_name, "r") as oldfile:
             with open(newfile_name, "w") as newfile:
@@ -53,7 +59,7 @@ class DetectorSettings:
     # Update detector cards if needed
     @classmethod
     def update_delphes_files(cls):
-        map(lambda exp: DetectorSettings._update_delphes_file(exp), Info.used_experiments)
+        list(map(lambda exp: DetectorSettings._update_delphes_file(exp), Info.used_experiments))
 
     @classmethod
     def set_by_anyone(cls, analyses, parameters, parameter_of_interest, value):
@@ -67,7 +73,7 @@ class DetectorSettings:
     @classmethod
     def merge_settings(cls):
       config = Info.config
-      map(lambda exp: _config_experiment(config, exp), Info.used_experiments)
+      list(map(lambda exp: _config_experiment(config, exp), Info.used_experiments))
       Info.config = config
 
 """
@@ -109,7 +115,7 @@ Takes a python list and turns it into a whitespace separated list (in a single s
 Optionally, every element of the list can have a prefix prepended.
 """
 def _make_list(val,prefix=""):
-    return " ".join(map(lambda v: prefix+str(v),val))
+    return " ".join([prefix+str(v) for v in val])
 
 """
 Add a tautag section with the given label to the config.

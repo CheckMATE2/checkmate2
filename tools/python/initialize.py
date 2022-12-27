@@ -1,5 +1,10 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import input
+from builtins import range
 import argparse
-import ConfigParser
+import configparser
 import os
 import shutil
 
@@ -23,7 +28,7 @@ def get_information_from_file(pfile):
         output.cerr_exit("Parameter file '"+pfile+"' does not exist.")        
         
     # Read file.
-    Config = ConfigParser.ConfigParser()
+    Config = configparser.ConfigParser()
     Config.read(pfile)
     
     # Set standard values
@@ -349,7 +354,7 @@ def prepare_run(analyses, events, files, flags, output, paths):
     # Let user check correctness of parameters, unless in force-mode.
     if not flags['skipparamcheck']:
         while True:
-            c = raw_input("Is this correct? (y/n) ")
+            c = input("Is this correct? (y/n) ")
             if c == "y": 
                 break
             elif c == "n": 
@@ -374,7 +379,7 @@ def prepare_run(analyses, events, files, flags, output, paths):
                   output.mute()
                 
                 while True:
-                    c = raw_input("Choose: (o)verwrite, (a)dd to existing results, (s)top\n")
+                    c = input("Choose: (o)verwrite, (a)dd to existing results, (s)top\n")
                     if c == "o":
                         shutil.rmtree(paths['output'])
                         os.mkdir(paths['output'])

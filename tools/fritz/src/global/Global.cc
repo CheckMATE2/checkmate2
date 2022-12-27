@@ -39,7 +39,7 @@ void print(std::string source, std::string message) {
         if (Global::redirect_stream == NULL) // TO STDOUT = TO PYTHON, we need to put |~| to filter our output from internal (e.. MG5) output)
             std::cout << "|~| " << source << ": " << message << std::endl;
         else
-            std::cout << source << ": " << message << std::endl;
+            std::cout << std::string(source) << ": " << message << std::endl;
     }
 }
 

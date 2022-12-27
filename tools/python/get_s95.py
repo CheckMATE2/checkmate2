@@ -8,7 +8,12 @@ the value s with CLs = 0.05, using the Pegasus algorithm to improve the performa
 S95 expected calculates the best fit nuisance parameters given the observation and
 uses these as the actual observation to find S95.
 """
+from __future__ import print_function
+from __future__ import division
 
+from builtins import str
+from builtins import range
+from past.utils import old_div
 __author__ = "Daniel Schmeier"
 __copyright__ = "Copyright 2014, CheckMATE"
 __credits__ = ["Daniel Schmeier"]
@@ -35,7 +40,7 @@ def nexp(mu, nu_b):
     the exponential of a normal distributed random number (nu).
   Note that b0, s0 and db are global variables defined at input
   """
-  return b0*exp(db/b0*nu_b) + s0*mu
+  return b0*exp(old_div(db,b0)*nu_b) + s0*mu
 
 def eqForMaxL(nu_b, n, nuTil_b, mu,):
   """
@@ -43,7 +48,7 @@ def eqForMaxL(nu_b, n, nuTil_b, mu,):
   The nu_b for which this function is zero maximises the likelihood 
   """
   lam = nexp(mu, nu_b)
-  return (n-lam)*db*exp(db/b0*nu_b)-lam*(nu_b-nuTil_b)
+  return (n-lam)*db*exp(old_div(db,b0)*nu_b)-lam*(nu_b-nuTil_b)
 
 def nuWithMaxL(n, nuTil_b, mu):
   """ Finds root of eqForMaxL to maximise Likelihood   """
@@ -57,7 +62,7 @@ def qMu(n, nuTil_b):
   """ Test statisctic for signal+background hypothesis """
 
   # First, overall maximum is easy to calculate (b0, s0, db are defined during input)
-  mu_hat = (n-b0*exp(db/b0*nuTil_b))/s0
+  mu_hat = old_div((n-b0*exp(old_div(db,b0)*nuTil_b)),s0)
   nu_b_hat = nuTil_b
 
   # mu_hat > 1 should result in zero to ensure one sided limit
@@ -96,7 +101,7 @@ def qMu(n, nuTil_b):
     result = -2.*(reduced_logp(nuTil_b, nu_b_mu_hat) - reduced_logp(nuTil_b, nu_b_hat))
   else:
     # Otherwise, return the normal likelihood    
-    result = -2.*(n*log(lam_hat/lam_hat_hat) - (lam_hat-lam_hat_hat) + reduced_logp(nuTil_b, nu_b_mu_hat) - reduced_logp(nuTil_b, nu_b_hat))
+    result = -2.*(n*log(old_div(lam_hat,lam_hat_hat)) - (lam_hat-lam_hat_hat) + reduced_logp(nuTil_b, nu_b_mu_hat) - reduced_logp(nuTil_b, nu_b_hat))
   
   return result
 
@@ -155,11 +160,11 @@ def calc_CLs(n_obs, nuTil_b_obs, b0_in, db_in, s0_in, nPseudo):
     CLs = 1.0
     dCLs = 1.0
   else:
-    CLs = ps/oneMinusPb
+    CLs = old_div(ps,oneMinusPb)
     if CLs == 0.0:
       dCLs = 1.0
     else:
-      dCLs = sqrt((dps/oneMinusPb)**2+(ps*doneMinusPb/oneMinusPb**2)**2)
+      dCLs = sqrt((old_div(dps,oneMinusPb))**2+(old_div(ps*doneMinusPb,oneMinusPb**2))**2)
     
   del n_pseu_sig
   del n_pseu_bkg
@@ -178,16 +183,16 @@ def f(x, N, n_data, nuTil_b_data, b0, sigma_b):
 
 def new_x(x0, x1, y0, y1):
   """ Determines the new x in the regula falsi method """
-  return x0 - (x1-x0)/(y1-y0)*y0
+  return x0 - old_div((x1-x0),(y1-y0))*y0
 
 
 def find_s95_obs(n_data, nuTil_b_data, b0, sigma_b):  
   """ Uses the pegasus type regula falsi method to determine S for which CLs(n, b, db, s) = 0.05 """
   
   # First, get an estimate for the size of s
-  db = sqrt(sigma_b*sigma_b + b0*exp(sigma_b/b0*nuTil_b_data)) 
+  db = sqrt(sigma_b*sigma_b + b0*exp(old_div(sigma_b,b0)*nuTil_b_data)) 
   if b0 < 1:
-    db = sqrt(sigma_b*sigma_b + 1*exp(sigma_b/b0*nuTil_b_data)) 
+    db = sqrt(sigma_b*sigma_b + 1*exp(old_div(sigma_b,b0)*nuTil_b_data)) 
   if n_data > b0:
     db = sqrt(db*db+(n_data-b0)**2)
     
@@ -202,7 +207,7 @@ def find_s95_obs(n_data, nuTil_b_data, b0, sigma_b):
   res = f(r, nPseudo, n_data, nuTil_b_data, b0, sigma_b)    
   yr = res[0] - 3.*res[1] # Use lower limit on f(r) for right y
   if (yl*yr > 0):
-    print "Estimate does not work for "+str(b0)+"  "+str(sigma_b)+"  "+str(n_data)+"  "+str(nuTil_b_data)+"  ["+str(l)+", "+str(r)+"]"
+    print("Estimate does not work for "+str(b0)+"  "+str(sigma_b)+"  "+str(n_data)+"  "+str(nuTil_b_data)+"  ["+str(l)+", "+str(r)+"]")
     # Start with a definitly working but very extreme start
     l = 1
     res = f(l, nPseudo, n_data, nuTil_b_data, b0, sigma_b)    
@@ -252,7 +257,7 @@ def find_s95_obs(n_data, nuTil_b_data, b0, sigma_b):
     else:
       # If m is put on the right, then scale down yl to improve convergence (Pegasus algorithm)
       kappa = 0.5  
-      yl = yr/(yr+ym[0]-3.*ym[1])*yl 
+      yl = old_div(yr,(yr+ym[0]-3.*ym[1]))*yl 
       r, yr = m, ym[0]-3.*ym[1]
 
 def find_s95_exp(n_data, b0, sigma_b):  
@@ -265,15 +270,15 @@ def find_s95_exp(n_data, b0, sigma_b):
 if __name__ == '__main__':
   if len(sys.argv) == 5:
     result = calc_CLs(float(sys.argv[1]), 0, float(sys.argv[2]), float(sys.argv[3]), float(sys.argv[4]), 5000)    
-    print "CLs: "+str(result[0])+" +- "+str(result[1])    
+    print("CLs: "+str(result[0])+" +- "+str(result[1]))    
   elif len(sys.argv) == 4:
     result = find_s95_obs(float(sys.argv[1]), 0, float(sys.argv[2]), float(sys.argv[3]))
-    print "S95_obs: "+str(result)
+    print("S95_obs: "+str(result))
     result = find_s95_exp(float(sys.argv[1]), float(sys.argv[2]), float(sys.argv[3]))
-    print "S95_exp: "+str(result)
+    print("S95_exp: "+str(result))
   else :
-    print "Syntax for S95:   ./get_s95.py   nobs   bkg   bkgerr"
-    print "Syntax for CLs:   ./get_s95.py   nobs   bkg   bkgerr   s"
+    print("Syntax for S95:   ./get_s95.py   nobs   bkg   bkgerr")
+    print("Syntax for CLs:   ./get_s95.py   nobs   bkg   bkgerr   s")
   
   
 

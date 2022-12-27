@@ -1,4 +1,7 @@
+from __future__ import division
 
+from builtins import str
+from past.utils import old_div
 import os, sys
 from math import sqrt
 from copy import deepcopy
@@ -105,8 +108,8 @@ class Events(dict):
                             
                             # Calculate errors
                             if resultCollector.signal_sumofweights > 0:
-                                resultCollector.signal_err_stat = resultCollector.signal_normevents*sqrt(resultCollector.signal_sumofweights2)/resultCollector.signal_sumofweights
-                                resultCollector.signal_err_sys = resultCollector.signal_normevents*xsecterr/xsect
+                                resultCollector.signal_err_stat = old_div(resultCollector.signal_normevents*sqrt(resultCollector.signal_sumofweights2),resultCollector.signal_sumofweights)
+                                resultCollector.signal_err_sys = old_div(resultCollector.signal_normevents*xsecterr,xsect)
                                 resultCollector.signal_err_tot = sqrt(resultCollector.signal_err_stat**2+resultCollector.signal_err_sys**2)
                             else:
                                 resultCollector.signal_err_stat = 0
@@ -560,5 +563,5 @@ class MG5Events(Pythia8Events):
         fritzconfig.set(secname, "mgRunPath",os.path.join(Info.paths['output_mg5'], self.identifier))
         fritzconfig.set(secname, "mgSourcePath",Info.paths['mg5_source_path'])
         if self.have_xsth:
-            fritzconfig.set(secname, "xsectthresh",self.xsth*Info.unit(self.xsth_unit)/Info.unit('pb')) # pythia calculates in pb
+            fritzconfig.set(secname, "xsectthresh",old_div(self.xsth*Info.unit(self.xsth_unit),Info.unit('pb'))) # pythia calculates in pb
         return fritzconfig, secname
