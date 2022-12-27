@@ -5,6 +5,9 @@ import sys
 
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "tools", "python"))
 
+if sys.version_info[0] == 3:
+    from importlib import reload
+
 reload(sys)
 
 import analysismanager_core
