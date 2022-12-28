@@ -128,7 +128,7 @@ def write_analysis_parameters(parameters):
     global Printlevel
     analysis = parameters["analysis"]
     Info.fill_standard_paths_and_files()
-    jfile = open(Info.files['analysis_settings'][analysis], "wb")
+    jfile = open(Info.files['analysis_settings'][analysis], "w")
     jfile.write(json.dumps(parameters, sort_keys=True, indent=2))
     jfile.close()
     myprint(" - Variable values saved in " + Info.files['analysis_settings'][analysis])
@@ -736,7 +736,7 @@ def remove_analysis():
         myprint('There is no analysis with that name.')
         return
 
-    with open(Info.files['analysis_settings'][analysis], "rb") as jfile:
+    with open(Info.files['analysis_settings'][analysis], "r") as jfile:
         parameters = json.loads(jfile.read())
 
     group = Info.analysis_group_map[analysis]
@@ -752,7 +752,7 @@ def update_s95():
         AdvPrint.cerr_exit("There is no analysis with name '{}'.".format(analysis))
     Info.fill_standard_paths_and_files()
 
-    with open(Info.files['analysis_settings'][analysis], "rb") as jfile:
+    with open(Info.files['analysis_settings'][analysis], "r") as jfile:
         parameters = json.loads(jfile.read())
 
     action = ask("Do you want to update S95 values for:\n        (a)ll signal regions\n        (s)elected signal regions", "as")
@@ -1167,14 +1167,14 @@ def _add_analysis_to_list_of_analyses(contents, parameters):
         has_cr = "yes"
     else:
         has_cr = "no"
-    new_analysis = "{}    {}    {}    {}    {}    {}    {}".format(
+    new_analysis = "{}    {}    {}    {}    {}".format(
             analysis_name,
             len(parameters["signal_regions"]),
             parameters["short_info"],
             parameters["lumi"],
-            has_cr,
-            parameters["author"],
-            parameters["authoremail"]
+            has_cr#,
+            #parameters["author"],
+            #parameters["authoremail"]
             )
     lines = contents.splitlines()
     lines.append(new_analysis)
@@ -1190,7 +1190,7 @@ def add_analysis_to_list_of_analyses(parameters, group):
             parameters,
             list_path
             )
-    AdvPrint.format_columnated_file(list_path)
+    #AdvPrint.format_columnated_file(list_path)
 
 def _remove_analysis_from_list_of_analyses(contents, parameters):
     """
