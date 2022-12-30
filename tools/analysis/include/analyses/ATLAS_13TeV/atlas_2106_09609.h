@@ -1,9 +1,11 @@
 #ifndef ATLAS_2106_09609_H_
 #define ATLAS_2106_09609_H_
-// AUTHOR: JSK
-//  EMAIL: jsk@th.physik.uni-bonn.de
+// AUTHOR: K. Rolbiecki
+//  EMAIL: krolb@fuw.edu.pl
 #include "AnalysisBase.h"
-#include </home/krolb/tools/CheckMATE/ONNX/tools/onnxruntime-linux-x64-1.12.1/include/onnxruntime_cxx_api.h>
+#ifdef HAVE_ONNX
+#include "onnxruntime_cxx_api.h"
+#endif
 
 class Atlas_2106_09609 : public AnalysisBase {
   public:
@@ -23,13 +25,15 @@ class Atlas_2106_09609 : public AnalysisBase {
       void findZ(std::vector<X*> candidates, std::vector <std::pair<double, double>> & zmassdiff);    
       
     TFile *hfile;  TH1F *nn4j, *nn5j, *nn6j, *nn7j, *nn8j;  
-    
+
+#ifdef HAVE_ONNX    
     Ort::Session *session[5];
     std::vector<int64_t> input_node_dims;
     const int input_tensor_size = 65;
     std::vector<const char*> input_names = {"input.1"};
     std::vector<const char*> output_names = {"39"};
     std::vector<int64_t> input_dims = {1, 65};
+#endif
     
     std::vector<Jet*> overlapRemoval_muon_jet_tracks(std::vector<Jet*> cand_jets, std::vector<Muon*> cand_muons, double deltaR, int nTracks);
     

@@ -61,4 +61,10 @@ if HAVE_HEPMC
    LD_RUN_PATH += :@HEPMCLIBDIR@ 
 endif
 endif
+if HAVE_ONNX
+   fritz_LDADD += @ONNXLIBS@    
+   fritz_LDFLAGS +=  -R@ONNXLIBDIR@
+   fritz_CXXFLAGS += @ONNXINCLUDE@ -DHAVE_ONNX=1
+   LD_RUN_PATH += :@ONNXLIBDIR@
+endif
 ROOTSYS = @ROOTSYSTEM@:

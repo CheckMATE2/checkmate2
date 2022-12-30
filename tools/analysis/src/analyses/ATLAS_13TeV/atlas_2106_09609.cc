@@ -1,10 +1,9 @@
 #include "atlas_2106_09609.h"
 #include <limits.h>
 #include <float.h>
-#include </home/krolb/tools/CheckMATE/ONNX/tools/onnxruntime-linux-x64-1.12.1/include/onnxruntime_cxx_api.h>
-#include <TLegend.h>
-// AUTHOR: JSK
-//  EMAIL: jsk@th.physik.uni-bonn.de
+#ifdef HAVE_ONNX
+#include "onnxruntime_cxx_api.h"
+#endif
 // NN AUTHOR: K. Rolbiecki
 //  EMAIL: krolb@fuw.edu.pl
 
@@ -19,7 +18,7 @@ void Atlas_2106_09609::initialize() {
   //  always ordered alphabetically in the cutflow output files.
 
   // You should initialize any declared variables here
-
+#ifdef HAVE_ONNX
   Ort::AllocatorWithDefaultOptions allocator;
   std::vector<const char*> input_node_names;
   std::vector<const char*> output_node_names;
@@ -74,7 +73,8 @@ void Atlas_2106_09609::initialize() {
   std::cout << "Output " << 0 << " : num_dims = " << output_node_dims.size() << '\n';
   for (size_t j = 0; j < input_node_dims.size(); j++) 
     std::cout << "Output " << 0 << " : dim[" << j << "] = " << output_node_dims[j] << '\n';
-
+#endif
+  
   int ifile = bookFile("atlas_2106_09609.root", true);
   const char *rootFileName = fNames[ifile].c_str() ;
   hfile = new TFile(rootFileName, "RECREATE", "Saving Histograms");
@@ -83,6 +83,7 @@ void Atlas_2106_09609::initialize() {
   nn6j = new TH1F("nn6j", "nn", 4, 0., 1.);
   nn7j = new TH1F("nn7j", "nn", 4, 0., 1.);
   nn8j = new TH1F("nn8j", "nn", 4, 0., 1.);  
+
 }
 
 void Atlas_2106_09609::analyze() {
@@ -606,23 +607,17 @@ void Atlas_2106_09609::finalize() {
   nn8j->SetLineColor(kGreen);
   //nn8j->SetTitle("NN output 8 jets");
   //can5.Close();    
-
-  auto L_cth = new TLegend(0.65, 0.87, 0.92, 0.38);
-  L_cth->AddEntry(nn4j,"4j","lp");
-  L_cth->AddEntry(nn5j,"5j","lp");
-  L_cth->AddEntry(nn6j,"6j","lp");  
-  L_cth->AddEntry(nn7j,"7j","lp");
-  L_cth->AddEntry(nn8j,"8j","lp");
-  L_cth->Draw("same");
+  
   //can1.Print("histo1.pdf");
   can1.Close();
   hfile->Write();
 
   hfile->Close();
-  
+
+#ifdef HAVE_ONNX  
   for (int i = 0; i < 5; i++)
     delete session[i];
-  
+#endif  
   
 }       
 
@@ -776,6 +771,7 @@ bool Atlas_2106_09609::check_nTrack_jet(Jet* jet, std::vector<Track*> tracks, in
 
 float Atlas_2106_09609::Passes_Cuts_NNSR(const std::vector<Jet*> sigjets, const std::vector<Jet*> bjets, const std::vector<FinalStateObject*> leptons) {
   
+#ifdef HAVE_ONNX  
   const float Escale = 100; 
   std::vector<float> input_tensor_values;  //input_tensor_size = 65
   
@@ -826,7 +822,7 @@ float Atlas_2106_09609::Passes_Cuts_NNSR(const std::vector<Jet*> sigjets, const 
   cout << "Score: " << output[0] << std::endl;
   
   return output[0];
-  
+#endif  
   
   return 0;
   

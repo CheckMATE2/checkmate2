@@ -1,6 +1,10 @@
 #include "atlas_2211_08028.h"
 #include "fastjet/tools/Filter.hh"
-#include </home/krolb/tools/CheckMATE/ONNX/tools/onnxruntime-linux-x64-1.12.1/include/onnxruntime_cxx_api.h>
+
+#ifdef HAVE_ONNX
+#include "onnxruntime_cxx_api.h"
+#endif
+
 // AUTHOR: K. Rolbiecki
 //  EMAIL: krolb@fuw.edu.pl
 void Atlas_2211_08028::initialize() {
@@ -14,7 +18,8 @@ void Atlas_2211_08028::initialize() {
   //  always ordered alphabetically in the cutflow output files.
 
   // You should initialize any declared variables here
-  
+
+#ifdef HAVE_ONNX  
   Ort::AllocatorWithDefaultOptions allocator;
   std::vector<const char*> input_node_names;
   std::vector<const char*> output_node_names;
@@ -60,12 +65,13 @@ void Atlas_2211_08028::initialize() {
   std::cout << "Output " << 0 << " : num_dims = " << output_node_dims.size() << '\n';
   for (size_t j = 0; j < input_node_dims.size(); j++) 
     std::cout << "Output " << 0 << " : dim[" << j << "] = " << output_node_dims[j] << '\n';  
-
+#endif
   
   int ifile = bookFile("atlas_2211_08028.root", true);
   const char *rootFileName = fNames[ifile].c_str() ;
   hfile = new TFile(rootFileName, "RECREATE", "Saving Histograms");
   nngtt = new TH1F("gtt", "NN score", 20, -1., 1.);  
+
   
 }
 
@@ -92,7 +98,7 @@ void Atlas_2211_08028::analyze() {
     
   jets = filterPhaseSpace(jets, 30., -2.8, 2.8);
   
-  std::vector<Jet*> nonbjets;
+  std::vector<Jet*> nonbjets={};
   for (int i = 0; i < jets.size(); i++) 
     if ( fabs(jets[i]->Eta) < 2.5 and checkBTag(jets[i],0) ) 
       bjets.push_back(jets[i]);
@@ -264,10 +270,16 @@ void Atlas_2211_08028::analyze() {
     
   }  
   
+  return;
+  
 }
 
 void Atlas_2211_08028::finalize() {
   // Whatever should be done after the run goes here
+ 
+#ifdef HAVE_ONNX 
+  //delete session;
+#endif  
 }       
 
 
@@ -408,7 +420,8 @@ bool Atlas_2211_08028::PassesCuts_Gbb(int Njet, int Nbjet, double met, double pt
 }
 
 bool Atlas_2211_08028::PassesCuts_NN(int Gtt, double mgluino, double mneut, double cutoff, int srnum, std::string sr) {
-  
+
+#ifdef HAVE_ONNX  
   std::vector<float> input_tensor_values;  
   
   assert(signal_jets.size() >= 4); 
@@ -487,6 +500,7 @@ bool Atlas_2211_08028::PassesCuts_NN(int Gtt, double mgluino, double mneut, doub
     return true;
   }  
   
+#endif  
   return false;
 }
 

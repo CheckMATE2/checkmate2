@@ -36,6 +36,7 @@ AC_SUBST(DYLD_LIBRARY_PATH)
 AC_SUBST(LD_RUN_PATH)
 CHECK_DELPHES([6], ,AC_MSG_ERROR("No Delphes... but why?") )
 CHECK_MADGRAPH([6], ,AC_MSG_ERROR("No MadGraph... but why?") )
+CHECK_ONNX([6], ,AC_MSG_ERROR("No ONNX... but why?") )
 
 # Checks for header files.
 
