@@ -1,7 +1,11 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import os, sys
 import subprocess
 import signal
-import ConfigParser
+import configparser
 from math import sqrt
 from copy import deepcopy
 from advprint import AdvPrint
@@ -10,7 +14,7 @@ from resultcollector import ResultCollector
 
 # note that for some strange reason, I cannot import "events" in the header as this results in a circular reference to Info.
 
-class Process:
+class Process(object):
     name = '' # User defined name
     
     have_xsect = False # cross section provided by user?
@@ -181,15 +185,15 @@ class Process:
                 globalconfig.set(name, "nevents", events.maxEvents)
             elif globalconfig.has_section("Global"):
                 globalconfig.remove_option(name, "nevents") # unfortunately this globalconfig construction is badly designed. Each event has its own maxevents but there can be only one globalconfig, so each one has to make sure that globalconfig is set correctly
-            config = ConfigParser.RawConfigParser()
+            config = configparser.RawConfigParser()
             
             self.prepareFritzInputFile(config, events)
             self.prepareFritzDelphes(config, events)
             self.prepareFritzAnalysisHandler(config, events)
             path = os.path.join(Info.paths["output_fritz"],events.identifier+".ini")
-            with open(path, 'wb') as file: 
+            with open(path, 'w') as file: 
                 globalconfig.write(file)
-            with open(path, 'ab') as file:
+            with open(path, 'a') as file:
                 config.write(file)
             events.configFile = path
     
@@ -205,17 +209,17 @@ class Process:
 
             maxlen = 0
             try:
-                for line in iter(result.stdout.readline, b''):
+                for line in iter(result.stdout.readline, bytes(b'')):
                     # Print to logfile. If it does not start with the Fritz::Global prefix, it comes from MG5 and should be redirected
                     AdvPrint.mute()
-                    if not line.startswith("|~| ") and isinstance(event, MG5Events):
+                    if not line.startswith(bytes(b'|~| ')) and isinstance(event, MG5Events):
                         AdvPrint.set_cout_file(os.path.join(Info.paths["output_mg5"], "mg5amcatnlo_"+event.identifier+".log"))
-                    elif "PYTHIA Rndm::dumpState" in line:
+                    elif bytes(b'PYTHIA Rndm::dumpState') in line:
                         AdvPrint.set_cout_file(os.path.join(Info.paths["output_pythia"], "pythia_"+event.identifier+".log"))
                     else:
-                        line = line.replace("|~| ", "")
+                        line = line.replace(bytes(b'|~| '), bytes(b""))
                         AdvPrint.set_cout_file(os.path.join(Info.paths["output_fritz"], "fritz_"+event.identifier+".log"))
-                    AdvPrint.cout(line.rstrip())
+                    AdvPrint.cout(line.decode('utf-8').rstrip())
                     AdvPrint.set_cout_file("#None")
                     AdvPrint.unmute()
                     
@@ -246,17 +250,17 @@ class Process:
                 AdvPrint.cout("Caught Keyboard Signal. Aborting Fritz")
                 result.send_signal(signal.SIGTERM)
             
-            for line in iter(result.stderr.readline, b''):
+            for line in iter(result.stderr.readline, bytes(b'')):
                 AdvPrint.unmute()
                 AdvPrint.set_cout_file(Info.files['fritz_log'])
                 # remove nasty ROOT6-CLING warnings from on-screen output 
-                if "cling::AutoloadingVisitor::InsertIntoAutoloadingState:" in line:
+                if bytes(b'cling::AutoloadingVisitor::InsertIntoAutoloadingState:') in line:
                     AdvPrint.mute()
-                elif "Missing FileEntry for ExRootAnalysis" in line:
+                elif bytes(b'Missing FileEntry for ExRootAnalysis') in line:
                     AdvPrint.mute()
-                elif "requested to autoload type" in line:
+                elif bytes(b'requested to autoload type') in line:
                     AdvPrint.mute()
-                AdvPrint.cout(line.rstrip()+"")
+                AdvPrint.cout(line.decode('utf-8').rstrip())
                 AdvPrint.set_cout_file("#None")
                 AdvPrint.unmute()                
             AdvPrint.cout("")

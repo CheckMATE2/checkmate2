@@ -1,10 +1,16 @@
 #!/usr/bin/python
+from future import standard_library
+standard_library.install_aliases()
+from builtins import input
+from builtins import str
+from builtins import object
 import sys,os
 from math import sqrt
 from copy import deepcopy
-import json, pickle, cPickle
+import json, pickle, pickle
 import os
 import shutil
+import subprocess
 
 from advprint import AdvPrint
 from info import Info
@@ -13,7 +19,7 @@ from detectorsettings import DetectorSettings
 from evaluator import Evaluator, find_strongest_evaluators, find_strongest_zsig
 from resultcollector import ResultCollector
 
-class CheckMATE2:
+class CheckMATE2(object):
     """ This is the main object whose instance corresponds to a full CheckMATE run """
     procList = list()
 
@@ -30,6 +36,7 @@ class CheckMATE2:
         if len(sys.argv) == 2 and sys.argv[-1] != "-h":
             Info.fill_info_from_file(sys.argv[1])            
             self.procList = Info.fill_processes_from_file(sys.argv[1])
+            print(self.procList)
         else:
             Info.fill_info_from_parameters()
             self.procList = Info.fill_processes_from_parameters()        
@@ -49,7 +56,7 @@ class CheckMATE2:
         AdvPrint.cout("\n")    
         # Evaluate
         if not Info.flags['skipevaluation']:
-	    self.evaluate()
+            self.evaluate()
 
         # Store internal status
         Info.save(Info.files['internal_info'])        
@@ -59,14 +66,18 @@ class CheckMATE2:
         """ Stores the current status of this instance in a file """
         contents = dict()
         contents["procList"] = pickle.dumps(self.procList)
-        with open(filename, "w") as f:
-            json.dump(contents, f, indent=2)
+        #print(self.procList)
+        #print(filename)
+        with open(filename, "wb") as f:
+            #json.dump(contents, f, indent=2)
+            pickle.dump(contents, f)
         
     
     def load(self, filename):
         """ Loads contents for current instance from a valid file  """
-        with open(filename, "r") as f:
-            contents = json.load(f)            
+        with open(filename, "rb") as f:
+            #contents = json.load(f)     
+            contents = pickle.load(f)
         try:
             # processes = old processes plus added new ones of current run
             newProcList = self.procList
@@ -186,7 +197,7 @@ class CheckMATE2:
         # Let user check correctness of parameters, unless in skipparamcheck.
         if not Info.flags['skipparamcheck']:
             while True:
-                c = raw_input("Is this correct? (y/n) ")
+                c = input("Is this correct? (y/n) ")
                 if c == "y": 
                     break
                 elif c == "n": 
@@ -307,10 +318,10 @@ class CheckMATE2:
         return resultCollectors_tot
 
 def _print_zsig(evaluators):
-    for analysis, v in evaluators.iteritems():
+    for analysis, v in evaluators.items():
         with open(Info.files['output_evaluation_zsig'][analysis], "w") as of:
             of.write("SR S B dB Z_exp\n")
-            for sr, ev in v.iteritems():
+            for sr, ev in v.items():
                 of.write(
                         sr+"  "
                         +str(ev.resultCollector.signal_normevents)+"  "
@@ -337,12 +348,12 @@ def _print_zsig(evaluators):
 def _print_likelihood(evaluators):
     tot_likeli = 0.
     dict_likeli = {}
-    for analysis, v in evaluators.iteritems():
+    for analysis, v in evaluators.items():
         ana_likeli =0.
         AdvPrint.set_cout_file(Info.files['output_evaluation_likelihood'][analysis], True)
         AdvPrint.mute()        
         AdvPrint.cout("SR  o  b  db  s  ds  likeli")
-        for sr, ev in v.iteritems():
+        for sr, ev in v.items():
             AdvPrint.cout(sr+"  "
                         +str(float(ev.obs))+"  "
                         +str(float(ev.bkg))+"  "

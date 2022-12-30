@@ -1,7 +1,13 @@
+from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import input
+from builtins import str
+from builtins import range
 import os, shutil,  sys
 import json, pickle
 import argparse
-import ConfigParser
+import configparser
 from advprint import AdvPrint
 
 class Info(dict):
@@ -102,7 +108,7 @@ class Info(dict):
                 }
         cls.paths = paths
         cls.used_experiments = set()
-        cls.config = ConfigParser.RawConfigParser()
+        cls.config = configparser.RawConfigParser()
         cls.flags = flags    
         cls.parameters = parameters     
     
@@ -115,9 +121,11 @@ class Info(dict):
         contents["files"] = Info.files
         contents["flags"] = Info.flags
         contents["parameters"] = Info.parameters
-        contents["identifiers"] = pickle.dumps(Info.identifiers)
+        #contents["identifiers"] = pickle.dumps(Info.identifiers)
         with open(filename, "w") as f:
             json.dump(contents, f, indent=2)
+        with open(filename[:-1]+"raw", "wb") as f:
+            pickle.dump(Info.identifiers, f)
     
     @classmethod
     def load(cls, filename):
@@ -125,14 +133,17 @@ class Info(dict):
         with open(filename, "r") as f:
             contents = json.load(f)            
         try:
-           cls.analyses = contents["analyses"]
-           cls.paths = contents["paths"]
-           cls.files = contents["files"]
-           cls.flags = contents["flags"]
-           cls.parameters = contents["parameters"]
-           cls.identifiers = pickle.loads(contents["identifiers"])
+            cls.analyses = contents["analyses"]
+            cls.paths = contents["paths"]
+            cls.files = contents["files"]
+            cls.flags = contents["flags"]
+            cls.parameters = contents["parameters"]
+            #cls.identifiers = pickle.loads(contents["identifiers"])
         except KeyError:
-            AdvPrint.cerr_exit("Problem loading info.j file "+inputfile)        
+            AdvPrint.cerr_exit("Problem loading info.j file "+inputfile)
+        with open(filename[:-1]+"raw", "rb") as f:
+            cls.identifiers = pickle.load(f)
+        
         
     @classmethod            
     def parse_arguments(cls, emptyparser=False):       
@@ -265,7 +276,7 @@ class Info(dict):
         if not os.path.isfile(pfile):
             AdvPrint.cerr_exit("Parameter file '"+pfile+"' does not exist.")    
         
-        Config = ConfigParser.ConfigParser()
+        Config = configparser.ConfigParser()
         Config.read(pfile)
         sections = Config.sections()
         
@@ -358,7 +369,7 @@ class Info(dict):
             if Info.parameters["outputexists"] == "ask":
                 while True:
                     AdvPrint.cout("Output directory with results already exists!")
-                    c = raw_input("Choose: (o)verwrite, (a)dd to existing results, (s)top\n")
+                    c = input("Choose: (o)verwrite, (a)dd to existing results, (s)top\n")
                     if c == "o":
                         Info.parameters["outputexists"] = "overwrite"
                         break
@@ -376,7 +387,7 @@ class Info(dict):
             if Info.parameters["outputexists"] == "ask":
                 while True:
                     AdvPrint.cout("Output directory with incomplete results already exists!")
-                    c = raw_input("Choose: (o)verwrite, (s)top\n")
+                    c = input("Choose: (o)verwrite, (s)top\n")
                     if c == "o":
                         Info.parameters["outputexists"] = "overwrite"
                         break
@@ -513,7 +524,7 @@ class Info(dict):
         if not os.path.isfile(pfile):
             AdvPrint.cerr_exit("Parameter file '"+pfile+"' does not exist.")  
             
-        Config = ConfigParser.ConfigParser()
+        Config = configparser.ConfigParser()
         Config.read(pfile)
         sections = Config.sections()
         
@@ -732,7 +743,7 @@ class Info(dict):
         # analysis handler sources
         src_dir = os.path.join(cls.paths["fritz"], "src", "analysishandler")
         inc_dir = os.path.join(cls.paths["fritz"], "include", "analysishandler")
-        for analysis_handler in cls.analysis_handlers.values():
+        for analysis_handler in list(cls.analysis_handlers.values()):
             cls.files[analysis_handler] = dict()
             cls.files[analysis_handler]["src"] = os.path.join(src_dir, "{}.cc".format(analysis_handler))
             cls.files[analysis_handler]["include"] = os.path.join(inc_dir, "{}.h".format(analysis_handler))
@@ -770,7 +781,7 @@ class Info(dict):
         cls.files['delphes_events'] = list()
         
         cls.files['internal_info'] = os.path.join(cls.paths['output_internal'], "info.j")
-        cls.files['internal_processes'] = os.path.join(cls.paths['output_internal'], "processes.j")
+        cls.files['internal_processes'] = os.path.join(cls.paths['output_internal'], "processes.raw")
         
         cls.files['delphes_log'] = os.path.join(cls.paths['output_delphes'], "delphes_output.log")
         cls.files['pythia_log'] = os.path.join(cls.paths['output_pythia'], "pythia_output.log")
@@ -893,7 +904,7 @@ class Info(dict):
         """ Reads in the _var.j file of a given analysis and returns the parameters
             as a dictionary """
         if 'analysis_settings' not in cls.files or analysis not in cls.files['analysis_settings']:
-            print cls.files['analysis_settings']
+            print(cls.files['analysis_settings'])
             AdvPrint.cerr_exit("Cannot find files for reading parameters of analysis "+analysis)
         jfile = open(cls.files['analysis_settings'][analysis], "rb")
         parameters = json.loads(jfile.read())

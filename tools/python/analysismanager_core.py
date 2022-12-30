@@ -1,3 +1,9 @@
+from __future__ import print_function
+from __future__ import division
+from builtins import zip
+from builtins import input
+from builtins import str
+from past.utils import old_div
 import json
 from math import sqrt
 from multiprocessing import Pool
@@ -13,7 +19,7 @@ Printlevel = 1
 
 def myprint(text):
     """Indents text according to Printlevel"""
-    print "    "*Printlevel + text
+    print("    "*Printlevel + text)
 
 def ask(question, allowed_answers="@", allow_empty=False):
     """Asks user a question with right indentation and only accepts a predefined set
@@ -23,7 +29,7 @@ def ask(question, allowed_answers="@", allow_empty=False):
       myprint(question)
     Printlevel += 1
     while True:
-        answer = raw_input("    "*Printlevel)
+        answer = input("    "*Printlevel)
         if allow_empty and answer == "": # zero entry is only allowed if explicitly told
           break
         elif answer != "" and allowed_answers == "@": # @ allows everything
@@ -33,7 +39,7 @@ def ask(question, allowed_answers="@", allow_empty=False):
             break
         elif answer != "" and answer in allowed_answers: # allowed_answers can be a string which always includes ""
             break
-        print "    "*Printlevel + " (Invalid Input)"
+        print("    "*Printlevel + " (Invalid Input)")
     Printlevel -= 1
     return answer
 
@@ -48,7 +54,7 @@ def ask_list(question, options):
     for n, option in enumerate(options):
         myprint("{}) {}".format(n+1, option))
     while True:
-        answer = raw_input("    "*Printlevel).strip()
+        answer = input("    "*Printlevel).strip()
         try:
             index = int(answer)
             if index < 1:
@@ -122,7 +128,7 @@ def write_analysis_parameters(parameters):
     global Printlevel
     analysis = parameters["analysis"]
     Info.fill_standard_paths_and_files()
-    jfile = open(Info.files['analysis_settings'][analysis], "wb")
+    jfile = open(Info.files['analysis_settings'][analysis], "w")
     jfile.write(json.dumps(parameters, sort_keys=True, indent=2))
     jfile.close()
     myprint(" - Variable values saved in " + Info.files['analysis_settings'][analysis])
@@ -162,7 +168,7 @@ def ask_for_general_information(parameters):
                 myprint('>>> Caught Interrupting Signal')
                 myprint('>>> Press any key to restart current question block')
                 myprint('        or resend signal to abort')
-                raw_input("")
+                input("")
             except KeyboardInterrupt:
                 exit(1)
     Printlevel = BASELEVEL
@@ -252,7 +258,7 @@ def normalize_error(reference_data):
         # Asymmetric error: as a rough approximation, use the mean of the squares
         upper = float(reference_data["bkg_errp"])
         lower = float(reference_data["bkg_errm"])
-        return sqrt((upper**2+lower**2)/2)
+        return sqrt(old_div((upper**2+lower**2),2))
     if "bkg_err_sys" in reference_data and "bkg_err_stat" in reference_data:
         # Total error = independent quadratic sum of statistical and systematical component
         sys = float(reference_data["bkg_err_sys"])
@@ -262,7 +268,7 @@ def normalize_error(reference_data):
         sys_upper = float(reference_data["bkg_errp_sys"])
         sys_lower = float(reference_data["bkg_errm_sys"])
         stat = float(reference_data["bkg_err_stat"])
-        return sqrt(stat**2 + (sys_upper**2 + sys_lower**2)/2)
+        return sqrt(stat**2 + old_div((sys_upper**2 + sys_lower**2),2))
     AdvPrint.cerr_exit("Invalid combination of errors given.")
 
 
@@ -298,7 +304,7 @@ def recompute_s95(parameters, signal_regions=None):
         sobs, sexp = recompute_s95_sr(reference_data_sr)
         reference_data_sr["S95_obs"] = str(sobs)
         reference_data_sr["S95_exp"] = str(sexp)
-        print "SR {}: S95_obs = {}, S95_exp = {}".format(sr, sobs, sexp)
+        print("SR {}: S95_obs = {}, S95_exp = {}".format(sr, sobs, sexp))
 
 
 def ask_for_signal_region_information(parameters):
@@ -385,7 +391,7 @@ def ask_for_signal_region_information(parameters):
             myprint('>>> Caught Interrupting Signal')
             myprint('>>> Press any key to restart current question block')
             myprint('        or resend signal to abort')
-            raw_input("")
+            input("")
         except KeyboardInterrupt:
             exit(1)
     Printlevel = BASELEVEL
@@ -403,7 +409,7 @@ def ask_for_experiment(parameters):
     if setups == None:
         AdvPrint.cerr_exit("Error: There is no CheckMATE setup for {} at a center of mass energy of {}TeV.".format(detector, ecm))
         return Info.detector_setups[detector]["default"]
-    setups = setups.keys()
+    setups = list(setups.keys())
     if len(setups) == 1:
         return Info.detector_setups[detector][ecm][setups[0]]
     else:
@@ -542,7 +548,7 @@ def ask_for_detector_information(parameters):
                 myprint('>>> Caught Interrupting Signal')
                 myprint('>>> Press any key to restart current question block')
                 myprint('        or resend signal to abort')
-                raw_input("")
+                input("")
             except KeyboardInterrupt:
                 exit(1)
     Printlevel = BASELEVEL
@@ -695,7 +701,7 @@ def edit_analysis():
         if what_to_edit == "l":
             myprint("Here are all defined objects in alphabetic order.")
             Printlevel += 1
-            sorted_keys = parameters.keys()
+            sorted_keys = list(parameters.keys())
             sorted_keys.sort()
             for p in sorted_keys:
                 myprint(str(p)+":   "+str(parameters[p]).replace("u'", "'")) # replace avoids that the unicde identifier is printed
@@ -730,7 +736,7 @@ def remove_analysis():
         myprint('There is no analysis with that name.')
         return
 
-    with open(Info.files['analysis_settings'][analysis], "rb") as jfile:
+    with open(Info.files['analysis_settings'][analysis], "r") as jfile:
         parameters = json.loads(jfile.read())
 
     group = Info.analysis_group_map[analysis]
@@ -746,7 +752,7 @@ def update_s95():
         AdvPrint.cerr_exit("There is no analysis with name '{}'.".format(analysis))
     Info.fill_standard_paths_and_files()
 
-    with open(Info.files['analysis_settings'][analysis], "rb") as jfile:
+    with open(Info.files['analysis_settings'][analysis], "r") as jfile:
         parameters = json.loads(jfile.read())
 
     action = ask("Do you want to update S95 values for:\n        (a)ll signal regions\n        (s)elected signal regions", "as")
@@ -806,7 +812,7 @@ def remove_analysis_files(parameters, group, keep_sources=False, delete_settings
         try:
             os.remove(Info.files["analysis_settings"][parameters["analysis"]])
         except OSError as err:
-            print "\nWARNING: Failed to delete settings file with error\n\t{}\n".format(err)
+            print("\nWARNING: Failed to delete settings file with error\n\t{}\n".format(err))
 
 def read_analysis_parameters(path):
     """
@@ -826,7 +832,7 @@ def remove_analysis_reference_file(parameters):
         try:
             os.remove(Info.files["evaluation_reference"][analysis_name])
         except OSError as err:
-            print "\nWARNING: Failed to delete the analysis reference file with error\n\t{}\n".format(err)
+            print("\nWARNING: Failed to delete the analysis reference file with error\n\t{}\n".format(err))
 
 def _strip_path_prefix(path, prefix_path):
     """
@@ -1067,7 +1073,7 @@ def _create_analysis_source_common(contents, long_info, parameters):
 def _create_analysis_source(contents, parameters):
     analysis_name = parameters["analysis"]
     long_info = parameters["long_info"]
-    long_info = "\n".join(map( lambda l: '    "# {}\\n"'.format(l), long_info))
+    long_info = "\n".join(['    "# {}\\n"'.format(l) for l in long_info])
     return _create_analysis_source_common(contents, long_info, parameters)
 
 def create_analysis_source(parameters, keep_sources):
@@ -1089,7 +1095,7 @@ def create_analysis_source(parameters, keep_sources):
 def _create_analysis_control_regions_source(contents, parameters):
     analysis_name = parameters["analysis"]
     long_info = parameters["long_info"]
-    long_info = "\n".join(map(lambda l: '    "@#{}\\n"'.format(l), long_info))
+    long_info = "\n".join(['    "@#{}\\n"'.format(l) for l in long_info])
     return _create_analysis_source_common(contents, long_info, parameters)
 
 def create_analysis_control_regions_source(parameters, keep_sources):
@@ -1127,20 +1133,20 @@ def remove_analysis_sources(parameters):
     try:
         os.remove(header_path)
     except OSError as err:
-        print "\nWARNING: Failed to remove header file with error\n\t{}\n".format(err)
+        print("\nWARNING: Failed to remove header file with error\n\t{}\n".format(err))
 
     source_path = Info.files["analysis_source"][analysis_name]
     try:
         os.remove(source_path)
     except OSError as err:
-        print "\nWARNING: Failed to remove source file with error\n\t{}\n".format(err)
+        print("\nWARNING: Failed to remove source file with error\n\t{}\n".format(err))
 
     if parameters["cr"] == "y":
         cr_source_path = Info.files["analysis_CR_source"][analysis_name]
         try:
             os.remove(cr_source_path)
         except OSError as err:
-            print "\nWARNING: Failed to remove control region source file with error\n\t{}\n".format(err)
+            print("\nWARNING: Failed to remove control region source file with error\n\t{}\n".format(err))
 
 # Update list of analyses
 
@@ -1161,14 +1167,14 @@ def _add_analysis_to_list_of_analyses(contents, parameters):
         has_cr = "yes"
     else:
         has_cr = "no"
-    new_analysis = "{}    {}    {}    {}    {}    {}    {}".format(
+    new_analysis = "{}    {}    {}    {}    {}".format(
             analysis_name,
             len(parameters["signal_regions"]),
             parameters["short_info"],
             parameters["lumi"],
-            has_cr,
-            parameters["author"],
-            parameters["authoremail"]
+            has_cr#,
+            #parameters["author"],
+            #parameters["authoremail"]
             )
     lines = contents.splitlines()
     lines.append(new_analysis)
@@ -1184,7 +1190,7 @@ def add_analysis_to_list_of_analyses(parameters, group):
             parameters,
             list_path
             )
-    AdvPrint.format_columnated_file(list_path)
+    #AdvPrint.format_columnated_file(list_path)
 
 def _remove_analysis_from_list_of_analyses(contents, parameters):
     """
@@ -1248,7 +1254,7 @@ def replace_in_file(fun, parameters, in_file_name, out_file_name=None):
 ########################
 
 def main():
-    print """
+    print("""
    ____ _               _    __  __    _  _____ _____ ____
   / ___| |__   ___  ___| | _|  \/  |  / \|_   _| ____|___ \ 
  | |   | '_ \ / _ \/ __| |/ / |\/| | / _ \ | | |  _|   __) |
@@ -1258,7 +1264,7 @@ def main():
                         /\  _  _ |   _. _  |\/| _  _  _  _  _ _
                        /--\| )(_||\/_)|_)  |  |(_|| )(_|(_)(-|
                                   /                     _/
-                                             """
+                                             """)
     action = ask("""What would you like to do?
         -(l)ist all analyses,
         -(a)dd a new analysis to CheckMATE,

@@ -1,10 +1,15 @@
+from __future__ import print_function
+from __future__ import division
+from builtins import str
+from builtins import object
+from past.utils import old_div
 from math import sqrt
 import os, sys
 
 from advprint import AdvPrint
 from info import Info
 
-class ResultCollector:
+class ResultCollector(object):
     identifier = ""
     analysis = ""
     sr = ""
@@ -39,19 +44,19 @@ class ResultCollector:
         self.signal_err_tot = 0
     
     def printme(self):
-        print "Name: "+self.name
-        print "Analysis - SR: "+str(self.analysis)+" "+str(self.sr)
-        print "\t total mcevents: "+str(self.total_mcevents)
-        print "\t total_normevents: "+str(self.total_normevents)
-        print "\t total_sumofweights: "+str(self.total_sumofweights)
-        print "\t total_sumofweights2: "+str(self.total_sumofweights2)
+        print("Name: "+self.name)
+        print("Analysis - SR: "+str(self.analysis)+" "+str(self.sr))
+        print("\t total mcevents: "+str(self.total_mcevents))
+        print("\t total_normevents: "+str(self.total_normevents))
+        print("\t total_sumofweights: "+str(self.total_sumofweights))
+        print("\t total_sumofweights2: "+str(self.total_sumofweights2))
     
-        print "\t signal_sumofweights: "+str(self.signal_sumofweights)
-        print "\t signal_sumofweights2: "+str(self.signal_sumofweights2)
-        print "\t signal_normevents: "+str(self.signal_normevents)
-        print "\t signal_err_stat: "+str(self.signal_err_stat)
-        print "\t signal_err_sys: "+str(self.signal_err_sys)
-        print "\t signal_err_tot: "+str(self.signal_err_tot)
+        print("\t signal_sumofweights: "+str(self.signal_sumofweights))
+        print("\t signal_sumofweights2: "+str(self.signal_sumofweights2))
+        print("\t signal_normevents: "+str(self.signal_normevents))
+        print("\t signal_err_stat: "+str(self.signal_err_stat))
+        print("\t signal_err_sys: "+str(self.signal_err_sys))
+        print("\t signal_err_tot: "+str(self.signal_err_tot))
         
         
     def line_from_data(self, columns):
@@ -109,8 +114,8 @@ class ResultCollector:
             weight_other = 0
         # otherwise, evaluate weights properly
         else: 
-            weight_self = self.total_normevents / (other.total_normevents + self.total_normevents) * (self.total_sumofweights + other.total_sumofweights)/self.total_sumofweights
-            weight_other = other.total_normevents / (other.total_normevents + self.total_normevents) * (self.total_sumofweights + other.total_sumofweights)/other.total_sumofweights
+            weight_self = old_div(old_div(self.total_normevents, (other.total_normevents + self.total_normevents)) * (self.total_sumofweights + other.total_sumofweights),self.total_sumofweights)
+            weight_other = old_div(old_div(other.total_normevents, (other.total_normevents + self.total_normevents)) * (self.total_sumofweights + other.total_sumofweights),other.total_sumofweights)
         
         self.total_mcevents = self.total_mcevents + other.total_mcevents
         self.total_normevents = self.total_normevents + other.total_normevents
@@ -141,9 +146,9 @@ class ResultCollector:
         if self.total_normevents == 0:
             self.total_normevents = other.total_normevents
         else:
-            weight1 = self.total_mcevents / (self.total_mcevents + other.total_mcevents)
-            weight2 = other.total_mcevents / (self.total_mcevents + other.total_mcevents)
-            self.total_normevents = (self.total_normevents * weight1 + other.total_normevents * weight2)/(weight1 + weight2)
+            weight1 = old_div(self.total_mcevents, (self.total_mcevents + other.total_mcevents))
+            weight2 = old_div(other.total_mcevents, (self.total_mcevents + other.total_mcevents))
+            self.total_normevents = old_div((self.total_normevents * weight1 + other.total_normevents * weight2),(weight1 + weight2))
         """    
           the below test is not correct anymore as combined runs of the same process with event gneration via Pythia8 or MadGraph can lead to different
           values for the respective cross sections. In that case, total_normevents should be given as the weighted mean of the respective total_normevents-numbers, using
@@ -159,18 +164,18 @@ class ResultCollector:
         # store old relative syserror (beware the case N = 0 and that self and other should be consistent!)
         rel_sys_error = 0
         if self.signal_err_sys != 0:
-            rel_sys_error = self.signal_err_sys/self.signal_normevents
+            rel_sys_error = old_div(self.signal_err_sys,self.signal_normevents)
         if other.signal_err_sys != 0:
-            rel_sys_error = other.signal_err_sys/other.signal_normevents
+            rel_sys_error = old_div(other.signal_err_sys,other.signal_normevents)
         # ds1/s1 must equal ds2/s2, or in other words ds1*s2 = ds2*s1, which avoids rounding problems
         if self.signal_err_sys != 0 and other.signal_err_sys != 0 and abs(self.signal_err_sys*other.signal_normevents - other.signal_err_sys*self.signal_normevents)>1E-5:
-            print self.signal_err_sys # debug
-            print self.signal_normevents # debug
-            print other.signal_err_sys # debug
-            print other.signal_normevents # debug
-            print self.signal_err_sys*other.signal_normevents # debug 
-            print other.signal_err_sys*self.signal_normevents #debug
-            print self.signal_err_sys*other.signal_normevents - other.signal_err_sys*self.signal_normevents #debug
+            print(self.signal_err_sys) # debug
+            print(self.signal_normevents) # debug
+            print(other.signal_err_sys) # debug
+            print(other.signal_normevents) # debug
+            print(self.signal_err_sys*other.signal_normevents) # debug 
+            print(other.signal_err_sys*self.signal_normevents) #debug
+            print(self.signal_err_sys*other.signal_normevents - other.signal_err_sys*self.signal_normevents) #debug
             AdvPrint.cerr_exit("\t resultCollector::add_and_average() \n \t Event files that should be averaged have different syserrors. Something must have gone wrong!")
         
         # weights can be added
@@ -179,19 +184,19 @@ class ResultCollector:
         
         # redetermine event numbers and stat error
         if self.total_sumofweights != 0:
-            self.signal_normevents = self.total_normevents * self.signal_sumofweights / self.total_sumofweights
+            self.signal_normevents = old_div(self.total_normevents * self.signal_sumofweights, self.total_sumofweights)
             
             if self.signal_sumofweights <= 0: # If there are no events in the signal region, ...
                 if Info.flags['no_mc_stat_err']:
                     self.signal_err_stat = 0.0 
                 else:  
-                    self.signal_err_stat = 1.*self.total_normevents/self.total_sumofweights # ... set staterror to error on 1 Monte Carlo Event under the assumption that all events have equal weight
+                    self.signal_err_stat = old_div(1.*self.total_normevents,self.total_sumofweights) # ... set staterror to error on 1 Monte Carlo Event under the assumption that all events have equal weight
                 self.signal_err_sys = 0 # ... set syserror to 0
             else:
                 if Info.flags['no_mc_stat_err']:
                     self.signal_err_stat = 0.0 
                 else:
-                    self.signal_err_stat = self.total_normevents*sqrt(self.signal_sumofweights2)/(self.total_sumofweights)
+                    self.signal_err_stat = old_div(self.total_normevents*sqrt(self.signal_sumofweights2),(self.total_sumofweights))
                 self.signal_err_sys = self.signal_normevents * rel_sys_error # multiply new normevents by old rel_sys_error
         else: # if there are no events, everything is 0
             self.signal_normevents = 0

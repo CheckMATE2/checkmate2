@@ -1,7 +1,11 @@
 ''' Module contains advanced printing and formatting routines '''
+from __future__ import print_function
+from builtins import zip
+from builtins import range
+from builtins import object
 import os, re, sys
 
-class AdvPrint:
+class AdvPrint(object):
     """Prints unless a flag is set"""
     quiet = False
     cout_file = "#None"
@@ -25,9 +29,9 @@ class AdvPrint:
     def cout(cls, message, option=""):
         if cls.quiet == False:
             if option in ["nlb", "nlb*"]:
-                print message, 
+                print(str(message), end=' ') 
             else:
-                print message
+                print(str(message))
         if cls.cout_file != "#None":            
             message = cls.color_remover.sub('', message)
             f = open(cls.cout_file, "a+")
@@ -89,7 +93,7 @@ class AdvPrint:
             # Split whenever there are two or more spaces
             line = cls.remove_extra_spaces(line)
             line_items.append(line.split("  "))
-        trans_lines = zip(*line_items)
+        trans_lines = list(zip(*line_items))
         col_widths = [max(len(c) for c in b)+2 for b in trans_lines]
         #col_width = max(len(word) for line in line_items for word in line) + 2  # padding
         
@@ -158,13 +162,13 @@ def parse_progress(pfile):
     
     # Next, group items according to their processes
     processes = dict()
-    prefixes = results.keys()
+    prefixes = list(results.keys())
     prefixes.sort()
     for prefix in prefixes:
         result = results[prefix]
         process = result['process']
         # If the process is new, add to dict
-        if process not in processes.keys():
+        if process not in list(processes.keys()):
             processes[process] = []
             processes[process].append(result)
         else:

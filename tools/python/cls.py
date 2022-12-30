@@ -5,7 +5,12 @@
 CLs is calculated using the standard LHC techniques using a profile likelihood 
 for the test statistic.
 """
+from __future__ import print_function
+from __future__ import division
 
+from builtins import str
+from builtins import range
+from past.utils import old_div
 __author__ = "Daniel Schmeier, Jamie Tattersall, Sebastian Belkner"
 __copyright__ = "Copyright 2014, CheckMATE"
 __credits__ = ["Daniel Schmeier"]
@@ -37,15 +42,16 @@ def nexp(mu, nu_b, nu_s):
     the exponential of a normal distributed random number (nu).
   Note that b0, s0, db and ds are global variables defined at input
   """
-  return b0*exp(db/b0*nu_b) + mu*s0*exp(ds/s0*nu_s)
+  return b0*exp(old_div(db,b0)*nu_b) + mu*s0*exp(old_div(ds,s0)*nu_s)
 
-def eqForMaxL((nu_b, nu_s), n, nuTil_b, nuTil_s, mu):
+def eqForMaxL(xxx_todo_changeme, n, nuTil_b, nuTil_s, mu):
   """
   Helper function to maximise likelihood 
   The nu_b, nu_s for which these functions are zero maximise the likelihood 
   """
+  (nu_b, nu_s) = xxx_todo_changeme
   lam = nexp(mu, nu_b, nu_s)
-  return ((n-lam)*db*exp(db/b0*nu_b)-lam*(nu_b-nuTil_b), (n-lam)*ds*mu*exp(ds/s0*nu_s)-lam*(nu_s-nuTil_s))
+  return ((n-lam)*db*exp(old_div(db,b0)*nu_b)-lam*(nu_b-nuTil_b), (n-lam)*ds*mu*exp(old_div(ds,s0)*nu_s)-lam*(nu_s-nuTil_s))
   #return ((n-lam)*db*exp(db/b0*nu_b)-lam*(nu_b-nuTil_b), db*exp(db/b0*nu_b-ds/s0*nu_s)*(nu_s-nuTil_s)-ds*mu*(nu_b-nuTil_b))
 
 def nuWithMaxL(n, nuTil_b, nuTil_s, mu):
@@ -61,7 +67,7 @@ def qMu(n, nuTil_b, nuTil_s):
   """ Test statisctic for signal+background hypothesis """
 
   # First, overall maximum is easy to calculate (b0, s0, db are defined during input)
-  mu_hat = (n-b0*exp(db/b0*nuTil_b))/(s0*exp(ds/s0*nuTil_s))
+  mu_hat = old_div((n-b0*exp(old_div(db,b0)*nuTil_b)),(s0*exp(old_div(ds,s0)*nuTil_s)))
   nu_b_hat = nuTil_b
   nu_s_hat = nuTil_s
 
@@ -102,7 +108,7 @@ def qMu(n, nuTil_b, nuTil_s):
     result = -2.*(reduced_logp(nuTil_b, nu_b_mu_hat) + reduced_logp(nuTil_s, nu_s_mu_hat) - reduced_logp(nuTil_b, nu_b_hat) - reduced_logp(nuTil_s, nu_s_hat))
   else:
     # Otherwise, return the normal likelihood    
-    result = -2.*(n*log(lam_hat/lam_hat_hat) - (lam_hat-lam_hat_hat) + reduced_logp(nuTil_b, nu_b_mu_hat) + reduced_logp(nuTil_s, nu_s_mu_hat) - reduced_logp(nuTil_b, nu_b_hat) - reduced_logp(nuTil_s, nu_s_hat))
+    result = -2.*(n*log(old_div(lam_hat,lam_hat_hat)) - (lam_hat-lam_hat_hat) + reduced_logp(nuTil_b, nu_b_mu_hat) + reduced_logp(nuTil_s, nu_s_mu_hat) - reduced_logp(nuTil_b, nu_b_hat) - reduced_logp(nuTil_s, nu_s_hat))
   
   # We have to return a rounded result as E-15 differences in the floats can
   # have weird effects on the CLs+b and CLb results for special cases
@@ -168,8 +174,8 @@ def calc_CLs(n_obs, nuTil_b_obs, b0_in, db_in, nuTil_s_obs, s0_in, ds_in, nPseud
     CLs = 1.0
     dCLs = 1.0
   else:
-    CLs = ps/oneMinusPb
-    dCLs = sqrt((dps/oneMinusPb)**2+(ps*doneMinusPb/oneMinusPb**2)**2)
+    CLs = old_div(ps,oneMinusPb)
+    dCLs = sqrt((old_div(dps,oneMinusPb))**2+(old_div(ps*doneMinusPb,oneMinusPb**2))**2)
     
   del n_pseu_sig
   del n_pseu_bkg
@@ -186,7 +192,7 @@ def cls_obs(b, db, o, s, ds, randomseed):
         global minimize, brentq, fsolve
         from scipy.optimize import minimize, brentq, fsolve
     except ImportError:
-        print "!!! IMPORTANT WARNING: CLS CANNOT BE EVALUATED SINCE SCIPY.MINIMIZE CANNOT BE LOADED! RETURNING -1"
+        print("!!! IMPORTANT WARNING: CLS CANNOT BE EVALUATED SINCE SCIPY.MINIMIZE CANNOT BE LOADED! RETURNING -1")
         return (-1, -1)
 
     if randomseed != 0:
@@ -199,7 +205,7 @@ def cls_exp(b_in, db_in, o_in, s_in, ds_in, randomseed):
         global minimize, brentq, fsolve
         from scipy.optimize import minimize, brentq, fsolve
     except ImportError:
-        print "!!! IMPORTANT WARNING: CLS CANNOT BE EVALUATED SINCE SCIPY.MINIMIZE CANNOT BE LOADED! RETURNING -1"
+        print("!!! IMPORTANT WARNING: CLS CANNOT BE EVALUATED SINCE SCIPY.MINIMIZE CANNOT BE LOADED! RETURNING -1")
         return (-1, -1)
 
     if randomseed != 0:
@@ -223,45 +229,45 @@ def Lambda(mu,  b,  s,  db,  ds,  nuisance = []):
         if(b==0.0 and s==0.0):
             return 1.0
         if(b==0.0):
-            return mu*s*exp(ds/s*nuisance[0])
+            return mu*s*exp(old_div(ds,s)*nuisance[0])
         if(s==0.0):
-            return b*exp(db/b*nuisance[1])
-        return mu*s*exp(ds/s*nuisance[0]) + b*exp(db/b*nuisance[1])
+            return b*exp(old_div(db,b)*nuisance[1])
+        return mu*s*exp(old_div(ds,s)*nuisance[0]) + b*exp(old_div(db,b)*nuisance[1])
     except OverflowError as e:
-        print "Error A",  e
+        print("Error A",  e)
         return 1.0
     except ZeroDivisionError as z:
-        print "Error B",  z
+        print("Error B",  z)
         return 1.0
 
 def derLambdasig(mu,  nu_sig,  s,  ds):
     try:
-        return mu*ds*exp(ds/s*nu_sig)
+        return mu*ds*exp(old_div(ds,s)*nu_sig)
     except OverflowError as e:
-        print "Error E",  e
+        print("Error E",  e)
         return 1.0
     except ZeroDivisionError as z:
-        print "Error F",  z
+        print("Error F",  z)
         return 1.0
 
 def derLambdabackg(nu_backg, b,  db):
     try:
-        return db*exp(db/b*nu_backg) 
+        return db*exp(old_div(db,b)*nu_backg) 
     except OverflowError as e:
-        print "Error G",  e
+        print("Error G",  e)
         return 1.0
     except ZeroDivisionError as z:
-        print "Error H",  z
+        print("Error H",  z)
         return 1.0
     
 def derLambdamu(nu_sig, s, ds):
     try:
-        return s*exp(ds/s*nu_sig)
+        return s*exp(old_div(ds,s)*nu_sig)
     except OverflowError as e:
-        print "Error I",  e
+        print("Error I",  e)
         return 1.0
     except ZeroDivisionError as z:
-        print "Error J",  z
+        print("Error J",  z)
         return 1.0
 
 # Returns the np for the Constrained Maximum Likelihood    
@@ -269,35 +275,35 @@ def get_CMLparameter(mu,  N_obs, N_backg,  N_sig,  dN_backg,  dN_sig,  nuTilde =
     NFunc = [0.0 for i in range(2)]
     guess = [0.0 for i in range(2)]
     def g(c):
-	if(c>=250):
-		c=np.random.uniform(low=0.8, high=1.0)*250.0
-		#print "case c1", N_sig, N_backg
-	try:
-        	NFunc[0] = derLambdabackg(c,  N_backg,  dN_backg)*(-1.0+N_obs/Lambda(mu,  N_backg,  N_sig,  dN_backg,  dN_sig, [0.0,  c]))-(c-nuTilde[0])        
-	except:
-		NFunc[0] = 500.0
-	return NFunc[0]
+        if(c>=250):
+            c=np.random.uniform(low=0.8, high=1.0)*250.0
+            #print "case c1", N_sig, N_backg
+        try:
+            NFunc[0] = derLambdabackg(c,  N_backg,  dN_backg)*(-1.0+old_div(N_obs,Lambda(mu,  N_backg,  N_sig,  dN_backg,  dN_sig, [0.0,  c])))-(c-nuTilde[0])        
+        except:
+            NFunc[0] = 500.0
+        return NFunc[0]
     def h(c):
-	if(c[0]>=250):
-		c[0]=np.random.uniform(low=0.8, high=1.0)*250.0
-		#print "case c0, [N_sig, Nbackg] = [", N_sig, N_backg,"]"
-	if(c[1]>=250):
-		c[1]=np.random.uniform(low=0.8, high=1.0)*250.0
-		#xprint "case c1, [N_sig, Nbackg] = [", N_sig, N_backg,"]"
-	try:
-        	NFunc[0] = derLambdasig(mu,   c[0],   N_sig, dN_sig)*(-1.0+N_obs/Lambda(mu,  N_backg,  N_sig,  dN_backg,  dN_sig, c))-(c[0]-nuTilde[0])
-	except:
-		NFunc[0] = 500.0
-	try:
-        	NFunc[1] = derLambdabackg(c[1],  N_backg, dN_backg)*(-1.0+N_obs/Lambda(mu, N_backg,  N_sig,  dN_backg,  dN_sig,  c))-(c[1]-nuTilde[1])
-	except:
-		NFunc[1] = 500.0
+        if(c[0]>=250):
+            c[0]=np.random.uniform(low=0.8, high=1.0)*250.0
+            #print "case c0, [N_sig, Nbackg] = [", N_sig, N_backg,"]"
+        if(c[1]>=250):
+            c[1]=np.random.uniform(low=0.8, high=1.0)*250.0
+            #xprint "case c1, [N_sig, Nbackg] = [", N_sig, N_backg,"]"
+        try:
+            NFunc[0] = derLambdasig(mu,   c[0],   N_sig, dN_sig)*(-1.0+old_div(N_obs,Lambda(mu,  N_backg,  N_sig,  dN_backg,  dN_sig, c)))-(c[0]-nuTilde[0])
+        except:
+            NFunc[0] = 500.0
+        try:
+            NFunc[1] = derLambdabackg(c[1],  N_backg, dN_backg)*(-1.0+old_div(N_obs,Lambda(mu, N_backg,  N_sig,  dN_backg,  dN_sig,  c)))-(c[1]-nuTilde[1])
+        except:
+            NFunc[1] = 500.0
         return NFunc
     def i(c):
-	if(c>=250):
-		c=np.random.uniform(low=0.8, high=1.0)*250
-		#print "case c0, [N_sig, Nbackg] = [", N_sig, N_backg,"]"
-        NFunc[1] = derLambdasig(mu, c, N_sig, dN_sig)*(-1.0+N_obs/Lambda(mu,  N_backg,  N_sig,  dN_backg,  dN_sig, [c, 0.0]))-(c-nuTilde[1])
+        if(c>=250):
+            c=np.random.uniform(low=0.8, high=1.0)*250
+            #print "case c0, [N_sig, Nbackg] = [", N_sig, N_backg,"]"
+        NFunc[1] = derLambdasig(mu, c, N_sig, dN_sig)*(-1.0+old_div(N_obs,Lambda(mu,  N_backg,  N_sig,  dN_backg,  dN_sig, [c, 0.0])))-(c-nuTilde[1])
         return NFunc[1]
     
     #decision-tree
@@ -321,80 +327,80 @@ def get_CMLparameter(mu,  N_obs, N_backg,  N_sig,  dN_backg,  dN_sig,  nuTilde =
         return [0.0,  0.0], succ
    
     if(opt_nuis_backg==0 and opt_nuis_sig==1):
-	try:        
-		guess[0] = N_sig/(2*dN_sig)*log(N_obs/(mu*N_sig))
-	except:
-		guess[0] = N_sig/(2*dN_sig)*N_obs/(mu*N_sig)
-	solution = opt.root(i, guess[0])
-	while(not solution.success and counter<=10):
-		counter+=1
-		succ=False
-		try:
-			guess[0] = N_sig/(2*dN_sig)*log(N_obs/(mu*N_sig))*np.random.uniform(low=0.0, high=2.0)
-		except:
-			guess[0] = N_sig/(2*dN_sig)*N_obs/(mu*N_sig)*np.random.uniform(low=0.0, high=2.0)
-		solution = opt.root(i, guess[0])
+        try:        
+            guess[0] = old_div(N_sig,(2*dN_sig))*log(old_div(N_obs,(mu*N_sig)))
+        except:
+            guess[0] = old_div(old_div(N_sig,(2*dN_sig))*N_obs,(mu*N_sig))
+        solution = opt.root(i, guess[0])
+        while(not solution.success and counter<=10):
+            counter+=1
+            succ=False
+            try:
+                guess[0] = old_div(N_sig,(2*dN_sig))*log(old_div(N_obs,(mu*N_sig)))*np.random.uniform(low=0.0, high=2.0)
+            except:
+                guess[0] = old_div(old_div(N_sig,(2*dN_sig))*N_obs,(mu*N_sig))*np.random.uniform(low=0.0, high=2.0)
+            solution = opt.root(i, guess[0])
         return [solution.x[0],  nuTilde[1]], succ 
     
     if(opt_nuis_backg==1 and opt_nuis_sig==0):
-	try:
-        	guess[1] = N_backg/(2*dN_backg)*log(N_obs/N_backg)
-	except:
-		guess[1] = N_backg/(2*dN_backg)*N_obs/N_backg
-	solution = opt.root(g, guess[1])
-	while(not solution.success and counter<=10):
-		counter+=1
-		succ=False
-		try:
-			guess[1] = N_backg/(2*dN_backg)*log(N_obs/N_backg)*np.random.uniform(low=0.0, high=2.0)
-		except:
-			guess[1] = N_backg/(2*dN_backg)*N_obs/N_backg*np.random.uniform(low=0.0, high=2.0)
-		solution = opt.root(g, guess[1])
+        try:
+            guess[1] = old_div(N_backg,(2*dN_backg))*log(old_div(N_obs,N_backg))
+        except:
+            guess[1] = old_div(old_div(N_backg,(2*dN_backg))*N_obs,N_backg)
+        solution = opt.root(g, guess[1])
+        while(not solution.success and counter<=10):
+            counter+=1
+            succ=False
+            try:
+                guess[1] = old_div(N_backg,(2*dN_backg))*log(old_div(N_obs,N_backg))*np.random.uniform(low=0.0, high=2.0)
+            except:
+                guess[1] = old_div(old_div(N_backg,(2*dN_backg))*N_obs,N_backg)*np.random.uniform(low=0.0, high=2.0)
+            solution = opt.root(g, guess[1])
         return [nuTilde[0],  solution.x[0]], succ
     
     if(opt_nuis_backg==1 and opt_nuis_sig==1):
         try:
-            guess[0] = log((N_obs-N_backg*exp(dN_backg/N_backg))/N_sig)*N_sig/(2*dN_sig)
-            guess[1] = log((N_obs-N_sig*exp(dN_sig/N_sig))/N_backg)*N_backg/(dN_backg)
+            guess[0] = old_div(log(old_div((N_obs-N_backg*exp(old_div(dN_backg,N_backg))),N_sig))*N_sig,(2*dN_sig))
+            guess[1] = old_div(log(old_div((N_obs-N_sig*exp(old_div(dN_sig,N_sig))),N_backg))*N_backg,(dN_backg))
         except:
-	    #print "Couldn't use a good guess, switching to approximation for tupel [N_obs, N_backg,  N_sig,  dN_backg,  dN_sig] = [",  N_obs, N_backg,  N_sig,  dN_backg,  dN_sig,"]"
-            guess[0] = N_sig/(2*dN_sig)*log(N_obs/(mu*N_sig))
-            guess[1] = N_backg/(2*dN_backg)*log(N_obs/N_backg)
+        #print "Couldn't use a good guess, switching to approximation for tupel [N_obs, N_backg,  N_sig,  dN_backg,  dN_sig] = [",  N_obs, N_backg,  N_sig,  dN_backg,  dN_sig,"]"
+            guess[0] = old_div(N_sig,(2*dN_sig))*log(old_div(N_obs,(mu*N_sig)))
+            guess[1] = old_div(N_backg,(2*dN_backg))*log(old_div(N_obs,N_backg))
         solution = opt.root(h, guess)
-	while(not solution.success and counter<=10):
-		counter+=1
-		succ=False
-		try:
-        	    guess[0] = log((N_obs-N_backg*exp(dN_backg/N_backg))/N_sig)*N_sig/(2*dN_sig)*np.random.uniform(low=0.0, high=2.0)
-          	    guess[1] = log((N_obs-N_sig*exp(dN_sig/N_sig))/N_backg)*N_backg/(dN_backg)*np.random.uniform(low=0.0, high=2.0)
-       		except:
-	  	    #print "Couldn't use a good guess, switching to approximation for tupel [N_obs, N_backg,  N_sig,  dN_backg,  dN_sig] = [",  N_obs, N_backg,  N_sig,  dN_backg,  dN_sig,"]"
-            	    guess[0] = N_sig/(2*dN_sig)*log(N_obs/(mu*N_sig))*np.random.uniform(low=0.0, high=2.0)
-            	    guess[1] = N_backg/(2*dN_backg)*log(N_obs/N_backg)*np.random.uniform(low=0.0, high=2.0)
-		solution = opt.root(h, guess)
+        while(not solution.success and counter<=10):
+            counter+=1
+            succ=False
+            try:
+                guess[0] = old_div(log(old_div((N_obs-N_backg*exp(old_div(dN_backg,N_backg))),N_sig))*N_sig,(2*dN_sig))*np.random.uniform(low=0.0, high=2.0)
+                guess[1] = old_div(log(old_div((N_obs-N_sig*exp(old_div(dN_sig,N_sig))),N_backg))*N_backg,(dN_backg))*np.random.uniform(low=0.0, high=2.0)
+            except:
+                #print "Couldn't use a good guess, switching to approximation for tupel [N_obs, N_backg,  N_sig,  dN_backg,  dN_sig] = [",  N_obs, N_backg,  N_sig,  dN_backg,  dN_sig,"]"
+                guess[0] = old_div(N_sig,(2*dN_sig))*log(old_div(N_obs,(mu*N_sig)))*np.random.uniform(low=0.0, high=2.0)
+                guess[1] = old_div(N_backg,(2*dN_backg))*log(old_div(N_obs,N_backg))*np.random.uniform(low=0.0, high=2.0)
+            solution = opt.root(h, guess)
         return solution.x, succ
 
 def Teststat(mu_tested, N_obs, N_backg,  N_sig,  dN_backg,  dN_sig,  nuisance_cml = [], nuisanceTilde = []):
     NFunc = 0.0
     try:
-   	 NFunc += 2.*(Lambda(mu_tested, N_backg,  N_sig,  dN_backg,  dN_sig,  nuisance_cml)-N_obs)-2.*N_obs*log(Lambda(mu_tested, N_backg,  N_sig,  dN_backg,  dN_sig,  nuisance_cml)/N_obs) 
+        NFunc += 2.*(Lambda(mu_tested, N_backg,  N_sig,  dN_backg,  dN_sig,  nuisance_cml)-N_obs)-2.*N_obs*log(old_div(Lambda(mu_tested, N_backg,  N_sig,  dN_backg,  dN_sig,  nuisance_cml),N_obs)) 
     except:
-	NFunc += 500.0
+        NFunc += 500.0
     if(N_sig==0.0):
-    	NFunc += (nuisance_cml[1]-nuisanceTilde[1])**2
+        NFunc += (nuisance_cml[1]-nuisanceTilde[1])**2
     else:
         if(N_backg==0.0):
            NFunc += (nuisance_cml[0]-nuisanceTilde[0])**2
         else:
-	   for i in range(2):   
+            for i in range(2):   
                 NFunc += (nuisance_cml[i]-nuisanceTilde[i])**2
     if NFunc<0.0:
-        print "Likelihoodratio<0. Something went wrong. Setting Likelihoodratio to 500.0"
+        print("Likelihoodratio<0. Something went wrong. Setting Likelihoodratio to 500.0")
         return 500.0
     return NFunc
     
 def findapproxlh(mu_tested, N_obs, N_backg,  N_sig,  dN_backg,  dN_sig,  nuTilde = []):
-	print "Root-algorithm didn't converge. Approximating for tupel [N_obs, N_backg,  N_sig,  dN_backg,  dN_sig] = [",N_obs, N_backg,  N_sig,  dN_backg,  dN_sig,"]"
+	print("Root-algorithm didn't converge. Approximating for tupel [N_obs, N_backg,  N_sig,  dN_backg,  dN_sig] = [",N_obs, N_backg,  N_sig,  dN_backg,  dN_sig,"]")
 	runs=40
 	Teststatb=[0.0 for i in range(runs)] 
 	Teststatbsorted=[0.0 for i in range(runs)] 
@@ -422,7 +428,7 @@ def findapproxlh(mu_tested, N_obs, N_backg,  N_sig,  dN_backg,  dN_sig,  nuTilde
 
 def likelihood(mu_tested,  N_obs, N_backg,  N_sig,  dN_backg,  dN_sig,  nuTilde_obs = []):
     if (int(scipy.__version__.split('.')[0]) == 0) and (int(scipy.__version__.split('.')[1]) <= 10):
-        print "ERROR: Scipy  Version 0.11.0 needed. You have Version",  scipy.__version__,". Please upgrade your scipy."
+        print("ERROR: Scipy  Version 0.11.0 needed. You have Version",  scipy.__version__,". Please upgrade your scipy.")
         sys.exit()
     if(N_obs==0.0):
         N_obs=0.001
@@ -441,16 +447,16 @@ def likelihood(mu_tested,  N_obs, N_backg,  N_sig,  dN_backg,  dN_sig,  nuTilde_
 
     nuisance_cml_obs, success = get_CMLparameter(mu_tested, N_obs,  N_backg,  N_sig,  dN_backg,  dN_sig, nuTilde_obs)
     if(not success):
-	return findapproxlh(mu_tested, N_obs, N_backg,  N_sig,  dN_backg,  dN_sig,  [0.0, 0.0])	    
+        return findapproxlh(mu_tested, N_obs, N_backg,  N_sig,  dN_backg,  dN_sig,  [0.0, 0.0])	    
     return Teststat(mu_tested, N_obs,   N_backg,  N_sig,  dN_backg,  dN_sig,  nuisance_cml_obs, nuTilde_obs) 
 ##/Replaces the likelihood-function, which uses a MC-approach with an rootfind-approach ###
 
 if __name__ == '__main__':
   if len(sys.argv) == 6:
     result = cls_obs(float(sys.argv[1]), float(sys.argv[2]), float(sys.argv[3]), float(sys.argv[4]), float(sys.argv[5]), 25000)    
-    print "CLs: "+str(result[0])+" +- "+str(result[1])    
+    print("CLs: "+str(result[0])+" +- "+str(result[1]))    
   else :
-    print "Syntax for CLs:   ./cls.py   nobs   bkg   bkgerr   sig   sigerr" 
+    print("Syntax for CLs:   ./cls.py   nobs   bkg   bkgerr   sig   sigerr") 
   
   
 
