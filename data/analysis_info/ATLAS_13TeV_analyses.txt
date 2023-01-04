@@ -34,6 +34,7 @@ atlas_2103_11684     2    Search for SUSY in events with four or more leptons (g
 atlas_2004_10894     12   EWino search in Higgs (diphoton) and met                                                    139   no
 atlas_2106_09609     21   Search for RPV SUSY in final states with leptons and many jets                              139   no
 atlas_1911_06660     2    search for direct stau production                                                           139   no
+atlas_2010_14293     78   search for squarks and gluinos in MET_jet final states                                      139   yes 
 
 #Superseded:          
 #atlas_1602_09058     4    2 ss leptons or 3 leptons                                                                   3.2   no   
