@@ -14,6 +14,10 @@ void Atlas_2010_14293::initialize() {
   bookSignalRegions("MB-SSd-2-1000-10;MB-SSd-2-1000-16;MB-SSd-2-1000-22;MB-SSd-2-1600-10;MB-SSd-2-1600-16;MB-SSd-2-1600-22;MB-SSd-2-2200-16;MB-SSd-2-2200-22;MB-SSd-2-2800-16;MB-SSd-2-2800-22;MB-SSd-2-3400-22;MB-SSd-2-3400-28;MB-SSd-2-4000-22;MB-SSd-2-4000-28;MB-SSd-4-1000-10;MB-SSd-4-1000-16;MB-SSd-4-1000-22;MB-SSd-4-1600-10;MB-SSd-4-1600-16;MB-SSd-4-1600-22;MB-SSd-4-2200-16;MB-SSd-4-2200-22;MB-SSd-4-2800-16;MB-SSd-4-2800-22;MB-GGd-4-1000-10;MB-GGd-4-1000-16;MB-GGd-4-1000-22;MB-GGd-4-1600-10;MB-GGd-4-1600-16;MB-GGd-4-1600-22;MB-GGd-4-2200-10;MB-GGd-4-2200-16;MB-GGd-4-2200-22;MB-GGd-4-2800-10;MB-GGd-4-2800-16;MB-GGd-4-2800-22;MB-GGd-4-3400-10;MB-GGd-4-3400-16;MB-GGd-4-3400-22;MB-GGd-4-4000-10;MB-GGd-4-4000-16;MB-GGd-4-4000-22;MB-C-2-1600-16;MB-C-2-1600-22;MB-C-2-2200-16;MB-C-2-2200-22;MB-C-2-2800-16;MB-C-2-2800-22;MB-C-4-1600-16;MB-C-4-1600-22;MB-C-4-2200-16;MB-C-4-2200-22;MB-C-4-2800-16;MB-C-4-2800-22;MB-C-5-1600-16;MB-C-5-1600-22;MB-C-5-2200-16;MB-C-5-2200-22;MB-C-5-2800-16;MB-C-5-2800-22;SR-2j-1600;SR-2j-2200;SR-2j-2800;SR-4j-1000;SR-4j-2200;SR-4j-3400;SR-5j-1600;SR-6j-1000;SR-6j-2200;SR-6j-3400;BDT-GGd1;BDT-GGd2;BDT-GGd3;BDT-GGd4;BDT-GGo1;BDT-GGo2;BDT-GGo3;BDT-GGo4");
   // You can also book cutflow regions with bookCutflowRegions("CR1;CR2;..."). Note that the regions are
   //  always ordered alphabetically in the cutflow output files.
+  bookControlRegions("MB-SSd-CRQ_2_1000_cuts;MB-SSd-CRQ_2_1600_cuts;MB-SSd-CRQ_2_2200_cuts;MB-SSd-CRQ_2_2800_cuts;MB-SSd-CRQ_2_3400_cuts;MB-SSd-CRQ_2_4000_cuts;MB-SSd-CRQ_4_1000_cuts;MB-SSd-CRQ_4_1600_cuts;MB-SSd-CRQ_4_2200_cuts;MB-SSd-CRQ_4_2800_cuts;MB-GGd-CRQ_4_1000_cuts;MB-GGd-CRQ_4_1600_cuts;MB-GGd-CRQ_4_2200_cuts;MB-GGd-CRQ_4_2800_cuts;MB-GGd-CRQ_4_3400_cuts;MB-GGd-CRQ_4_4000_cuts;MB-C-CRQ_2_1600_cuts;MB-C-CRQ_2_2200_cuts;MB-C-CRQ_2_2800_cuts;MB-C-CRQ_4_1600_cuts;MB-C-CRQ_4_2200_cuts;MB-C-CRQ_4_2800_cuts;MB-C-CRQ_5_1600_cuts;MB-C-CRQ_5_2200_cuts;MB-C-CRQ_5_2800_cuts");
+  bookControlRegions("MB-SSd-CRY_2_1000_cuts;MB-SSd-CRY_2_1600_cuts;MB-SSd-CRY_2_2200_cuts;MB-SSd-CRY_2_2800_cuts;MB-SSd-CRY_2_3400_cuts;MB-SSd-CRY_2_4000_cuts;MB-SSd-CRY_4_1000_cuts;MB-SSd-CRY_4_1600_cuts;MB-SSd-CRY_4_2200_cuts;MB-SSd-CRY_4_2800_cuts;MB-GGd-CRY_4_1000_cuts;MB-GGd-CRY_4_1600_cuts;MB-GGd-CRY_4_2200_cuts;MB-GGd-CRY_4_2800_cuts;MB-GGd-CRY_4_3400_cuts;MB-GGd-CRY_4_4000_cuts;MB-C-CRY_2_1600_cuts;MB-C-CRY_2_2200_cuts;MB-C-CRY_2_2800_cuts;MB-C-CRY_4_1600_cuts;MB-C-CRY_4_2200_cuts;MB-C-CRY_4_2800_cuts;MB-C-CRY_5_1600_cuts;MB-C-CRY_5_2200_cuts;MB-C-CRY_5_2800_cuts");
+  bookControlRegions("MB-SSd-CRT_2_1000_cuts;MB-SSd-CRT_2_1600_cuts;MB-SSd-CRT_2_2200_cuts;MB-SSd-CRT_2_2800_cuts;MB-SSd-CRT_2_3400_cuts;MB-SSd-CRT_2_4000_cuts;MB-SSd-CRT_4_1000_cuts;MB-SSd-CRT_4_1600_cuts;MB-SSd-CRT_4_2200_cuts;MB-SSd-CRT_4_2800_cuts;MB-GGd-CRT_4_1000_cuts;MB-GGd-CRT_4_1600_cuts;MB-GGd-CRT_4_2200_cuts;MB-GGd-CRT_4_2800_cuts;MB-GGd-CRT_4_3400_cuts;MB-GGd-CRT_4_4000_cuts;MB-C-CRT_2_1600_cuts;MB-C-CRT_2_2200_cuts;MB-C-CRT_2_2800_cuts;MB-C-CRT_4_1600_cuts;MB-C-CRT_4_2200_cuts;MB-C-CRT_4_2800_cuts;MB-C-CRT_5_1600_cuts;MB-C-CRT_5_2200_cuts;MB-C-CRT_5_2800_cuts");
+  bookControlRegions("MB-SSd-CRW_2_1000_cuts;MB-SSd-CRW_2_1600_cuts;MB-SSd-CRW_2_2200_cuts;MB-SSd-CRW_2_2800_cuts;MB-SSd-CRW_2_3400_cuts;MB-SSd-CRW_2_4000_cuts;MB-SSd-CRW_4_1000_cuts;MB-SSd-CRW_4_1600_cuts;MB-SSd-CRW_4_2200_cuts;MB-SSd-CRW_4_2800_cuts;MB-GGd-CRW_4_1000_cuts;MB-GGd-CRW_4_1600_cuts;MB-GGd-CRW_4_2200_cuts;MB-GGd-CRW_4_2800_cuts;MB-GGd-CRW_4_3400_cuts;MB-GGd-CRW_4_4000_cuts;MB-C-CRW_2_1600_cuts;MB-C-CRW_2_2200_cuts;MB-C-CRW_2_2800_cuts;MB-C-CRW_4_1600_cuts;MB-C-CRW_4_2200_cuts;MB-C-CRW_4_2800_cuts;MB-C-CRW_5_1600_cuts;MB-C-CRW_5_2200_cuts;MB-C-CRW_5_2800_cuts");
 
   // You should initialize any declared variables here
   char *a = Global::get_maindir();
@@ -187,23 +191,30 @@ void Atlas_2010_14293::analyze() {
     CRjets = overlapRemoval(jets, photonsMedium, 0.4);
     CRjets = filterPhaseSpace(CRjets, 50., -2.8, 2.8);
   }
-  Jet *newjet;
+  auto newjet = new Jet;
   
   std::vector<Jet*> sigjets = filterPhaseSpace(jets, 50., -2.8, 2.8);
   
-  countCutflowEvent("00_all");
-  
-  if ( sigjets.size() < 2 || sigjets[0]->PT < 200. ) return; //too early?
-  if ( M_eff(sigjets, 0) < 800. ) return;
-  
-  if ( CRjets.size() > 1 and CRphotons.size() == 1 and electronsLoose.size() == 0 and muonsCombined.size() == 0 and (missingET->P4() + CRphotons[0]->P4()).Perp() > 300.) {
+  if ( CRjets.size() > 1 and CRphotons.size() == 1 and electronsLoose.size() == 0 and muonsCombined.size() == 0 and (missingET->P4() + CRphotons[0]->P4()).Perp() > 300. and M_eff(CRjets, 0) > 800. )  {
       met = (missingET->P4() + CRphotons[0]->P4()).Perp();  // photon treated as MET for evaluation of Z CR
       evaluateCRs(CRjets, "CRY");
   }
   else if (CRmuons.size() + CRelectrons.size() == 1 and missingET->P4().Et() > 300. ) {
     
-    if (CRmuons.size() ) newjet->P4() = CRmuons[0]->P4();
-    else if (CRelectrons.size() ) newjet->P4() = CRelectrons[0]->P4();
+    met = missingET->P4().Et();
+    
+    if (CRmuons.size() ) {
+      newjet->PT = CRmuons[0]->PT;
+      newjet->Eta = CRmuons[0]->Eta;
+      newjet->Phi = CRmuons[0]->Phi;
+      newjet->Mass = 0;
+    }
+    else if (CRelectrons.size() > 0 ) {
+      newjet->PT = CRelectrons[0]->PT;
+      newjet->Eta = CRelectrons[0]->Eta;
+      newjet->Phi = CRelectrons[0]->Phi;
+      newjet->Mass = 0;
+    }
     
     bool btag = false;
     for (int i = 0; i < sigjets.size(); i++) 
@@ -211,13 +222,25 @@ void Atlas_2010_14293::analyze() {
     
     CRjets = sigjets;
     CRjets.push_back(newjet);
-    std::sort(CRjets.begin(), CRjets.end(), Atlas_2010_14293::sortByPT ); 
-      
-    if (btag) evaluateCRs(CRjets, "CRT");
-    else evaluateCRs(CRjets, "CRW");
+    std::sort(CRjets.begin(), CRjets.end(), sortByPT ); 
+    CRjets = filterPhaseSpace(CRjets, 50., -2.8, 2.8);
     
+    if ( CRjets.size() > 1 and CRjets[0]->PT > 200. and M_eff(CRjets, 0) > 800. and missingET->P4().Et() > 300.) {
+      if (btag) evaluateCRs(CRjets, "CRT");
+      else evaluateCRs(CRjets, "CRW");
+    }  
   }
-  else if (missingET->P4().Et() > 300. ) evaluateCRQs(sigjets);
+  else if ( sigjets.size() > 1 and sigjets[0]->PT > 200. and electronsLoose.size() == 0 and muonsCombined.size() == 0 and M_eff(sigjets, 0) > 800. and missingET->P4().Et() > 300. ) {
+    
+    met = missingET->P4().Et();
+    evaluateCRQs(sigjets); 
+    
+  }  
+  
+  countCutflowEvent("00_all");
+  
+  if ( sigjets.size() < 2 || sigjets[0]->PT < 200. ) return; //too early?
+  if ( M_eff(sigjets, 0) < 800. ) return;
     
   met = missingET->P4().Et();
   
@@ -635,36 +658,36 @@ bool Atlas_2010_14293::Passes_Cuts_BDT(std::vector<Jet*> jets, int NJetMin, doub
 
 void Atlas_2010_14293::evaluateCRs(std::vector<Jet*> jets, std::string type) {
   
-  if (Passes_Cuts_MB(jets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 10., -1., 0.,   1000., 1600., false, "CRY-2") ) countSignalEvent("MB-SSd-"+type+"_2_1000_cuts");
-  if (Passes_Cuts_MB(jets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 10., -1., 0.,   1600., 2200., false, "CRY-2") ) countSignalEvent("MB-SSd-"+type+"_2_1600_cuts"); 
-  if (Passes_Cuts_MB(jets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 10., -1., 0.,   2200., 2800., false, "CRY-2") ) countSignalEvent("MB-SSd-"+type+"_2_2200_cuts");
-  if (Passes_Cuts_MB(jets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 10., -1., 0.,   2800., 3400., false, "CRY-2") ) countSignalEvent("MB-SSd-"+type+"_2_2800_cuts");  
-  if (Passes_Cuts_MB(jets, 250., 250., 2, 0, 2.0, 0.8, 0.4, 10., -1., 0.,   3400., 4000., false, "CRY-2") ) countSignalEvent("MB-SSd-"+type+"_2_3400_cuts");  
-  if (Passes_Cuts_MB(jets, 250., 250., 2, 0, 2.0, 0.8, 0.4, 10., -1., 0.,   4000., -1.0 , false, "CRY-2") ) countSignalEvent("MB-SSd-"+type+"_2_4000_cuts"); 
+  if (Passes_Cuts_MB(jets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 10., -1., 0.,   1000., 1600., false, "CRY-2") ) countControlEvent("MB-SSd-"+type+"_2_1000_cuts");
+  if (Passes_Cuts_MB(jets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 10., -1., 0.,   1600., 2200., false, "CRY-2") ) countControlEvent("MB-SSd-"+type+"_2_1600_cuts"); 
+  if (Passes_Cuts_MB(jets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 10., -1., 0.,   2200., 2800., false, "CRY-2") ) countControlEvent("MB-SSd-"+type+"_2_2200_cuts");
+  if (Passes_Cuts_MB(jets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 10., -1., 0.,   2800., 3400., false, "CRY-2") ) countControlEvent("MB-SSd-"+type+"_2_2800_cuts");  
+  if (Passes_Cuts_MB(jets, 250., 250., 2, 0, 2.0, 0.8, 0.4, 10., -1., 0.,   3400., 4000., false, "CRY-2") ) countControlEvent("MB-SSd-"+type+"_2_3400_cuts");  
+  if (Passes_Cuts_MB(jets, 250., 250., 2, 0, 2.0, 0.8, 0.4, 10., -1., 0.,   4000., -1.0 , false, "CRY-2") ) countControlEvent("MB-SSd-"+type+"_2_4000_cuts"); 
   
-  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 10., -1., 0.,   1000., 1600., false, "CRY-4") ) countSignalEvent("MB-SSd-"+type+"_4_1000_cuts");
-  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 10., -1., 0.,   1600., 2200., false, "CRY-4") ) countSignalEvent("MB-SSd-"+type+"_4_1600_cuts");
-  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 10., -1., 0.,   2200., 2800., false, "CRY-4") ) countSignalEvent("MB-SSd-"+type+"_4_2200_cuts");
-  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 10., -1., 0.,   2800., -1.0 , false, "CRY-4") ) countSignalEvent("MB-SSd-"+type+"_4_2800_cuts");
+  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 10., -1., 0.,   1000., 1600., false, "CRY-4") ) countControlEvent("MB-SSd-"+type+"_4_1000_cuts");
+  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 10., -1., 0.,   1600., 2200., false, "CRY-4") ) countControlEvent("MB-SSd-"+type+"_4_1600_cuts");
+  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 10., -1., 0.,   2200., 2800., false, "CRY-4") ) countControlEvent("MB-SSd-"+type+"_4_2200_cuts");
+  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 10., -1., 0.,   2800., -1.0 , false, "CRY-4") ) countControlEvent("MB-SSd-"+type+"_4_2800_cuts");
   
-  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., -1., 0.04,   1000., 1600., false, "CRY-4") ) countSignalEvent("MB-GGd-"+type+"_4_1000_cuts");
-  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., -1., 0.04,   1600., 2200., false, "CRY-4") ) countSignalEvent("MB-GGd-"+type+"_4_1600_cuts");
-  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., -1., 0.04,   2200., 2800., false, "CRY-4") ) countSignalEvent("MB-GGd-"+type+"_4_2200_cuts");
-  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., -1., 0.04,   2800., 3400., false, "CRY-4") ) countSignalEvent("MB-GGd-"+type+"_4_2800_cuts");
-  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., -1., 0.04,   3400., 4000., false, "CRY-4") ) countSignalEvent("MB-GGd-"+type+"_4_3400_cuts");
-  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., -1., 0.04,   4000., -1.0 , false, "CRY-4") ) countSignalEvent("MB-GGd-"+type+"_4_4000_cuts");
+  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., -1., 0.04,   1000., 1600., false, "CRY-4") ) countControlEvent("MB-GGd-"+type+"_4_1000_cuts");
+  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., -1., 0.04,   1600., 2200., false, "CRY-4") ) countControlEvent("MB-GGd-"+type+"_4_1600_cuts");
+  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., -1., 0.04,   2200., 2800., false, "CRY-4") ) countControlEvent("MB-GGd-"+type+"_4_2200_cuts");
+  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., -1., 0.04,   2800., 3400., false, "CRY-4") ) countControlEvent("MB-GGd-"+type+"_4_2800_cuts");
+  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., -1., 0.04,   3400., 4000., false, "CRY-4") ) countControlEvent("MB-GGd-"+type+"_4_3400_cuts");
+  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., -1., 0.04,   4000., -1.0 , false, "CRY-4") ) countControlEvent("MB-GGd-"+type+"_4_4000_cuts");
 
-  if (Passes_Cuts_MB(jets, 600.,  50., 2, 3, 2.8, 0.4, 0.2, 16., -1., 0.0,   1600., 2200., false, "CRY-4") ) countSignalEvent("MB-C-"+type+"_2_1600_cuts");
-  if (Passes_Cuts_MB(jets, 600.,  50., 2, 3, 2.8, 0.4, 0.2, 16., -1., 0.0,   2200., 2800., false, "CRY-4") ) countSignalEvent("MB-C-"+type+"_2_2200_cuts");    
-  if (Passes_Cuts_MB(jets, 600.,  50., 2, 3, 2.8, 0.4, 0.2, 16., -1., 0.0,   2800., -1.0 , false, "CRY-4") ) countSignalEvent("MB-C-"+type+"_2_2800_cuts");       
+  if (Passes_Cuts_MB(jets, 600.,  50., 2, 3, 2.8, 0.4, 0.2, 16., -1., 0.0,   1600., 2200., false, "CRY-4") ) countControlEvent("MB-C-"+type+"_2_1600_cuts");
+  if (Passes_Cuts_MB(jets, 600.,  50., 2, 3, 2.8, 0.4, 0.2, 16., -1., 0.0,   2200., 2800., false, "CRY-4") ) countControlEvent("MB-C-"+type+"_2_2200_cuts");    
+  if (Passes_Cuts_MB(jets, 600.,  50., 2, 3, 2.8, 0.4, 0.2, 16., -1., 0.0,   2800., -1.0 , false, "CRY-4") ) countControlEvent("MB-C-"+type+"_2_2800_cuts");       
   
-  if (Passes_Cuts_MB(jets, 600.,  50., 4, 4, 2.8, 0.4, 0.2, 16., -1., 0.0,   1600., 2200., false, "CRY-4") ) countSignalEvent("MB-C-"+type+"_4_1600_cuts");
-  if (Passes_Cuts_MB(jets, 600.,  50., 4, 4, 2.8, 0.4, 0.2, 16., -1., 0.0,   2200., 2800., false, "CRY-4") ) countSignalEvent("MB-C-"+type+"_4_2200_cuts");    
-  if (Passes_Cuts_MB(jets, 600.,  50., 4, 4, 2.8, 0.4, 0.2, 16., -1., 0.0,   2800., -1.0 , false, "CRY-4") ) countSignalEvent("MB-C-"+type+"_4_2800_cuts");    
+  if (Passes_Cuts_MB(jets, 600.,  50., 4, 4, 2.8, 0.4, 0.2, 16., -1., 0.0,   1600., 2200., false, "CRY-4") ) countControlEvent("MB-C-"+type+"_4_1600_cuts");
+  if (Passes_Cuts_MB(jets, 600.,  50., 4, 4, 2.8, 0.4, 0.2, 16., -1., 0.0,   2200., 2800., false, "CRY-4") ) countControlEvent("MB-C-"+type+"_4_2200_cuts");    
+  if (Passes_Cuts_MB(jets, 600.,  50., 4, 4, 2.8, 0.4, 0.2, 16., -1., 0.0,   2800., -1.0 , false, "CRY-4") ) countControlEvent("MB-C-"+type+"_4_2800_cuts");    
   
-  if (Passes_Cuts_MB(jets, 600.,  50., 5, 0, 2.8, 0.4, 0.2, 16., -1., 0.0,   1600., 2200., false, "CRY-4") ) countSignalEvent("MB-C-"+type+"_5_1600_cuts");
-  if (Passes_Cuts_MB(jets, 600.,  50., 5, 0, 2.8, 0.4, 0.2, 16., -1., 0.0,   2200., 2800., false, "CRY-4") ) countSignalEvent("MB-C-"+type+"_5_2200_cuts");        
-  if (Passes_Cuts_MB(jets, 600.,  50., 5, 0, 2.8, 0.4, 0.2, 16., -1., 0.0,   2800., -1.0 , false, "CRY-4") ) countSignalEvent("MB-C-"+type+"_5_2800_cuts");    
+  if (Passes_Cuts_MB(jets, 600.,  50., 5, 0, 2.8, 0.4, 0.2, 16., -1., 0.0,   1600., 2200., false, "CRY-4") ) countControlEvent("MB-C-"+type+"_5_1600_cuts");
+  if (Passes_Cuts_MB(jets, 600.,  50., 5, 0, 2.8, 0.4, 0.2, 16., -1., 0.0,   2200., 2800., false, "CRY-4") ) countControlEvent("MB-C-"+type+"_5_2200_cuts");        
+  if (Passes_Cuts_MB(jets, 600.,  50., 5, 0, 2.8, 0.4, 0.2, 16., -1., 0.0,   2800., -1.0 , false, "CRY-4") ) countControlEvent("MB-C-"+type+"_5_2800_cuts");    
   
   return;
   
@@ -707,5 +730,36 @@ bool Atlas_2010_14293::Passes_Cuts_CRQ(std::vector<Jet*> jets, double PT1Cut, do
 }
 
 void Atlas_2010_14293::evaluateCRQs(std::vector<Jet*> jets) {
+  
+  if (Passes_Cuts_CRQ(jets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 10., 0.,   1000., 1600. , false, "CRQ-SSd") ) countControlEvent("MB-SSd-CRQ_2_1000_cuts");
+  if (Passes_Cuts_CRQ(jets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 10., 0.,   1600., 2200. , false, "CRQ-SSd") ) countControlEvent("MB-SSd-CRQ_2_1600_cuts");
+  if (Passes_Cuts_CRQ(jets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 10., 0.,   2200., 2800. , false, "CRQ-SSd") ) countControlEvent("MB-SSd-CRQ_2_2200_cuts");
+  if (Passes_Cuts_CRQ(jets, 250., 250., 2, 3, 2.0, 0.8, 0.4, 10., 0.,   2800., 3400. , false, "CRQ-SSd") ) countControlEvent("MB-SSd-CRQ_2_2800_cuts");
+  if (Passes_Cuts_CRQ(jets, 250., 250., 2, 0, 2.0, 0.8, 0.4, 10., 0.,   3400., 4000. , false, "CRQ-SSd") ) countControlEvent("MB-SSd-CRQ_2_3400_cuts");
+  if (Passes_Cuts_CRQ(jets, 250., 250., 2, 0, 2.0, 0.8, 0.4, 10., 0.,   4000., -1.0  , false, "CRQ-SSd") ) countControlEvent("MB-SSd-CRQ_2_4000_cuts");
+  
+  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 10., 0.,   1000., 1600. , false, "CRQ-SSd") ) countControlEvent("MB-SSd-CRQ_4_1000_cuts");
+  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 10., 0.,   1600., 2200. , false, "CRQ-SSd") ) countControlEvent("MB-SSd-CRQ_4_1600_cuts");
+  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 10., 0.,   2200., 2800. , false, "CRQ-SSd") ) countControlEvent("MB-SSd-CRQ_4_2200_cuts");
+  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 10., 0.,   2800., -1.0  , false, "CRQ-SSd") ) countControlEvent("MB-SSd-CRQ_4_2800_cuts");  
+  
+  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 0.04,   1000., 1600., false, "CRQ-GGd") ) countControlEvent("MB-GGd-CRQ_4_1000_cuts");
+  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 0.04,   1600., 2200., false, "CRQ-GGd") ) countControlEvent("MB-GGd-CRQ_4_1600_cuts");
+  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 0.04,   2200., 2800., false, "CRQ-GGd") ) countControlEvent("MB-GGd-CRQ_4_2200_cuts");
+  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 0.04,   2800., 3400., false, "CRQ-GGd") ) countControlEvent("MB-GGd-CRQ_4_2800_cuts");
+  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 0.04,   3400., 4000., false, "CRQ-GGd") ) countControlEvent("MB-GGd-CRQ_4_3400_cuts");
+  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 0.04,   4000., -1.0 , false, "CRQ-GGd") ) countControlEvent("MB-GGd-CRQ_4_4000_cuts");
+  
+  if (Passes_Cuts_CRQ(jets, 600.,  50., 2, 3, 2.8, 0.4, 0.2, 16., 0.0,   1600., 2200., false, "CRQ-C") ) countControlEvent("MB-C-CRQ_2_1600_cuts");
+  if (Passes_Cuts_CRQ(jets, 600.,  50., 2, 3, 2.8, 0.4, 0.2, 16., 0.0,   2200., 2800., false, "CRQ-C") ) countControlEvent("MB-C-CRQ_2_2200_cuts");     
+  if (Passes_Cuts_CRQ(jets, 600.,  50., 2, 3, 2.8, 0.4, 0.2, 16., 0.0,   2800., -1.0 , false, "CRQ-C") ) countControlEvent("MB-C-CRQ_2_2800_cuts");     
+  
+  if (Passes_Cuts_CRQ(jets, 600.,  50., 4, 4, 2.8, 0.4, 0.2, 16., 0.0,   1600., 2200., false, "CRQ-C") ) countControlEvent("MB-C-CRQ_4_1600_cuts");
+  if (Passes_Cuts_CRQ(jets, 600.,  50., 4, 4, 2.8, 0.4, 0.2, 16., 0.0,   2200., 2800., false, "CRQ-C") ) countControlEvent("MB-C-CRQ_4_2200_cuts");      
+  if (Passes_Cuts_CRQ(jets, 600.,  50., 4, 4, 2.8, 0.4, 0.2, 16., 0.0,   2800., -1.0 , false, "CRQ-C") ) countControlEvent("MB-C-CRQ_4_2800_cuts");    
+  
+  if (Passes_Cuts_CRQ(jets, 600.,  50., 5, 0, 2.8, 0.4, 0.2, 16., 0.0,   1600., 2200., false, "CRQ-C") ) countControlEvent("MB-C-CRQ_5_1600_cuts");
+  if (Passes_Cuts_CRQ(jets, 600.,  50., 5, 0, 2.8, 0.4, 0.2, 16., 0.0,   2200., 2800., false, "CRQ-C") ) countControlEvent("MB-C-CRQ_5_2200_cuts");    
+  if (Passes_Cuts_CRQ(jets, 600.,  50., 5, 0, 2.8, 0.4, 0.2, 16., 0.0,   2800., -1.0 , false, "CRQ-C") ) countControlEvent("MB-C-CRQ_5_2800_cuts");      
   
 }
