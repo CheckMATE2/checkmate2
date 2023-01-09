@@ -11,6 +11,7 @@ void Atlas_2211_08028::initialize() {
   bookSignalRegions("SR-Gtt-0L-B;SR-Gtt-0L-M1;SR-Gtt-0L-M2;SR-Gtt-0L-C;SR-Gtt-1L-B;SR-Gtt-1L-M1;SR-Gtt-1L-M2;SR-Gtt-1L-C;SR-Gbb-B;SR-Gbb-M;SR-Gbb-C;SR-Gtb-B;SR-Gtb-M;SR-Gtb-C;SR-Gtt-2100-1;SR-Gtt-1800-1;SR-Gtt-2300-1200;SR-Gtt-1900-1400;SR-Gbb-2800-1400;SR-Gbb-2300-1000;SR-Gbb-2100-1600;SR-Gbb-2000-1800");
   // You can also book cutflow regions with bookCutflowRegions("CR1;CR2;..."). Note that the regions are
   //  always ordered alphabetically in the cutflow output files.
+  bookControlRegions("CR_Gtt_1L_B_cuts;CR_Gtt_1L_M1_cuts;CR_Gtt_1L_M2_cuts;CR_Gtt_1L_C_cuts;CR_Gtt_0L_B_cuts;CR_Gtt_0L_M1_cuts;CR_Gtt_0L_M2_cuts;CR_Gtt_0L_C_cuts;CR_Gbb_B_cuts;CR_Gbb_M_cuts;CR_Gbb_C_cuts;CR_Gtb_B_cuts;CR_Gtb_M_cuts;CR_Gtb_C_cuts");
 
   // You should initialize any declared variables here
 }
@@ -160,36 +161,54 @@ void Atlas_2211_08028::analyze() {
     countCutflowEvent("01_1signalLep");
     mT_lep = sqrt(2.*(signalLeps[0]->PT)*pTmiss.Perp()*(1.-cos(fabs(signalLeps[0]->P4().DeltaPhi(pTmiss)))));
     
-    if (PassesCuts_Gtt1L(4, 3, 600., 2300., 150., 120., 200., "SR-Gtt-1L-B")) countSignalEvent("SR-Gtt-1L-B");
-    if (PassesCuts_Gtt1L(5, 3, 600., 2000., 200., 120., 200., "SR-Gtt-1L-M1")) countSignalEvent("SR-Gtt-1L-M1");
-    if (PassesCuts_Gtt1L(8, 3, 500., 1100., 200., 120., 100., "SR-Gtt-1L-M2")) countSignalEvent("SR-Gtt-1L-M2");
-    if (PassesCuts_Gtt1L(9, 3, 300.,  800., 150., 120.,   0., "SR-Gtt-1L-C")) countSignalEvent("SR-Gtt-1L-C");
+    if (PassesCuts_Gtt1L(4, 3, 600., 2300., 150., 120., 200., true, "SR-Gtt-1L-B")) countSignalEvent("SR-Gtt-1L-B");
+    if (PassesCuts_Gtt1L(5, 3, 600., 2000., 200., 120., 200., true, "SR-Gtt-1L-M1")) countSignalEvent("SR-Gtt-1L-M1");
+    if (PassesCuts_Gtt1L(8, 3, 500., 1100., 200., 120., 100., true, "SR-Gtt-1L-M2")) countSignalEvent("SR-Gtt-1L-M2");
+    if (PassesCuts_Gtt1L(9, 3, 300.,  800., 150., 120.,   0., true, "SR-Gtt-1L-C")) countSignalEvent("SR-Gtt-1L-C");
+    
+    if (PassesCutsCR_Gtt1L(4, 3, 200., 1500., 150., "CR-Gtt-1L-B")) countControlEvent("CR_Gtt_1L_B_cuts");
+    if (PassesCutsCR_Gtt1L(5, 3, 200., 1200., 200., "CR-Gtt-1L-M1")) countControlEvent("CR_Gtt_1L_M1_cuts");
+    if (PassesCutsCR_Gtt1L(8, 3, 200.,  800., 200., "CR-Gtt-1L-M2")) countControlEvent("CR_Gtt_1L_M2_cuts");
+    if (PassesCutsCR_Gtt1L(9, 3, 200.,  800., 150., "CR-Gtt-1L-C")) countControlEvent("CR_Gtt_1L_C_cuts");    
+    
+    if (signalLeps.size() == 1 and mT_lep < 150.) {
+      if (PassesCuts_Gtt0L(4, 3, 200., 2000., -1., 150., false, "CR-Gtt-0L-B")) countControlEvent("CR_Gtt_0L_B_cuts");
+      if (PassesCuts_Gtt0L(8, 3, 200., 1100., -1., 150., false, "CR-Gtt-0L-M1")) countControlEvent("CR_Gtt_0L_M1_cuts");
+      if (PassesCuts_Gtt0L(9, 3, 200.,  800., -1., 100., false, "CR-Gtt-0L-M2")) countControlEvent("CR_Gtt_0L_M2_cuts");
+      if (PassesCuts_Gtt0L(9, 4, 200.,  800., -1., 100., false, "CR-Gtt-0L-C")) countControlEvent("CR_Gtt_0L_C_cuts");      
+      
+      if (PassesCuts_Gbb(4, 3, 450., 65., 2600., false, "CR-Gbb-B")) countControlEvent("CR_Gbb_B_cuts");
+      if (PassesCuts_Gbb(4, 3, 550., 30., 2000., false, "CR-Gbb-M")) countControlEvent("CR_Gbb_M_cuts");
+      if (PassesCuts_Gbb(4, 3, 550., 30., 1600., false, "CR-Gbb-C")) countControlEvent("CR_Gbb_C_cuts");   
+      
+      if (PassesCuts_Gtb(4, 3, 2200., 400., 200., false, "CR-Gtb-B")) countControlEvent("CR_Gtb_B_cuts");
+      if (PassesCuts_Gtb(6, 4, 1700., 300., 200., false, "CR-Gtb-M")) countControlEvent("CR_Gtb_M_cuts");
+      if (PassesCuts_Gtb(7, 4, 1300., 350.,  50., false, "CR-Gtb-C")) countControlEvent("CR_Gtb_C_cuts");            
+    }
     
   }
   
   if (electronsLoose.size() + muonsCombined.size() == 0) {
     countCutflowEvent("01_ObaseLep");
     
-    if (PassesCuts_Gtt0L(4, 3, 200., 2000., 120., 300., "")) countSignalEvent("CR-Gtt-0L-B");
-    
     if (dphimin < 0.4) return;
     countCutflowEvent("02_phimin");
     
-    if (PassesCuts_Gtt0L(5, 3, 600., 2900., 120., 300., "SR-Gtt-0L-B")) countSignalEvent("SR-Gtt-0L-B");
-    if (PassesCuts_Gtt0L(9, 3, 600., 1700., 120., 300., "SR-Gtt-0L-M1")) countSignalEvent("SR-Gtt-0L-M1");
-    if (PassesCuts_Gtt0L(10, 3, 500., 1100., 120., 200., "SR-Gtt-0L-M2")) countSignalEvent("SR-Gtt-0L-M2");
-    if (PassesCuts_Gtt0L(10, 4, 400.,  800., 180., 100., "SR-Gtt-0L-C")) countSignalEvent("SR-Gtt-0L-C");
+    if (PassesCuts_Gtt0L(5, 3, 600., 2900., 120., 300., true, "SR-Gtt-0L-B")) countSignalEvent("SR-Gtt-0L-B");
+    if (PassesCuts_Gtt0L(9, 3, 600., 1700., 120., 300., true, "SR-Gtt-0L-M1")) countSignalEvent("SR-Gtt-0L-M1");
+    if (PassesCuts_Gtt0L(10, 3, 500., 1100., 120., 200., true, "SR-Gtt-0L-M2")) countSignalEvent("SR-Gtt-0L-M2");
+    if (PassesCuts_Gtt0L(10, 4, 400.,  800., 180., 100., true, "SR-Gtt-0L-C")) countSignalEvent("SR-Gtt-0L-C");
     
     if (mT_b < 130.) return;
     countCutflowEvent("03_mTb>130");
     
-    if (PassesCuts_Gtb(4, 3, 2500., 550., 200., "SR-Gtb-B")) countSignalEvent("SR-Gtb-B");
-    if (PassesCuts_Gtb(6, 4, 2000., 550., 200., "SR-Gtb-M")) countSignalEvent("SR-Gtb-M");
-    if (PassesCuts_Gtb(7, 4, 1300., 500.,  50., "SR-Gtb-C")) countSignalEvent("SR-Gtb-C");
+    if (PassesCuts_Gtb(4, 3, 2500., 550., 200., true, "SR-Gtb-B")) countSignalEvent("SR-Gtb-B");
+    if (PassesCuts_Gtb(6, 4, 2000., 550., 200., true, "SR-Gtb-M")) countSignalEvent("SR-Gtb-M");
+    if (PassesCuts_Gtb(7, 4, 1300., 500.,  50., true, "SR-Gtb-C")) countSignalEvent("SR-Gtb-C");
     
-    if (PassesCuts_Gbb(4, 3, 550., 65., 2600., "SR-Gbb-B")) countSignalEvent("SR-Gbb-B");
-    if (PassesCuts_Gbb(4, 3, 550., 30., 2000., "SR-Gbb-M")) countSignalEvent("SR-Gbb-M");
-    if (PassesCuts_Gbb(4, 3, 550., 30., 1600., "SR-Gbb-C")) countSignalEvent("SR-Gbb-C");    
+    if (PassesCuts_Gbb(4, 3, 550., 65., 2600., true, "SR-Gbb-B")) countSignalEvent("SR-Gbb-B");
+    if (PassesCuts_Gbb(4, 3, 550., 30., 2000., true, "SR-Gbb-M")) countSignalEvent("SR-Gbb-M");
+    if (PassesCuts_Gbb(4, 3, 550., 30., 1600., true, "SR-Gbb-C")) countSignalEvent("SR-Gbb-C");    
     
   }  
   
@@ -250,87 +269,101 @@ double Atlas_2211_08028::get_meff() {
   return tmp;
 }
 
-bool Atlas_2211_08028::PassesCuts_Gtt1L(int Njet, int Nbjet, double met, double meff_cut, double mT_cut, double mTb_cut, double MJ_cut, std::string sr) {
+bool Atlas_2211_08028::PassesCuts_Gtt1L(int Njet, int Nbjet, double met, double meff_cut, double mT_cut, double mTb_cut, double MJ_cut, bool cutflow, std::string sr) {
   
   if (signal_jets.size() < Njet or bjets.size() < Nbjet) return false;
-  countCutflowEvent(sr+"_02_jets");
+  if (cutflow) countCutflowEvent(sr+"_02_jets");
   
   if( pTmiss.Pt() < met) return false;
-  countCutflowEvent(sr+"_03_met");
+  if (cutflow) countCutflowEvent(sr+"_03_met");
   
   if( meff < meff_cut) return false;
-  countCutflowEvent(sr+"_04_meff");
+  if (cutflow) countCutflowEvent(sr+"_04_meff");
   
   if( mT_lep < mT_cut) return false;
-  countCutflowEvent(sr+"_05_mT");  
+  if (cutflow) countCutflowEvent(sr+"_05_mT");  
   
   if( mT_b < mTb_cut) return false;
-  countCutflowEvent(sr+"_06_mTb");    
+  if (cutflow) countCutflowEvent(sr+"_06_mTb");    
   
   if( MJ < MJ_cut) return false;
-  countCutflowEvent(sr+"_07_MJ");      
+  if (cutflow) countCutflowEvent(sr+"_07_MJ");      
   
   return true;
   
 }
 
-bool Atlas_2211_08028::PassesCuts_Gtt0L(int Njet, int Nbjet, double met, double meff_cut, double mTb_cut, double MJ_cut, std::string sr) {
+bool Atlas_2211_08028::PassesCuts_Gtt0L(int Njet, int Nbjet, double met, double meff_cut, double mTb_cut, double MJ_cut, bool cutflow, std::string sr) {
   
   if (signal_jets.size() < Njet or bjets.size() < Nbjet) return false;
-  countCutflowEvent(sr+"_03_jets");
+  if (cutflow) countCutflowEvent(sr+"_03_jets");
   
   if( pTmiss.Pt() < met) return false;
-  countCutflowEvent(sr+"_04_met");
+  if (cutflow) countCutflowEvent(sr+"_04_met");
   
   if( meff < meff_cut) return false;
-  countCutflowEvent(sr+"_05_meff");
+  if (cutflow) countCutflowEvent(sr+"_05_meff");
   
   if( mT_b < mTb_cut) return false;
-  countCutflowEvent(sr+"_06_mTb");    
+  if (cutflow) countCutflowEvent(sr+"_06_mTb");    
   
   if( MJ < MJ_cut) return false;
-  countCutflowEvent(sr+"_07_MJ");      
+  if (cutflow) countCutflowEvent(sr+"_07_MJ");      
   
   return true;
   
 }
 
 
-bool Atlas_2211_08028::PassesCuts_Gtb(int Njet, int Nbjet, double meff_cut, double met, double MJ_cut, std::string sr) {
+bool Atlas_2211_08028::PassesCuts_Gtb(int Njet, int Nbjet, double meff_cut, double met, double MJ_cut, bool cutflow, std::string sr) {
   
   if (signal_jets.size() < Njet ) return false;
-  countCutflowEvent(sr+"_04_jets");
+  if (cutflow) countCutflowEvent(sr+"_04_jets");
   
   if (bjets.size() < Nbjet) return false;
-  countCutflowEvent(sr+"_05_bjets");  
+  if (cutflow) countCutflowEvent(sr+"_05_bjets");  
   
   if( meff < meff_cut) return false;
-  countCutflowEvent(sr+"_06_meff");  
+  if (cutflow) countCutflowEvent(sr+"_06_meff");  
   
   if( pTmiss.Pt() < met) return false;
-  countCutflowEvent(sr+"_07_met");
+  if (cutflow) countCutflowEvent(sr+"_07_met");
   
-    if( MJ < MJ_cut) return false;
-  countCutflowEvent(sr+"_08_MJ");    
+  if( MJ < MJ_cut) return false;
+  if (cutflow) countCutflowEvent(sr+"_08_MJ");    
   
   return true;
   
 }
 
 
-bool Atlas_2211_08028::PassesCuts_Gbb(int Njet, int Nbjet, double met, double ptj1, double meff_cut, std::string sr) {
+bool Atlas_2211_08028::PassesCuts_Gbb(int Njet, int Nbjet, double met, double ptj1, double meff_cut, bool cutflow, std::string sr) {
   
   if (signal_jets.size() < Njet or bjets.size() < Nbjet) return false;
-  countCutflowEvent(sr+"_04_jets");
+  if (cutflow) countCutflowEvent(sr+"_04_jets");
   
   if( pTmiss.Pt() < met) return false;
-  countCutflowEvent(sr+"_05_met");
+  if (cutflow) countCutflowEvent(sr+"_05_met");
   
   if( signal_jets[0]->PT < ptj1) return false;
-  countCutflowEvent(sr+"_06_pTj1");    
+  if (cutflow) countCutflowEvent(sr+"_06_pTj1");    
   
   if( meff < meff_cut) return false;
-  countCutflowEvent(sr+"_07_meff");  
+  if (cutflow) countCutflowEvent(sr+"_07_meff");  
+  
+  return true;
+  
+}
+
+bool Atlas_2211_08028::PassesCutsCR_Gtt1L(int Njet, int Nbjet, double met, double meff_cut, double mT_cut, std::string sr) {
+  
+  if (signal_jets.size() != Njet or bjets.size() < Nbjet) return false;
+  
+  if( pTmiss.Pt() < met) return false;
+  
+  if( meff < meff_cut) return false;
+  
+  if( mT_lep > mT_cut) return false;
   
   return true;
   
