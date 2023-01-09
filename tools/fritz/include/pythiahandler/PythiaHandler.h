@@ -57,6 +57,7 @@ public:
 
     //! Name used for logfiles
     std::string name;
+    Pythia8::Info ptr_temp;
 private:
     Pythia8::Pythia* mainPythia; //!< Pythia8 object
     std::string pythiaPath; //!< path to pythia directory in the results

@@ -233,7 +233,7 @@ void PythiaHandler::setup(Properties props) {
     if(mgParamCard != "") madgraph->addCard(mgParamCard,"param_card.dat");
     if(mgRunCard != "") madgraph->addCard(mgRunCard,"run_card.dat");
     if(mgConfigCard != "") madgraph->addCard(mgConfigCard,"me5_configuration.txt");
-    mainPythia->setLHAupPtr(madgraph);
+    mainPythia->setLHAupPtr((Pythia8::LHAupPtr)madgraph);
     
     // Set LHE file by hand
     //if(!madgraph->setInit())

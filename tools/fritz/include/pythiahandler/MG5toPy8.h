@@ -3,6 +3,7 @@
 
 #include "Pythia8/Pythia.h"
 #include "Pythia8Plugins/GeneratorInput.h"
+#include "PythiaHandler.h"
 #include <unistd.h>
 #include <sys/stat.h>
 
@@ -125,6 +126,8 @@ protected:
 
   // Vector of whether a command stage has been overridden by the user.
   vector<bool> override;
+  
+  //Pythia8::Info ptr_temp;
 
 };
 
@@ -226,13 +229,18 @@ bool LHAupMadgraph::setSeed(int seedIn, int runsIn) {
   if (seed < 0) {
     seed = pythia->settings.mode("Random:seed");
     if (seed < 1) {
-      pythia->info.errorMsg("Error from LHAupMadgraph::setSeed: the given "
-                            "Pythia seed is less than 1."); return false;}
+//      pythia->info.errorMsg("Error from LHAupMadgraph::setSeed: the given "
+//                            "Pythia seed is less than 1."); 
+      Global::print("Pythia", "Error from LHAupMadgraph::setSeed: the given Pythia seed is less than 1.");
+      return false;
+    }
   }
   runs = runsIn;
   if (seed * runs > 30081 * 30081) {
-    pythia->info.errorMsg("Error from LHAupMadgraph::setSeed: the given seed "
-                          "exceeds the MadGraph limit."); return false;}
+//    pythia->info.errorMsg("Error from LHAupMadgraph::setSeed: the given seed "
+//                          "exceeds the MadGraph limit."); 
+    Global::print("Pythia", "Error from LHAupMadgraph::setSeed: the given seed exceeds the MadGraph limit.");
+    return false;}
   nRuns = 0;
   return true;
 
@@ -299,8 +307,9 @@ bool LHAupMadgraph::generate() {
   setenv("HOME", home, 1);
   if (!success) {orig.close(); return false;}
   else if (access((dir + "/Cards/run_card.dat").c_str(), F_OK) == -1) {
-    pythia->info.errorMsg("Error from LHAupMadgraph::generate: MadGraph "
-                          "failed to produce run_card.dat");
+//    pythia->info.errorMsg("Error from LHAupMadgraph::generate: MadGraph "
+//                          "failed to produce run_card.dat");
+    Global::print("Pythia", "Error from LHAupMadgraph::generate: MadGraph failed to produce run_card.dat");
     orig.close(); return false;
   }
 
@@ -378,16 +387,22 @@ bool LHAupMadgraph::run(int eventsIn, int seedIn) {
 
   if (!pythia) return false;
   if (nRuns >= runs) {
-    pythia->info.errorMsg("Error from LHAupMadgraph::run: maximum number "
-                          "of allowed runs exceeded."); return false;}
+//    pythia->info.errorMsg("Error from LHAupMadgraph::run: maximum number "
+//                          "of allowed runs exceeded."); 
+    Global::print("Pythia", "Error from LHAupMadgraph::run: maximum number of allowed runs exceeded.");    
+    return false;}
 
   if (access((dir + "/run.sh").c_str(), F_OK) == -1){
-    pythia->info.errorMsg("Error from LHAupMadgraph::run: "
-                          "Cannot find run.sh."); return false;}
+//    pythia->info.errorMsg("Error from LHAupMadgraph::run: "
+//                          "Cannot find run.sh."); 
+    Global::print("Pythia", "Error from LHAupMadgraph::run: Cannot find run.sh.");
+    return false;}
 
   if (seed < 0 && !setSeed(seed, runs)) {
-    pythia->info.errorMsg("Error from LHAupMadgraph::run: "
-                          "Cannot set seed."); return false;}
+//    pythia->info.errorMsg("Error from LHAupMadgraph::run: "
+//                          "Cannot set seed."); 
+    Global::print("Pythia", "Error from LHAupMadgraph::run: Cannot set seed.");
+    return false;}
   
   if (seedIn < 0) seedIn = (seed - 1) * runs + nRuns + 1;
   stringstream line;
@@ -395,8 +410,9 @@ bool LHAupMadgraph::run(int eventsIn, int seedIn) {
   if (!execute(line.str())) return false;
   if (access(lhegz.c_str(), F_OK) == -1) {
 
-    pythia->info.errorMsg("Error from LHAupMadgraph::run: "
-                          "could not read LHEfile.");
+//    pythia->info.errorMsg("Error from LHAupMadgraph::run: "
+//                          "could not read LHEfile.");
+    Global::print("Pythia", "Error from LHAupMadgraph::run: could not read LHEfile.");
     return false;
   }
   
@@ -416,13 +432,20 @@ bool LHAupMadgraph::reader(bool init) {
   if (lhef) delete lhef;
   bool setScales(pythia->settings.flag("Beams:setProductionScalesFromLHEF"));
 
-  lhef = new LHAupLHEF(&pythia->info, lhegz.c_str(), NULL, false, setScales);
+  //Pythia8::Info& ptr_temp = const_cast<Pythia8::Info&>(pythia->info);
+  //Pythia8::Info ptr_temp = pythia->info;
+  //lhef = new LHAupLHEF(&ptr_temp, lhegz.c_str(), NULL, false, setScales);
+  lhef = new LHAupLHEF(&(const_cast<Pythia8::Info&>(pythia->info)), lhegz.c_str(), NULL, false, setScales);
   if (!lhef->setInit()) {
-    pythia->info.errorMsg("Error from LHAupMadgraph::reader: failed to "
-                          "initialize the LHEF reader"); return false;}
+//    pythia->info.errorMsg("Error from LHAupMadgraph::reader: failed to "
+//                          "initialize the LHEF reader"); 
+    Global::print("Pythia", "Error from LHAupMadgraph::reader: failed to initialize the LHEF reader");
+    return false;}
   if (lhef->sizeProc() != 1) {
-    pythia->info.errorMsg("Error from LHAupMadgraph::reader: number of "
-                          "processes is not 1"); return false;}
+//    pythia->info.errorMsg("Error from LHAupMadgraph::reader: number of "
+//                          "processes is not 1"); 
+    Global::print("Pythia", "Error from LHAupMadgraph::reader: number of processes is not 1");
+    return false;}
 
   if (init) {
 
@@ -438,6 +461,7 @@ bool LHAupMadgraph::reader(bool init) {
     addProcess(lhef->idProcess(0), sig, err, lhef->xMax(0));
     xSecSumSave = sig; xErrSumSave = err;
   }
+
   return true;
 
 }
@@ -452,14 +476,20 @@ bool LHAupMadgraph::setInit() {
   if (!pythia) return false;
   //  if (access((dir + "/run.sh").c_str(), F_OK) == -1) {
   if (!configure()) {
-    pythia->info.errorMsg("Error from LHAupMadgraph::setInit: failed to "
-			  "create the MadGraph configuration"); return false;}
+//    pythia->info.errorMsg("Error from LHAupMadgraph::setInit: failed to "
+//			  "create the MadGraph configuration"); 
+    Global::print("Pythia", "Error from LHAupMadgraph::setInit: failed to create the MadGraph configuration");
+    return false;}
   if (!generate()) {
-    pythia->info.errorMsg("Error from LHAupMadgraph::setInit: failed to "
-			  "generate the MadGraph process"); return false;}
+//    pythia->info.errorMsg("Error from LHAupMadgraph::setInit: failed to "
+//			  "generate the MadGraph process"); 
+    Global::print("Pythia", "Error from LHAupMadgraph::setInit: failed to generate the MadGraph process");
+    return false;}
   if (!launch()) {
-    pythia->info.errorMsg("Error from LHAupMadgraph::setInit: failed to "
-                            "launch the MadGraph process"); return false;}
+//    pythia->info.errorMsg("Error from LHAupMadgraph::setInit: failed to "
+//                            "launch the MadGraph process"); 
+    Global::print("Pythia", "Error from LHAupMadgraph::setInit: failed to launch the MadGraph process");
+    return false;}
   //}
   
   // Create the LHEF LHAup object and run setInit.
@@ -479,11 +509,15 @@ bool LHAupMadgraph::setEvent(int) {
   // Run setEvent from the LHEF object and launch MadGraph if failed.
   if (!pythia) return false;
   if (!lhef) {
-    pythia->info.errorMsg("Error from LHAupMadgraph::setEvent: LHAupLHEF "
-                          "object not correctly initialized"); return false;}
+//    pythia->info.errorMsg("Error from LHAupMadgraph::setEvent: LHAupLHEF "
+//                          "object not correctly initialized"); 
+    Global::print("Pythia", "Error from LHAupMadgraph::setEvent: LHAupLHEF object not correctly initialized");
+    return false;}
   if (!lhef->fileFound()) {
-    pythia->info.errorMsg("Error from LHAupMadgraph::setEvent: LHEF "
-                          "event file was not found"); return false;}
+//    pythia->info.errorMsg("Error from LHAupMadgraph::setEvent: LHEF "
+//                          "event file was not found"); 
+    Global::print("Pythia", "Error from LHAupMadgraph::setEvent: LHEF event file was not found"); 
+    return false;}
   if (!lhef->setEvent()) {
     if (!run(events)) return false;
     if (!reader(false)) return false;
