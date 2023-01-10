@@ -1167,7 +1167,7 @@ def _add_analysis_to_list_of_analyses(contents, parameters):
         has_cr = "yes"
     else:
         has_cr = "no"
-    new_analysis = "{}    {}    {}    {}    {}".format(
+    new_analysis = "{:21}{:<5}{:92}{:6}{:4}".format(
             analysis_name,
             len(parameters["signal_regions"]),
             parameters["short_info"],
