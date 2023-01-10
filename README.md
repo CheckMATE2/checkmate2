@@ -44,9 +44,16 @@ This is a brief note on how to install CheckMATE from the master branch on https
 
 # current
 
+
 2022-11-28   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 
     ~ Python3 compatibility
+
+2022-11-17   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ added atlas_2010_14293
+    ~ statistical combinations
+    ~ TMVA support
 
 2022-11-04   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 

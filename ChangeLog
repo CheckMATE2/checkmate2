@@ -7,6 +7,13 @@ Ver 2.0.36
 
     ~ Python3 compatibility
 
+2022-11-17   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ added atlas_2010_14293
+    ~ statistical combinations
+    ~ TMVA support
+
+
 Ver 2.0.35
 ---------
 
