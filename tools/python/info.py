@@ -46,6 +46,7 @@ class Info(dict):
         parameters['ProcessResultFileColumns'] = ['analysis', 'sr', 'signal_normevents', 'signal_err_tot']
         parameters['TotalEvaluationFileColumns'] = ['analysis', 'sr', 'o', 'b', 'db', 's', 'ds', 's95obs', 's95exp', 'robscons', 'rexpcons']
         parameters['BestPerAnalysisEvaluationFileColumns'] = ['analysis', 'sr', 'o', 'b', 'db', 's', 'ds', 's95obs', 's95exp', 'robscons', 'rexpcons']
+        parameters['statcomb'] = "simple"
         
         cls.analysis_groups = {
                 "ATLAS_7TeV",
@@ -186,6 +187,7 @@ class Info(dict):
         parser.add_argument('-se', '--skip-evaluation', dest='skipevaluation', action='store_true', help='Skips evaluation step.')
         parser.add_argument('-cr', '--control-regions', dest='controlregions', action='store_true', help='Analyses control regions instead of signal regions. Sets -se automatically.')
         parser.add_argument('-rs', '--random-seed', dest='randomseed', type=int, default=0, help='Chooses fixed seed for random number generator. 0 chooses a random seed automatically.')     
+        parser.add_argument('-mb', '--multibin', dest='statcomb', default="simple", type=str, help='Whether to perform multibin fit.')     
         
         # Parse arguments and set return parameters
         if emptyparser:
@@ -210,6 +212,7 @@ class Info(dict):
                 AdvPrint.cerr_exit("long-lived PIDs are in wrong format. Must be integer numbers, separated by ','")              
         cls.parameters['randomseed'] = args.randomseed
         cls.parameters["outputexists"] = args.output_exists
+        cls.parameters["statcomb"] = args.statcomb
         if args.force:
             cls.flags["skipparamcheck"] = True
         if args.quiet:

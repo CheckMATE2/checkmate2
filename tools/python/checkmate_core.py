@@ -12,6 +12,7 @@ from process import Process
 from detectorsettings import DetectorSettings
 from evaluator import Evaluator, find_strongest_evaluators, find_strongest_zsig
 from resultcollector import ResultCollector
+import multibin_limit
 
 class CheckMATE2:
     """ This is the main object whose instance corresponds to a full CheckMATE run """
@@ -280,6 +281,14 @@ class CheckMATE2:
         AdvPrint.unmute()
         best_evaluator.check_warnings()
         best_evaluator.print_result()
+        
+        for analysis in evaluators:
+            mb_signal_regions = Info.get_analysis_parameters(analysis)["mb_signal_regions"]
+            for mbsr in mb_signal_regions:
+                if Info.parameters["statcomb"] == "simple":
+                    sr_list = mb_signal_regions[mbsr]
+                    mb.calc_point(Info.paths['output'] , sr_list)
+        #       if Info.parameters["statcomb"] == "full":                     
 
         if Info.flags['zsig']:
             _print_zsig(evaluators)

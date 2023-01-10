@@ -38,7 +38,7 @@ void Atlas_2010_14293::initialize() {
     reader[0][i]->AddVariable( "jetEta1", &jetEta1 );
     reader[0][i]->AddVariable( "jetEta2", &jetEta2 );
     reader[0][i]->AddVariable( "jetEta3", &jetEta3 );
-    std::string file = maindir  + std::string("/data/atlas_2010_14293/ZeroLepton2018-SRBDT-GGd1_weight"  + std::to_string(i+1) +".xml");
+    std::string file = maindir  + std::string("/data/atlas_2010_14293/BDTxml/ZeroLepton2018-SRBDT-GGd1_weight"  + std::to_string(i+1) +".xml");
     reader[0][i]->BookMVA( "BDT", file );
   }
   
@@ -54,7 +54,7 @@ void Atlas_2010_14293::initialize() {
     reader[1][i]->AddVariable( "jetEta1", &jetEta1 );
     reader[1][i]->AddVariable( "jetEta2", &jetEta2 );
     reader[1][i]->AddVariable( "jetEta3", &jetEta3 );
-    std::string file = maindir  + std::string("/data/atlas_2010_14293/ZeroLepton2018-SRBDT-GGd2_weight"  + std::to_string(i+1) +".xml");
+    std::string file = maindir  + std::string("/data/atlas_2010_14293/BDTxml/ZeroLepton2018-SRBDT-GGd2_weight"  + std::to_string(i+1) +".xml");
     reader[1][i]->BookMVA( "BDT", file );
   }
   
@@ -71,7 +71,7 @@ void Atlas_2010_14293::initialize() {
     reader[2][i]->AddVariable( "jetEta1", &jetEta1 );
     reader[2][i]->AddVariable( "jetEta2", &jetEta2 );
     reader[2][i]->AddVariable( "jetEta3", &jetEta3 );
-    std::string file = maindir  + std::string("/data/atlas_2010_14293/ZeroLepton2018-SRBDT-GGd3_weight"  + std::to_string(i+1) +".xml");
+    std::string file = maindir  + std::string("/data/atlas_2010_14293/BDTxml/ZeroLepton2018-SRBDT-GGd3_weight"  + std::to_string(i+1) +".xml");
     reader[2][i]->BookMVA( "BDT", file );
   }
   
@@ -87,7 +87,7 @@ void Atlas_2010_14293::initialize() {
     reader[3][i]->AddVariable( "jetEta1", &jetEta1 );
     reader[3][i]->AddVariable( "jetEta2", &jetEta2 );
     reader[3][i]->AddVariable( "jetEta3", &jetEta3 );
-    std::string file = maindir  + std::string("/data/atlas_2010_14293/ZeroLepton2018-SRBDT-GGd4_weight"  + std::to_string(i+1) +".xml");
+    std::string file = maindir  + std::string("/data/atlas_2010_14293/BDTxml/ZeroLepton2018-SRBDT-GGd4_weight"  + std::to_string(i+1) +".xml");
     reader[3][i]->BookMVA( "BDT", file );  
   }
   
@@ -105,7 +105,7 @@ void Atlas_2010_14293::initialize() {
     reader[4][i]->AddVariable( "jetEta2", &jetEta2 );
     reader[4][i]->AddVariable( "jetEta3", &jetEta3 );
     reader[4][i]->AddVariable( "jetEta4", &jetEta4 );
-    std::string file = maindir  + std::string("/data/atlas_2010_14293/ZeroLepton2018-SRBDT-GGo1_weight"  + std::to_string(i+1) +".xml");
+    std::string file = maindir  + std::string("/data/atlas_2010_14293/BDTxml/ZeroLepton2018-SRBDT-GGo1_weight"  + std::to_string(i+1) +".xml");
     reader[4][i]->BookMVA( "BDT", file );  
   }  
   
@@ -121,7 +121,7 @@ void Atlas_2010_14293::initialize() {
     reader[5][i]->AddVariable( "jetEta1", &jetEta1 );
     reader[5][i]->AddVariable( "jetEta2", &jetEta2 );
     reader[5][i]->AddVariable( "jetEta3", &jetEta3 );
-    std::string file = maindir  + std::string("/data/atlas_2010_14293/ZeroLepton2018-SRBDT-GGo2_weight"  + std::to_string(i+1) +".xml");
+    std::string file = maindir  + std::string("/data/atlas_2010_14293/BDTxml/ZeroLepton2018-SRBDT-GGo2_weight"  + std::to_string(i+1) +".xml");
     reader[5][i]->BookMVA( "BDT", file );  
   }    
   
@@ -139,7 +139,7 @@ void Atlas_2010_14293::initialize() {
     reader[6][i]->AddVariable( "jetEta2", &jetEta2 );
     reader[6][i]->AddVariable( "jetEta4", &jetEta4 );
     reader[6][i]->AddVariable( "jetEta5", &jetEta5 );
-    std::string file = maindir  + std::string("/data/atlas_2010_14293/ZeroLepton2018-SRBDT-GGo3_weight"  + std::to_string(i+1) +".xml");
+    std::string file = maindir  + std::string("/data/atlas_2010_14293/BDTxml/ZeroLepton2018-SRBDT-GGo3_weight"  + std::to_string(i+1) +".xml");
     reader[6][i]->BookMVA( "BDT", file );  
   }    
   
@@ -155,7 +155,7 @@ void Atlas_2010_14293::initialize() {
     reader[7][i]->AddVariable( "jetEta1", &jetEta1 );
     reader[7][i]->AddVariable( "jetEta2", &jetEta2 );
     reader[7][i]->AddVariable( "jetEta3", &jetEta3 );
-    std::string file = maindir  + std::string("/data/atlas_2010_14293/ZeroLepton2018-SRBDT-GGo4_weight"  + std::to_string(i+1) +".xml");
+    std::string file = maindir  + std::string("/data/atlas_2010_14293/BDTxml/ZeroLepton2018-SRBDT-GGo4_weight"  + std::to_string(i+1) +".xml");
     reader[7][i]->BookMVA( "BDT", file );  
   }      
   
