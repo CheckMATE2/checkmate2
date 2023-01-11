@@ -282,13 +282,24 @@ class CheckMATE2:
         best_evaluator.check_warnings()
         best_evaluator.print_result()
         
-        for analysis in evaluators:
-            mb_signal_regions = Info.get_analysis_parameters(analysis)["mb_signal_regions"]
-            for mbsr in mb_signal_regions:
-                if Info.parameters["statcomb"] == "simple":
-                    sr_list = mb_signal_regions[mbsr]
-                    mb.calc_point(Info.paths['output'] , sr_list)
-        #       if Info.parameters["statcomb"] == "full":                     
+        if sys.version_info[0] == 3:
+            best_invr=100000.
+            best_analysis=""
+            best_sr=""
+            for analysis in evaluators:
+                mb_signal_regions = Info.get_analysis_parameters(analysis)["mb_signal_regions"]
+                for mbsr in mb_signal_regions:
+                    if Info.parameters["statcomb"] == "simple":
+                        sr_list = mb_signal_regions[mbsr]
+                        inv_r = mb.calc_point(Info.paths['output'] , sr_list, analysis, mbsr)
+                        if inv_r < best_invr:
+                            best_invr = inv_r
+                            best_analysis = analysis
+                            best_sr = mbsr
+        #           if Info.parameters["statcomb"] == "full":                  
+            if best_invr < 100000.:
+                
+                
 
         if Info.flags['zsig']:
             _print_zsig(evaluators)
