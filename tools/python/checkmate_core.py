@@ -18,6 +18,7 @@ from process import Process
 from detectorsettings import DetectorSettings
 from evaluator import Evaluator, find_strongest_evaluators, find_strongest_zsig
 from resultcollector import ResultCollector
+import multibin_limit as mb
 
 class CheckMATE2(object):
     """ This is the main object whose instance corresponds to a full CheckMATE run """
@@ -172,7 +173,9 @@ class CheckMATE2(object):
         if Info.flags['no_mc_stat_err']:
             AdvPrint.cout("\t - No Monte Carlo statistical uncertainty will be included in the evaluation")    
         if Info.flags['eff_tab']:
-            AdvPrint.cout("\t - Efficiency tables will be calculated for each signal region of every analysis run")        
+            AdvPrint.cout("\t - Efficiency tables will be calculated for each signal region of every analysis run")     
+        if Info.parameters["statcomb"] == "simple":
+            AdvPrint.cout("\t - Simplified likelihood calculation will be applied to multibin signal regions")            
         if Info.flags["controlregions"]:
             AdvPrint.cout("\t - Analysing control regions")
         if Info.parameters["outputexists"] == "overwrite":
@@ -291,7 +294,38 @@ class CheckMATE2(object):
         AdvPrint.unmute()
         best_evaluator.check_warnings()
         best_evaluator.print_result()
-
+        
+        if sys.version_info[0] == 3 and Info.parameters["statcomb"] == "simple":
+            best_invr=10.
+            best_analysis=""
+            best_sr=""
+            for analysis in evaluators:
+                if "mb_signal_regions" in Info.get_analysis_parameters(analysis):
+                    mb_signal_regions = Info.get_analysis_parameters(analysis)["mb_signal_regions"]
+                    for mbsr in mb_signal_regions:
+                        if Info.parameters["statcomb"] == "simple":
+                            sr_list = mb_signal_regions[mbsr]
+                            inv_r = mb.calc_point(Info.paths['output'] , sr_list, analysis, mbsr)
+                            if inv_r < best_invr:
+                                best_invr = inv_r
+                                best_analysis = analysis
+                                best_sr = mbsr
+        #               if Info.parameters["statcomb"] == "full":                  
+                    if best_invr < 10.:
+                        AdvPrint.set_cout_file(Info.files["output_result"], False)
+                        AdvPrint.cout("\nTest: Calculation of approximate (fast) likelihood for multibin signal regions")
+                        if best_invr < 1.:
+                            result = "\033[31mExcluded\033[0m"
+                        else:
+                            result = "\033[32mAllowed\033[0m"
+                        AdvPrint.cout("Result: "+result)
+                        AdvPrint.cout("Result for 1/mu (r): "+str(1./best_invr))
+                        AdvPrint.cout("Analysis: "+best_analysis)
+                        AdvPrint.cout("MBSR: "+best_sr)
+                        AdvPrint.set_cout_file("#None")
+                    else:
+                        AdvPrint.cout("Results of approximate (fast) likelihood to weak to exclude model")
+    
         if Info.flags['zsig']:
             _print_zsig(evaluators)
         if Info.flags['likelihood']:
