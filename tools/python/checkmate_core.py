@@ -19,6 +19,7 @@ from detectorsettings import DetectorSettings
 from evaluator import Evaluator, find_strongest_evaluators, find_strongest_zsig
 from resultcollector import ResultCollector
 import multibin_limit as mb
+import multibin_limit_full as mbfull
 
 class CheckMATE2(object):
     """ This is the main object whose instance corresponds to a full CheckMATE run """
@@ -295,7 +296,7 @@ class CheckMATE2(object):
         best_evaluator.check_warnings()
         best_evaluator.print_result()
         
-        if sys.version_info[0] == 3 and Info.parameters["statcomb"] == "simple":
+        if sys.version_info[0] == 3 and (Info.parameters["statcomb"] == "simple" or Info.parameters["statcomb"] == "full"):
             best_invr=10.
             best_analysis=""
             best_sr=""
@@ -310,10 +311,19 @@ class CheckMATE2(object):
                                 best_invr = inv_r
                                 best_analysis = analysis
                                 best_sr = mbsr
-        #               if Info.parameters["statcomb"] == "full":                  
+                        if Info.parameters["statcomb"] == "full":
+                            inv_r = mbfull.calc_point(Info.paths['output'] , analysis, mbsr)
+                            if inv_r < best_invr:
+                                best_invr = inv_r
+                                best_analysis = analysis
+                                best_sr = mbsr
+                            
                     if best_invr < 10.:
                         AdvPrint.set_cout_file(Info.files["output_result"], False)
-                        AdvPrint.cout("\nTest: Calculation of approximate (fast) likelihood for multibin signal regions")
+                        if Info.parameters["statcomb"] == "simple":
+                            AdvPrint.cout("\nTest: Calculation of approximate (fast) likelihood for multibin signal regions")
+                        else:
+                            AdvPrint.cout("\nTest: Calculation of full likelihood for multibin signal regions")
                         if best_invr < 1.:
                             result = "\033[31mExcluded\033[0m"
                         else:
