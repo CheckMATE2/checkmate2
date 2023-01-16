@@ -1,6 +1,6 @@
 import json
 import numpy as np
-import pyhf
+import pyhf, jsonpatch
 from pyhf.contrib.viz import brazil
 import matplotlib.pyplot as plt
 import os
@@ -172,11 +172,16 @@ def calc_point(path,analysis,MB_set,systematics=0,ntoys=-1):
     patchset=create_patchset(path,names,s,ds,systematics)
     #string='jsonpatch '+hepfiles_folder+analysis_name+'/Likelihoods/'+bkgonly+' <(pyhf patchset extract '+path+'/pyhf_full/patchset.json --name \'Signal0\') > '+path+'/pyhf_full/'+SR_set+'_Signal0.json'
     #print(string)
-    os.system('pyhf patchset extract '+path+'/pyhf_full/patchset.json --name \'Signal0\' --output-file '+path+'/pyhf_full/'+SR_set+'_extract.json')
-    os.system('jsonpatch '+hepfiles_folder+analysis_name+'/Likelihoods/'+bkgonly+' '+ path+'/pyhf_full/'+SR_set+'_extract.json'+' > '+ path+'/pyhf_full/'+SR_set+'_Signal0.json')
-    #spec = jsonpatch.apply_patch(hepfiles_folder+analysis_name+'/Likelihoods/'+bkgonly, 
-    with open(path+"/pyhf_full/"+SR_set+"_Signal0.json") as serialized:
-        spec = json.load(serialized)
+    with open(path+'/pyhf_full/patchset.json') as serialized:
+        signal = pyhf.PatchSet(json.load(serialized))
+    signal0 = signal["Signal0"]    
+    #os.system('pyhf patchset extract '+path+'/pyhf_full/patchset.json --name \'Signal0\' --output-file '+path+'/pyhf_full/'+SR_set+'_extract.json')
+    #os.system('jsonpatch '+hepfiles_folder+analysis_name+'/Likelihoods/'+bkgonly+' '+ path+'/pyhf_full/'+SR_set+'_extract.json'+' > '+ path+'/pyhf_full/'+SR_set+'_Signal0.json')
+    with open(hepfiles_folder+analysis_name+'/Likelihoods/'+bkgonly) as serialized:
+        bckg_input = json.load(serialized)
+    spec = jsonpatch.apply_patch(bckg_input, signal0) 
+    #with open(path+"/pyhf_full/"+SR_set+"_Signal0.json") as serialized:
+    #    spec = json.load(serialized)
     workspace = pyhf.Workspace(spec)
     result = hypotest(workspace,ntoys)
     poi_values, obs_limit, exp_limits, (scan, results) = upperlim(workspace,ntoys)

@@ -177,6 +177,8 @@ class CheckMATE2(object):
             AdvPrint.cout("\t - Efficiency tables will be calculated for each signal region of every analysis run")     
         if Info.parameters["statcomb"] == "simple":
             AdvPrint.cout("\t - Simplified likelihood calculation will be applied to multibin signal regions")            
+        if Info.parameters["statcomb"] == "full":
+            AdvPrint.cout("\t - Full likelihood calculation will be applied to multibin signal regions")                        
         if Info.flags["controlregions"]:
             AdvPrint.cout("\t - Analysing control regions")
         if Info.parameters["outputexists"] == "overwrite":
