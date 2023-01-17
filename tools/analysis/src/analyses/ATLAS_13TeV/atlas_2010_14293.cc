@@ -291,24 +291,24 @@ void Atlas_2010_14293::analyze() {
   if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 16., 22., 0.,   2800., -1.0 , false, "MB-SSd") ) countSignalEvent("MB-SSd-4-2800-16");
   if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 22., -1., 0.,   2800., 3400 , false, "MB-SSd") ) countSignalEvent("MB-SSd-4-2800-22");    
   
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 16., 0.04,   1000., 1600., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-1000-10");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 16., 22., 0.04,   1000., 1600., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-1000-16");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 22., -1., 0.04,   1000., 1600., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-1000-22");  
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 16., 0.04,   1600., 2200., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-1600-10");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 16., 22., 0.04,   1600., 2200., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-1600-16");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 22., -1., 0.04,   1600., 2200., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-1600-22");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 16., 0.04,   2200., 2800., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-2200-10");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 16., 22., 0.04,   2200., 2800., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-2200-16");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 22., -1., 0.04,   2200., 2800., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-2200-22");    
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 16., 0.04,   2800., 3400., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-2800-10");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 16., 22., 0.04,   2800., 3400., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-2800-16");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 22., -1., 0.04,   2800., 3400., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-2800-22");    
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 16., 0.04,   3400., 4000., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-3400-10");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 16., 22., 0.04,   3400., 4000., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-3400-16");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 22., -1., 0.04,   3400., 4000., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-3400-22");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 16., 0.04,   4000., -1.0 , false, "MB-GGd") ) countSignalEvent("MB-GGd-4-4000-10");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 16., 22., 0.04,   4000., -1.0 , false, "MB-GGd") ) countSignalEvent("MB-GGd-4-4000-16");
-  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 22., -1., 0.04,   4000., -1.0 , false, "MB-GGd") ) countSignalEvent("MB-GGd-4-4000-22");  
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 10., 16., 0.04,   1000., 1600., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-1000-10");
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 16., 22., 0.04,   1000., 1600., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-1000-16");
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 22., -1., 0.04,   1000., 1600., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-1000-22");  
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 10., 16., 0.04,   1600., 2200., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-1600-10");
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 16., 22., 0.04,   1600., 2200., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-1600-16");
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 22., -1., 0.04,   1600., 2200., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-1600-22");
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 10., 16., 0.04,   2200., 2800., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-2200-10");
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 16., 22., 0.04,   2200., 2800., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-2200-16");
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 22., -1., 0.04,   2200., 2800., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-2200-22");    
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 10., 16., 0.04,   2800., 3400., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-2800-10");
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 16., 22., 0.04,   2800., 3400., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-2800-16");
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 22., -1., 0.04,   2800., 3400., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-2800-22");    
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 10., 16., 0.04,   3400., 4000., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-3400-10");
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 16., 22., 0.04,   3400., 4000., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-3400-16");
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 22., -1., 0.04,   3400., 4000., false, "MB-GGd") ) countSignalEvent("MB-GGd-4-3400-22");
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 10., 16., 0.04,   4000., -1.0 , false, "MB-GGd") ) countSignalEvent("MB-GGd-4-4000-10");
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 16., 22., 0.04,   4000., -1.0 , false, "MB-GGd") ) countSignalEvent("MB-GGd-4-4000-16");
+  if (Passes_Cuts_MB(sigjets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 22., -1., 0.04,   4000., -1.0 , false, "MB-GGd") ) countSignalEvent("MB-GGd-4-4000-22");  
 
   if (Passes_Cuts_MB(sigjets, 600.,  50., 2, 3, 2.8, 0.4, 0.2, 16., 22., 0.0,   1600., 2200., false, "MB-C") ) countSignalEvent("MB-C-2-1600-16");
   if (Passes_Cuts_MB(sigjets, 600.,  50., 2, 3, 2.8, 0.4, 0.2, 22., -1., 0.0,   1600., 2200., false, "MB-C") ) countSignalEvent("MB-C-2-1600-22");
@@ -670,12 +670,12 @@ void Atlas_2010_14293::evaluateCRs(std::vector<Jet*> jets, std::string type) {
   if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 10., -1., 0.,   2200., 2800., false, "CRY-4") ) countControlEvent("MB-SSd-"+type+"_4_2200_cuts");
   if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 10., -1., 0.,   2800., -1.0 , false, "CRY-4") ) countControlEvent("MB-SSd-"+type+"_4_2800_cuts");
   
-  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., -1., 0.04,   1000., 1600., false, "CRY-4") ) countControlEvent("MB-GGd-"+type+"_4_1000_cuts");
-  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., -1., 0.04,   1600., 2200., false, "CRY-4") ) countControlEvent("MB-GGd-"+type+"_4_1600_cuts");
-  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., -1., 0.04,   2200., 2800., false, "CRY-4") ) countControlEvent("MB-GGd-"+type+"_4_2200_cuts");
-  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., -1., 0.04,   2800., 3400., false, "CRY-4") ) countControlEvent("MB-GGd-"+type+"_4_2800_cuts");
-  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., -1., 0.04,   3400., 4000., false, "CRY-4") ) countControlEvent("MB-GGd-"+type+"_4_3400_cuts");
-  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., -1., 0.04,   4000., -1.0 , false, "CRY-4") ) countControlEvent("MB-GGd-"+type+"_4_4000_cuts");
+  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 10., -1., 0.04,   1000., 1600., false, "CRY-4") ) countControlEvent("MB-GGd-"+type+"_4_1000_cuts");
+  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 10., -1., 0.04,   1600., 2200., false, "CRY-4") ) countControlEvent("MB-GGd-"+type+"_4_1600_cuts");
+  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 10., -1., 0.04,   2200., 2800., false, "CRY-4") ) countControlEvent("MB-GGd-"+type+"_4_2200_cuts");
+  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 10., -1., 0.04,   2800., 3400., false, "CRY-4") ) countControlEvent("MB-GGd-"+type+"_4_2800_cuts");
+  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 10., -1., 0.04,   3400., 4000., false, "CRY-4") ) countControlEvent("MB-GGd-"+type+"_4_3400_cuts");
+  if (Passes_Cuts_MB(jets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 10., -1., 0.04,   4000., -1.0 , false, "CRY-4") ) countControlEvent("MB-GGd-"+type+"_4_4000_cuts");
 
   if (Passes_Cuts_MB(jets, 600.,  50., 2, 3, 2.8, 0.4, 0.2, 16., -1., 0.0,   1600., 2200., false, "CRY-4") ) countControlEvent("MB-C-"+type+"_2_1600_cuts");
   if (Passes_Cuts_MB(jets, 600.,  50., 2, 3, 2.8, 0.4, 0.2, 16., -1., 0.0,   2200., 2800., false, "CRY-4") ) countControlEvent("MB-C-"+type+"_2_2200_cuts");    
@@ -743,12 +743,12 @@ void Atlas_2010_14293::evaluateCRQs(std::vector<Jet*> jets) {
   if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 10., 0.,   2200., 2800. , false, "CRQ-SSd") ) countControlEvent("MB-SSd-CRQ_4_2200_cuts");
   if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.8, 0.4, 10., 0.,   2800., -1.0  , false, "CRQ-SSd") ) countControlEvent("MB-SSd-CRQ_4_2800_cuts");  
   
-  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 0.04,   1000., 1600., false, "CRQ-GGd") ) countControlEvent("MB-GGd-CRQ_4_1000_cuts");
-  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 0.04,   1600., 2200., false, "CRQ-GGd") ) countControlEvent("MB-GGd-CRQ_4_1600_cuts");
-  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 0.04,   2200., 2800., false, "CRQ-GGd") ) countControlEvent("MB-GGd-CRQ_4_2200_cuts");
-  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 0.04,   2800., 3400., false, "CRQ-GGd") ) countControlEvent("MB-GGd-CRQ_4_2800_cuts");
-  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 0.04,   3400., 4000., false, "CRQ-GGd") ) countControlEvent("MB-GGd-CRQ_4_3400_cuts");
-  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.4, 0.2, 10., 0.04,   4000., -1.0 , false, "CRQ-GGd") ) countControlEvent("MB-GGd-CRQ_4_4000_cuts");
+  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 10., 0.04,   1000., 1600., false, "CRQ-GGd") ) countControlEvent("MB-GGd-CRQ_4_1000_cuts");
+  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 10., 0.04,   1600., 2200., false, "CRQ-GGd") ) countControlEvent("MB-GGd-CRQ_4_1600_cuts");
+  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 10., 0.04,   2200., 2800., false, "CRQ-GGd") ) countControlEvent("MB-GGd-CRQ_4_2200_cuts");
+  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 10., 0.04,   2800., 3400., false, "CRQ-GGd") ) countControlEvent("MB-GGd-CRQ_4_2800_cuts");
+  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 10., 0.04,   3400., 4000., false, "CRQ-GGd") ) countControlEvent("MB-GGd-CRQ_4_3400_cuts");
+  if (Passes_Cuts_CRQ(jets, 200., 100., 4, 0, 2.0, 0.4, 0.4, 10., 0.04,   4000., -1.0 , false, "CRQ-GGd") ) countControlEvent("MB-GGd-CRQ_4_4000_cuts");
   
   if (Passes_Cuts_CRQ(jets, 600.,  50., 2, 3, 2.8, 0.4, 0.2, 16., 0.0,   1600., 2200., false, "CRQ-C") ) countControlEvent("MB-C-CRQ_2_1600_cuts");
   if (Passes_Cuts_CRQ(jets, 600.,  50., 2, 3, 2.8, 0.4, 0.2, 16., 0.0,   2200., 2800., false, "CRQ-C") ) countControlEvent("MB-C-CRQ_2_2200_cuts");     
