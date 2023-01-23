@@ -176,9 +176,11 @@ class CheckMATE2(object):
         if Info.flags['eff_tab']:
             AdvPrint.cout("\t - Efficiency tables will be calculated for each signal region of every analysis run")     
         if Info.parameters["statcomb"] == "simple":
-            AdvPrint.cout("\t - Simplified likelihood calculation will be applied to multibin signal regions")            
+            AdvPrint.cout("\t - Simplified likelihood calculation will be applied to multibin signal regions")    
+        if Info.parameters["statcomb"] == "cls":
+            AdvPrint.cout("\t - Full likelihood calculation of CLs will be applied to multibin signal regions")                      
         if Info.parameters["statcomb"] == "full":
-            AdvPrint.cout("\t - Full likelihood calculation will be applied to multibin signal regions")                        
+            AdvPrint.cout("\t - Full likelihood calculation of CLs and upper limits will be applied to multibin signal regions")                        
         if Info.flags["controlregions"]:
             AdvPrint.cout("\t - Analysing control regions")
         if Info.parameters["outputexists"] == "overwrite":
@@ -298,8 +300,9 @@ class CheckMATE2(object):
         best_evaluator.check_warnings()
         best_evaluator.print_result()
         
-        if sys.version_info[0] == 3 and (Info.parameters["statcomb"] == "simple" or Info.parameters["statcomb"] == "full"):
+        if sys.version_info[0] == 3 and (Info.parameters["statcomb"] == "simple" or Info.parameters["statcomb"] == "cls" or Info.parameters["statcomb"] == "full"):
             best_invr=10.
+            best_cls=1.
             best_analysis=""
             best_sr=""
             for analysis in evaluators:
@@ -313,8 +316,14 @@ class CheckMATE2(object):
                                 best_invr = inv_r
                                 best_analysis = analysis
                                 best_sr = mbsr
+                        if Info.parameters["statcomb"] == "cls":
+                            cls = mbfull.calc_point(Info.paths['output'] , analysis, mbsr, False)
+                            if cls < best_cls: 
+                                best_cls = cls
+                                best_analysis = analysis
+                                best_sr = mbsr                                
                         if Info.parameters["statcomb"] == "full":
-                            inv_r = mbfull.calc_point(Info.paths['output'] , analysis, mbsr)
+                            inv_r = mbfull.calc_point(Info.paths['output'] , analysis, mbsr, True)
                             if inv_r < best_invr:
                                 best_invr = inv_r
                                 best_analysis = analysis
@@ -324,14 +333,19 @@ class CheckMATE2(object):
                         AdvPrint.set_cout_file(Info.files["output_result"], False)
                         if Info.parameters["statcomb"] == "simple":
                             AdvPrint.cout("\nTest: Calculation of approximate (fast) likelihood for multibin signal regions")
-                        else:
-                            AdvPrint.cout("\nTest: Calculation of full likelihood for multibin signal regions")
-                        if best_invr < 1.:
+                        elif Info.parameters["statcomb"] == "cls":
+                            AdvPrint.cout("\nTest: Calculation of CLs using full likelihood for multibin signal regions")
+                        elif Info.parameters["statcomb"] == "full":
+                            AdvPrint.cout("\nTest: Calculation of upper limit using full likelihood for multibin signal regions")                            
+                        if best_invr < 1. or best_cls < 0.05:
                             result = "\033[31mExcluded\033[0m"
                         else:
                             result = "\033[32mAllowed\033[0m"
                         AdvPrint.cout("Result: "+result)
-                        AdvPrint.cout("Result for 1/mu (r): "+str(1./best_invr))
+                        if Info.parameters["statcomb"] == "cls":
+                            AdvPrint.cout("Result for CL: "+str(best_cls))
+                        else:
+                            AdvPrint.cout("Result for 1/mu (r): "+str(1./best_invr))
                         AdvPrint.cout("Analysis: "+best_analysis)
                         AdvPrint.cout("MBSR: "+best_sr)
                         AdvPrint.set_cout_file("#None")

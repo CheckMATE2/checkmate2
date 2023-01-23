@@ -13,7 +13,7 @@ def init(path,analysis,MB_set):
     global bkgonly
     global f_patchset
     global SR_dict  
-    os.system("mkdir -p "+path+'/multibin_limits')
+    os.mkdir(path+'/multibin_limits')
     analysis_name = analysis
     SR_set=MB_set
     with open(hepfiles_folder+analysis_name+"/pyhf_conf.json") as serialized:
@@ -55,8 +55,9 @@ def select_MBsr(names,SRs):
     b=[]
     db=[]
     o=[]
+    _names=[SR_dict[x] for x in SR_dict.keys()]
     for sr in SRs:
-        if sr['SR'] in names:
+        if sr['SR'] in _names:
             b.append(sr['b'])  
             db.append(sr['db'])  
             o.append(sr['o']) 
@@ -74,8 +75,8 @@ def patch(sample,spec,systematics=0):
     workspace = pyhf.Workspace(spec)
     for i,channel in zip(range(len(workspace.channels)),workspace.channels):
         path="/channels/"+str(i)+"/samples/"+str(len(spec['channels'][i]['samples']))
-        if workspace.channels[i] in [ SR_dict[name] for name in sample["SRs"]]:
-            names=[SR_dict[name] for name in sample["SRs"]]
+        if workspace.channels[i] in [ name for name in sample["SRs"]]:
+            names=[name for name in sample["SRs"]]
             s=sample["s"][names.index(workspace.channels[i])]
             ds=sample["ds"][names.index(workspace.channels[i])]
         else:
@@ -162,21 +163,25 @@ def upperlim(workspace,ntoys=-1):
     		track_progress=True)   
     return poi_values, obs_limit, exp_limits, (scan, results) 
 
-def calc_point(path,analysis,MB_set,systematics=0,ntoys=-1):
+def calc_point(path,analysis,MB_set,full,systematics=0,ntoys=-1):
+
     global hepfiles_folder
-    hepfiles_folder=Info.paths['data']+"/"   #<----Set the path of the folder with the models here.
+    
+    hepfiles_folder = Info.paths['data']+"/"   #<----Set the path of the folder with the models here.
     init(path,analysis,MB_set)
-    names=SR_dict.keys()
-    SRs=data_from_CMresults(path)
-    o,b,db,s,ds=select_MBsr(names,SRs)
-    patchset=create_patchset(path,names,s,ds,systematics)
+    names = SR_dict.keys()
+    SRs = data_from_CMresults(path)
+    o, b, db, s, ds = select_MBsr(names,SRs)
+    patchset = create_patchset(path,names,s,ds,systematics)
     #string='jsonpatch '+hepfiles_folder+analysis_name+'/Likelihoods/'+bkgonly+' <(pyhf patchset extract '+path+'/pyhf_full/patchset.json --name \'Signal0\') > '+path+'/pyhf_full/'+SR_set+'_Signal0.json'
     #print(string)
+    
     with open(path+'/pyhf_full/patchset.json') as serialized:
         signal = pyhf.PatchSet(json.load(serialized))
     signal0 = signal["Signal0"]    
     #os.system('pyhf patchset extract '+path+'/pyhf_full/patchset.json --name \'Signal0\' --output-file '+path+'/pyhf_full/'+SR_set+'_extract.json')
     #os.system('jsonpatch '+hepfiles_folder+analysis_name+'/Likelihoods/'+bkgonly+' '+ path+'/pyhf_full/'+SR_set+'_extract.json'+' > '+ path+'/pyhf_full/'+SR_set+'_Signal0.json')
+    
     with open(hepfiles_folder+analysis_name+'/Likelihoods/'+bkgonly) as serialized:
         bckg_input = json.load(serialized)
     spec = jsonpatch.apply_patch(bckg_input, signal0) 
@@ -184,13 +189,29 @@ def calc_point(path,analysis,MB_set,systematics=0,ntoys=-1):
     #    spec = json.load(serialized)
     workspace = pyhf.Workspace(spec)
     result = hypotest(workspace,ntoys)
-    poi_values, obs_limit, exp_limits, (scan, results) = upperlim(workspace,ntoys)
-    string=f"Observed CLs for μ = 1: {result[0]}"+'\n'
-    string=string+f"Expected CLs band for μ = 1: {[exp.tolist() for exp in result[1]]}"+'\n\n'
-    string=string+f"Upper limit (obs): μ = {obs_limit:.4f}"+'\n'
-    for i in range(5):
-        string=string+f"Upper limit ({-2+i:2d} σ) (exp): μ = {exp_limits[i]:.4f}"+'\n'
-    [f"Upper limit ({-2+i:2d} σ) (exp): μ = {exp_limits[2]:.4f}" for i in range(4) ]
-    with open(path+'/multibin_limits/'+"results.dat", "w") as write_file:
-        print(string,file=write_file)
-    return True
+    
+    if full:
+        poi_values, obs_limit, exp_limits, (scan, results) = upperlim(workspace,ntoys)
+    
+    string = "================================\n Analysis: "+analysis+" , SR: "+MB_set+"\n"
+    string += f"Observed CLs for μ = 1: {result[0]}"+'\n'
+    string += f"Expected CLs band for μ = 1: {[exp.tolist() for exp in result[1]]}"+'\n'
+    
+    if full:
+        string += f"Upper limit (obs): μ = {obs_limit:.4f}"+'\n'
+        string += f"Expected upper limit (+/-2 sigma) (exp): mu = ["
+        for i in range(4):
+            string+=f"{exp_limits[i]:.4f}, "
+        string+=f"{exp_limits[4]:.4f}]"                                                               
+    
+    #for i in range(5):
+    #    string=string+f"Upper limit ({-2+i:2d} σ) (exp): μ = {exp_limits[i]:.4f}"+'\n'
+    #[f"Upper limit ({-2+i:2d} σ) (exp): μ = {exp_limits[2]:.4f}" for i in range(4) ]
+    
+    string += "\n================================\n"
+    with open(path+'/multibin_limits/'+"results.dat", "a") as write_file:
+        print(string, file = write_file)
+    if full:
+        return obs_limit
+    else:
+        return result[0]

@@ -216,6 +216,8 @@ def get_information_from_parameters():
       flags["statcomb"] = "simple"
     elif args.statcomb == "full":
       flags["statcomb"] = "full"      
+    elif args.statcomb == "cls":
+      flags["statcomb"] = "cls"            
       
     
     # If analyses = "atlas", "cms" or "all", manually add all these to the list
@@ -362,7 +364,9 @@ def prepare_run(analyses, events, files, flags, output, paths):
     if flags["statcomb"] == "simple":
         output.cout("\t - Simplified likelihood calculation will be applied to multibin signal regions")    
     if flags["statcomb"] == "full":
-        output.cout("\t - Full likelihood calculation will be applied to multibin signal regions")                    
+        output.cout("\t - Full likelihood calculation of CLs and upper limits will be applied to multibin signal regions")                    
+    if flags["statcomb"] == "cls":
+        output.cout("\t - Full likelihood calculation of CLs will be applied to multibin signal regions")                            
     # Let user check correctness of parameters, unless in force-mode.
     if not flags['skipparamcheck']:
         while True:
