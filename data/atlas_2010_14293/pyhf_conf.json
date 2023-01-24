@@ -2,16 +2,19 @@
 	{"name":"MB-SSd",
 	"bkgonly":"MB-SSd_bkgonly.json",
         "patchset":"MB-SSd_patchset.json",
-	"SR_dict": {"MB-SSd-2-1000-10":"SR_2_1000_10_cuts","MB-SSd-2-1000-16":"SR_2_1000_16_cuts","MB-SSd-2-1000-22":"SR_2_1000_22_cuts","MB-SSd-2-1600-10":"SR_2_1600_10_cuts","MB-SSd-2-1600-16":"SR_2_1600_16_cuts","MB-SSd-2-1600-22":"SR_2_1600_22_cuts","MB-SSd-2-2200-16":"SR_2_2200_16_cuts","MB-SSd-2-2200-22":"SR_2_2200_22_cuts","MB-SSd-2-2800-16":"SR_2_2800_16_cuts","MB-SSd-2-2800-22":"SR_2_2800_22_cuts","MB-SSd-2-3400-22":"SR_2_3400_22_cuts","MB-SSd-2-3400-28":"SR_2_3400_28_cuts","MB-SSd-2-4000-22":"SR_2_4000_22_cuts","MB-SSd-2-4000-28":"SR_2_4000_28_cuts","MB-SSd-4-1000-10":"SR_4_1000_10_cuts","MB-SSd-4-1000-16":"SR_4_1000_16_cuts","MB-SSd-4-1000-22":"SR_4_1000_22_cuts","MB-SSd-4-1600-10":"SR_4_1600_10_cuts","MB-SSd-4-1600-16":"SR_4_1600_16_cuts","MB-SSd-4-1600-22":"SR_4_1600_22_cuts","MB-SSd-4-2200-16":"SR_4_2200_16_cuts","MB-SSd-4-2200-22":"SR_4_2200_22_cuts"
+        "histosize":"1",
+	"SR_dict": {"SR_2_1000_10_cuts":"MB-SSd-2-1000-10","SR_2_1000_16_cuts":"MB-SSd-2-1000-16","SR_2_1000_22_cuts":"MB-SSd-2-1000-22","SR_2_1600_10_cuts":"MB-SSd-2-1600-10","SR_2_1600_16_cuts":"MB-SSd-2-1600-16","SR_2_1600_22_cuts":"MB-SSd-2-1600-22","SR_2_2200_16_cuts":"MB-SSd-2-2200-16","SR_2_2200_22_cuts":"MB-SSd-2-2200-22","SR_2_2800_16_cuts":"MB-SSd-2-2800-16","SR_2_2800_22_cuts":"MB-SSd-2-2800-22","SR_2_3400_22_cuts":"MB-SSd-2-3400-22","SR_2_3400_28_cuts":"MB-SSd-2-3400-28","SR_2_4000_22_cuts":"MB-SSd-2-4000-22","SR_2_4000_28_cuts":"MB-SSd-2-4000-28","SR_4_1000_10_cuts":"MB-SSd-4-1000-10","SR_4_1000_16_cuts":"MB-SSd-4-1000-16","SR_4_1000_22_cuts":"MB-SSd-4-1000-22","SR_4_1600_10_cuts":"MB-SSd-4-1600-10","SR_4_1600_16_cuts":"MB-SSd-4-1600-16","SR_4_1600_22_cuts":"MB-SSd-4-1600-22","SR_4_2200_16_cuts":"MB-SSd-4-2200-16","SR_4_2200_22_cuts":"MB-SSd-4-2200-22"
 	}},
 	{"name":"MB-C",
 	"bkgonly":"MB-C_bkgonly.json",
 	"patchset":"MB-C_patchset.json",
+	"histosize":"1",
 	"SR_dict": {"SR_2_1600_16_cuts":"MB-C-2-1600-16","SR_2_1600_22_cuts":"MB-C-2-1600-22","SR_2_2200_16_cuts":"MB-C-2-2200-16","SR_2_2200_22_cuts":"MB-C-2-2200-22","SR_2_2800_16_cuts":"MB-C-2-2800-16","SR_2_2800_22_cuts":"MB-C-2-2800-22","SR_4_1600_16_cuts":"MB-C-4-1600-16","SR_4_1600_22_cuts":"MB-C-4-1600-22","SR_4_2200_16_cuts":"MB-C-4-2200-16","SR_4_2200_22_cuts":"MB-C-4-2200-22","SR_4_2800_16_cuts":"MB-C-4-2800-16","SR_4_2800_22_cuts":"MB-C-4-2800-22","SR_5_1600_16_cuts":"MB-C-5-1600-16","SR_5_1600_22_cuts":"MB-C-5-1600-22","SR_5_2200_16_cuts":"MB-C-5-2200-16","SR_5_2200_22_cuts":"MB-C-5-2200-22","SR_5_2800_16_cuts":"MB-C-5-2800-16","SR_5_2800_22_cuts":"MB-C-5-2800-22"
 	}},
 	{"name":"MB-GGd",
 	"bkgonly":"MB-GGd_bkgonly.json",
          "patchset":"MB-GGd_patchset.json",
+         "histosize":"1",
 	"SR_dict": {"SR_4_1000_10_cuts":"MB-GGd-4-1000-10","SR_4_1000_16_cuts":"MB-GGd-4-1000-16","SR_4_1000_22_cuts":"MB-GGd-4-1000-22","SR_4_1600_10_cuts":"MB-GGd-4-1600-10","SR_4_1600_16_cuts":"MB-GGd-4-1600-16","SR_4_1600_22_cuts":"MB-GGd-4-1600-22","SR_4_2200_10_cuts":"MB-GGd-4-2200-10","SR_4_2200_16_cuts":"MB-GGd-4-2200-16","SR_4_2200_22_cuts":"MB-GGd-4-2200-22","SR_4_2800_10_cuts":"MB-GGd-4-2800-10","SR_4_2800_16_cuts":"MB-GGd-4-2800-16","SR_4_2800_22_cuts":"MB-GGd-4-2800-22","SR_4_3400_10_cuts":"MB-GGd-4-3400-10","SR_4_3400_16_cuts":"MB-GGd-4-3400-16","SR_4_3400_22_cuts":"MB-GGd-4-3400-22","SR_4_4000_10_cuts":"MB-GGd-4-4000-10","SR_4_4000_16_cuts":"MB-GGd-4-4000-16","SR_4_4000_22_cuts":"MB-GGd-4-4000-22"
 	}}]
 }

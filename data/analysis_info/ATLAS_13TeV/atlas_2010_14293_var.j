@@ -705,6 +705,7 @@
     "gluinos", 
     "hadronic"
   ],
+  "likelihoods": "y",
   "mb_signal_regions": {
     "MB-SSd": [
       "MB-SSd-2-1000-10",
