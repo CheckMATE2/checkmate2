@@ -44,6 +44,10 @@ This is a brief note on how to install CheckMATE from the master branch on https
 
 # current
 
+2023-01-26   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ added cms_sus_19_005
+
 
 2022-11-28   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 
