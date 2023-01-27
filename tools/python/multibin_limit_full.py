@@ -13,7 +13,8 @@ def init(path,analysis,MB_set):
     global bkgonly
     global f_patchset
     global SR_dict  
-    os.mkdir(path+'/multibin_limits')
+    if not os.path.exists(path+'/multibin_limits'):
+        os.mkdir(path+'/multibin_limits')
     analysis_name = analysis
     SR_set=MB_set
     with open(hepfiles_folder+analysis_name+"/pyhf_conf.json") as serialized:
@@ -112,19 +113,20 @@ def patch(sample,spec,systematics=0):
     
 #Creates the patchset from the data and exports it to a new folder path/pyhf/ in json format.
 def create_patchset(path,names,s,ds,systematics=0):
-	import hashlib
-	with open(hepfiles_folder+analysis_name+"/Likelihoods/"+bkgonly) as serialized:
-		spec = json.load(serialized)
-	with open(hepfiles_folder+analysis_name+"/Likelihoods/"+f_patchset) as serialized:
-		spec_patchset = json.load(serialized)
-	os.system("mkdir -p "+path+'/pyhf_full')
-	samples=[{"name":'Signal0',"id":len(spec_patchset["patches"][0]["metadata"]["values"])*[''],"SRs":names,"s":s,"ds":ds}]
-	workspace_new={"metadata": {"analysis_id": spec_patchset["metadata"]["analysis_id"],"description": spec_patchset["metadata"]["description"],"digests": {"sha256": ""},"labels": spec_patchset["metadata"]["labels"],"references": {"hepdata": spec_patchset["metadata"]["references"]["hepdata"]}},"patches": [],"version": "1.0.0"}
-	for sample in samples:
-		workspace_new["patches"].append(patch(sample,spec,systematics))
-	workspace_new["metadata"]["digests"]["sha256"]=hashlib.sha256(json.dumps(workspace_new).encode('utf8')).hexdigest()
-	with open(path+'/pyhf_full/'+"patchset.json", "w") as write_file:
-		json.dump(workspace_new, write_file, indent=4)
+    import hashlib
+    with open(hepfiles_folder+analysis_name+"/Likelihoods/"+bkgonly) as serialized:
+        spec = json.load(serialized)
+    with open(hepfiles_folder+analysis_name+"/Likelihoods/"+f_patchset) as serialized:
+        spec_patchset = json.load(serialized)
+    if not os.path.exists(path+'/pyhf_full'):
+        os.mkdir(path+'/pyhf_full')
+    samples=[{"name":'Signal0',"id":len(spec_patchset["patches"][0]["metadata"]["values"])*[''],"SRs":names,"s":s,"ds":ds}]
+    workspace_new={"metadata": {"analysis_id": spec_patchset["metadata"]["analysis_id"],"description": spec_patchset["metadata"]["description"],"digests": {"sha256": ""},"labels": spec_patchset["metadata"]["labels"],"references": {"hepdata": spec_patchset["metadata"]["references"]["hepdata"]}},"patches": [],"version": "1.0.0"}
+    for sample in samples:
+        workspace_new["patches"].append(patch(sample,spec,systematics))
+    workspace_new["metadata"]["digests"]["sha256"]=hashlib.sha256(json.dumps(workspace_new).encode('utf8')).hexdigest()
+    with open(path+'/pyhf_full/'+"patchset.json", "w") as write_file:
+        json.dump(workspace_new, write_file, indent=4)
 
 
 #Performs the CLs hypotesis test. Returns CLs_obs, [CLs_exp -2σ,CLs_exp -1, CLs_exp -0σ, CLs_exp +1σ, CLs_exp +2σ].
