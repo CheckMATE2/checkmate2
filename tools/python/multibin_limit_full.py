@@ -13,6 +13,7 @@ def init(path,analysis,MB_set):
     global f_patchset
     global SR_dict  
     global histosize
+
     if not os.path.exists(path+'/multibin_limits'):
         os.mkdir(path+'/multibin_limits')
     analysis_name = analysis
@@ -130,6 +131,7 @@ def create_patchset(path,names,s,ds,systematics=0):
         samples=[{"name":'Signal0',"id":len(spec_patchset["patches"][0]["metadata"]["values"])*[''],"SRs":names,"s":s,"ds":ds}]
     else:
         samples=[{"name":'Signal0',"id":len(spec_patchset["patches"][0]["metadata"]["values"])*[''],"SRs":[x[:-3] for x in names],"s":s,"ds":ds}]
+
     workspace_new={"metadata": {"analysis_id": spec_patchset["metadata"]["analysis_id"],"description": spec_patchset["metadata"]["description"],"digests": {"sha256": ""},"labels": spec_patchset["metadata"]["labels"],"references": {"hepdata": spec_patchset["metadata"]["references"]["hepdata"]}},"patches": [],"version": "1.0.0"}
     for sample in samples:
         workspace_new["patches"].append(patch(sample,spec,systematics))
