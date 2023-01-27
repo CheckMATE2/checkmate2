@@ -1,7 +1,6 @@
 import json
 import numpy as np
 import pyhf, jsonpatch
-from pyhf.contrib.viz import brazil
 import matplotlib.pyplot as plt
 import os
 import sys, subprocess
@@ -13,7 +12,9 @@ def init(path,analysis,MB_set):
     global bkgonly
     global f_patchset
     global SR_dict  
-    os.mkdir(path+'/multibin_limits')
+    global histosize
+    if not os.path.exists(path+'/multibin_limits'):
+        os.mkdir(path+'/multibin_limits')
     analysis_name = analysis
     SR_set=MB_set
     with open(hepfiles_folder+analysis_name+"/pyhf_conf.json") as serialized:
@@ -22,6 +23,7 @@ def init(path,analysis,MB_set):
     bkgonly = conf["analysis"][ind]['bkgonly']
     f_patchset = conf["analysis"][ind]['patchset']
     SR_dict=conf["analysis"][ind]["SR_dict"]
+    histosize=int(conf["analysis"][ind]["histosize"])
 
 ## Returns the list of regions defined inside the HEP_model file 'file_p'.
 def lookup_SRs(file_p):
@@ -72,18 +74,23 @@ def patch(sample,spec,systematics=0):
                 "values": sample["id"]       
             },
         "patch":[]}
-    workspace = pyhf.Workspace(spec)
-    for i,channel in zip(range(len(workspace.channels)),workspace.channels):
+    for i,channel in zip(range(len(spec['channels'])),[x["name"] for x in spec['channels']]):
         path="/channels/"+str(i)+"/samples/"+str(len(spec['channels'][i]['samples']))
-        if workspace.channels[i] in [ name for name in sample["SRs"]]:
-            names=[name for name in sample["SRs"]]
-            s=sample["s"][names.index(workspace.channels[i])]
-            ds=sample["ds"][names.index(workspace.channels[i])]
+        if channel in [ name for name in sample["SRs"]]:
+            if histosize==1:
+            	names=[name for name in sample["SRs"]]
+            	s=[sample["s"][names.index(channel)]]
+            	ds=[sample["ds"][names.index(channel)]]
+            else:
+            	names=[name+"["+str(i)+"]" for name,i in zip(sample["SRs"],range(histosize))]
+            	s=sample["s"]
+            	ds=sample["ds"]
         else:
-            s=0
-            ds=0
+            s=[0 for x in range(len(spec['channels'][i]['samples'][0]['data']))]
+            ds=[0 for x in range(len(spec['channels'][i]['samples'][0]['data']))]
+        
         patch["patch"].append(
-                        {"op": "add","path": path,"value": {"data": [s],"modifiers": [
+                        {"op": "add","path": path,"value": {"data": s,"modifiers": [
                             {
                                 "data": None,
                                 "name": "lumi",
@@ -95,8 +102,8 @@ def patch(sample,spec,systematics=0):
                                 "type": "normfactor"
                             },
                             {
-                                "data": [ds],
-                                "name": "staterror_"+workspace.channels[i],
+                                "data": ds,
+                                "name": "staterror_"+channel,
                                 "type": "staterror"
                             },
                             {   "name": "sistematics", 
@@ -108,23 +115,27 @@ def patch(sample,spec,systematics=0):
             }
         } 
         )
-    return patch  
+    return patch      
     
 #Creates the patchset from the data and exports it to a new folder path/pyhf/ in json format.
 def create_patchset(path,names,s,ds,systematics=0):
-	import hashlib
-	with open(hepfiles_folder+analysis_name+"/Likelihoods/"+bkgonly) as serialized:
-		spec = json.load(serialized)
-	with open(hepfiles_folder+analysis_name+"/Likelihoods/"+f_patchset) as serialized:
-		spec_patchset = json.load(serialized)
-	os.system("mkdir -p "+path+'/pyhf_full')
-	samples=[{"name":'Signal0',"id":len(spec_patchset["patches"][0]["metadata"]["values"])*[''],"SRs":names,"s":s,"ds":ds}]
-	workspace_new={"metadata": {"analysis_id": spec_patchset["metadata"]["analysis_id"],"description": spec_patchset["metadata"]["description"],"digests": {"sha256": ""},"labels": spec_patchset["metadata"]["labels"],"references": {"hepdata": spec_patchset["metadata"]["references"]["hepdata"]}},"patches": [],"version": "1.0.0"}
-	for sample in samples:
-		workspace_new["patches"].append(patch(sample,spec,systematics))
-	workspace_new["metadata"]["digests"]["sha256"]=hashlib.sha256(json.dumps(workspace_new).encode('utf8')).hexdigest()
-	with open(path+'/pyhf_full/'+"patchset.json", "w") as write_file:
-		json.dump(workspace_new, write_file, indent=4)
+    import hashlib
+    with open(hepfiles_folder+analysis_name+"/Likelihoods/"+bkgonly) as serialized:
+        spec = json.load(serialized)
+    with open(hepfiles_folder+analysis_name+"/Likelihoods/"+f_patchset) as serialized:
+        spec_patchset = json.load(serialized)
+    if not os.path.exists(path+'/pyhf_full'):
+        os.mkdir(path+'/pyhf_full')
+    if histosize==1:
+        samples=[{"name":'Signal0',"id":len(spec_patchset["patches"][0]["metadata"]["values"])*[''],"SRs":names,"s":s,"ds":ds}]
+    else:
+        samples=[{"name":'Signal0',"id":len(spec_patchset["patches"][0]["metadata"]["values"])*[''],"SRs":[x[:-3] for x in names],"s":s,"ds":ds}]
+    workspace_new={"metadata": {"analysis_id": spec_patchset["metadata"]["analysis_id"],"description": spec_patchset["metadata"]["description"],"digests": {"sha256": ""},"labels": spec_patchset["metadata"]["labels"],"references": {"hepdata": spec_patchset["metadata"]["references"]["hepdata"]}},"patches": [],"version": "1.0.0"}
+    for sample in samples:
+        workspace_new["patches"].append(patch(sample,spec,systematics))
+    workspace_new["metadata"]["digests"]["sha256"]=hashlib.sha256(json.dumps(workspace_new).encode('utf8')).hexdigest()
+    with open(path+'/pyhf_full/'+"patchset.json", "w") as write_file:
+        json.dump(workspace_new, write_file, indent=4)
 
 
 #Performs the CLs hypotesis test. Returns CLs_obs, [CLs_exp -2σ,CLs_exp -1, CLs_exp -0σ, CLs_exp +1σ, CLs_exp +2σ].
@@ -132,7 +143,7 @@ def hypotest(workspace,ntoys=-1):
     test_poi = 1.0
     model = workspace.model()
     if ntoys<0:
-    	result= pyhf.infer.hypotest(test_poi,workspace.data(model),model,test_stat="qtilde",return_expected_set=True)
+        result= pyhf.infer.hypotest(test_poi,workspace.data(model),model,test_stat="qtilde",return_expected_set=True)
     else:
     	result= pyhf.infer.hypotest(test_poi,workspace.data(model),model,
     		test_stat="qtilde",
@@ -168,6 +179,7 @@ def calc_point(path,analysis,MB_set,full,systematics=0,ntoys=-1):
     global hepfiles_folder
     
     hepfiles_folder = Info.paths['data']+"/"   #<----Set the path of the folder with the models here.
+    #hepfiles_folder = "/home/krolb/tools/CheckMATE/multibin_1908_03122/data/"
     init(path,analysis,MB_set)
     names = SR_dict.keys()
     SRs = data_from_CMresults(path)
