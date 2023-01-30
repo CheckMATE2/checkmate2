@@ -309,7 +309,7 @@ class CheckMATE2(object):
             best_analysis_cls=""
             best_sr_cls=""
             full = "?"
-            AdvPrint.cout("\n")
+            AdvPrint.cout("")
             for analysis in evaluators:
                 if "mb_signal_regions" in Info.get_analysis_parameters(analysis):
                     mb_signal_regions = Info.get_analysis_parameters(analysis)["mb_signal_regions"]
