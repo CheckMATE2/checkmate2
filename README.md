@@ -44,6 +44,9 @@ This is a brief note on how to install CheckMATE from the master branch on https
 
 # current
 
+2023-01-11   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ multibin profile likelihood
 
 2022-11-28   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 

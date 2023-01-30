@@ -162,5 +162,19 @@
   ], 
   "tags": [
     "sbottoms"
-  ]
+  ],
+  "likelihoods": "y",
+  "mb_signal_regions": {
+    "RegionA": [
+      "SRAH",
+      "SRAM",
+      "SRAL"
+    ],
+    "RegionC": [
+      "SRC22",
+      "SRC24",
+      "SRC26",
+      "SRC28"
+    ]
+  }  
 }

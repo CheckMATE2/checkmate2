@@ -44,6 +44,7 @@ def get_information_from_file(pfile):
     flags['controlregions'] = False
     flags['outputexists'] = "ask"
     flags['randomseed'] = 0
+    flags['statcomb'] = "none"
     
     events['raw'] = []
     events['xsects'] = []
@@ -88,6 +89,8 @@ def get_information_from_file(pfile):
                 flags['fullcl'] = Config.getboolean("Optional Parameters", "fullcl")
             elif optional_parameter == "likelihood":
                 flags['likelihood'] = Config.getboolean("Optional Parameters", "likelihood")
+            elif optional_parameter == "multibin":
+                flags['statcomb'] = Config.get("Optional Parameters", "multibin")                           
             elif optional_parameter == "randomseed":
                 flags['randomseed'] = Config.getint("Optional Parameters", "randomseed")
             elif optional_parameter == "controlregions":
@@ -173,7 +176,8 @@ def get_information_from_parameters():
     parser.add_argument('-t', '--temporary', dest='temp', action='store_true', help='Temporary mode; Delphes output is deleted after analysis step.')
     parser.add_argument('-se', '--skip-evaluation', dest='skipevaluation', action='store_true', help='Skips evaluation step.')              
     parser.add_argument('-cr', '--control-regions', dest='controlregions', action='store_true', help='Analyses control regions instead of signal regions. Sets -se automatically.')
-    parser.add_argument('-rs', '--random-seed', dest='randomseed', type=int, default=0, help='Chooses fixed seed for random number generator. 0 chooses a random seed automatically.')                            
+    parser.add_argument('-rs', '--random-seed', dest='randomseed', type=int, default=0, help='Chooses fixed seed for random number generator. 0 chooses a random seed automatically.')             
+    parser.add_argument('-mb', '--multibin', dest='statcomb', default="none", type=str, help='Whether to perform multibin fit.')                    
     
     # Parse arguments and set return parameters
     args = parser.parse_args()
@@ -208,6 +212,12 @@ def get_information_from_parameters():
     if args.controlregions:
       flags["controlregions"] = True
       flags["skipevaluation"] = True
+    if args.statcomb == "simple":
+      flags["statcomb"] = "simple"
+    elif args.statcomb == "full":
+      flags["statcomb"] = "full"      
+    elif args.statcomb == "cls":
+      flags["statcomb"] = "cls"            
       
     
     # If analyses = "atlas", "cms" or "all", manually add all these to the list
@@ -351,6 +361,12 @@ def prepare_run(analyses, events, files, flags, output, paths):
         output.cout("\t - Delphes files are deleted after the analysis step")
     if flags["randomseed"] != 0:
         output.cout("\t - Fixed random seed of "+str(flags["randomseed"]))
+    if flags["statcomb"] == "simple":
+        output.cout("\t - Simplified likelihood calculation will be applied to multibin signal regions")    
+    if flags["statcomb"] == "full":
+        output.cout("\t - Full likelihood calculation of CLs and upper limits will be applied to multibin signal regions")                    
+    if flags["statcomb"] == "cls":
+        output.cout("\t - Full likelihood calculation of CLs will be applied to multibin signal regions")                            
     # Let user check correctness of parameters, unless in force-mode.
     if not flags['skipparamcheck']:
         while True:

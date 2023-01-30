@@ -51,6 +51,42 @@ AC_CONFIG_FILES([Makefile
 AC_OUTPUT
 
 AC_MSG_RESULT([])
+AC_MSG_RESULT([=== Downloading external resources ===])
+# BDT weights for atlas_2010_14293
+if ! test -f "$srcdir/data/atlas_2010_14293/ZeroLepton2018-SRBDT-weight.tar.gz"
+  then
+  if ! test -d "$srcdir/data/atlas_2010_14293"
+  then 
+    mkdir "$srcdir/data/atlas_2010_14293"
+  fi  
+  `curl -JLH "Accept: application/x-tar" -o "$srcdir/data/atlas_2010_14293/ZeroLepton2018-SRBDT-weight.tar.gz" "https://doi.org/10.17182/hepdata.95664.v2/r8"`
+  `tar -xvzf "$srcdir/data/atlas_2010_14293/ZeroLepton2018-SRBDT-weight.tar.gz" -C "$srcdir/data/atlas_2010_14293"`
+fi  
+# Likelihoods for atlas_2010_14293
+if ! test -f "$srcdir/data/atlas_2010_14293/Likelihoods.tar.gz"
+  then
+  if ! test -d "$srcdir/data/atlas_2010_14293"
+  then 
+    mkdir "$srcdir/data/atlas_2010_14293"
+  fi  
+  `curl -JLH "Accept: application/x-tar" -o "$srcdir/data/atlas_2010_14293/Likelihoods.tar.gz" "https://doi.org/10.17182/hepdata.95664.v2/r9"`
+  `tar -xvzf "$srcdir/data/atlas_2010_14293/Likelihoods.tar.gz" -C "$srcdir/data/atlas_2010_14293"`
+fi
+# Likelihoods for atlas_2211_08028
+# `curl -OJLH "Accept: application/x-tar" https://doi.org/10.17182/hepdata.95928.v1/r5`
+# Likelihoods for atlas_1908_03122
+if ! test -f "$srcdir/data/atlas_1908_03122/HEPData_workspaces.tar.gz"
+  then
+  `curl -JLH "Accept: application/x-tar" -o "$srcdir/data/atlas_1908_03122/HEPData_workspaces.tar.gz" "https://doi.org/10.17182/hepdata.89408.v3/r2"`
+  if ! test -d "$srcdir/data/atlas_1908_03122/Likelihoods/"
+  then
+    mkdir "$srcdir/data/atlas_1908_03122/Likelihoods"
+  fi  
+  `tar -xvzf "$srcdir/data/atlas_1908_03122/HEPData_workspaces.tar.gz" -C "$srcdir/data/atlas_1908_03122/Likelihoods/"`
+fi  
+AC_MSG_RESULT([])
+
+AC_MSG_RESULT([])
 AC_MSG_RESULT([=== Subconfigurations Done ===])
 AC_MSG_RESULT([Configuration of CheckMATE finished. Run 'make' to compile. If you have more than one core, you can use -j2 or even -j4 to speed up the compilation process.])
 AC_MSG_RESULT([])
