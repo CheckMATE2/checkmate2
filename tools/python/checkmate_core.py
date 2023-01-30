@@ -18,8 +18,9 @@ from process import Process
 from detectorsettings import DetectorSettings
 from evaluator import Evaluator, find_strongest_evaluators, find_strongest_zsig
 from resultcollector import ResultCollector
-import multibin_limit as mb
-import multibin_limit_full as mbfull
+if sys.version_info[0] == 3:
+    import multibin_limit as mb
+    import multibin_limit_full as mbfull
 
 class CheckMATE2(object):
     """ This is the main object whose instance corresponds to a full CheckMATE run """
@@ -308,26 +309,33 @@ class CheckMATE2(object):
             best_analysis_cls=""
             best_sr_cls=""
             full = "?"
+            AdvPrint.cout("\n")
             for analysis in evaluators:
                 if "mb_signal_regions" in Info.get_analysis_parameters(analysis):
                     mb_signal_regions = Info.get_analysis_parameters(analysis)["mb_signal_regions"]
                     for mbsr in mb_signal_regions:
                         if Info.parameters["statcomb"] == "simple" or (Info.parameters["statcomb"] == "cls" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n") or (Info.parameters["statcomb"] == "full" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n"):
                             sr_list = mb_signal_regions[mbsr]
+                            AdvPrint.cout("Calculating fast likelihood for analysis: "+analysis+", SR: "+mbsr+"... ")
                             inv_r = mb.calc_point(Info.paths['output'] , sr_list, analysis, mbsr)
+                            AdvPrint.cout("Done!")
                             if inv_r < best_invr:
                                 best_invr = inv_r
                                 best_analysis_r = analysis
                                 best_sr_r = mbsr
                                 full = "n"
                         if Info.parameters["statcomb"] == "cls" and Info.get_analysis_parameters(analysis)["likelihoods"] == "y":
+                            AdvPrint.cout("Calculating full likelihood CLs for analysis: "+analysis+", SR: "+mbsr+"... ")
                             cls = mbfull.calc_point(Info.paths['output'] , analysis, mbsr, False)
+                            AdvPrint.cout("Done!")
                             if cls < best_cls: 
                                 best_cls = cls
                                 best_analysis_cls = analysis
                                 best_sr_cls = mbsr                                
                         if Info.parameters["statcomb"] == "full" and Info.get_analysis_parameters(analysis)["likelihoods"] == "y":
+                            AdvPrint.cout("Calculating full likelihood upper limits and CLs for analysis: "+analysis+", SR: "+mbsr+"... ")
                             inv_r = mbfull.calc_point(Info.paths['output'] , analysis, mbsr, True)
+                            AdvPrint.cout("Done!")
                             if inv_r < best_invr:
                                 best_invr = inv_r
                                 best_analysis_r = analysis

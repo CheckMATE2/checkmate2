@@ -78,6 +78,10 @@ fi
 if ! test -f "$srcdir/data/atlas_1908_03122/HEPData_workspaces.tar.gz"
   then
   `curl -JLH "Accept: application/x-tar" -o "$srcdir/data/atlas_1908_03122/HEPData_workspaces.tar.gz" "https://doi.org/10.17182/hepdata.89408.v3/r2"`
+  if ! test -d "$srcdir/data/atlas_1908_03122/Likelihoods/"
+  then
+    mkdir "$srcdir/data/atlas_1908_03122/Likelihoods"
+  fi  
   `tar -xvzf "$srcdir/data/atlas_1908_03122/HEPData_workspaces.tar.gz" -C "$srcdir/data/atlas_1908_03122/Likelihoods/"`
 fi  
 AC_MSG_RESULT([])
