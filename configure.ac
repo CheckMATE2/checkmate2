@@ -36,6 +36,7 @@ AC_SUBST(DYLD_LIBRARY_PATH)
 AC_SUBST(LD_RUN_PATH)
 CHECK_DELPHES([6], ,AC_MSG_ERROR("No Delphes... but why?") )
 CHECK_MADGRAPH([6], ,AC_MSG_ERROR("No MadGraph... but why?") )
+CHECK_ONNX([6], ,AC_MSG_ERROR("No ONNX... but why?") )
 
 # Checks for header files.
 
@@ -74,6 +75,16 @@ if ! test -f "$srcdir/data/atlas_2010_14293/Likelihoods.tar.gz"
 fi
 # Likelihoods for atlas_2211_08028
 # `curl -OJLH "Accept: application/x-tar" https://doi.org/10.17182/hepdata.95928.v1/r5`
+# ONNX for atlas_2106_09609
+if ! test -f "$srcdir/data/atlas_2106_09609/SUSY-2019-04-ONNX.tgz"
+  then
+  if ! test -d "$srcdir/data/atlas_2106_09609/"
+  then
+    mkdir "$srcdir/data/atlas_2106_09609/"
+  fi
+  `curl -JLH "Accept: application/x-tar" -o "$srcdir/data/atlas_2106_09609/SUSY-2019-04-ONNX.tgz" "https://doi.org/10.17182/hepdata.104860.v1/r3"`
+  `tar -zxvf "$srcdir/data/atlas_2106_09609/SUSY-2019-04-ONNX.tgz" --strip-components=1 -C "$srcdir/data/atlas_2106_09609/"`
+fi  
 # Likelihoods for atlas_1908_03122
 if ! test -f "$srcdir/data/atlas_1908_03122/HEPData_workspaces.tar.gz"
   then

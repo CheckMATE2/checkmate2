@@ -29,6 +29,11 @@ Ver 2.0.35
     ~ providing master path for external analysis resources (like in LLP)
     ~ Delphes 3.5 required
 
+Ver 2.0.35
+---------
+2022-09-30   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ implementation of NN method in atlas_2106_09609
 
 Ver 2.0.34
 ---------

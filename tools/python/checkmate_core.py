@@ -301,6 +301,9 @@ class CheckMATE2(object):
         best_evaluator.check_warnings()
         best_evaluator.print_result()
         
+        if sys.version_info[0] == 2 and (Info.parameters["statcomb"] == "simple" or Info.parameters["statcomb"] == "cls" or Info.parameters["statcomb"] == "full"):
+            AdvPrint.cout("Mutlibin signal regions require Python 3!")
+        
         if sys.version_info[0] == 3 and (Info.parameters["statcomb"] == "simple" or Info.parameters["statcomb"] == "cls" or Info.parameters["statcomb"] == "full"):
             best_invr=10.
             best_cls=1.
@@ -342,35 +345,35 @@ class CheckMATE2(object):
                                 best_sr_r = mbsr
                                 full = "y"
                             
-                    if best_invr < 10.:
-                        AdvPrint.set_cout_file(Info.files["output_result"], False)
-                        if full == "n":
-                            AdvPrint.cout("\nTest: Calculation of approximate (fast) likelihood for multibin signal regions")
-                        else:
-                            AdvPrint.cout("\nTest: Calculation of upper limit using full likelihood for multibin signal regions")                            
-                        if best_invr < 1.:
-                            result = "\033[31mExcluded\033[0m"
-                        else:
-                            result = "\033[32mAllowed\033[0m"
-                        AdvPrint.cout("Result: "+result)
-                        AdvPrint.cout("Result for 1/mu (r): "+str(1./best_invr))
-                        AdvPrint.cout("Analysis: "+best_analysis_r)
-                        AdvPrint.cout("MBSR: "+best_sr_r)
-                        AdvPrint.set_cout_file("#None")
-                    if best_cls < 1.:
-                        AdvPrint.set_cout_file(Info.files["output_result"], False)
-                        AdvPrint.cout("\nTest: Calculation of CLs using full likelihood for multibin signal regions")                  
-                        if best_cls < 0.05:
-                            result = "\033[31mExcluded\033[0m"
-                        else:
-                            result = "\033[32mAllowed\033[0m"
-                        AdvPrint.cout("Result: "+result)
-                        AdvPrint.cout("Result for CL: "+str(best_cls))
-                        AdvPrint.cout("Analysis: "+best_analysis_cls)
-                        AdvPrint.cout("MBSR: "+best_sr_cls)
-                        AdvPrint.set_cout_file("#None")
-                    if best_invr == 10. and best_cls == 1.:
-                        AdvPrint.cout("Results of approximate/fast likelihood to weak to exclude model or no multibin analysis available")
+            if best_invr < 10.:
+                AdvPrint.set_cout_file(Info.files["output_result"], False)
+                if full == "n":
+                    AdvPrint.cout("\nTest: Calculation of approximate (fast) likelihood for multibin signal regions")
+                else:
+                    AdvPrint.cout("\nTest: Calculation of upper limit using full likelihood for multibin signal regions")                            
+                if best_invr < 1.:
+                    result = "\033[31mExcluded\033[0m"
+                else:
+                    result = "\033[32mAllowed\033[0m"
+                AdvPrint.cout("Result: "+result)
+                AdvPrint.cout("Result for 1/mu (r): "+str(1./best_invr))
+                AdvPrint.cout("Analysis: "+best_analysis_r)
+                AdvPrint.cout("MBSR: "+best_sr_r)
+                AdvPrint.set_cout_file("#None")
+            if best_cls < 1.:
+                AdvPrint.set_cout_file(Info.files["output_result"], False)
+                AdvPrint.cout("\nTest: Calculation of CLs using full likelihood for multibin signal regions")                  
+                if best_cls < 0.05:
+                    result = "\033[31mExcluded\033[0m"
+                else:
+                    result = "\033[32mAllowed\033[0m"
+                AdvPrint.cout("Result: "+result)
+                AdvPrint.cout("Result for CL: "+str(best_cls))
+                AdvPrint.cout("Analysis: "+best_analysis_cls)
+                AdvPrint.cout("MBSR: "+best_sr_cls)
+                AdvPrint.set_cout_file("#None")
+            if best_invr == 10. and best_cls == 1.:
+                AdvPrint.cout("Results of approximate/fast likelihood to weak to exclude model or no multibin analysis available")
     
         if Info.flags['zsig']:
             _print_zsig(evaluators)

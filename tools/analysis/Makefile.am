@@ -5,6 +5,10 @@ AM_CXXFLAGS = @ROOTCFLAGS@ @DELPHESCFLAGS@ -Iinclude/base -Iinclude/kinematics -
              -Iinclude/analyses/ATLAS_7TeV -Iinclude/analyses/ATLAS_8TeV -Iinclude/analyses/ATLAS_13TeV -Iinclude/analyses/ATLAS_14TeV_HighLumi \
              -Iinclude/analyses/CMS_7TeV -Iinclude/analyses/CMS_8TeV -Iinclude/analyses/CMS_13TeV -Iinclude/analyses/CMS_14TeV_HighLumi
 
+if HAVE_ONNX
+   AM_CXXFLAGS += @ONNXINCLUDE@ -DHAVE_ONNX=1
+endif
+             
 # the library names to build
 mylibdir = $(abs_top_builddir)/tools/analysis/lib
 mylib_LTLIBRARIES = libanalyses.la

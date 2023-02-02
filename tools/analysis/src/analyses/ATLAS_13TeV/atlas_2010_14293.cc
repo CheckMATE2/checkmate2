@@ -4,7 +4,7 @@
 using namespace TMVA;
 
 // AUTHOR: K. Rolbiecki
-//  EMAIL: a
+//  EMAIL: krolb@fuw.edu.pl
 void Atlas_2010_14293::initialize() {
   setAnalysisName("atlas_2010_14293");          
   setInformation(""
