@@ -48,8 +48,7 @@ This is a brief note on how to install CheckMATE from the master branch on https
      For command line use "-mb simple/cls/full"; in input file "Multibin: simple/cls/full"
      simple: simple fitting of shape in several bins as defined in a search, reasonably fast;
      cls: calculates CLs using full likelihood provided by the collaboration, slower but still manageable
-     full: calculates CLs and upper limits using full likelihood but quite slow (extremely slow for atlas_2010_14293 - running time in days).
-     
+     full: calculates CLs and upper limits using full likelihood but quite slow (extremely slow for atlas_2010_14293 - running time in days). 
      The results are stored in the multibin_limits folder.
      
   b) Neural nets implemented with ONNX Runtime, available in atlas_2106_09609 and atlas_2211_08028:
