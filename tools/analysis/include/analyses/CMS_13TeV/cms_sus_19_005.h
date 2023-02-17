@@ -36,6 +36,7 @@ std::vector<X*> Isolate_leptons_with_variable_track_isolation_cone_CMS(std::vect
     double dPhi(std::vector<Jet*> jets, int j);
     static bool sortByPT(Jet *i, Jet *j) { return (i->PT > j->PT); }
     std::vector<LundCluster> cluster_jets(std::vector<Jet*> input);
+    bool fill_bins_2j(int Nj, int Nb, double HT, double MT2);
 };
 
 #endif

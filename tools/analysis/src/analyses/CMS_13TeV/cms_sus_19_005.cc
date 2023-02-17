@@ -8,7 +8,7 @@ void Cms_sus_19_005::initialize() {
     "# only prompt decays\n"
   "");
   setLuminosity(137.0*units::INVFB);      
-  bookSignalRegions("2j_loose;2j_tight;4j_loose;4j_tight;7j_loose;7j_tight;10j_loose;10j_tight;2b_loose;2b_tight;3b_loose;3b_tight;4b_loose;4b_tight;7j_3b_loose;7j_3b_tight;7j_4b_loose;7j_4b_tight;10j_4b_loose;10j_4b_tight;Mono-phi;1j_0b_250;1j_0b_350;1j_0b_450;1j_0b_575;1j_0b_750;1j_0b_1000;1j_0b_1200;1j_1b_250;1j_1b_350;1j_1b_450;1j_1b_575;1j_1b_700;2-3j_0b_250_200;2-3j_0b_250_300;2-3j_0b_250_400;2-3j_1b_250_200;2-3j_1b_250_300;2-3j_1b_250_400;2-3j_2b_250_200;2-3j_2b_250_300;2-3j_2b_250_400;2-6j_3b_250_200;2-6j_3b_250_300;2-6j_3b_250_400;4-6j_0b_250_200;4-6j_0b_250_300;4-6j_0b_250_400;4-6j_1b_250_200;4-6j_1b_250_300;4-6j_1b_250_400;4-6j_2b_250_200;4-6j_2b_250_300;4-6j_2b_250_400;7j_0b_250_200;7j_0b_250_300;7j_0b_250_500;7j_1b_250_200;7j_1b_250_300;7j_2b_250_200;7j_2b_250_300;7j_3b_250_200;7j_3b_250_300");
+  bookSignalRegions("2j_loose;2j_tight;4j_loose;4j_tight;7j_loose;7j_tight;10j_loose;10j_tight;2b_loose;2b_tight;3b_loose;3b_tight;4b_loose;4b_tight;7j_3b_loose;7j_3b_tight;7j_4b_loose;7j_4b_tight;10j_4b_loose;10j_4b_tight;Mono-phi;1j_0b_250;1j_0b_350;1j_0b_450;1j_0b_575;1j_0b_700;1j_0b_1000;1j_0b_1200;1j_1b_250;1j_1b_350;1j_1b_450;1j_1b_575;1j_1b_700;2-3j_0b_250_200;2-3j_0b_250_300;2-3j_0b_250_400;2-3j_1b_250_200;2-3j_1b_250_300;2-3j_1b_250_400;2-3j_2b_250_200;2-3j_2b_250_300;2-3j_2b_250_400;2-6j_3b_250_200;2-6j_3b_250_300;2-6j_3b_250_400;4-6j_0b_250_200;4-6j_0b_250_300;4-6j_0b_250_400;4-6j_1b_250_200;4-6j_1b_250_300;4-6j_1b_250_400;4-6j_2b_250_200;4-6j_2b_250_300;4-6j_2b_250_400;7j_0b_250_200;7j_0b_250_300;7j_0b_250_500;7j_1b_250_200;7j_1b_250_300;7j_2b_250_200;7j_2b_250_300;7j_3b_250_200;7j_3b_250_300");
   bookSignalRegions("2-3j_0b_450_200;2-3j_0b_450_300;2-3j_0b_450_400;2-3j_0b_450_500;2-3j_1b_450_200;2-3j_1b_450_300;2-3j_1b_450_400;2-3j_1b_450_500;2-3j_2b_450_200;2-3j_2b_450_300;2-3j_2b_450_400;2-3j_2b_450_500;2-6j_3b_450_200;2-6j_3b_450_300;2-6j_3b_450_400;2-6j_3b_450_500;4-6j_0b_450_200;4-6j_0b_450_300;4-6j_0b_450_400;4-6j_0b_450_500;4-6j_1b_450_200;4-6j_1b_450_300;4-6j_1b_450_400;4-6j_1b_450_500;4-6j_2b_450_200;4-6j_2b_450_300;4-6j_2b_450_400;4-6j_2b_450_500;7j_0b_450_200;7j_0b_450_300;7j_0b_450_400;7j_1b_450_200;7j_1b_450_300;7j_1b_450_400;7j_2b_450_200;7j_2b_450_300;7j_2b_450_400;7j_3b_450_200;7j_3b_450_300;7j_3b_450_400");  
   bookSignalRegions("2-3j_0b_575_200;2-3j_0b_575_300;2-3j_0b_575_400;2-3j_0b_575_500;2-3j_0b_575_600;2-3j_0b_575_700;2-3j_0b_575_800;2-3j_0b_575_900;2-3j_0b_575_1000;2-3j_0b_575_1100;2-3j_1b_575_200;2-3j_1b_575_300;2-3j_1b_575_400;2-3j_1b_575_600;2-3j_1b_575_800;2-3j_1b_575_1000;2-3j_2b_575_200;2-3j_2b_575_300;2-3j_2b_575_400;2-3j_2b_575_600;2-3j_2b_575_800");  
   bookSignalRegions("2-6j_3b_575_200;2-6j_3b_575_300;2-6j_3b_575_400;2-6j_3b_575_600;2-6j_3b_575_800;4-6j_0b_575_200;4-6j_0b_575_300;4-6j_0b_575_400;4-6j_0b_575_500;4-6j_0b_575_600;4-6j_0b_575_700;4-6j_0b_575_800;4-6j_0b_575_900;4-6j_0b_575_1000;4-6j_0b_575_1100;4-6j_1b_575_200;4-6j_1b_575_300;4-6j_1b_575_400;4-6j_1b_575_600;4-6j_1b_575_800;4-6j_1b_575_1000;4-6j_2b_575_200;4-6j_2b_575_300;4-6j_2b_575_400;4-6j_2b_575_600;4-6j_2b_575_800");  
@@ -109,183 +109,56 @@ void Cms_sus_19_005::analyze() {
       }
     } */
     
-    std::string labmt2;
-    std::string labj;
-    std::string labb;
     double MT2 = mT2(clusters[0].P4(), clusters[1].P4(), 0., missingET->P4());
     
     if (MT2 < 200.) return;
     countCutflowEvent("09_MT2>200");
     
-    if ( HT < 450.) {
-      if ( (Nb < 3 and Nj < 7) or (Nb == 0 and Nj > 6)) {
-        if (MT2 < 300.) labmt2 = "200"; 
-        else if (MT2 < 400.) labmt2 = "300"; 
-        else labmt2 = "400"; 
-        if (Nj < 4) labj = "2-3j_"; 
-        else if (Nj < 7) labj = "4-6j_";
-        else labj = "7j_";  
-        countSignalEvent(labj + std::to_string(Nb) + "b_250_" + labmt2);
-      }
-      else if ( Nb > 2 and Nj < 7) {
-        if (MT2 < 300.) labmt2 = "200"; 
-        else if (MT2 < 400.) labmt2 = "300"; 
-        else labmt2 = "400"; 
-        labj = "2-6j_" ; 
-        countSignalEvent(labj + std::to_string(Nb) + "b_250_" + labmt2);
-      }
-      else if ( Nb > 0 and Nj > 6) {
-        if (MT2 < 300.) labmt2 = "200"; 
-        else labmt2 = "300"; 
-        labj = "7j_";
-        labb = std::to_string(std::min(Nb, 3)); 
-        countSignalEvent(labj + labb + "b_250_" + labmt2);
-      }      
-    }
-    else if ( HT < 575.) {
-      if ( Nb < 3 and Nj < 7 ) {
-        if (MT2 < 300.) labmt2 = "200"; 
-        else if (MT2 < 400.) labmt2 = "300"; 
-        else if (MT2 < 500.) labmt2 = "400";
-        else labmt2 = "500";  
-        if (Nj < 4) labj = "2-3j_"; 
-        else labj = "4-6j_";
-        countSignalEvent(labj + std::to_string(Nb) + "b_450_" + labmt2);
-      }      
-      else if ( Nb > 2 and Nj < 7 ) {
-        if (MT2 < 300.) labmt2 = "200"; 
-        else if (MT2 < 400.) labmt2 = "300"; 
-        else if (MT2 < 500.) labmt2 = "400";
-        else labmt2 = "500";  
-        labj = "2-6j_"; 
-        labb = "3"; 
-        countSignalEvent(labj + labb + "b_450_" + labmt2);
-      } 
-      else if ( Nj > 6 ) {
-        if (MT2 < 300.) labmt2 = "200"; 
-        else if (MT2 < 400.) labmt2 = "300"; 
-        else labmt2 = "400"  ;
-        labj = "7j_"; 
-        labb = std::to_string(std::min(Nb, 3)); 
-        countSignalEvent(labj + labb + "b_450_" + labmt2);
-      }       
-    }
-    else if ( HT < 1200.) {
-      if (Nj < 4 and Nb == 0){
-        labmt2 = std::to_string(std::min(int(MT2/100.), 11)) + "00" ;
-        cout << MT2 << "    "  << int(std::floor(MT2/100));
-        countSignalEvent("2-3j_0b_575_" + labmt2);
-      }
-      else if (Nj < 4 and Nb == 1){
-        if (MT2 < 300.) labmt2 = "200"; 
-        else if (MT2 < 400.) labmt2 = "300"; 
-        else if (MT2 < 600.) labmt2 = "400";
-        else if (MT2 < 800.) labmt2 = "600";
-        else if (MT2 < 1000.) labmt2 = "800";
-        else labmt2 = "1000";  
-        countSignalEvent("2-3j_1b_575_" + labmt2);
-      }      
-      else if (Nj < 4 and Nb == 2){
-        if (MT2 < 300.) labmt2 = "200"; 
-        else if (MT2 < 400.) labmt2 = "300"; 
-        else if (MT2 < 600.) labmt2 = "400";
-        else if (MT2 < 800.) labmt2 = "600";
-        else labmt2 = "800";  
-        countSignalEvent("2-3j_2b_575_" + labmt2);
-      }  
-      else if (Nj < 7 and Nb == 3){
-        if (MT2 < 300.) labmt2 = "200"; 
-        else if (MT2 < 400.) labmt2 = "300"; 
-        else if (MT2 < 600.) labmt2 = "400";
-        else if (MT2 < 800.) labmt2 = "600";
-        else labmt2 = "800";  
-        countSignalEvent("2-6j_3b_575_" + labmt2);
-      }
-      else if (Nj < 7 and Nb == 0){
-        labmt2 = std::to_string(std::min(int(MT2/100.), 11)) + "00" ;
-        cout << MT2 << "    "  << int(std::floor(MT2/100)) << endl;
-        countSignalEvent("4-6j_0b_575_" + labmt2);
-      }    
-      else if (Nj < 7 and Nb == 1){
-        if (MT2 < 300.) labmt2 = "200"; 
-        else if (MT2 < 400.) labmt2 = "300"; 
-        else if (MT2 < 600.) labmt2 = "400";
-        else if (MT2 < 800.) labmt2 = "600";
-        else if (MT2 < 1000.) labmt2 = "800";
-        else labmt2 = "1000";  
-        countSignalEvent("4-6j_1b_575_" + labmt2);
-      }
-      else if (Nj < 7 and Nb == 2){
-        if (MT2 < 300.) labmt2 = "200"; 
-        else if (MT2 < 400.) labmt2 = "300"; 
-        else if (MT2 < 600.) labmt2 = "400";
-        else if (MT2 < 800.) labmt2 = "600";
-        else labmt2 = "800";  
-        countSignalEvent("4-6j_2b_575_" + labmt2);
-      }        
-     else if (Nj < 10 and Nb < 3){
-        if (MT2 < 300.) labmt2 = "200"; 
-        else if (MT2 < 400.) labmt2 = "300"; 
-        else if (MT2 < 600.) labmt2 = "400";
-        else if (MT2 < 800.) labmt2 = "600";
-        else labmt2 = "800";  
-        countSignalEvent("7-9j_"+ std::to_string(Nb)+"b_575_" + labmt2);
-      }    
-     else if (Nj < 10 and Nb == 3){
-        if (MT2 < 300.) labmt2 = "200"; 
-        else if (MT2 < 400.) labmt2 = "300"; 
-        else if (MT2 < 600.) labmt2 = "400";
-        else labmt2 = "600";  
-        countSignalEvent("7-9j_"+ std::to_string(Nb)+"b_575_" + labmt2);
-      }   
-     else if (Nj < 10 and Nb > 3){
-        if (MT2 < 300.) labmt2 = "200"; 
-        else if (MT2 < 400.) labmt2 = "300"; 
-        else labmt2 = "400";  
-        countSignalEvent("7-9j_4b_575_" + labmt2);
-      } 
-     else if (Nj >= 10 and Nb < 3){
-        if (MT2 < 300.) labmt2 = "200"; 
-        else if (MT2 < 500.) labmt2 = "300"; 
-        else labmt2 = "500";  
-        countSignalEvent("7-9j_"+ std::to_string(Nb)+"b_575_" + labmt2);
-      }    
-     else if (Nj >= 10 and Nb == 3){
-        if (MT2 < 300.) labmt2 = "200"; 
-        else labmt2 = "300";  
-        countSignalEvent("7-9j_"+ std::to_string(Nb)+"b_575_" + labmt2);
-      }
-      else if (Nj >= 10 and Nb > 3) countSignalEvent("7-9j_4b_575_200");
-    }
-    else if ( HT < 1500.) {
-      if ( Nj < 4 and Nb < 2){
-        labmt2 = std::to_string(std::min(2*int(MT2/200.), 12)) + "00" ;
-        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << endl;
-        countSignalEvent("2-3j_"+std::to_string(Nb)+"b_1200_" + labmt2);
-      }
-      else if ( Nj < 7 and Nb < 2){
-        labmt2 = std::to_string(std::min(2*int(MT2/200.), 12)) + "00" ;
-        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << endl;
-        countSignalEvent("4-6j_"+std::to_string(Nb)+"b_1200_" + labmt2);
-      }  
-      else if ( Nj < 4 and Nb == 2){
-        labmt2 = std::to_string(std::min(2*int(MT2/200.), 10)) + "00" ;
-        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << endl;
-        countSignalEvent("2-3j_"+std::to_string(Nb)+"b_1200_" + labmt2);
-      }  
-      else if ( Nj < 7 and Nb == 2){
-        labmt2 = std::to_string(std::min(2*int(MT2/200.), 10)) + "00" ;
-        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << endl;
-        countSignalEvent("4-6j_"+std::to_string(Nb)+"b_1200_" + labmt2);
-      }
-      else if ( Nj < 7 and Nb >= 2){
-        labmt2 = std::to_string(std::min(2*int(MT2/200.), 6)) + "00" ;
-        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << endl;
-        countSignalEvent("2-6j_3b_1200_" + labmt2);
-      }      
-      
-    }
+    fill_bins_2j(Nj, Nb, HT, MT2);
     
+    if ( Nj >= 2  and Nb >= 0 and HT > 1200. and MT2 > 1200.) countSignalEvent("2j_loose");
+    if ( Nj >= 2  and Nb >= 0 and HT > 1500. and MT2 > 1400.) countSignalEvent("2j_tight");
+    if ( Nj >= 4  and Nb >= 0 and HT > 1200. and MT2 > 1000.) countSignalEvent("4j_loose");
+    if ( Nj >= 4  and Nb >= 0 and HT > 1500. and MT2 > 1400.) countSignalEvent("4j_tight");
+    if ( Nj >= 7  and Nb >= 0 and HT > 1200. and MT2 >  600.) countSignalEvent("7j_loose");
+    if ( Nj >= 7  and Nb >= 0 and HT > 1500. and MT2 >  800.) countSignalEvent("7j_tight");    
+    if ( Nj >= 10 and Nb >= 0 and HT > 1200. and MT2 >  400.) countSignalEvent("10j_loose");
+    if ( Nj >= 10 and Nb >= 0 and HT > 1500. and MT2 >  600.) countSignalEvent("10j_tight");
+    if ( Nj >= 2  and Nb >= 2 and HT > 1200. and MT2 >  600.) countSignalEvent("2b_loose");
+    if ( Nj >= 2  and Nb >= 2 and HT > 1500. and MT2 >  600.) countSignalEvent("2b_tight");    
+    if ( Nj >= 2  and Nb >= 3 and HT > 1200. and MT2 >  400.) countSignalEvent("3b_loose");
+    if ( Nj >= 2  and Nb >= 3 and HT > 1500. and MT2 >  400.) countSignalEvent("3b_tight");       
+    if ( Nj >= 2  and Nb >= 4 and HT > 1200. and MT2 >  400.) countSignalEvent("4b_loose");
+    if ( Nj >= 2  and Nb >= 4 and HT > 1500. and MT2 >  400.) countSignalEvent("4b_tight");        
+    if ( Nj >= 7  and Nb >= 3 and HT > 1200. and MT2 >  400.) countSignalEvent("7j_3b_loose");
+    if ( Nj >= 7  and Nb >= 3 and HT > 1500. and MT2 >  400.) countSignalEvent("7j_3b_tight");            
+    if ( Nj >= 7  and Nb >= 4 and HT > 1200. and MT2 >  400.) countSignalEvent("7j_4b_loose");
+    if ( Nj >= 7  and Nb >= 4 and HT > 1500. and MT2 >  400.) countSignalEvent("7j_4b_tight");              
+    if ( Nj >=10  and Nb >= 4 and HT > 1200. and MT2 >  400.) countSignalEvent("10j_4b_loose");
+    if ( Nj >=10  and Nb >= 4 and HT > 1500. and MT2 >  400.) countSignalEvent("10j_4b_tight");   
+    if ( Nj <=3   and Nb == 0 and HT > 250. and HT < 450. and MT2 > 200. and MT2 < 300.) countSignalEvent("Mono-phi");
+
+  }
+  
+  double pT1 = lightjets[0]->PT;
+  if (Nj == 1 and pT1 > 250.) {
+    
+    if ( Nb == 0 and HT < 450. ) countSignalEvent("Mono-phi");
+    
+    if      ( Nb == 0 and pT1 < 350. ) countSignalEvent("1j_0b_250");
+    else if ( Nb == 0 and pT1 < 450. ) countSignalEvent("1j_0b_350");
+    else if ( Nb == 0 and pT1 < 575. ) countSignalEvent("1j_0b_450");
+    else if ( Nb == 0 and pT1 < 700. ) countSignalEvent("1j_0b_575");
+    else if ( Nb == 0 and pT1 < 1000.) countSignalEvent("1j_0b_700");
+    else if ( Nb == 0 and pT1 < 1200.) countSignalEvent("1j_0b_1000");
+    else if ( Nb == 0 and pT1 >= 1200.) countSignalEvent("1j_0b_1200");
+    
+    if      ( Nb >= 1 and pT1 < 350. ) countSignalEvent("1j_1b_250");
+    else if ( Nb >= 1 and pT1 < 450. ) countSignalEvent("1j_1b_350");
+    else if ( Nb >= 1 and pT1 < 575. ) countSignalEvent("1j_1b_450");
+    else if ( Nb >= 1 and pT1 < 700. ) countSignalEvent("1j_1b_575");
+    else if ( Nb >= 1 and pT1 >= 700.) countSignalEvent("1j_1b_700");
+
   }
   
   return;
@@ -432,4 +305,290 @@ void LundCluster::remove_jet(Jet* jet) {
   return;
 }
 
+  
+bool Cms_sus_19_005::fill_bins_2j(int Nj, int Nb, double HT, double MT2) {
+  
+    std::string labmt2;
+    std::string labj;
+    std::string labb;
+
+    if ( HT < 450.) {
+      if ( (Nb < 3 and Nj < 7) or (Nb == 0 and Nj > 6)) {
+        if (MT2 < 300.) labmt2 = "200"; 
+        else if (MT2 < 400.) labmt2 = "300"; 
+        else labmt2 = "400"; 
+        if (Nj < 4) labj = "2-3j_"; 
+        else if (Nj < 7) labj = "4-6j_";
+        else labj = "7j_";  
+        countSignalEvent(labj + std::to_string(Nb) + "b_250_" + labmt2);
+      }
+      else if ( Nb > 2 and Nj < 7) {
+        if (MT2 < 300.) labmt2 = "200"; 
+        else if (MT2 < 400.) labmt2 = "300"; 
+        else labmt2 = "400"; 
+        labj = "2-6j_" ; 
+        countSignalEvent(labj + std::to_string(Nb) + "b_250_" + labmt2);
+      }
+      else if ( Nb > 0 and Nj > 6) {
+        if (MT2 < 300.) labmt2 = "200"; 
+        else labmt2 = "300"; 
+        labj = "7j_";
+        labb = std::to_string(std::min(Nb, 3)); 
+        countSignalEvent(labj + labb + "b_250_" + labmt2);
+      }      
+    }
+    else if ( HT < 575.) {
+      if ( Nb < 3 and Nj < 7 ) {
+        if (MT2 < 300.) labmt2 = "200"; 
+        else if (MT2 < 400.) labmt2 = "300"; 
+        else if (MT2 < 500.) labmt2 = "400";
+        else labmt2 = "500";  
+        if (Nj < 4) labj = "2-3j_"; 
+        else labj = "4-6j_";
+        countSignalEvent(labj + std::to_string(Nb) + "b_450_" + labmt2);
+      }      
+      else if ( Nb > 2 and Nj < 7 ) {
+        if (MT2 < 300.) labmt2 = "200"; 
+        else if (MT2 < 400.) labmt2 = "300"; 
+        else if (MT2 < 500.) labmt2 = "400";
+        else labmt2 = "500";  
+        labj = "2-6j_"; 
+        labb = "3"; 
+        countSignalEvent(labj + labb + "b_450_" + labmt2);
+      } 
+      else if ( Nj > 6 ) {
+        if (MT2 < 300.) labmt2 = "200"; 
+        else if (MT2 < 400.) labmt2 = "300"; 
+        else labmt2 = "400"  ;
+        labj = "7j_"; 
+        labb = std::to_string(std::min(Nb, 3)); 
+        countSignalEvent(labj + labb + "b_450_" + labmt2);
+      }       
+    }
+    else if ( HT < 1200.) {
+      if (Nj < 4 and Nb == 0){
+        labmt2 = std::to_string(std::min(int(MT2/100.), 11)) + "00" ;
+        cout << MT2 << "    "  << int(std::floor(MT2/100)) << endl ;
+        countSignalEvent("2-3j_0b_575_" + labmt2);
+      }
+      else if (Nj < 4 and Nb == 1){
+        if (MT2 < 300.) labmt2 = "200"; 
+        else if (MT2 < 400.) labmt2 = "300"; 
+        else if (MT2 < 600.) labmt2 = "400";
+        else if (MT2 < 800.) labmt2 = "600";
+        else if (MT2 < 1000.) labmt2 = "800";
+        else labmt2 = "1000";  
+        countSignalEvent("2-3j_1b_575_" + labmt2);
+      }      
+      else if (Nj < 4 and Nb == 2){
+        if (MT2 < 300.) labmt2 = "200"; 
+        else if (MT2 < 400.) labmt2 = "300"; 
+        else if (MT2 < 600.) labmt2 = "400";
+        else if (MT2 < 800.) labmt2 = "600";
+        else labmt2 = "800";  
+        countSignalEvent("2-3j_2b_575_" + labmt2);
+      }  
+      else if (Nj < 7 and Nb == 3){
+        if (MT2 < 300.) labmt2 = "200"; 
+        else if (MT2 < 400.) labmt2 = "300"; 
+        else if (MT2 < 600.) labmt2 = "400";
+        else if (MT2 < 800.) labmt2 = "600";
+        else labmt2 = "800";  
+        countSignalEvent("2-6j_3b_575_" + labmt2);
+      }
+      else if (Nj < 7 and Nb == 0){
+        labmt2 = std::to_string(std::min(int(MT2/100.), 11)) + "00" ;
+        cout << MT2 << "    "  << int(std::floor(MT2/100)) << endl;
+        countSignalEvent("4-6j_0b_575_" + labmt2);
+      }    
+      else if (Nj < 7 and Nb == 1){
+        if (MT2 < 300.) labmt2 = "200"; 
+        else if (MT2 < 400.) labmt2 = "300"; 
+        else if (MT2 < 600.) labmt2 = "400";
+        else if (MT2 < 800.) labmt2 = "600";
+        else if (MT2 < 1000.) labmt2 = "800";
+        else labmt2 = "1000";  
+        countSignalEvent("4-6j_1b_575_" + labmt2);
+      }
+      else if (Nj < 7 and Nb == 2){
+        if (MT2 < 300.) labmt2 = "200"; 
+        else if (MT2 < 400.) labmt2 = "300"; 
+        else if (MT2 < 600.) labmt2 = "400";
+        else if (MT2 < 800.) labmt2 = "600";
+        else labmt2 = "800";  
+        countSignalEvent("4-6j_2b_575_" + labmt2);
+      }        
+     else if (Nj < 10 and Nb < 3){
+        if (MT2 < 300.) labmt2 = "200"; 
+        else if (MT2 < 400.) labmt2 = "300"; 
+        else if (MT2 < 600.) labmt2 = "400";
+        else if (MT2 < 800.) labmt2 = "600";
+        else labmt2 = "800";  
+        countSignalEvent("7-9j_"+ std::to_string(Nb)+"b_575_" + labmt2);
+      }    
+     else if (Nj < 10 and Nb == 3){
+        if (MT2 < 300.) labmt2 = "200"; 
+        else if (MT2 < 400.) labmt2 = "300"; 
+        else if (MT2 < 600.) labmt2 = "400";
+        else labmt2 = "600";  
+        countSignalEvent("7-9j_"+ std::to_string(Nb)+"b_575_" + labmt2);
+      }   
+     else if (Nj < 10 and Nb > 3){
+        if (MT2 < 300.) labmt2 = "200"; 
+        else if (MT2 < 400.) labmt2 = "300"; 
+        else labmt2 = "400";  
+        countSignalEvent("7-9j_4b_575_" + labmt2);
+      } 
+     else if (Nj >= 10 and Nb < 3){
+        if (MT2 < 300.) labmt2 = "200"; 
+        else if (MT2 < 500.) labmt2 = "300"; 
+        else labmt2 = "500";  
+        countSignalEvent("7-9j_"+ std::to_string(Nb)+"b_575_" + labmt2);
+      }    
+     else if (Nj >= 10 and Nb == 3){
+        if (MT2 < 300.) labmt2 = "200"; 
+        else labmt2 = "300";  
+        countSignalEvent("7-9j_"+ std::to_string(Nb)+"b_575_" + labmt2);
+      }
+      else if (Nj >= 10 and Nb > 3) countSignalEvent("7-9j_4b_575_200");
+    }
+    else if ( HT < 1500.) {
+      if ( Nj < 4 and Nb < 2){
+        labmt2 = std::to_string(std::min(2*int(MT2/200.), 12)) + "00" ;
+        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        countSignalEvent("2-3j_"+std::to_string(Nb)+"b_1200_" + labmt2);
+      }
+      else if ( Nj < 7 and Nb < 2){
+        labmt2 = std::to_string(std::min(2*int(MT2/200.), 12)) + "00" ;
+        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        countSignalEvent("4-6j_"+std::to_string(Nb)+"b_1200_" + labmt2);
+      }  
+      else if ( Nj < 4 and Nb == 2){
+        labmt2 = std::to_string(std::min(2*int(MT2/200.), 10)) + "00" ;
+        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        countSignalEvent("2-3j_"+std::to_string(Nb)+"b_1200_" + labmt2);
+      }  
+      else if ( Nj < 7 and Nb == 2){
+        labmt2 = std::to_string(std::min(2*int(MT2/200.), 10)) + "00" ;
+        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        countSignalEvent("4-6j_"+std::to_string(Nb)+"b_1200_" + labmt2);
+      }
+      else if ( Nj < 7 and Nb >= 2){
+        labmt2 = std::to_string(std::min(2*int(MT2/200.), 6)) + "00" ;
+        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        countSignalEvent("2-6j_3b_1200_" + labmt2);
+      }      
+      else if ( Nj < 10 and Nb < 2){
+        labmt2 = std::to_string(std::min(2*int(MT2/200.), 10)) + "00" ;
+        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        countSignalEvent("7-9j_"+std::to_string(Nb)+"b_1200_" + labmt2);
+      }
+      else if ( Nj < 10 and Nb == 2){
+        labmt2 = std::to_string(std::min(2*int(MT2/200.), 8)) + "00" ;
+        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        countSignalEvent("7-9j_"+std::to_string(Nb)+"b_1200_" + labmt2);
+      }
+     else if ( Nj < 10 and Nb == 3){
+        labmt2 = std::to_string(std::min(2*int(MT2/200.), 6)) + "00" ;
+        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        countSignalEvent("7-9j_"+std::to_string(Nb)+"b_1200_" + labmt2);
+      }
+     else if ( Nj < 10 and Nb > 3){
+        labmt2 = std::to_string(std::min(2*int(MT2/200.), 4)) + "00" ;
+        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        countSignalEvent("7-9j_4b_1200_" + labmt2);
+      }
+      else if ( Nj >= 10 and Nb < 2){
+        labmt2 = std::to_string(std::min(2*int(MT2/200.), 6)) + "00" ;
+        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        countSignalEvent("10j_"+std::to_string(Nb)+"b_1200_" + labmt2);
+      }
+      else if ( Nj >= 10 and Nb == 3){
+        labmt2 = std::to_string(std::min(2*int(MT2/200.), 4)) + "00" ;
+        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        countSignalEvent("10j_"+std::to_string(Nb)+"b_1200_" + labmt2);
+      }  
+      else if ( Nj >= 10 and Nb >= 4) countSignalEvent("10j_4b_1200_200");
+    }
+    else if ( HT >= 1500.) {
+      if (Nj < 4 and Nb == 0){
+        if (MT2 < 600.) labmt2 = "400"; 
+        else if (MT2 < 800.) labmt2 = "600"; 
+        else if (MT2 < 1000.) labmt2 = "800";
+        else if (MT2 < 1200.) labmt2 = "1000";
+        else if (MT2 < 1400.) labmt2 = "1200";
+        else if (MT2 < 1800.) labmt2 = "1400";
+        else labmt2 = "1800";  
+        countSignalEvent("2-3j_"+ std::to_string(Nb)+"b_1500_" + labmt2);
+      }
+      else if (Nj < 4 and Nb == 1){
+        if (MT2 < 600.) labmt2 = "400"; 
+        else if (MT2 < 800.) labmt2 = "600"; 
+        else if (MT2 < 1000.) labmt2 = "800";
+        else if (MT2 < 1200.) labmt2 = "1000";
+        else labmt2 = "1200";  
+        countSignalEvent("2-3j_"+ std::to_string(Nb)+"b_1500_" + labmt2);
+      }
+      else if (Nj < 4 and Nb == 2) countSignalEvent("2-3j_"+ std::to_string(Nb)+"b_1500_400");
+      else if (Nj < 7 and Nb >= 3){
+        if (MT2 < 600.) labmt2 = "400"; 
+        else labmt2 = "600";  
+        countSignalEvent("2-6j_3b_1500_" + labmt2);
+      }
+      else if (Nj < 7 and Nb == 0){
+        if (MT2 < 600.) labmt2 = "400"; 
+        else if (MT2 < 800.) labmt2 = "600"; 
+        else if (MT2 < 1000.) labmt2 = "800";
+        else if (MT2 < 1200.) labmt2 = "1000";
+        else if (MT2 < 1400.) labmt2 = "1200";
+        else if (MT2 < 1600.) labmt2 = "1400";
+        else labmt2 = "1600";  
+        countSignalEvent("4-6j_"+ std::to_string(Nb)+"b_1500_" + labmt2);
+      } 
+      else if (Nj < 7 and Nb == 1){
+        if (MT2 < 600.) labmt2 = "400"; 
+        else if (MT2 < 800.) labmt2 = "600"; 
+        else if (MT2 < 1000.) labmt2 = "800";
+        else if (MT2 < 1400.) labmt2 = "1000";
+        else labmt2 = "1400";  
+        countSignalEvent("4-6j_"+ std::to_string(Nb)+"b_1500_" + labmt2);
+      } 
+      else if (Nj < 7 and Nb == 2){
+        if (MT2 < 600.) labmt2 = "400"; 
+        else if (MT2 < 800.) labmt2 = "600"; 
+        else labmt2 = "800";  
+        countSignalEvent("4-6j_"+ std::to_string(Nb)+"b_1500_" + labmt2);
+      }   
+      else if (Nj < 10 and Nb == 0){
+        if (MT2 < 600.) labmt2 = "400"; 
+        else if (MT2 < 800.) labmt2 = "600"; 
+        else if (MT2 < 1000.) labmt2 = "800";
+        else if (MT2 < 1400.) labmt2 = "1000";
+        else labmt2 = "1400";  
+        countSignalEvent("7-9j_"+ std::to_string(Nb)+"b_1500_" + labmt2);
+      }
+      else if (Nj < 10 and Nb < 2 ){
+        if (MT2 < 600.) labmt2 = "400"; 
+        else if (MT2 < 800.) labmt2 = "600"; 
+        else labmt2 = "800";  
+        countSignalEvent("7-9j_"+ std::to_string(Nb)+"b_1500_" + labmt2);
+      } 
+      else if (Nj < 10 and Nb ==3  ){
+        if (MT2 < 800.) labmt2 = "400"; 
+        else labmt2 = "800";  
+        countSignalEvent("7-9j_"+ std::to_string(Nb)+"b_1500_" + labmt2);
+      }       
+      else if (Nj < 10 and Nb >= 4  ) countSignalEvent("7-9j_4b_1500_400");
+      else if (Nj >= 10 and Nb < 2  ) {
+        if (MT2 < 800.) labmt2 = "400"; 
+        else labmt2 = "800";  
+        countSignalEvent("10j_"+ std::to_string(Nb)+"b_1500_" + labmt2);
+      }      
+      else if (Nj >= 10 and Nb < 4  ) countSignalEvent("10j_"+ std::to_string(Nb)+"b_1500_400");
+      else if (Nj >= 10 and Nb >= 4  ) countSignalEvent("10j_4b_1500_400");
+    }
+
+    return true;
+
+}  
   
