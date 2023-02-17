@@ -225,7 +225,7 @@ class Process(object):
                     
                     # We should not exceed the terminal terminal_width:
                     terminal_width = AdvPrint.get_terminal_width()
-                    print_line = " |-> "+str(line.strip())
+                    print_line = " |-> "+str(line.decode('utf-8').strip())
                     print_line.replace("\t", "    ")
                     while "\r" in print_line:
                         print_line = print_line[print_line.index("\r"):]

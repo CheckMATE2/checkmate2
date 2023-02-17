@@ -1,0 +1,20 @@
+{"analysis" :[
+	{"name":"RegionA",
+	"bkgonly":"RegionA/BkgOnly.json",
+        "patchset":"RegionA/patchset.json",
+        "histosize":"3",
+	"SR_dict": {"SR_meff[0]":"SRAH","SR_meff[1]":"SRAL","SR_meff[2]":"SRAM"
+	}},
+	{"name":"RegionB",
+	"bkgonly":"RegionB/BkgOnly.json",
+	"patchset":"RegionB/patchset.json",
+	"histosize":"1",
+	"SR_dict": {"SR_cuts":"SRB"
+	}},
+	{"name":"RegionC",
+	"bkgonly":"RegionC/BkgOnly.json",
+         "patchset":"RegionC/patchset.json",
+        "histosize":"4",
+	"SR_dict": {"SR_metsigST[0]":"SRC22","SR_metsigST[1]":"SRC24","SR_metsigST[2]":"SRC26","SR_metsigST[3]":"SRC28"
+	}}]
+}

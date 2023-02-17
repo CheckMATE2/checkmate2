@@ -1,5 +1,10 @@
 #include "atlas_2211_08028.h"
 #include "fastjet/tools/Filter.hh"
+
+#ifdef HAVE_ONNX
+#include "onnxruntime_cxx_api.h"
+#endif
+
 // AUTHOR: K. Rolbiecki
 //  EMAIL: krolb@fuw.edu.pl
 void Atlas_2211_08028::initialize() {
@@ -14,12 +19,73 @@ void Atlas_2211_08028::initialize() {
   bookControlRegions("CR_Gtt_1L_B_cuts;CR_Gtt_1L_M1_cuts;CR_Gtt_1L_M2_cuts;CR_Gtt_1L_C_cuts;CR_Gtt_0L_B_cuts;CR_Gtt_0L_M1_cuts;CR_Gtt_0L_M2_cuts;CR_Gtt_0L_C_cuts;CR_Gbb_B_cuts;CR_Gbb_M_cuts;CR_Gbb_C_cuts;CR_Gtb_B_cuts;CR_Gtb_M_cuts;CR_Gtb_C_cuts");
 
   // You should initialize any declared variables here
+
+#ifdef HAVE_ONNX  
+  Ort::AllocatorWithDefaultOptions allocator;
+  std::vector<const char*> input_node_names;
+  std::vector<const char*> output_node_names;
+  std::vector<int64_t> input_node_dims;
+  char *a = Global::get_maindir();
+  std::string maindir(a, strlen(a));
+  std::string file = maindir  + std::string("/data/atlas_2211_08028/ANA-SUSY-2018-30_model.onnx");
+  
+  Ort::Env env;
+  env = Ort::Env(ORT_LOGGING_LEVEL_WARNING, "GG");
+
+  Ort::SessionOptions session_options;
+  session = new Ort::Session(env, file.c_str(), session_options);
+  
+  const size_t num_input_nodes = session->GetInputCount();
+  cout << "Number input nodes: " << num_input_nodes << endl;
+  input_node_names.reserve(num_input_nodes);    
+  
+  for (size_t i = 0; i < num_input_nodes; i++) {
+    auto type_info = session->GetInputTypeInfo(i);
+    auto tensor_info = type_info.GetTensorTypeAndShapeInfo();
+    auto input_name = session->GetInputNameAllocated(i, allocator);
+    std::cout << "Input " << i << " : name = " << input_name.get() << std::endl;
+    input_node_names.push_back(input_name.get());
+    input_names.push_back(input_name.get());
+    ONNXTensorElementDataType type = tensor_info.GetElementType(); 
+    std::cout << "Input " << i << " : type = " << type << std::endl;
+    input_node_dims = tensor_info.GetShape();
+    std::cout << "Input " << i << " : num_dims = " << input_node_dims.size() << '\n';
+    for (size_t j = 0; j < input_node_dims.size(); j++) 
+        std::cout << "Input " << i << " : dim[" << j << "] = " << input_node_dims[j] << '\n';
+  }   // input_tensor_size = input_node_dims[0] * input_node_dims[1] * .... 
+  
+  //asume just 1 output node 
+  
+  const size_t num_output_nodes = session->GetOutputCount();
+  cout << "Number output nodes: " << num_output_nodes << endl;
+  output_node_names.reserve(num_output_nodes);
+  auto output_name = session->GetOutputNameAllocated(0, allocator);
+  std::cout << "Output " << "0" << " : name = " << output_name.get() << std::endl;
+  output_node_names.push_back(output_name.get());
+  auto type_info = session->GetOutputTypeInfo(0);
+  auto tensor_info = type_info.GetTensorTypeAndShapeInfo();
+  ONNXTensorElementDataType type = tensor_info.GetElementType(); 
+  std::cout << "Output 0 : type = " << type << std::endl;
+  std::vector<int64_t> output_node_dims = tensor_info.GetShape();
+  std::cout << "Output " << 0 << " : num_dims = " << output_node_dims.size() << '\n';
+  for (size_t j = 0; j < input_node_dims.size(); j++) 
+    std::cout << "Output " << 0 << " : dim[" << j << "] = " << output_node_dims[j] << '\n';  
+#endif
+  
+  int ifile = bookFile("atlas_2211_08028.root", true);
+  const char *rootFileName = fNames[ifile].c_str() ;
+  hfile = new TFile(rootFileName, "RECREATE", "Saving Histograms");
+
+  nngtt = new TH1F("gtt", "NN score", 20, 0., 1.);  
+  nngbb = new TH1F("gbb", "NN score", 20, 0., 1.);  
+
 }
 
 void Atlas_2211_08028::analyze() {
 
   signal_jets.clear();
   bjets.clear();
+  trimmedJets.clear();
   signal_el.clear();
   signal_mu.clear();
   signalLeps.clear();
@@ -38,7 +104,7 @@ void Atlas_2211_08028::analyze() {
     
   jets = filterPhaseSpace(jets, 30., -2.8, 2.8);
   
-  std::vector<Jet*> nonbjets;
+  std::vector<Jet*> nonbjets={};
   for (int i = 0; i < jets.size(); i++) 
     if ( fabs(jets[i]->Eta) < 2.5 and checkBTag(jets[i],0) ) 
       bjets.push_back(jets[i]);
@@ -120,7 +186,6 @@ void Atlas_2211_08028::analyze() {
   fastjet::JetDefinition jet_def08(fastjet::antikt_algorithm, 0.8);  
   fastjet::ClusterSequence cs08(particles, jet_def08);
   std::vector<fastjet::PseudoJet> largeR08 = sorted_by_pt(cs08.inclusive_jets());  
-  std::vector<fastjet::PseudoJet> trimmedJets;
   
   fastjet::Filter trimmer(fastjet::JetDefinition(fastjet::antikt_algorithm, 0.2), fastjet::SelectorPtFractionMin(0.1));  
   
@@ -186,6 +251,11 @@ void Atlas_2211_08028::analyze() {
       if (PassesCuts_Gtb(7, 4, 1300., 350.,  50., false, "CR-Gtb-C")) countControlEvent("CR_Gtb_C_cuts");            
     }
     
+    if (PassesCuts_NN(1, 1900, 1400, 0.9987, 0, "SR-NN-Gtt-1900-1400")) countSignalEvent("SR-Gtt-1900-1400");
+    if (PassesCuts_NN(1, 1800, 1, 0.9997, 1, "SR-NN-Gtt-1800-1")) countSignalEvent("SR-Gtt-1800-1");    
+    if (PassesCuts_NN(1, 2100, 1, 0.9997, 2, "SR-NN-Gtt-2100-1")) countSignalEvent("SR-Gtt-2100-1");
+    if (PassesCuts_NN(1, 2300, 1200, 0.9993, 3, "SR-NN-Gtt-2300-1200")) countSignalEvent("SR-Gtt-2300-1200");   
+    
   }
   
   if (electronsLoose.size() + muonsCombined.size() == 0) {
@@ -198,6 +268,19 @@ void Atlas_2211_08028::analyze() {
     if (PassesCuts_Gtt0L(9, 3, 600., 1700., 120., 300., true, "SR-Gtt-0L-M1")) countSignalEvent("SR-Gtt-0L-M1");
     if (PassesCuts_Gtt0L(10, 3, 500., 1100., 120., 200., true, "SR-Gtt-0L-M2")) countSignalEvent("SR-Gtt-0L-M2");
     if (PassesCuts_Gtt0L(10, 4, 400.,  800., 180., 100., true, "SR-Gtt-0L-C")) countSignalEvent("SR-Gtt-0L-C");
+        
+    if (PassesCuts_NN(1, 1900, 1400, 0.9987, 0, "SR-NN-Gtt-1900-1400")) countSignalEvent("SR-Gtt-1900-1400");    
+    if (PassesCuts_NN(1, 1800, 1, 0.9997, 1, "SR-NN-Gtt-1800-1")) countSignalEvent("SR-Gtt-1800-1");    
+    if (PassesCuts_NN(1, 2100, 1, 0.9997, 2, "SR-NN-Gtt-2100-1")) countSignalEvent("SR-Gtt-2100-1");        
+    if (PassesCuts_NN(1, 2300, 1200, 0.9993, 3, "SR-NN-Gtt-2300-1200")) countSignalEvent("SR-Gtt-2300-1200");   
+    if (PassesCuts_NN(0, 2100, 1600, 0.9993, 0, "SR-NN-Gbb-2100-1600")) countSignalEvent("SR-Gbb-2100-1600");    
+    if (PassesCuts_NN(0, 2000, 1800, 0.997, 0, "SR-NN-Gbb-2000-1800")) countSignalEvent("SR-Gbb-2000-1800");    
+    
+    if (dphimin > 0.6) {
+      if (PassesCuts_NN(0, 2800, 1400, 0.999, 0, "SR-NN-Gbb-2800-1400")) countSignalEvent("SR-Gbb-2800-1400"); 
+      if (PassesCuts_NN(0, 2300, 1000, 0.9994, 0, "SR-NN-Gbb-2300-1000")) countSignalEvent("SR-Gbb-2300-1000");    
+    }
+    
     
     if (mT_b < 130.) return;
     countCutflowEvent("03_mTb>130");
@@ -212,10 +295,31 @@ void Atlas_2211_08028::analyze() {
     
   }  
   
+  return;
 }
 
 void Atlas_2211_08028::finalize() {
   // Whatever should be done after the run goes here
+ 
+#ifdef HAVE_ONNX 
+  delete session;
+#endif  
+  
+  TCanvas can1;
+  //ggd1->SetMinimum(0.1);
+  can1.SetLogy();
+  nngtt->Draw("hist");
+  can1.Close();
+  
+  TCanvas can2;
+  //ggo1->SetMinimum(0.1);
+  can2.SetLogy();
+  nngbb->Draw("hist");
+  can2.Close();  
+  
+  hfile->Write();
+  hfile->Close();
+
 }       
 
 
@@ -269,6 +373,7 @@ double Atlas_2211_08028::get_meff() {
   return tmp;
 }
 
+
 bool Atlas_2211_08028::PassesCuts_Gtt1L(int Njet, int Nbjet, double met, double meff_cut, double mT_cut, double mTb_cut, double MJ_cut, bool cutflow, std::string sr) {
   
   if (signal_jets.size() < Njet or bjets.size() < Nbjet) return false;
@@ -292,6 +397,7 @@ bool Atlas_2211_08028::PassesCuts_Gtt1L(int Njet, int Nbjet, double met, double 
   return true;
   
 }
+
 
 bool Atlas_2211_08028::PassesCuts_Gtt0L(int Njet, int Nbjet, double met, double meff_cut, double mTb_cut, double MJ_cut, bool cutflow, std::string sr) {
   
@@ -368,3 +474,121 @@ bool Atlas_2211_08028::PassesCutsCR_Gtt1L(int Njet, int Nbjet, double met, doubl
   return true;
   
 }
+
+
+bool Atlas_2211_08028::PassesCuts_NN(int Gtt, double mgluino, double mneut, double cutoff, int srnum, std::string sr) {
+
+#ifdef HAVE_ONNX  
+  std::vector<float> input_tensor_values;  
+  
+  assert(signal_jets.size() >= 4); 
+  assert(bjets.size() >= 3);
+  std::vector<double> b_cat = jet_btag_category();
+  
+  for (int i = 0; i < 10; i++) {
+    input_tensor_values.push_back(signal_jets.size() > i ? signal_jets[i]->PT : 0.);
+    input_tensor_values.push_back(signal_jets.size() > i ? signal_jets[i]->Eta : 0.);
+    input_tensor_values.push_back(signal_jets.size() > i ? signal_jets[i]->Phi : 0.);
+    input_tensor_values.push_back(signal_jets.size() > i ? signal_jets[i]->P4().M() : 0.);
+    input_tensor_values.push_back(signal_jets.size() > i ? b_cat[i] : 0);  
+  }
+  
+  for (int i = 0; i < 4; i++) {
+    input_tensor_values.push_back(trimmedJets.size() > i ? trimmedJets[i].pt() : 0.);
+    input_tensor_values.push_back(trimmedJets.size() > i ? trimmedJets[i].eta() : 0.);
+    input_tensor_values.push_back(trimmedJets.size() > i ? trimmedJets[i].phi() : 0.);
+    input_tensor_values.push_back(trimmedJets.size() > i ? trimmedJets[i].m() : 0.);  
+  }
+  
+  for (int i = 0; i < 4; i++) {
+    input_tensor_values.push_back(signalLeps.size() > i ? signalLeps[i]->PT : 0.);
+    input_tensor_values.push_back(signalLeps.size() > i ? signalLeps[i]->Eta : 0.);
+    input_tensor_values.push_back(signalLeps.size() > i ? signalLeps[i]->Phi : 0.);
+    input_tensor_values.push_back(signalLeps.size() > i ? signalLeps[i]->P4().M() : 0.);    
+  }
+  
+  input_tensor_values.push_back(pTmiss.Perp() );
+  input_tensor_values.push_back(pTmiss.Phi() );  
+  
+  input_tensor_values.push_back(Gtt);
+  input_tensor_values.push_back(mgluino);
+  input_tensor_values.push_back(mneut);
+  
+  assert(input_tensor_values.size() == 87);
+  
+//  for(int i = 0; i < 87; i++)
+//    cout << "Input " << i << ": " << input_tensor_values[i] << std::endl;
+  
+  for (int i = 0; i < 87; i++)
+    input_tensor_values[i] = (input_tensor_values[i] - mean[i])/std[i];
+  
+//  for(int i = 0; i < 87; i++)
+//    cout << "Input " << i << ": " << input_tensor_values[i] << std::endl;  
+  
+  auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
+  auto input_tensor = Ort::Value::CreateTensor(memory_info, input_tensor_values.data(), input_tensor_size, input_dims.data(), 2); //rank = 2
+  
+  auto output_tensors = session->Run(Ort::RunOptions{nullptr}, input_names.data(), &input_tensor, 1, output_names.data(), 1);
+    
+  float* output = output_tensors.front().GetTensorMutableData<float>();
+  //cout << *output << endl;
+  std::vector<float> result{output, output + 8};
+  cout << sr << ": " << result[0] << "  " << result [1] << endl;
+  
+  /*cout << "output_tensor_shape: " << print_shape(output_tensors[0].GetTensorTypeAndShapeInfo().GetShape()) << endl;
+  
+  auto outputInfo = output_tensors[0].GetTensorTypeAndShapeInfo();
+  std::cout << "GetElementType: " << outputInfo.GetElementType() << "\n";
+  std::cout << "Dimensions of the output: " << outputInfo.GetShape().size() << "\n";
+  std::cout << "Shape of the output: ";
+  for (unsigned int shapeI = 0; shapeI < outputInfo.GetShape().size(); shapeI++)
+          std::cout << outputInfo.GetShape()[shapeI] << ", ";
+  cout << endl;*/
+  
+  countCutflowEvent(sr+"_02_dphi_common");
+  
+  if (sr == "SR-NN-Gbb-2100-1600") nngbb->Fill(result[1], weight);
+  if (sr == "SR-NN-Gtt-2300-1200") nngtt->Fill(result[0], weight);
+  
+  if( Gtt and result[0] > cutoff) {
+    countCutflowEvent(sr+"_03_score");
+    return true;
+  }
+  
+  if( !Gtt and result[1] > cutoff) {
+    countCutflowEvent(sr+"_03_score");
+    return true;
+  }  
+  
+#endif  
+  return false;
+}
+
+
+std::vector<double> Atlas_2211_08028::jet_btag_category() {
+  
+  std::vector<double> cat;
+  int k = 0; //reduce number of loops
+  for (int i = 0; i < signal_jets.size(); i++) {
+    bool btag = false;
+    for (int j = k; j < bjets.size(); j++)
+      if (signal_jets[i] == bjets[j]) {
+        k++;
+        btag = true;
+        break;
+      }
+    if (btag) cat.push_back(1.); else cat.push_back(0.);
+  }
+  
+  return cat;
+  
+}
+
+std::string Atlas_2211_08028::print_shape(const std::vector<int64_t>& v) {
+  std::stringstream ss("");
+  for (size_t i = 0; i < v.size() - 1; i++)
+    ss << v[i] << "x";
+  ss << v[v.size() - 1];
+  return ss.str();
+}
+

@@ -7,6 +7,9 @@ Ver 2.0.37
 
     ~ added cms_sus_19_005
 
+2023-01-11   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ multibin profile likelihood
 
 Ver 2.0.36
 ---------
@@ -30,6 +33,11 @@ Ver 2.0.35
     ~ providing master path for external analysis resources (like in LLP)
     ~ Delphes 3.5 required
 
+Ver 2.0.35
+---------
+2022-09-30   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ implementation of NN method in atlas_2106_09609
 
 Ver 2.0.34
 ---------

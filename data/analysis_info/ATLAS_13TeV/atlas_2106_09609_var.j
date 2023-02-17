@@ -18,7 +18,7 @@
   ], 
   "electron_iso_ptratiomax": [
     "0.2", 
-    "0.15"
+    "0.06"
   ], 
   "electron_iso_source": [
     "c", 
@@ -54,15 +54,15 @@
   ], 
   "muon_iso_ptmin": [
     "0.5", 
-    "0.4"
+    "0.5"
   ], 
   "muon_iso_ptratiomax": [
     "0.2", 
-    "0.15"
+    "0.1"
   ], 
   "muon_iso_source": [
     "t", 
-    "t"
+    "c"
   ], 
   "muon_niso": 2, 
   "photon_iso_absorrel": [
