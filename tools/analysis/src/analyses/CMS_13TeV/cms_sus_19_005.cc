@@ -368,7 +368,7 @@ bool Cms_sus_19_005::fill_bins_2j(int Nj, int Nb, double HT, double MT2) {
     else if ( HT < 1200.) {
       if (Nj < 4 and Nb == 0){
         labmt2 = std::to_string(std::min(int(MT2/100.), 11)) + "00" ;
-        cout << MT2 << "    "  << int(std::floor(MT2/100)) << endl ;
+        //cout << MT2 << "    "  << int(std::floor(MT2/100)) << endl ;
         countSignalEvent("2-3j_0b_575_" + labmt2);
       }
       else if (Nj < 4 and Nb == 1){
@@ -398,7 +398,7 @@ bool Cms_sus_19_005::fill_bins_2j(int Nj, int Nb, double HT, double MT2) {
       }
       else if (Nj < 7 and Nb == 0){
         labmt2 = std::to_string(std::min(int(MT2/100.), 11)) + "00" ;
-        cout << MT2 << "    "  << int(std::floor(MT2/100)) << endl;
+        //cout << MT2 << "    "  << int(std::floor(MT2/100)) << endl;
         countSignalEvent("4-6j_0b_575_" + labmt2);
       }    
       else if (Nj < 7 and Nb == 1){
@@ -455,57 +455,57 @@ bool Cms_sus_19_005::fill_bins_2j(int Nj, int Nb, double HT, double MT2) {
     else if ( HT < 1500.) {
       if ( Nj < 4 and Nb < 2){
         labmt2 = std::to_string(std::min(2*int(MT2/200.), 12)) + "00" ;
-        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        //cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
         countSignalEvent("2-3j_"+std::to_string(Nb)+"b_1200_" + labmt2);
       }
       else if ( Nj < 7 and Nb < 2){
         labmt2 = std::to_string(std::min(2*int(MT2/200.), 12)) + "00" ;
-        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        //cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
         countSignalEvent("4-6j_"+std::to_string(Nb)+"b_1200_" + labmt2);
       }  
       else if ( Nj < 4 and Nb == 2){
         labmt2 = std::to_string(std::min(2*int(MT2/200.), 10)) + "00" ;
-        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        //cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
         countSignalEvent("2-3j_"+std::to_string(Nb)+"b_1200_" + labmt2);
       }  
       else if ( Nj < 7 and Nb == 2){
         labmt2 = std::to_string(std::min(2*int(MT2/200.), 10)) + "00" ;
-        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        //cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
         countSignalEvent("4-6j_"+std::to_string(Nb)+"b_1200_" + labmt2);
       }
       else if ( Nj < 7 and Nb >= 2){
         labmt2 = std::to_string(std::min(2*int(MT2/200.), 6)) + "00" ;
-        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        //cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
         countSignalEvent("2-6j_3b_1200_" + labmt2);
       }      
       else if ( Nj < 10 and Nb < 2){
         labmt2 = std::to_string(std::min(2*int(MT2/200.), 10)) + "00" ;
-        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        //cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
         countSignalEvent("7-9j_"+std::to_string(Nb)+"b_1200_" + labmt2);
       }
       else if ( Nj < 10 and Nb == 2){
         labmt2 = std::to_string(std::min(2*int(MT2/200.), 8)) + "00" ;
-        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        //cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
         countSignalEvent("7-9j_"+std::to_string(Nb)+"b_1200_" + labmt2);
       }
      else if ( Nj < 10 and Nb == 3){
         labmt2 = std::to_string(std::min(2*int(MT2/200.), 6)) + "00" ;
-        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        //cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
         countSignalEvent("7-9j_"+std::to_string(Nb)+"b_1200_" + labmt2);
       }
      else if ( Nj < 10 and Nb > 3){
         labmt2 = std::to_string(std::min(2*int(MT2/200.), 4)) + "00" ;
-        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        //cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
         countSignalEvent("7-9j_4b_1200_" + labmt2);
       }
       else if ( Nj >= 10 and Nb < 2){
         labmt2 = std::to_string(std::min(2*int(MT2/200.), 6)) + "00" ;
-        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        //cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
         countSignalEvent("10j_"+std::to_string(Nb)+"b_1200_" + labmt2);
       }
       else if ( Nj >= 10 and Nb == 3){
         labmt2 = std::to_string(std::min(2*int(MT2/200.), 4)) + "00" ;
-        cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
+        //cout << MT2 << "    "  << 2*int(std::floor(MT2/200)) << " ...  double bins" << endl;
         countSignalEvent("10j_"+std::to_string(Nb)+"b_1200_" + labmt2);
       }  
       else if ( Nj >= 10 and Nb >= 4) countSignalEvent("10j_4b_1200_200");
