@@ -99,7 +99,7 @@ def upperlim(workspace, ntoys = -1):
 # if ntoys greater than 0 changes to toy based calculation instead of the asymptotic aproximation, with ntoys number of "toys".
 # 'systematics' is the relative systematic uncertanty of the signal (expressed as ratio ds/s, not as percentage). Default is 0.
 # 'lumi is the uncertanty in the integrated luminosity, default value is 0.017 (1.7%).
-def calc_point(path, names, analysis, mbsr, systematics = 0, lumi = 0.017, ntoys = -1):
+def calc_point(path, names, analysis, mbsr, systematics = 0, lumi = 0.017, ntoys = 1000):
     string = "================================\n Analysis: "+analysis+" , SR: "+mbsr+"\n"
     SRs = data_from_CMresults(path)
     o, b, db, s, ds = select_MBsr(names, SRs)

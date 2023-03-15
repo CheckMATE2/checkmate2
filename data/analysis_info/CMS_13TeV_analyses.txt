@@ -4,3 +4,4 @@ cms_sus_16_039       158  electrowekinos in multilepton final state             
 cms_sus_16_025       14   electroweakino and stop compressed spectra                                                  12.9  no
 cms_sus_16_048       20   two soft opposite sign leptons                                                              35.9  no
 cms_sus_19_005       303  hadronic final states with MT2                                                              137.0 no  
+cms_sus_19_006       186  hadronic final states with HT                                                               137.0 no  
