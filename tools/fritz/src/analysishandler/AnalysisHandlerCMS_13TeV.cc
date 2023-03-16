@@ -334,8 +334,8 @@ double AnalysisHandlerCMS_13TeV::electronRecEff(double pt,
     const double r5 = -0.000449114;
     // Reconstruction: ATL-COM-PHYS-2013-1287
     double rec_eff = r1+r2*pow(eta, 2)+r3*pow(eta, 4)+
-                        r4*pow(eta, 6)+r5*pow(eta, 8);
-    return (fabs(eta) < 2.5)*(pt>7.0)*rec_eff;
+                        r4*pow(eta, 6)+r5*pow(eta, 8); //range = [0.965,0.99]
+    return (fabs(eta) < 2.5)*(pt>5.0)*rec_eff;
 }
 
 double AnalysisHandlerCMS_13TeV::electronIDEffMedium(double pt,

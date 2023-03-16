@@ -1,6 +1,10 @@
 #include "cms_sus_19_006.h"
 // AUTHOR: K. Rolbiecki
 //  EMAIL: krolb@fuw.edu.pl
+
+std::string Cms_sus_19_006::label[10] = { "300_300", "300_600", "300_1200", "350_350", "350_600", "350_1200", "600_600", "600_1200", "850_850", "850_1700"};
+std::string Cms_sus_19_006::label_hi[10] = { "300_600", "300_1200", "350_600", "350_1200", "600_600", "600_1200", "850_850", "850_1700"};
+
 void Cms_sus_19_006::initialize() {
   setAnalysisName("cms_sus_19_006");          
   setInformation(""
@@ -12,14 +16,172 @@ void Cms_sus_19_006::initialize() {
   //  always ordered alphabetically in the cutflow output files.
 
   // You should initialize any declared variables here
+  
 }
 
 void Cms_sus_19_006::analyze() {
 
   //missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
   
+  electronsLoose = filterPhaseSpace(electronsLoose, 5., -2.5, 2.5);
+  std::vector<Electron*> electronsPF = filterPhaseSpace(electronsLoose, 10., -2.5, 2.5, false, true);   // =>   pT < 10
+  electronsMedium = filterPhaseSpace(electronsMedium, 10., -2.5, 2.5);
+  muonsCombined = filterPhaseSpace(muonsCombined, 5., -2.4, 2.4);
+  std::vector<Muon*> muonsPF = filterPhaseSpace(muonsCombined, 10., -2.4, 2.4, false, true);
+  muonsCombined = filterPhaseSpace(muonsCombined, 10., -2.4, 2.4);  
+  photonsMedium = filterPhaseSpace(photonsMedium, 100., -2.4, 2.4);
+  
+  photonsMedium = filterIsolation( photonsMedium); 
+  electronsPF = filterIsolation( electronsPF, 0);
+  electronsMedium = Isolate_leptons_with_variable_track_isolation_cone_CMS(electronsMedium, 0.2, 0.05, 10., 0.1);
+  muonsPF = filterIsolation( muonsPF, 0);
+  muonsCombined = Isolate_leptons_with_variable_track_isolation_cone_CMS(muonsCombined, 0.2, 0.05, 10., 0.2);
+  
+  jets = filterPhaseSpace(jets, 30., -5.0, 5.0);
+  jets = overlapRemoval(jets, electronsMedium, 0.3, "y");
+  jets = overlapRemoval(jets, muonsCombined, 0.3, "y");
+  jets = overlapRemoval(jets, photonsMedium, 0.3, "y");  
+  
+  double HT = 0.;
+  TLorentzVector Hmiss = TLorentzVector(0.,0.,0.,0.);
+  for (int i = 0; i < jets.size(); i++) {
+    if ( fabs(jets[i]->Eta) < 2.4)  HT += jets[i]->PT;
+    Hmiss -= jets[i]->P4();
+  }
+  
+  countCutflowEvent("00_all");
+  signal_jets = filterPhaseSpace(jets, 30., -2.4, 2.4);
+  
+  if (signal_jets.size() < 2) return;
+  countCutflowEvent("01_Nj>=2");
+  
+  if (HT < 300.) return;
+  countCutflowEvent("02_HT>300");
+  
+  double HTmiss = Hmiss.Perp();
+  if (HTmiss < 300.) return;
+  countCutflowEvent("03_HTmiss>300");
+  
+  if (HTmiss/HT <= 1.) return;
+  countCutflowEvent("04_HTmiss/HT>1");
+  
+  if (muonsCombined.size() ) return;
+  countCutflowEvent("05_muVeto");
+  
+  if (muonsPF.size() ) return;
+  countCutflowEvent("06_mutrackVeto");
+  
+  if (electronsMedium.size() ) return;
+  countCutflowEvent("07_eVeto");  
+  
+  if (electronsPF.size() ) return;
+  countCutflowEvent("08_etrackVeto");    
+  
+  if (photonsMedium.size() ) return;
+  countCutflowEvent("08_photVeto");    
+  
+  if (fabs(Hmiss.DeltaPhi(signal_jets[0]->P4())) < 0.5) return;
+  countCutflowEvent("09_dPhi_j1");   
+  
+  if (fabs(Hmiss.DeltaPhi(signal_jets[1]->P4())) < 0.5) return;
+  countCutflowEvent("10_dPhi_j2");     
+  
+  if (signal_jets.size() > 2 and fabs(Hmiss.DeltaPhi(signal_jets[2]->P4())) < 0.3) return;
+  countCutflowEvent("11_dPhi_j3");     
+
+  if (signal_jets.size() > 3 and fabs(Hmiss.DeltaPhi(signal_jets[3]->P4())) < 0.3) return;
+  countCutflowEvent("11_dPhi_j4");     
+  
+  int Nb = 0;
+  for (int i = 0; i < signal_jets.size(); i++) 
+    if (checkBTag(signal_jets[i]) ) Nb++;
+  
+  fill_bins( signal_jets.size(), Nb, HTmiss, HT );
+  
+  
+  return;  
 }
 
 void Cms_sus_19_006::finalize() {
   // Whatever should be done after the run goes here
 }       
+
+template <class X>
+std::vector<X*> Cms_sus_19_006::Isolate_leptons_with_variable_track_isolation_cone_CMS(std::vector<X*> leptons, double dR_track_max, double dR_track_min, double pT_for_inverse_function_track, double pT_amount_track ) {
+      
+  std::vector<X*> filtered_leptons;
+  for(int i = 0; i < leptons.size(); i++) {
+    double dR_track = 0.;
+    double sumPT = 0.;
+    dR_track = std::min(dR_track_max, std::max(pT_for_inverse_function_track/leptons[i]->PT, dR_track_min));
+        
+    for (int t = 0; t < tracks.size(); t++) {
+      Track* neighbour = tracks[t];
+
+	  // Ignore the lepton's track itself
+      if(neighbour->Particle == leptons[i]->Particle) continue;
+      if(neighbour->PT < 1.) continue;
+      if (neighbour->P4().DeltaR(leptons[i]->P4()) > dR_track) continue;
+      sumPT += neighbour->PT;
+    }
+    
+    if( (leptons[i]->PT)*pT_amount_track > sumPT) filtered_leptons.push_back(leptons[i]);
+  }
+    
+    return filtered_leptons;
+}
+
+void Cms_sus_19_006::fill_bins(int Nj, int Nb, double HTmiss, double HT) {
+  
+  int count = 0;
+  int interval = 0;
+  
+  if (HTmiss < 350. and HT < 600. ) interval = 1;
+  if (HTmiss < 350. and HT > 600. and HT < 1200. ) interval = 2;
+  if (HTmiss < 350. and HT > 1200. ) interval = 3;
+  if (HTmiss > 350. and HTmiss < 600 and HT < 600. ) interval = 4;
+  if (HTmiss > 350. and HTmiss < 600 and HT > 600. and HT < 1200. ) interval = 5;
+  if (HTmiss > 350. and HTmiss < 600 and HT > 1200. ) interval = 6;
+  if (HTmiss > 600. and HTmiss < 850 and HT < 1200. ) interval = 7;  
+  if (HTmiss > 600. and HTmiss < 850 and HT > 1200. ) interval = 8;  
+  if (HTmiss > 850. and HT < 1700. ) interval = 9;
+  if (HTmiss > 850. and HT > 1700. ) interval = 10;
+  
+  std::string bb;
+  if (Nj <= 3) {
+    if (Nb == 0) { count = 0; bb = "_2-3j_0b_";}
+    else if (Nb == 1) {count = 10; bb = "_2-3j_1b_";}
+    else {count = 20; bb = "_2-3j_2b_"}
+    count += interval;
+    if (count >= 10) countSignalEvent("B0"+std::to_string(count)+bb+label[interval-1]);
+    else countSignalEvent("B00"+std::to_string(count)+bb+label[interval-1]);   
+    return;
+  }
+  else if (Nj <= 5) {
+    if (Nb == 0) {count = 30; bb = "_4-5j_0b_";}
+    else if (Nb == 1) {count = 40; bb = "_4-5j_1b_";}
+    else if (Nb == 2) {count = 50; bb = "_4-5j_2b_";}
+    else {count = 60; bb = "_4-5j_3b_";}
+    count += interval;
+    countSignalEvent("B0"+std::to_string(count)+bb+label[interval-1]);
+    return;
+  }
+  else if (Nj <= 7) {
+    if (Nb == 0) {count = 70; bb = "_6-7j_0b_";}
+    else if (Nb == 1) {count = 80; bb = "_6-7j_1b_";}
+    else if (Nb == 2) {count = 90; bb = "_6-7j_2b_";}
+    else {count = 100; bb = "_6-7j_3b_";}
+    count += interval;
+    if (count < 100) countSignalEvent("B0"+std::to_string(count)+bb+label[interval-1]);
+    else countSignalEvent("B"+std::to_string(count)+bb+label[interval-1]);
+    return;
+  }
+  
+  int interval_hi;
+  if (Nj >= 8 and (interval == 1 or interval == 4) ) return;
+  if (interval < 5) interval_hi = interval - 1;
+  else interval_hi = interval - 2;
+  
+  
+  
+}
