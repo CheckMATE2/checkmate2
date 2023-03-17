@@ -3,7 +3,7 @@
 //  EMAIL: krolb@fuw.edu.pl
 
 std::string Cms_sus_19_006::label[10] = { "300_300", "300_600", "300_1200", "350_350", "350_600", "350_1200", "600_600", "600_1200", "850_850", "850_1700"};
-std::string Cms_sus_19_006::label_hi[10] = { "300_600", "300_1200", "350_600", "350_1200", "600_600", "600_1200", "850_850", "850_1700"};
+std::string Cms_sus_19_006::label_hi[8] = { "300_600", "300_1200", "350_600", "350_1200", "600_600", "600_1200", "850_850", "850_1700"};
 
 void Cms_sus_19_006::initialize() {
   setAnalysisName("cms_sus_19_006");          
@@ -50,9 +50,10 @@ void Cms_sus_19_006::analyze() {
   }
   
   countCutflowEvent("00_all");
-  signal_jets = filterPhaseSpace(jets, 30., -2.4, 2.4);
+  std::vector<Jet*> signal_jets = filterPhaseSpace(jets, 30., -2.4, 2.4);
+  int Nj = signal_jets.size();
   
-  if (signal_jets.size() < 2) return;
+  if (Nj < 2) return;
   countCutflowEvent("01_Nj>=2");
   
   if (HT < 300.) return;
@@ -62,7 +63,7 @@ void Cms_sus_19_006::analyze() {
   if (HTmiss < 300.) return;
   countCutflowEvent("03_HTmiss>300");
   
-  if (HTmiss/HT <= 1.) return;
+  if (HTmiss/HT >= 1.) return;
   countCutflowEvent("04_HTmiss/HT>1");
   
   if (muonsCombined.size() ) return;
@@ -96,8 +97,20 @@ void Cms_sus_19_006::analyze() {
   for (int i = 0; i < signal_jets.size(); i++) 
     if (checkBTag(signal_jets[i]) ) Nb++;
   
-  fill_bins( signal_jets.size(), Nb, HTmiss, HT );
+  fill_bins( Nj, Nb, HTmiss, HT );
   
+  if (Nj >=2 and Nb == 0 and HTmiss > 600. and HT > 600.) countSignalEvent("A01_2j_0b_600_600");
+  if (Nj >=4 and Nb == 0 and HTmiss > 850. and HT > 1700.) countSignalEvent("A02_4j_0b_850_1700");
+  if (Nj >=6 and Nb == 0 and HTmiss > 600. and HT > 600.) countSignalEvent("A03_6j_0b_600_600");
+  if (Nj >=8 and Nb <= 1 and HTmiss > 600. and HT > 600.) countSignalEvent("A04_8j_0-1b_600_600");
+  if (Nj >=10 and Nb <= 1 and HTmiss > 850. and HT > 1700.) countSignalEvent("A05_10j_0-1b_850_1700");
+  if (Nj >=4 and Nb >= 2 and HTmiss > 300. and HT > 300.) countSignalEvent("A06_4j_2b_300_300");
+  if (Nj >=2 and Nb >= 2 and HTmiss > 600. and HT > 600.) countSignalEvent("A07_2j_2b_600_600");
+  if (Nj >=6 and Nb >= 2 and HTmiss > 350. and HT > 350.) countSignalEvent("A08_6j_2b_350_350");
+  if (Nj >=4 and Nb >= 2 and HTmiss > 600. and HT > 600.) countSignalEvent("A09_4j_2b_600_600");
+  if (Nj >=8 and Nb >= 3 and HTmiss > 300. and HT > 300.) countSignalEvent("A10_8j_3b_300_300");
+  if (Nj >=6 and Nb >= 1 and HTmiss > 600. and HT > 600.) countSignalEvent("A11_6j_1b_600_600");
+  if (Nj >=10 and Nb >= 3 and HTmiss > 850. and HT > 850.) countSignalEvent("A12_10j_3b_850_850");
   
   return;  
 }
@@ -151,7 +164,7 @@ void Cms_sus_19_006::fill_bins(int Nj, int Nb, double HTmiss, double HT) {
   if (Nj <= 3) {
     if (Nb == 0) { count = 0; bb = "_2-3j_0b_";}
     else if (Nb == 1) {count = 10; bb = "_2-3j_1b_";}
-    else {count = 20; bb = "_2-3j_2b_"}
+    else {count = 20; bb = "_2-3j_2b_";}
     count += interval;
     if (count >= 10) countSignalEvent("B0"+std::to_string(count)+bb+label[interval-1]);
     else countSignalEvent("B00"+std::to_string(count)+bb+label[interval-1]);   
@@ -182,6 +195,24 @@ void Cms_sus_19_006::fill_bins(int Nj, int Nb, double HTmiss, double HT) {
   if (interval < 5) interval_hi = interval - 1;
   else interval_hi = interval - 2;
   
-  
+  if (Nj >=8 and Nj <= 9) {
+    if (Nb == 0) {count = 110; bb = "_8-9j_0b_";}
+    else if (Nb == 1) {count = 118; bb = "_8-9j_1b_";}
+    else if (Nb == 2) {count = 126; bb = "_8-9j_2b_";}
+    else {count = 134; bb = "_8-9j_3b_";}    
+    count += interval;
+    countSignalEvent("B"+std::to_string(count)+bb+label[interval-1]);
+    return;    
+  }
+  else if(Nj >= 10) {
+    if (Nb == 0) {count = 142; bb = "_10j_0b_";}
+    else if (Nb == 1) {count = 150; bb = "_10j_1b_";}
+    else if (Nb == 2) {count = 158; bb = "_10j_2b_";}
+    else {count = 166; bb = "_10j_3b_";}    
+    count += interval;
+    countSignalEvent("B"+std::to_string(count)+bb+label[interval-1]);
+    return;    
+  }
+    
   
 }

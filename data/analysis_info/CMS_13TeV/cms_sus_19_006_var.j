@@ -5,6 +5,7 @@
   "cr": "n",
   "ecm": "13.0",
   "electron_iso_absorrel": [
+    "r",
     "r"
   ],
   "electron_iso_dR": [
