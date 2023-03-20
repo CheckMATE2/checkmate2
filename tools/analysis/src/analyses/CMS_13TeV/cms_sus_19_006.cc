@@ -200,8 +200,8 @@ void Cms_sus_19_006::fill_bins(int Nj, int Nb, double HTmiss, double HT) {
     else if (Nb == 1) {count = 118; bb = "_8-9j_1b_";}
     else if (Nb == 2) {count = 126; bb = "_8-9j_2b_";}
     else {count = 134; bb = "_8-9j_3b_";}    
-    count += interval;
-    countSignalEvent("B"+std::to_string(count)+bb+label[interval-1]);
+    count += interval_hi;
+    countSignalEvent("B"+std::to_string(count)+bb+label_hi[interval_hi-1]);
     return;    
   }
   else if(Nj >= 10) {
@@ -209,8 +209,8 @@ void Cms_sus_19_006::fill_bins(int Nj, int Nb, double HTmiss, double HT) {
     else if (Nb == 1) {count = 150; bb = "_10j_1b_";}
     else if (Nb == 2) {count = 158; bb = "_10j_2b_";}
     else {count = 166; bb = "_10j_3b_";}    
-    count += interval;
-    countSignalEvent("B"+std::to_string(count)+bb+label[interval-1]);
+    count += interval_hi;
+    countSignalEvent("B"+std::to_string(count)+bb+label_hi[interval_hi-1]);
     return;    
   }
     
