@@ -2516,7 +2516,7 @@
     "hadronic"
   ],
   "likelihoods": "n",
-  "mb_signal_regions": {
+  "!mb_signal_regions": {
     "AllBins": [
     	"1j_0b_250",
     	"1j_0b_350",
