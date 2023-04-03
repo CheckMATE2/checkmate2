@@ -287,8 +287,9 @@ def recompute_s95_sr(reference_data):
     # For numerical reasons, it can happen that they aren't. In that case, choose
     # the mean
     if bkg == obs:
-      S95 = myround((s95_exp+s95_obs)/2., bkg)
-      sexp = s95 = S95
+      S95 = myround((sobs+sexp)/2., bkg)
+      sexp = S95
+      sobs = S95
     return (sobs, sexp)
 
 def recompute_s95(parameters, signal_regions=None):

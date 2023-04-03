@@ -94,7 +94,27 @@ if ! test -f "$srcdir/data/atlas_1908_03122/HEPData_workspaces.tar.gz"
     mkdir "$srcdir/data/atlas_1908_03122/Likelihoods"
   fi  
   `tar -xvzf "$srcdir/data/atlas_1908_03122/HEPData_workspaces.tar.gz" -C "$srcdir/data/atlas_1908_03122/Likelihoods/"`
-fi  
+fi 
+# Likelihoods for atlas_2101_01629
+if ! test -f "$srcdir/data/atlas_2101_01629/likelihoods_2101_01629.tar.gz"
+  then
+  `curl -JLH "Accept: application/x-tar" -o "$srcdir/data/atlas_2101_01629/likelihoods_2101_01629.tar.gz" "https://doi.org/10.17182/hepdata.97041.v2/r3"`  
+  if ! test -d "$srcdir/data/atlas_2101_01629/Likelihoods/"
+  then
+    mkdir "$srcdir/data/atlas_2101_01629/Likelihoods"
+  fi   
+  `tar -xvzf "$srcdir/data/atlas_2101_01629/likelihoods_2101_01629.tar.gz" --strip-components=1 -C "$srcdir/data/atlas_2101_01629/Likelihoods"`
+fi 
+# Likelihoods for atlas_1908_08215
+if ! test -f "$srcdir/data/atlas_1908_08215/likelihoods_1908_08215.tar.gz"
+  then
+  `curl -JLH "Accept: application/x-tar" -o "$srcdir/data/atlas_1908_08215/likelihoods_1908_08215.tar.gz" "https://doi.org/10.17182/hepdata.89413.v4/r5"`
+  if ! test -d "$srcdir/data/atlas_1908_08215/Likelihoods/"
+  then
+    mkdir "$srcdir/data/atlas_1908_08215/Likelihoods"
+  fi    
+  `tar -xvzf "$srcdir/data/atlas_1908_08215/likelihoods_1908_08215.tar.gz" -C "$srcdir/data/atlas_1908_08215/Likelihoods"`
+fi 
 AC_MSG_RESULT([])
 
 AC_MSG_RESULT([])
