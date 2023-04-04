@@ -130,8 +130,12 @@ def create_patchset(path, names, s, ds, systematics = 0):
         samples = [{"name":'Signal0',"id":len(spec_patchset["patches"][0]["metadata"]["values"])*[''],"SRs":names,"s":s,"ds":ds}]
     else:
         samples = [{"name":'Signal0',"id":len(spec_patchset["patches"][0]["metadata"]["values"])*[''],"SRs":[x[:-3] for x in names],"s":s,"ds":ds}]
-
-    workspace_new = {"metadata": {"analysis_id": spec_patchset["metadata"]["analysis_id"],"description": spec_patchset["metadata"]["description"],"digests": {"sha256": ""},"labels": spec_patchset["metadata"]["labels"],"references": {"hepdata": spec_patchset["metadata"]["references"]["hepdata"]}},"patches": [],"version": "1.0.0"}
+    
+    if "analysis_id" in spec_patchset["metadata"]:
+        temp_key = spec_patchset["metadata"]["analysis_id"]
+    else:
+        temp_key = "random_analysis"
+    workspace_new = {"metadata": {"analysis_id": temp_key,"description": spec_patchset["metadata"]["description"],"digests": {"sha256": ""},"labels": spec_patchset["metadata"]["labels"],"references": {"hepdata": spec_patchset["metadata"]["references"]["hepdata"]}},"patches": [],"version": "1.0.0"}
     for sample in samples:
         workspace_new["patches"].append(patch(sample,spec,systematics))
     workspace_new["metadata"]["digests"]["sha256"]=hashlib.sha256(json.dumps(workspace_new).encode('utf8')).hexdigest()

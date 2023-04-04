@@ -1,0 +1,51 @@
+{"analysis" :[
+	{"name":"2J_bveto",
+	"bkgonly":"BkgOnly.json",
+        "patchset":"GG_x12_patchset.json",
+        "histosize":"3",
+	"SR_dict": {"SR2JBVEM_meffInc30[0]":"2J_bveto_700","SR2JBVEM_meffInc30[1]":"2J_bveto_1300","SR2JBVEM_meffInc30[2]":"2J_bveto_1900"
+	}},
+	{"name":"2J_btag",
+	"bkgonly":"BkgOnly.json",
+	"patchset":"GG_x12_patchset.json",
+	"histosize":"3",
+	"SR_dict": {"SR2JBTEM_meffInc30[0]":"2J_btag_700","SR2JBTEM_meffInc30[1]":"2J_btag_1300","SR2JBTEM_meffInc30[2]":"2J_btag_1900"
+	}},
+	{"name":"4J_lx_bveto",
+	"bkgonly":"BkgOnly.json",
+         "patchset":"GG_x12_patchset.json",
+        "histosize":"3",
+	"SR_dict": {"SR4JlowxBVEM_meffInc30[0]":"4J_lx_bveto_1000","SR4JlowxBVEM_meffInc30[1]":"4J_lx_bveto_1600","SR4JlowxBVEM_meffInc30[2]":"4J_lx_bveto_22006"
+	}},
+	{"name":"4J_lx_btag",
+	"bkgonly":"BkgOnly.json",
+         "patchset":"GG_x12_patchset.json",
+        "histosize":"3",
+	"SR_dict": {"SR4JlowxBTEM_meffInc30[0]":"4J_lx_btag_1000","SR4JlowxBTEM_meffInc30[1]":"4J_lx_btag_1600","SR4JlowxBTEM_meffInc30[2]":"4J_lx_btag_22006"
+	}},
+	{"name":"4J_hx_bveto",
+	"bkgonly":"BkgOnly.json",
+         "patchset":"GG_x12_patchset.json",
+        "histosize":"3",
+	"SR_dict": {"SR4JhighxBVEM_meffInc30[0]":"4J_hx_bveto_1000","SR4JhighxBVEM_meffInc30[1]":"4J_hx_bveto_1600","SR4JhighxBVEM_meffInc30[2]":"4J_hx_bveto_22006"
+	}},
+	{"name":"4J_hx_btag",
+	"bkgonly":"BkgOnly.json",
+         "patchset":"GG_x12_patchset.json",
+        "histosize":"3",
+	"SR_dict": {"SR4JhighxBTEM_meffInc30[0]":"4J_hx_btag_1000","SR4JhighxBTEM_meffInc30[1]":"4J_hx_btag_1600","SR4JhighxBTEM_meffInc30[2]":"4J_hx_btag_22006"
+	}},
+	{"name":"6J_bveto",
+	"bkgonly":"BkgOnly.json",
+        "patchset":"GG_x12_patchset.json",
+        "histosize":"4",
+	"SR_dict": {"SR6JBVEM_meffInc30[0]":"6J_bveto_700","SR6JBVEM_meffInc30[1]":"6J_bveto_1400","SR6JBVEM_meffInc30[2]":"6J_bveto_2100","SR6JBVEM_meffInc30[3]":"6J_bveto_2800"
+	}},
+	{"name":"6J_btag",
+	"bkgonly":"BkgOnly.json",
+	"patchset":"GG_x12_patchset.json",
+	"histosize":"4",
+	"SR_dict": {"SR6JBTEM_meffInc30[0]":"6J_btag_700","SR6JBTEM_meffInc30[1]":"6J_btag_1400","SR6JBTEM_meffInc30[2]":"6J_btag_2100","SR6JBTEM_meffInc30[3]":"6J_btag_2800"
+	}}			
+	]
+}
