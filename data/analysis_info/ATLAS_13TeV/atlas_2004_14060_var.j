@@ -152,5 +152,21 @@
   "tags": [
     "stops", 
     "leptoquarks"
-  ]
+  ],
+  "likelihoods": "n",
+  "mb_signal_regions": {
+    "SRA-B": [
+      "SRA-TT", 
+      "SRA-TW", 
+      "SRA-T0", 
+      "SRB-TT", 
+      "SRB-TW", 
+      "SRB-T0"
+    ],
+    "SRD": [
+      "SRD0", 
+      "SRD1", 
+      "SRD2"
+    ]
+  }   
 }

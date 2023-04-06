@@ -1,0 +1,68 @@
+{"analysis" :[
+	{"name":"SR-E-high-ee",
+	  "bkgonly":"EWKinos_bkgonly.json",
+          "patchset":"EWKinos_patchset.json",
+          "histosize":"1",
+	  "SR_dict": {"SRee_eMLLc_hghmet_cuts":"E-high-ee-05","SRee_eMLLd_hghmet_cuts":"E-high-ee-10","SRee_eMLLe_hghmet_cuts":"E-high-ee-20","SRee_eMLLf_hghmet_cuts":"E-high-ee-30","SRee_eMLLg_hghmet_cuts":"E-high-ee-40","SRee_eMLLh_hghmet_cuts":"E-high-ee-60"
+	}},
+	{"name":"SR-E-med-ee",
+	  "bkgonly":"EWKinos_bkgonly.json",
+	  "patchset":"EWKinos_patchset.json",
+	  "histosize":"1",
+	  "SR_dict": {"SRee_eMLLc_lowmet_deltaM_low_cuts":"E-med-ee-05","SRee_eMLLd_lowmet_deltaM_low_cuts":"E-med-ee-10","SRee_eMLLe_lowmet_deltaM_low_cuts":"E-med-ee-20","SRee_eMLLf_lowmet_deltaM_low_cuts":"E-med-ee-30"
+	}},
+	{"name":"SR-E-low-ee",
+	  "bkgonly":"EWKinos_bkgonly.json",
+          "patchset":"EWKinos_patchset.json",
+          "histosize":"1",
+	  "SR_dict": {"SRee_eMLLc_lowmet_deltaM_high_cuts":"E-low-ee-05","SRee_eMLLd_lowmet_deltaM_high_cuts":"E-low-ee-10","SRee_eMLLe_lowmet_deltaM_high_cuts":"E-low-ee-20","SRee_eMLLf_lowmet_deltaM_high_cuts":"E-low-ee-30","SRee_eMLLg_lowmet_deltaM_high_cuts":"E-low-ee-40","SRee_eMLLh_lowmet_deltaM_high_cuts":"E-low-ee-60"
+	}},
+	{"name":"SR-E-high-mm",
+	  "bkgonly":"EWKinos_bkgonly.json",
+          "patchset":"EWKinos_patchset.json",
+          "histosize":"1",
+	  "SR_dict": {"SRmm_eMLLa_hghmet_cuts":"E-high-mm-02","SRmm_eMLLb_hghmet_cuts":"E-high-mm-03","SRmm_eMLLc_hghmet_cuts":"E-high-mm-05","SRmm_eMLLd_hghmet_cuts":"E-high-mm-10","SRmm_eMLLe_hghmet_cuts":"E-high-mm-20","SSRmm_eMLLf_hghmet_cuts":"E-high-mm-30","SRmm_eMLLg_hghmet_cuts":"E-high-mm-40","SRmm_eMLLh_hghmet_cuts":"E-high-mm-60"
+	}},
+	{"name":"SR-E-med-mm",
+	  "bkgonly":"EWKinos_bkgonly.json",
+          "patchset":"EWKinos_patchset.json",
+          "histosize":"1",
+	  "SR_dict": {"SRmm_eMLLa_lowmet_deltaM_low_cuts":"E-med-mm-02","SRmm_eMLLb_lowmet_deltaM_low_cuts":"E-med-mm-03","SRmm_eMLLc_lowmet_deltaM_low_cuts":"E-med-mm-05","SRmm_eMLLd_lowmet_deltaM_low_cuts":"E-med-mm-10","SRmm_eMLLe_lowmet_deltaM_low_cuts":"E-med-mm-20","SRmm_eMLLf_lowmet_deltaM_low_cuts":"E-med-mm-30"
+	}},
+	{"name":"SR-E-low-mm",
+	  "bkgonly":"EWKinos_bkgonly.json",
+          "patchset":"EWKinos_patchset.json",
+          "histosize":"1",
+	  "SR_dict": {"SRmm_eMLLa_lowmet_deltaM_high_cuts":"E-low-mm-02","SRmm_eMLLb_lowmet_deltaM_high_cuts":"E-low-mm-03","SRmm_eMLLc_lowmet_deltaM_high_cuts":"E-low-mm-05","SRmm_eMLLd_lowmet_deltaM_high_cuts":"E-low-mm-10","SRmm_eMLLe_lowmet_deltaM_high_cuts":"E-low-mm-20","SRmm_eMLLf_lowmet_deltaM_high_cuts":"E-low-mm-30","SRmm_eMLLg_lowmet_deltaM_high_cuts":"E-low-mm-40","SRmm_eMLLg_lowmet_deltaM_high_cuts":"E-low-mm-60"
+	}},
+	{"name":"SR-1L1T",
+	  "bkgonly":"EWKinos_bkgonly.json",
+          "patchset":"EWKinos_patchset.json",
+          "histosize":"1",
+	  "SR_dict":{"SR_eMLLa_Onelep1track_cuts":"SR-1L1T-1.0","SR_eMLLb_Onelep1track_cuts":"SR-1L1T-1.5","SR_eMLLc_Onelep1track_cuts":"SR-1L1T-2.0","SR_eMLLd_Onelep1track_cuts":"SR-1L1T-3.0","SR_eMLLe_Onelep1track_cuts":"SR-1L1T-4.0","SR_eMLLf_Onelep1track_cuts":"SR-1L1T-5.0"
+	}},
+	{"name":"SR-S-high-ee",
+	  "bkgonly":"Selectrons_bkgonly.json",
+          "patchset":"Selectrons_patchset.json",
+          "histosize":"1",
+	  "SR_dict": {"SRee_eMT2a_hghmet_cuts":"S-high-ee-00","SRee_eMT2b_hghmet_cuts":"S-high-ee-01","SRee_eMT2c_hghmet_cuts":"S-high-ee-02","SRee_eMT2d_hghmet_cuts":"S-high-ee-05","SRee_eMT2e_hghmet_cuts":"S-high-ee-10","SRee_eMT2f_hghmet_cuts":"S-high-ee-20","SRee_eMT2g_hghmet_cuts":"S-high-ee-30","SRee_eMT2h_hghmet_cuts":"S-high-ee-40"
+	}},
+	{"name":"SR-S-low-ee",
+	  "bkgonly":"Selectrons_bkgonly.json",
+          "patchset":"Selectrons_patchset.json",
+          "histosize":"1",
+	  "SR_dict": {"SRee_eMT2a_lowmet_V2_cuts":"S-low-ee-00","SRee_eMT2b_lowmet_V2_cuts":"S-low-ee-01","SRee_eMT2c_lowmet_V2_cuts":"S-low-ee-02","SRee_eMT2d_lowmet_V2_cuts":"S-low-ee-05","SRee_eMT2e_lowmet_V2_cuts":"S-low-ee-10","SRee_eMT2f_lowmet_V2_cuts":"S-low-ee-20","SRee_eMT2g_lowmet_V2_cuts":"S-low-ee-30","SRee_eMT2h_lowmet_V2_cuts":"S-low-ee-40"
+	}},
+	{"name":"SR-S-high-mm",
+	  "bkgonly":"Smuons_bkgonly.json",
+          "patchset":"Smuons_patchset.json",
+          "histosize":"1",
+	  "SR_dict": {"SRmm_eMT2a_hghmet_cuts":"S-high-mm-00","SRmm_eMT2b_hghmet_cuts":"S-high-mm-01","SRmm_eMT2c_hghmet_cuts":"S-high-mm-02","SRmm_eMT2d_hghmet_cuts":"S-high-mm-05","SRmm_eMT2e_hghmet_cuts":"S-high-mm-10","SRmm_eMT2f_hghmet_cuts":"S-high-mm-20","SRmm_eMT2g_hghmet_cuts":"S-high-mm-30","SRmm_eMT2h_hghmet_cuts":"S-high-mm-40"
+	}},
+	{"name":"SR-S-low-mm",
+	  "bkgonly":"Smuons_bkgonly.json",
+          "patchset":"Smuons_patchset.json",
+          "histosize":"1",
+	  "SR_dict": {"SRmm_eMT2a_lowmet_V2_cuts":"S-low-mm-00","SRmm_eMT2b_lowmet_V2_cuts":"S-low-mm-01","SRmm_eMT2c_lowmet_V2_cuts":"S-low-mm-02","SRmm_eMT2d_lowmet_V2_cuts":"S-low-mm-05","SRmm_eMT2e_lowmet_V2_cuts":"S-low-mm-10","SRmm_eMT2f_lowmet_V2_cuts":"S-low-mm-20","SRmm_eMT2g_lowmet_V2_cuts":"S-low-mm-30","SRmm_eMT2h_lowmet_V2_cuts":"S-low-mm-40"
+	}}]
+}
