@@ -14,6 +14,8 @@ class Cms_2107_13201 : public AnalysisBase {
     void finalize();
 
   private:
+    template <class X>
+std::vector<X*> Isolate_leptons_with_variable_track_isolation_cone_CMS(std::vector<X*> leptons, double dR_track_max, double dR_track_min, double pT_for_inverse_function_track, double pT_amount_track );
 };
 
 #endif

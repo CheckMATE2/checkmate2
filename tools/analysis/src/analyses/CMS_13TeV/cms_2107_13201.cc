@@ -15,51 +15,177 @@ void Cms_2107_13201::initialize() {
 }
 
 void Cms_2107_13201::analyze() {
-  // Your eventwise analysis code goes here
-  // The following objects are always defined unless they are 'ignored' above. They form std::vector objects of the respective Delphes class type (except for Etmiss which is a single object)
-  // All std::vector members and etmiss have the common properties PT, Eta, Phi and P4() with the latter giving access to the full ROOT TLorentzVector.
-  // Within a std::vector, all members are ordered with highest pt coming first.
-
-  // electronsLoose, electronsMedium, electronsTight   are list of electrons that passed respective efficiency and reconstruction cuts
-  // muonsCombinedPlus, muonsCombined                  as above for muons
-  // photonsMedium                                     as above for photons
-  // jets are all reconstructed jets                   as above for jets. Note that electrons are most certainly also reconstructed as a jet -> overlap removal do avoid double counting necessary!
-  // tracks, towers                                    calorimeter and tracker information. Usually not needed.
-  // missingET                                         rec missing ET EXCLUDING muons.
-
+ 
+  //missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
+ 
+  electronsMedium = filterPhaseSpace(electronsMedium, 10., -2.5, 2.5);
+  muonsCombined = filterPhaseSpace(muonsCombined, 10., -2.4, 2.4);  
+  photonsMedium = filterPhaseSpace(photonsMedium, 15., -2.5, 2.5);  
   
-  // Here is a couple of useful functions and lines:  
-  //------------Phase Space Cuts (defined for jets, electronsXYZ, muonsXYZ, photonsXYZ)
-  // jets = filterPhaseSpace(jets, 20., -2.8, 2.8)  // The vector 'jets' only contains jets with pt >= 20 GeV and -2.8 < eta < 2.8. This function is applicable to other particles too (electronsMedium, ... ).
-  // jets = overlapRemoval(jets, electronsLoose, 0.2) Removes all jets for which there exists any electron in 'electronsLoose' with deltaR < 0.2.
-  // jets = overlapRemovel(jets, 0.2) If two jets overlap within deltaR < 0.2, only the harder jet is stored.
+  photonsMedium = filterIsolation( photonsMedium); 
+  electronsMedium = Isolate_leptons_with_variable_track_isolation_cone_CMS(electronsMedium, 0.2, 0.05, 10., 0.1);
+  muonsCombined = Isolate_leptons_with_variable_track_isolation_cone_CMS(muonsCombined, 0.2, 0.05, 10., 0.2);
   
-  //------------Isolation Checks (defined for electronsXYZ, muonsXYZ, photonsXYZ
-  //------------        For each object, if the user entered N isolation conditions, they can be
-  //------------        checked individually be the second argument (running from 0 to N-1).
-  // electronsMedium = filterIsolation(electronsMedium, 0)            Removes electrons that do not pass the first isolation condition entered into the AnalysisManager by the user
-  // std::vector<int> flags; flags.push_back(0); flags.push_back(2);
-  // electronsMedium = filterIsolation(electronsMedium, flags)        Same as above, but both the first and the third condition have to be fulfilled
-  // electronsMedium = filterIsolation(electronsMedium)               Same as above, but all conditions have to be fulfilled.
+  jets = filterPhaseSpace(jets, 20., -2.4, 2.4);
+  jets = overlapRemoval(jets, electronsMedium, 0.3, "y");
+  jets = overlapRemoval(jets, muonsCombined, 0.3, "y");
+  jets = overlapRemoval(jets, photonsMedium, 0.3, "y");    
   
-  //-----------Flavour Tag Checks (defined for jets only)
-  //----------          Tau tags "loose", "medium" or "tight" can be individually checked if the user enabled tau tagging in the AM.
-  //----------          For b-tags, if N working points have been defined, the ith condition can be tested by putting i-1 into the second argument (if there is only one, the argument can be omitted)
-  // if checkTauTag(jets[0], "tight") leadingJetIsTagged = True;
-  // if checkBTag(jets[0], 0) leadingJetIsBTagged = True;
-
-
-  //-----------Auxiliary Information
-  // - Always ensure that you don't access vectors out of bounds. E.g. 'if(jets[1]->PT > 150)' should rather be if (jets.size() > 1 && jets[1]->PT > 150). 
-  // - Use rand()/(RAND_MAX+1.) for random numbers between 0 and 1. The random seed is determined from system time or by the RandomSeed parameter in CheckMATE.
-  // - The 'return' statement will end this function for the current event and hence should be called whenever the current event is to be vetoed.
-  // - Many advanced kinematical functions like mT2 are implemented. Check the manual for more information.
-  // - If you need output to be stored in other files than the cutflow/signal files we provide, check the manual for how to do this conveniently.  
-
-  missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
+  double MET = missingET->PT;
+    
+  countCutflowEvent("00_All");
   
+  if (MET <  120.) return;
+  countCutflowEvent("01_Trigger");
+  
+  if (MET <  250.) return;
+  countCutflowEvent("02_MET>250");
+
+  if (electronsMedium.size()) return;
+  countCutflowEvent("03_el_veto");  
+  
+  if (muonsCombined.size()) return;
+  countCutflowEvent("04_mu_veto");    
+  
+  for (int i = 0; i < jets.size(); i++) 
+    if ( fabs(jets[i]->Eta)<2.3 and checkTauTag(jets[i], "medium") ) return;    
+  countCutflowEvent("05_tau_veto");    
+
+  for (int i = 0; i < jets.size(); i++) 
+    if (checkBTag(jets[i]) ) return;  
+  countCutflowEvent("06_B_veto");    
+  
+  if (photonsMedium.size()) return;
+  countCutflowEvent("07_photon_veto");    
+  
+  for (int i = 0; i < jets.size(); i++)
+    if ( fabs(missingET->P4().DeltaPhi(jets[i]->P4())) < 0.5) return;
+  countCutflowEvent("08_DPhi(MET,jet)");      
+  
+  if (!jets.size()) return;
+  if (jets[0]->PT < 100.) return;
+  countCutflowEvent("09_jet1>100");      
+  
+  std::string year;
+  double batch = rand()/(RAND_MAX + 1.);
+  if (batch < 36./137.2) year = "2016";
+  else if (batch < (36.+41.5)/137.2 ) year = "2017";
+  else year = "2018";
+    
+  if (MET < 280.) {
+    countSignalEvent("A_00");
+    countSignalEvent("B_"+year+"_00");    
+  }
+  else if (MET < 310.) {
+    countSignalEvent("A_01");
+    countSignalEvent("B_"+year+"_01");    
+  }
+  else if (MET < 340.) {
+    countSignalEvent("A_02");
+    countSignalEvent("B_"+year+"_02");    
+  }
+  else if (MET < 370.) {
+    countSignalEvent("A_03");
+    countSignalEvent("B_"+year+"_03");    
+  }  
+  else if (MET < 400.) {
+    countSignalEvent("A_04");
+    countSignalEvent("B_"+year+"_04");    
+  }
+  else if (MET < 430.) {
+    countSignalEvent("A_05");
+    countSignalEvent("B_"+year+"_05");    
+  }  
+  else if (MET < 470.) {
+    countSignalEvent("A_06");
+    countSignalEvent("B_"+year+"_06");    
+  } 
+  else if (MET < 510.) {
+    countSignalEvent("A_07");
+    countSignalEvent("B_"+year+"_07");    
+  } 
+  else if (MET < 550.) {
+    countSignalEvent("A_08");
+    countSignalEvent("B_"+year+"_08");    
+  }  
+  else if (MET < 590.) {
+    countSignalEvent("A_09");
+    countSignalEvent("B_"+year+"_09");    
+  }  
+  else if (MET < 640.) {
+    countSignalEvent("A_10");
+    countSignalEvent("B_"+year+"_10");    
+  }  
+  else if (MET < 690.) {
+    countSignalEvent("A_11");
+    countSignalEvent("B_"+year+"_11");    
+  }
+  else if (MET < 740.) {
+    countSignalEvent("A_12");
+    countSignalEvent("B_"+year+"_12");    
+  }  
+  else if (MET < 790.) {
+    countSignalEvent("A_13");
+    countSignalEvent("B_"+year+"_13");    
+  }  
+  else if (MET < 840.) {
+    countSignalEvent("A_14");
+    countSignalEvent("B_"+year+"_14");    
+  }  
+  else if (MET < 900.) {
+    countSignalEvent("A_15");
+    countSignalEvent("B_"+year+"_15");    
+  }  
+  else if (MET < 960.) {
+    countSignalEvent("A_16");
+    countSignalEvent("B_"+year+"_16");    
+  }  
+  else if (MET < 1020.) {
+    countSignalEvent("A_17");
+    countSignalEvent("B_"+year+"_17");    
+  }  
+  else if (MET < 1090.) {
+    countSignalEvent("A_18");
+    countSignalEvent("B_"+year+"_18");    
+  }  
+  else if (MET < 1250.) {
+    countSignalEvent("A_20");
+    countSignalEvent("B_"+year+"_20");    
+  }  
+  else  {
+    countSignalEvent("A_21");
+    countSignalEvent("B_"+year+"_21");    
+  }  
+  
+  return;  
 }
 
 void Cms_2107_13201::finalize() {
   // Whatever should be done after the run goes here
 }       
+
+
+template <class X>
+std::vector<X*> Cms_2107_13201::Isolate_leptons_with_variable_track_isolation_cone_CMS(std::vector<X*> leptons, double dR_track_max, double dR_track_min, double pT_for_inverse_function_track, double pT_amount_track ) {
+      
+  std::vector<X*> filtered_leptons;
+  for(int i = 0; i < leptons.size(); i++) {
+    double dR_track = 0.;
+    double sumPT = 0.;
+    dR_track = std::min(dR_track_max, std::max(pT_for_inverse_function_track/leptons[i]->PT, dR_track_min));
+        
+    for (int t = 0; t < tracks.size(); t++) {
+      Track* neighbour = tracks[t];
+
+	  // Ignore the lepton's track itself
+      if(neighbour->Particle == leptons[i]->Particle) continue;
+      if(neighbour->PT < 1.) continue;
+      if (neighbour->P4().DeltaR(leptons[i]->P4()) > dR_track) continue;
+      sumPT += neighbour->PT;
+    }
+    
+    if( (leptons[i]->PT)*pT_amount_track > sumPT) filtered_leptons.push_back(leptons[i]);
+  }
+    
+    return filtered_leptons;
+}

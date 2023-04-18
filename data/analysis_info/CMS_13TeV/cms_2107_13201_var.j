@@ -5,21 +5,26 @@
   "cr": "n",
   "ecm": "13.0",
   "electron_iso_absorrel": [
+    "r",
     "r"
   ],
   "electron_iso_dR": [
-    "0.2"
+    "0.05",
+    "0.3"
   ],
   "electron_iso_ptmin": [
-    "0.1"
+    "1.0",
+    "1.0"
   ],
   "electron_iso_ptratiomax": [
+    "0.1",
     "0.2"
   ],
   "electron_iso_source": [
-    "c"
+    "t",
+    "t"
   ],
-  "electron_niso": 1,
+  "electron_niso": 2,
   "expectation_known": "y",
   "experiment": "cms13tev",
   "info_set": [
@@ -34,27 +39,36 @@
     "80.0"
   ],
   "jets_btagging_n": 1,
-  "jets_tautagging": "n",
+  "jets_tautagging": "y",
+  "jets_tautagging_eff": [
+    "70.0"
+  ],
+  "jets_tautagging_n": 1,  
   "long_info": [
     "monojet with multibin"
   ],
   "lumi": "137.0",
   "muon_iso_absorrel": [
+    "r",
     "r"
   ],
   "muon_iso_dR": [
-    "0.05"
+    "0.05",
+    "0.3"
   ],
   "muon_iso_ptmin": [
-    "0.5"
+    "1.0",
+    "1.0"
   ],
   "muon_iso_ptratiomax": [
+    "0.1",
     "0.2"
   ],
   "muon_iso_source": [
+    "t",
     "t"
   ],
-  "muon_niso": 1,
+  "muon_niso": 2,
   "photon_iso_absorrel": [
     "r"
   ],
