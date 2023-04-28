@@ -147,6 +147,10 @@ void Cms_2107_13201::analyze() {
   else if (MET < 1090.) {
     countSignalEvent("A_18");
     countSignalEvent("B_"+year+"_18");    
+  }
+  else if (MET < 1160.) {
+    countSignalEvent("A_19");
+    countSignalEvent("B_"+year+"_19");    
   }  
   else if (MET < 1250.) {
     countSignalEvent("A_20");
