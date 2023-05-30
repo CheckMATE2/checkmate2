@@ -3,7 +3,7 @@ cms_pas_sus_15_011   47   CMS, 13 TeV, 2 leptons + jets + MET                   
 cms_sus_16_039       158  electrowekinos in multilepton final state                                                   35.9  no
 cms_sus_16_025       14   electroweakino and stop compressed spectra                                                  12.9  no
 cms_sus_16_048       20   two soft opposite sign leptons                                                              35.9  no
-cms_sus_19_005       303  hadronic final states with MT2                                                              137.0 no  
-cms_sus_19_006       186  hadronic final states with HT, pre-fit                                                      137.0 no  
+#cms_sus_19_005       303  hadronic final states with MT2                                                              137.0 no  
+#cms_sus_19_006       186  hadronic final states with HT, pre-fit                                                      137.0 no  
 cms_1908_04722       186  hadronic final states with HT, post-fit and simple fitting                                  137.0 no  
 cms_2107_13201       88   monojet with multibin                                                                       137.0 no  

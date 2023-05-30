@@ -797,7 +797,7 @@
   "tags": [
     "monojet"
   ],
-  "likelihoods": "n",
+  "likelihoods": "cov",
   "mb_signal_regions": {
     "combination": [   
       "B_2016_00",

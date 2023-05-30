@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import os
 import sys
 import scipy
+from info import Info
+from advprint import AdvPrint
 
 def data_from_CMresults(path):
     f_results=open(path+'/evaluation/total_results.txt','r')
@@ -93,6 +95,115 @@ def upperlim(workspace, ntoys = -1):
     return poi_values, obs_limit, exp_limits, (scan, results) 
 ##--------------------------------------------------------------------------------------
 
+def upperlim_with_cov(_o, _b, _db, _s, _ds, _cov):
+
+    import ROOT
+    from array import array
+    #ROOT.Math.MinimizerOptions.SetDefaultMinimizer("Minuit2") #minuit 2 instead of minuit
+    #Prepare variables for using in ROOSTAT
+    nbins = len(_o)
+    s = array('d',_s)
+    b = array('d',_b)
+    db = array('d',_db)
+    ds = array('d',_ds)
+    o = array('d',_o)
+    cov = ROOT.TMatrixDSym(nbins,np.array(_cov))
+    for i in range(nbins): 
+        for j in range(nbins): 
+            cov[i][j]=_cov[i,j]  
+    pdf_string=''
+    # Create workspace
+    wspace= ROOT.RooWorkspace()
+    wspace.factory("mu[0,0,5]") # create the variable mu to store the POI
+
+    # Define, for each bin :
+    # 1. The variable nexpi corresponding to the argument of the poisson distribution: sum of  mu*s_i + b0_i+thb_i where s_i is the free-floating signal (constrained by constraints_i), b0_ is the median value (constant) of the background prediction and thb_i is the variation of bi around b0_i (constrained by constraintb).
+    # 2. A gaussian constraint for s_i (nuissance parameters) centered around s0_i (constant global observables) and with variance fixed by ds (number).
+    # 3. A poisson distribution with arguments nobsi (observables) and nexpi. 
+    # 4. The variable zero_i to hold the target value of the nuissance parameters thb_i, treated as a global obsevable.
+    #  Define for all bins:
+    # 1. A multivariate gaussian constraint term for all of the thb_i with thb_i as random variable, zero_i as mean and covariance matrix defined by cov
+    # 2. The model p.d.f as the product of al poisson and constraint terms.
+    for i in range(nbins):           
+        wspace.factory("sum::nexp"+str(i)+"(0.0,prod::muS"+str(i)+"(mu,s_"+str(i)+"["+str(s[i])+",0,1e+30]),b0_"+str(i)+"["+str(b[i])+"],thb_"+str(i)+"["+str(o[i]-b[i]+0.1)+","+str(-b[i]+0.01)+","+str(5*db[i])+"])")
+        wspace.factory("Gaussian::constraints"+str(i)+"(s_"+str(i)+",s0_"+str(i)+"["+str(s[i])+",0,1e+7],"+str(ds[i])+")")
+        wspace.factory("RooPoisson::poiss"+str(i)+"(nobs"+str(i)+"["+str(o[i])+"],nexp"+str(i)+")")
+        pdf_string = pdf_string+"poiss"+str(i)+",constraints"+str(i)+","
+        wspace.factory("thb_0_"+str(i)+"[0]")#wspace.factory("zero_"+str(i)+"[0,-1e-10,1e-10]")
+        wspace.var("thb_0_"+str(i)).setConstant()        
+    constraintb=ROOT.RooMultiVarGaussian("constraintb","constraintb",ROOT.RooArgSet([wspace.var("thb_"+str(i)) for i in range(nbins)]),ROOT.RooArgSet([wspace.var("thb_0_"+str(i)) for i in range(nbins)]),cov)
+    wspace.Import(constraintb)
+    ##
+    pdf_string=pdf_string+"constraintb"
+    wspace.factory("PROD:model("+pdf_string+")")
+    
+    ## Set the observables and global obsevables as constants and fix their values, put reasonable limits on s to optimize calculation
+    for i in range(nbins):
+        wspace.var("b0_"+str(i)).setVal(b[i])
+        wspace.var("b0_"+str(i)).setConstant(True)
+        wspace.var("s0_"+str(i)).setVal(s[i])
+        wspace.var("s0_"+str(i)).setConstant(True)
+        wspace.var("thb_0_"+str(i)).setVal(0)
+        wspace.var("thb_0_"+str(i)).setConstant(True)
+        wspace.var("s_"+str(i)).setMax(s[i]+5*ds[i])
+        wspace.var("s_"+str(i)).setMin(0)
+        wspace.var("nobs"+str(i)).setVal(o[i])
+        wspace.var("nobs"+str(i)).setConstant(True)
+    ## Define sets of variables: data, constrained parameters and global observables
+    wspace.defineSet("obs",ROOT.RooArgSet([wspace.var("nobs"+str(i)) for i in range(nbins) ]))
+    data = ROOT.RooDataSet("data",'data',wspace.set("obs"))
+    data.add(wspace.set("obs"))
+    wspace.defineSet("const_p",ROOT.RooArgSet([wspace.var("thb_"+str(i)) for i in range(nbins) ]+[wspace.var("s_"+str(i)) for i in range(nbins) ]))
+    constrainedParams=ROOT.RooDataSet("constrainedParams",'constrainedParams',wspace.set("const_p"))
+    constrainedParams.add(wspace.set("const_p"))
+
+    ## Create a model for the alternate (mu=1) and null (mu=0) hypotesis.
+    sbModel = ROOT.RooStats.ModelConfig("sbModel","",wspace)
+    sbModel.SetPdf(wspace.pdf("model"))
+    sbModel.SetParametersOfInterest(wspace.var("mu"))
+    sbModel.SetNuisanceParameters(wspace.set("const_p"))
+    sbModel.SetObservables(wspace.set("obs"))
+    wspace.var("mu").setVal(1.)
+    sbModel.SetSnapshot(wspace.var("mu"))
+    getattr(wspace,'import')(sbModel)
+    getattr(wspace,'import')(data)
+    bModel = ROOT.RooStats.ModelConfig("bModel","",wspace)
+    bModel.SetPdf(wspace.pdf("model"))
+    bModel.SetParametersOfInterest(wspace.var("mu"))
+    bModel.SetNuisanceParameters(wspace.set("const_p"))
+    bModel.SetObservables(wspace.set("obs"))
+    wspace.var("mu").setVal(0) 
+    bModel.SetSnapshot(wspace.var("mu"))
+    getattr(wspace,'import')(bModel)
+    poi=sbModel.GetParametersOfInterest().first()
+
+    #calculator=='PLR':
+    pl = ROOT.RooStats.ProfileLikelihoodCalculator(data,sbModel)
+    ROOT.Math.MinimizerOptions.SetDefaultPrintLevel(-1) #<< Change the messages level, smaller means less info.
+    ROOT.RooMsgService.instance().setGlobalKillBelow(ROOT.RooFit.FATAL)
+    pl.SetAlternateParameters(sbModel.GetSnapshot())
+    pl.SetNullParameters(bModel.GetSnapshot())
+    pl.SetConfidenceLevel(0.95)
+    myPOI = sbModel.GetParametersOfInterest().first()
+    myPOI.setConstant(False)
+    interval = pl.GetInterval()
+    upperLimit = interval.UpperLimit(myPOI)
+    #print(upperLimit)
+#
+
+    ''' plot result of the scan CLs vs mu
+    if False:   
+        plot2 = ROOT.RooStats.HypoTestInverterPlot("HTI_Result_Plot", "CLs upper limit", r)
+        c2 = ROOT.TCanvas("HypoTestInverter Scan") 
+        c2.SetLogy(False)
+        plot2.Draw("2CL")
+        c2.SaveAs("SimpleCLsLimit.pdf") 
+    '''
+    
+    return upperLimit
+
+#------------------------------------------------------------------
+
 
 #Wraps around the fucntions to calculate the upper limit for the data in the CheckMATE results folder pointed through 'path' and the set of bins in 'names', then stores the results in  'path/multibin_limits/'.
 #'names' must be a list of SRs names with the exact same notation as in 'path/evaluation/total_results.txt'.
@@ -119,4 +230,48 @@ def calc_point(path, names, analysis, mbsr, systematics = 0, lumi = 0.017, ntoys
     with open(path+'/multibin_limits/'+"results.dat", "a") as write_file:
         write_file.write(string)
         #print(string,file=write_file)
+    return obs_limit
+
+
+
+def calc_cov(path, names, analysis, mbsr, systematics = 0, lumi = 0.017):
+    
+    string = "================================\n Analysis: "+analysis+" , SR: "+mbsr+"\n"
+    SRs = data_from_CMresults(path)
+    o, b, db, s, ds = select_MBsr(names, SRs)
+    
+    global hepfiles_folder
+    hepfiles_folder = Info.paths['data']+"/"   #<----Set the path of the folder with the models here.
+    os.system("mkdir -p "+path+'/multibin_limits')
+    
+    if os.path.isfile(hepfiles_folder+analysis+"/cov.json"):
+        with open(hepfiles_folder+analysis+"/cov.json") as serialized:
+            cov = json.load(serialized)
+        cov_mat=np.ones((int(np.sqrt(len(cov["values"]))),int(np.sqrt(len(cov["values"])))))
+        for i in range(len(cov["values"])):
+            cov_mat[int(float(cov["values"][i]["x"][0]["value"])-0.5),int(float(cov["values"][i]["x"][1]["value"])-0.5)]=float(cov["values"][i]["y"][0]["value"])
+    elif os.path.isfile(hepfiles_folder+analysis+"/corr.json"):
+        with open(hepfiles_folder+analysis+"/corr.json") as serialized:
+            corr = json.load(serialized)
+        corr_mat=np.ones((int(np.sqrt(len(corr["values"]))),int(np.sqrt(len(corr["values"])))))
+        for i in range(len(corr["values"])):
+            corr_mat[int(float(corr["values"][i]["x"][0]["value"])-0.5),int(float(corr["values"][i]["x"][1]["value"])-0.5)]=float(corr["values"][i]["y"][0]["value"])
+            cov_mat=np.ones((int(np.sqrt(len(corr["values"]))),int(np.sqrt(len(corr["values"])))))
+        for i in range(corr_mat.shape[0]):
+            for j in range(corr_mat.shape[0]):
+                    cov_mat[i,j]=corr_mat[i,j]*db[i]*db[j]
+    else:
+        AdvPrint.cout("\nNo covariance matrix found!")
+        return 1.
+        
+    obs_limit = upperlim_with_cov(o, b, db, s, ds, cov_mat)
+    exp_limit = upperlim_with_cov(b, b, db, s, ds, cov_mat)
+    
+    string += f"Limits with covariance matrix:\n\n"
+    string += f"Upper limit (observed): mu = {obs_limit:.10f}"+'\n'
+    string += f"Upper limit (expected): mu = {exp_limit:.10f}"+'\n'   
+    string += "\n================================\n"
+    with open(path+'/multibin_limits/'+"results.dat", "a") as write_file:
+        write_file.write(string)
+        
     return obs_limit

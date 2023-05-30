@@ -1579,7 +1579,7 @@
     "gluinos",
     "MET"
   ],
-  "likelihoods": "n",
+  "likelihoods": "cov",
   "mb_signal_regions": {
     "174bin": [  
       "B001_2-3j_0b_300_300",

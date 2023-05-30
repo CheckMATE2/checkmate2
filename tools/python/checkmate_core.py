@@ -300,6 +300,9 @@ class CheckMATE2(object):
         AdvPrint.unmute()
         best_evaluator.check_warnings()
         best_evaluator.print_result()
+        if not best_evaluator.allowed():
+            Info.parameters["statcomb"] = "skip"
+            AdvPrint.cout("\nThe point is excluded - skipping multibin analysis")
         
         if sys.version_info[0] == 2 and (Info.parameters["statcomb"] == "simple" or Info.parameters["statcomb"] == "cls" or Info.parameters["statcomb"] == "full"):
             AdvPrint.cout("Mutlibin signal regions require Python 3!")
@@ -317,7 +320,7 @@ class CheckMATE2(object):
                 if "mb_signal_regions" in Info.get_analysis_parameters(analysis):
                     mb_signal_regions = Info.get_analysis_parameters(analysis)["mb_signal_regions"]
                     for mbsr in mb_signal_regions:
-                        if Info.parameters["statcomb"] == "simple" or (Info.parameters["statcomb"] == "cls" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n") or (Info.parameters["statcomb"] == "full" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n"):
+                        if (Info.parameters["statcomb"] == "simple" and Info.get_analysis_parameters(analysis)["likelihoods"] != "cov") or (Info.parameters["statcomb"] == "cls" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n") or (Info.parameters["statcomb"] == "full" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n"):
                             sr_list = mb_signal_regions[mbsr]
                             AdvPrint.cout("Calculating fast likelihood for analysis: "+analysis+", SR: "+mbsr+"... ")
                             inv_r = mb.calc_point(Info.paths['output'] , sr_list, analysis, mbsr)
@@ -334,7 +337,8 @@ class CheckMATE2(object):
                             if cls < best_cls: 
                                 best_cls = cls
                                 best_analysis_cls = analysis
-                                best_sr_cls = mbsr                                
+                                best_sr_cls = mbsr
+                                full = "cls"
                         if Info.parameters["statcomb"] == "full" and Info.get_analysis_parameters(analysis)["likelihoods"] == "y":
                             AdvPrint.cout("Calculating full likelihood upper limits and CLs for analysis: "+analysis+", SR: "+mbsr+"... ")
                             inv_r = mbfull.calc_point(Info.paths['output'] , analysis, mbsr, True)
@@ -344,13 +348,25 @@ class CheckMATE2(object):
                                 best_analysis_r = analysis
                                 best_sr_r = mbsr
                                 full = "y"
+                        if (Info.parameters["statcomb"] == "full" or Info.parameters["statcomb"] == "cls" or Info.parameters["statcomb"] == "simple") and Info.get_analysis_parameters(analysis)["likelihoods"] == "cov":
+                            sr_list = mb_signal_regions[mbsr]
+                            AdvPrint.cout("Calculating approximate likelihood with covariance matrix: "+analysis+", SR: "+mbsr+"... ")
+                            inv_r = mb.calc_cov(Info.paths['output'] , sr_list, analysis, mbsr)
+                            AdvPrint.cout("Done!")
+                            if inv_r < best_invr:
+                                best_invr = inv_r
+                                best_analysis_r = analysis
+                                best_sr_r = mbsr
+                                full = "cov"
                             
             if best_invr < 10.:
                 AdvPrint.set_cout_file(Info.files["output_result"], False)
                 if full == "n":
                     AdvPrint.cout("\nTest: Calculation of approximate (fast) likelihood for multibin signal regions")
+                elif full == "y":
+                    AdvPrint.cout("\nTest: Calculation of upper limit using full likelihood for multibin signal regions")
                 else:
-                    AdvPrint.cout("\nTest: Calculation of upper limit using full likelihood for multibin signal regions")                            
+                    AdvPrint.cout("\nTest: Calculation of CLs using covariance matrix for multibin signal regions")
                 if best_invr < 1.:
                     result = "\033[31mExcluded\033[0m"
                 else:
@@ -362,7 +378,7 @@ class CheckMATE2(object):
                 AdvPrint.set_cout_file("#None")
             if best_cls < 1.:
                 AdvPrint.set_cout_file(Info.files["output_result"], False)
-                AdvPrint.cout("\nTest: Calculation of CLs using full likelihood for multibin signal regions")                  
+                AdvPrint.cout("\nTest: Calculation of CLs using full likelihood for multibin signal regions")
                 if best_cls < 0.05:
                     result = "\033[31mExcluded\033[0m"
                 else:
