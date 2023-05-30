@@ -44,7 +44,7 @@ This is a brief note on how to install CheckMATE from the master branch on https
      
 3) New features:
 
-  a) Multibin fits available in atlas_2010_14293 and atlas_1908_03122 (more to come):
+  a) Multibin fits available in atlas_2010_14293, atlas_1908_03122, atlas_1911_12606, atlas_2101_01629, atlas_1908_08215, atlas_2004_14060:
      For command line use "-mb simple/cls/full"; in input file "Multibin: simple/cls/full"
      simple: simple fitting of shape in several bins as defined in a search, reasonably fast;
      cls: calculates CLs using full likelihood provided by the collaboration, slower but still manageable
@@ -59,9 +59,14 @@ This is a brief note on how to install CheckMATE from the master branch on https
 
 # current
 
+
 2023-01-26   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 
     ~ added cms_sus_19_005
+
+2023-03-31   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ more ATLAS analyses updated to multibin
 
 2023-01-11   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 

@@ -8,7 +8,7 @@ void Atlas_1908_08215::initialize() {
     "# final states with 2 leptons and MET, 13 TeV, 139/fb\n"
   "");
   setLuminosity(139.0*units::INVFB);      
-  bookSignalRegions("SR-DF-0J-INC100;SR-DF-0J-INC160;SR-DF-0J-EXC100;SR-DF-0J-EXC120;SR-DF-1J-INC100;SR-DF-1J-INC160;SR-DF-1J-EXC100;SR-DF-1J-EXC120;SR-SF-0J-INC100;SR-SF-0J-INC160;SR-SF-0J-EXC100;SR-SF-0J-EXC120;SR-SF-1J-INC100;SR-SF-1J-INC160;SR-SF-1J-EXC100;SR-SF-1J-EXC120");
+  bookSignalRegions("SR-DF-0J-INC100;SR-DF-0J-INC160;SR-DF-0J-EXC100;SR-DF-0J-EXC120;SR-DF-1J-INC100;SR-DF-1J-INC160;SR-DF-1J-EXC100;SR-DF-1J-EXC120;SR-SF-0J-INC100;SR-SF-0J-INC160;SR-SF-0J-EXC100;SR-SF-0J-EXC120;SR-SF-1J-INC100;SR-SF-1J-INC160;SR-SF-1J-EXC100;SR-SF-1J-EXC120;SR-SF-0Ja;SR-SF-0Jb;SR-SF-0Jc;SR-SF-0Jd;SR-SF-0Je;SR-SF-0Jf;SR-SF-0Jg;SR-SF-0Jh;SR-SF-0Ji;SR-DF-0Ja;SR-DF-0Jb;SR-DF-0Jc;SR-DF-0Jd;SR-DF-0Je;SR-DF-0Jf;SR-DF-0Jg;SR-DF-0Jh;SR-DF-0Ji;SR-SF-1Ja;SR-SF-1Jb;SR-SF-1Jc;SR-SF-1Jd;SR-SF-1Je;SR-SF-1Jf;SR-SF-1Jg;SR-SF-1Jh;SR-SF-1Ji;SR-DF-1Ja;SR-DF-1Jb;SR-DF-1Jc;SR-DF-1Jd;SR-DF-1Je;SR-DF-1Jf;SR-DF-1Jg;SR-DF-1Jh;SR-DF-1Ji");
   // You can also book cutflow regions with bookCutflowRegions("CR1;CR2;..."). Note that the regions are
   //  always ordered alphabetically in the cutflow output files.
 
@@ -109,6 +109,16 @@ void Atlas_1908_08215::analyze() {
   if (mt2_val > 160.) countSignalEvent("SR-"+sf+"-"+nj+"-INC160");
   if (mt2_val < 120.) countSignalEvent("SR-"+sf+"-"+nj+"-EXC100");
   if (mt2_val > 120. and mt2_val < 160. ) countSignalEvent("SR-"+sf+"-"+nj+"-EXC120");
+  
+  if (mt2_val < 105.) countSignalEvent("SR-"+sf+"-"+nj+"a");
+  else if (mt2_val < 110.) countSignalEvent("SR-"+sf+"-"+nj+"b");
+  else if (mt2_val < 120.) countSignalEvent("SR-"+sf+"-"+nj+"c");
+  else if (mt2_val < 140.) countSignalEvent("SR-"+sf+"-"+nj+"d");
+  else if (mt2_val < 160.) countSignalEvent("SR-"+sf+"-"+nj+"e");
+  else if (mt2_val < 180.) countSignalEvent("SR-"+sf+"-"+nj+"f");
+  else if (mt2_val < 220.) countSignalEvent("SR-"+sf+"-"+nj+"g");
+  else if (mt2_val < 260.) countSignalEvent("SR-"+sf+"-"+nj+"h");
+  else countSignalEvent("SR-"+sf+"-"+nj+"i");
   
   return;
   

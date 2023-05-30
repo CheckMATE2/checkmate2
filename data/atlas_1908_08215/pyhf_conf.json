@@ -1,0 +1,26 @@
+{"analysis" :[
+	{"name":"SR-SF-0J",
+	  "bkgonly":"bkgonly.json",
+          "patchset":"C1C1SlepSnu_patchset.json",
+          "histosize":"1",
+	  "SR_dict": {"SRSF_0a_cuts":"SR-SF-0Ja","SRSF_0b_cuts":"SR-SF-0Jb","SRSF_0c_cuts":"SR-SF-0Jc","SRSF_0d_cuts":"SR-SF-0Jd","SRSF_0e_cuts":"SR-SF-0Je","SRSF_0f_cuts":"SR-SF-0Jf","SRSF_0g_cuts":"SR-SF-0Jg","SRSF_0h_cuts":"SR-SF-0Jh","SRSF_0i_cuts":"SR-SF-0Ji"
+	}},
+	{"name":"SR-SF-1J",
+	  "bkgonly":"bkgonly.json",
+	  "patchset":"C1C1SlepSnu_patchset.json",
+	  "histosize":"1",
+	  "SR_dict": {"SRSF_1a_cuts":"SR-SF-1Ja","SRSF_1b_cuts":"SR-SF-1Jb","SRSF_1c_cuts":"SR-SF-1Jc","SRSF_1d_cuts":"SR-SF-1Jd","SRSF_1e_cuts":"SR-SF-1Je","SRSF_1f_cuts":"SR-SF-1Jf","SRSF_1g_cuts":"SR-SF-1Jg","SRSF_1h_cuts":"SR-SF-1Jh","SRSF_1i_cuts":"SR-SF-1Ji"
+	}},
+	{"name":"SR-DF-0J",
+	  "bkgonly":"bkgonly.json",
+          "patchset":"C1C1SlepSnu_patchset.json",
+          "histosize":"1",
+	  "SR_dict": {"SRDF_0a_cuts":"SR-DF-0Ja","SRDF_0b_cuts":"SR-DF-0Jb","SRDF_0c_cuts":"SR-DF-0Jc","SRDF_0d_cuts":"SR-DF-0Jd","SRDF_0e_cuts":"SR-DF-0Je","SRDF_0f_cuts":"SR-DF-0Jf","SRDF_0g_cuts":"SR-DF-0Jg","SRDF_0h_cuts":"SR-DF-0Jh","SRDF_0i_cuts":"SR-DF-0Ji"
+	}},
+	{"name":"SR-DF-1J",
+	  "bkgonly":"bkgonly.json",
+          "patchset":"C1C1SlepSnu_patchset.json",
+          "histosize":"1",
+	  "SR_dict": {"SRDF_1a_cuts":"SR-DF-1Ja","SRDF_1b_cuts":"SR-DF-1Jb","SRDF_1c_cuts":"SR-DF-1Jc","SRDF_1d_cuts":"SR-DF-1Jd","SRDF_1e_cuts":"SR-DF-1Je","SRDF_1f_cuts":"SR-DF-1Jf","SRDF_1g_cuts":"SR-DF-1Jg","SRDF_1h_cuts":"SR-DF-1Jh","SRDF_1i_cuts":"SR-DF-1Ji"
+	}}]
+}

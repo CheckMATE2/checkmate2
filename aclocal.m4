@@ -10563,6 +10563,7 @@ AC_SUBST([am__untar])
 
 m4_include([m4/cpp11.m4])
 m4_include([m4/delphes.m4])
+m4_include([m4/downloads.m4])
 m4_include([m4/hepmc.m4])
 m4_include([m4/madgraph.m4])
 m4_include([m4/onnx.m4])
