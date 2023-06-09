@@ -167,23 +167,25 @@ def upperlim_with_cov(_o, _b, _db, _s, _ds, _cov):
     sbModel.SetSnapshot(wspace.var("mu"))
     getattr(wspace,'import')(sbModel)
     getattr(wspace,'import')(data)
-    bModel = ROOT.RooStats.ModelConfig("bModel","",wspace)
-    bModel.SetPdf(wspace.pdf("model"))
-    bModel.SetParametersOfInterest(wspace.var("mu"))
-    bModel.SetNuisanceParameters(wspace.set("const_p"))
-    bModel.SetObservables(wspace.set("obs"))
-    wspace.var("mu").setVal(0) 
-    bModel.SetSnapshot(wspace.var("mu"))
-    getattr(wspace,'import')(bModel)
+    #bModel = ROOT.RooStats.ModelConfig("bModel","",wspace)
+    #bModel.SetPdf(wspace.pdf("model"))
+    #bModel.SetParametersOfInterest(wspace.var("mu"))
+    #bModel.SetNuisanceParameters(wspace.set("const_p"))
+    #bModel.SetObservables(wspace.set("obs"))
+    #wspace.var("mu").setVal(0) 
+    #bModel.SetSnapshot(wspace.var("mu"))
+    #getattr(wspace,'import')(bModel)
     poi=sbModel.GetParametersOfInterest().first()
 
     #calculator=='PLR':
     pl = ROOT.RooStats.ProfileLikelihoodCalculator(data,sbModel)
     ROOT.Math.MinimizerOptions.SetDefaultPrintLevel(-1) #<< Change the messages level, smaller means less info.
     ROOT.RooMsgService.instance().setGlobalKillBelow(ROOT.RooFit.FATAL)
-    pl.SetAlternateParameters(sbModel.GetSnapshot())
-    pl.SetNullParameters(bModel.GetSnapshot())
+    #pl.SetAlternateParameters(sbModel.GetSnapshot())
+    #pl.SetNullParameters(bModel.GetSnapshot())
     pl.SetConfidenceLevel(0.95)
+    hypotest = pl.GetHypoTest()
+    clb = hypotest.NullPValue()
     myPOI = sbModel.GetParametersOfInterest().first()
     myPOI.setConstant(False)
     interval = pl.GetInterval()
@@ -200,7 +202,7 @@ def upperlim_with_cov(_o, _b, _db, _s, _ds, _cov):
         c2.SaveAs("SimpleCLsLimit.pdf") 
     '''
     
-    return upperLimit
+    return upperLimit, clb
 
 #------------------------------------------------------------------
 
@@ -256,22 +258,30 @@ def calc_cov(path, names, analysis, mbsr, systematics = 0, lumi = 0.017):
         corr_mat=np.ones((int(np.sqrt(len(corr["values"]))),int(np.sqrt(len(corr["values"])))))
         for i in range(len(corr["values"])):
             corr_mat[int(float(corr["values"][i]["x"][0]["value"])-0.5),int(float(corr["values"][i]["x"][1]["value"])-0.5)]=float(corr["values"][i]["y"][0]["value"])
-            cov_mat=np.ones((int(np.sqrt(len(corr["values"]))),int(np.sqrt(len(corr["values"])))))
+        cov_mat=np.ones((int(np.sqrt(len(corr["values"]))),int(np.sqrt(len(corr["values"])))))
         for i in range(corr_mat.shape[0]):
             for j in range(corr_mat.shape[0]):
                     cov_mat[i,j]=corr_mat[i,j]*db[i]*db[j]
     else:
         AdvPrint.cout("\nNo covariance matrix found!")
-        return 1.
+        return 5.
         
-    obs_limit = upperlim_with_cov(o, b, db, s, ds, cov_mat)
-    exp_limit = upperlim_with_cov(b, b, db, s, ds, cov_mat)
+    obs_limit, clb_obs = upperlim_with_cov(o, b, db, s, ds, cov_mat)
+    exp_limit, clb_exp = upperlim_with_cov(b, b, db, s, ds, cov_mat)
     
     string += f"Limits with covariance matrix:\n\n"
-    string += f"Upper limit (observed): mu = {obs_limit:.10f}"+'\n'
-    string += f"Upper limit (expected): mu = {exp_limit:.10f}"+'\n'   
+    string += f"Observed CL test results: {clb_obs:.10f}"+'\n'
+    if obs_limit < 5.:
+        string += f"Upper limit (observed): mu = {obs_limit:.10f}"+'\n'
+    else:
+        string += f"Calculation of upper limit failed or the upper limit out of range\n"
+    string += f"Expected CL test results: {clb_exp:.10f}"+'\n'
+    if obs_limit < 5.:
+        string += f"Upper limit (expected): mu = {exp_limit:.10f}"+'\n'   
+    else:    
+        string += f"Calculation of upper limit failed or the upper limit out of range\n"
     string += "\n================================\n"
     with open(path+'/multibin_limits/'+"results.dat", "a") as write_file:
         write_file.write(string)
         
-    return obs_limit
+    return clb_obs
