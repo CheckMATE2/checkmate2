@@ -351,12 +351,12 @@ class CheckMATE2(object):
                         if (Info.parameters["statcomb"] == "full" or Info.parameters["statcomb"] == "cls" or Info.parameters["statcomb"] == "simple") and Info.get_analysis_parameters(analysis)["likelihoods"] == "cov":
                             sr_list = mb_signal_regions[mbsr]
                             AdvPrint.cout("Calculating approximate likelihood with covariance matrix: "+analysis+", SR: "+mbsr+"... ")
-                            cls = mb.calc_cov(Info.paths['output'] , sr_list, analysis, mbsr)
+                            inv_r = mb.calc_cov(Info.paths['output'] , sr_list, analysis, mbsr)
                             AdvPrint.cout("Done!")
-                            if cls < best_cls:
-                                best_cls = cls
-                                best_analysis_cls = analysis
-                                best_sr_cls = mbsr
+                            if inv_r < best_invr:
+                                best_invr = inv_r
+                                best_analysis_r = analysis
+                                best_sr_r = mbsr
                                 full = "cov"
                             
             if best_invr < 10.:
@@ -365,6 +365,8 @@ class CheckMATE2(object):
                     AdvPrint.cout("\nTest: Calculation of approximate (fast) likelihood for multibin signal regions")
                 elif full == "y":
                     AdvPrint.cout("\nTest: Calculation of upper limit using full likelihood for multibin signal regions")
+                elif full == "cov":
+                    AdvPrint.cout("\nTest: Calculation of upper limit using covariance matrix for multibin signal regions")                    
                 if best_invr < 1.:
                     result = "\033[31mExcluded\033[0m"
                 else:
@@ -378,8 +380,6 @@ class CheckMATE2(object):
                 AdvPrint.set_cout_file(Info.files["output_result"], False)
                 if full == "cls":
                     AdvPrint.cout("\nTest: Calculation of CLs using full likelihood for multibin signal regions")
-                elif full == "cov":
-                    AdvPrint.cout("\nTest: Calculation of CLs using covariance matrix for multibin signal regions")
                 if best_cls < 0.05:
                     result = "\033[31mExcluded\033[0m"
                 else:

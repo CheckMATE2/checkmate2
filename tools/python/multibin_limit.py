@@ -35,9 +35,9 @@ def select_MBsr(names, SRs):
         if sr['SR'] in names:
             b.append(sr['b'])  
             db.append(sr['db'])  
-            o.append(sr['o']) 
-            s.append(max(sr['s'],0.01))  
-            ds.append(max(min(sr['s'],sr['ds']),0.01)) 
+            o.append(round(sr['o'])) 
+            s.append(max(sr['s'],0.0))  
+            ds.append(max(min(sr['s'],sr['ds']),0.0001)) 
     return o,b,db,s,ds
 
 #Creates the workspace from the data and exports it to a new folder path/multibin_limits/ in json format.
@@ -95,7 +95,7 @@ def upperlim(workspace, ntoys = -1):
     return poi_values, obs_limit, exp_limits, (scan, results) 
 ##--------------------------------------------------------------------------------------
 
-def upperlim_with_cov(_o, _b, _db, _s, _ds, _cov):
+def upperlim_with_cov(_o, _b, _db, _s, _ds, _cov, calculator):
 
     import ROOT
     from array import array
@@ -114,7 +114,7 @@ def upperlim_with_cov(_o, _b, _db, _s, _ds, _cov):
     pdf_string=''
     # Create workspace
     wspace= ROOT.RooWorkspace()
-    wspace.factory("mu[0,0,5]") # create the variable mu to store the POI
+    wspace.factory("mu[1,-1,5]") # create the variable mu to store the POI
 
     # Define, for each bin :
     # 1. The variable nexpi corresponding to the argument of the poisson distribution: sum of  mu*s_i + b0_i+thb_i where s_i is the free-floating signal (constrained by constraints_i), b0_ is the median value (constant) of the background prediction and thb_i is the variation of bi around b0_i (constrained by constraintb).
@@ -145,7 +145,7 @@ def upperlim_with_cov(_o, _b, _db, _s, _ds, _cov):
         wspace.var("s0_"+str(i)).setConstant(True)
         wspace.var("thb_0_"+str(i)).setVal(0)
         wspace.var("thb_0_"+str(i)).setConstant(True)
-        wspace.var("s_"+str(i)).setMax(s[i]+5*ds[i])
+        wspace.var("s_"+str(i)).setMax(s[i]+3*ds[i])
         wspace.var("s_"+str(i)).setMin(0)
         wspace.var("nobs"+str(i)).setVal(o[i])
         wspace.var("nobs"+str(i)).setConstant(True)
@@ -167,42 +167,76 @@ def upperlim_with_cov(_o, _b, _db, _s, _ds, _cov):
     sbModel.SetSnapshot(wspace.var("mu"))
     getattr(wspace,'import')(sbModel)
     getattr(wspace,'import')(data)
-    #bModel = ROOT.RooStats.ModelConfig("bModel","",wspace)
-    #bModel.SetPdf(wspace.pdf("model"))
-    #bModel.SetParametersOfInterest(wspace.var("mu"))
-    #bModel.SetNuisanceParameters(wspace.set("const_p"))
-    #bModel.SetObservables(wspace.set("obs"))
-    #wspace.var("mu").setVal(0) 
-    #bModel.SetSnapshot(wspace.var("mu"))
-    #getattr(wspace,'import')(bModel)
+    bModel = ROOT.RooStats.ModelConfig("bModel","",wspace)
+    bModel.SetPdf(wspace.pdf("model"))
+    bModel.SetParametersOfInterest(wspace.var("mu"))
+    bModel.SetNuisanceParameters(wspace.set("const_p"))
+    bModel.SetObservables(wspace.set("obs"))
+    wspace.var("mu").setVal(0) 
+    bModel.SetSnapshot(wspace.var("mu"))
+    getattr(wspace,'import')(bModel)
     poi=sbModel.GetParametersOfInterest().first()
-
-    #calculator=='PLR':
-    pl = ROOT.RooStats.ProfileLikelihoodCalculator(data,sbModel)
+    #wspace.Print()
     ROOT.Math.MinimizerOptions.SetDefaultPrintLevel(-1) #<< Change the messages level, smaller means less info.
     ROOT.RooMsgService.instance().setGlobalKillBelow(ROOT.RooFit.FATAL)
-    #pl.SetAlternateParameters(sbModel.GetSnapshot())
-    #pl.SetNullParameters(bModel.GetSnapshot())
-    pl.SetConfidenceLevel(0.95)
-    hypotest = pl.GetHypoTest()
-    clb = hypotest.NullPValue()
-    myPOI = sbModel.GetParametersOfInterest().first()
-    myPOI.setConstant(False)
-    interval = pl.GetInterval()
-    upperLimit = interval.UpperLimit(myPOI)
-    #print(upperLimit)
-#
 
-    ''' plot result of the scan CLs vs mu
-    if False:   
-        plot2 = ROOT.RooStats.HypoTestInverterPlot("HTI_Result_Plot", "CLs upper limit", r)
-        c2 = ROOT.TCanvas("HypoTestInverter Scan") 
-        c2.SetLogy(False)
-        plot2.Draw("2CL")
-        c2.SaveAs("SimpleCLsLimit.pdf") 
-    '''
+    if calculator == "PLLC":
+        pl = ROOT.RooStats.ProfileLikelihoodCalculator(data,sbModel)
+        #pl.SetAlternateParameters(sbModel.GetSnapshot())
+        #pl.SetNullParameters(bModel.GetSnapshot())
+        pl.SetConfidenceLevel(0.95)
+        hypotest = pl.GetHypoTest()
+        clb = hypotest.NullPValue()
+        myPOI = sbModel.GetParametersOfInterest().first()
+        myPOI.setConstant(False)
+        interval = pl.GetInterval()
+        print("Best fit: "+str(interval.GetBestFitParameters().getRealValue("mu"))+" +/- "+str(myPOI.getError()))
+        upperLimit_exp = [5.,5.,5.,5.,5.]
+        upperLimit = interval.UpperLimit(myPOI)
+        print("Upper limit: " + str(upperLimit))
+        '''
+        # make plots for profile likelihood
+        plot = ROOT.RooStats.LikelihoodIntervalPlot(interval)
+        c = ROOT.TCanvas("Scan") 
+        plot.SetNPoints(50)
+        plot.SetRange(0., 2.)
+        plot.SetMaximum(3.)
+        plot.Draw()
+        c.SaveAs("plot"+str(o[0])+"_2.pdf")
+        '''
+    elif calculator == "ASYMP":    
+        asympCalc = ROOT.RooStats.AsymptoticCalculator(data,bModel,sbModel)
+        asympCalc.SetOneSided(True)
+        asympCalc.SetPrintLevel(0)
+        calc = ROOT.RooStats.HypoTestInverter(asympCalc)
+        calc.SetVerbose(True)
+        calc.SetConfidenceLevel(0.95)
+        useCLs = True
+        calc.UseCLs(useCLs)
+        npoints = 50
+        poimin = max(poi.getMin(),0.1)
+        poimax = poi.getMax()
+        #calc.SetFixedScan(npoints, poimin, poimax)
+        r = calc.GetInterval()
+        upperLimit = r.UpperLimit()
+        ulError = r.UpperLimitEstimatedError()
+        print("Upper limit: " + str(upperLimit) + " +/- " + str(ulError))
+        upperLimit_exp=[r.GetExpectedUpperLimit(-2),r.GetExpectedUpperLimit(-1),r.GetExpectedUpperLimit(0),r.GetExpectedUpperLimit(1),r.GetExpectedUpperLimit(2)]
+        print(upperLimit_exp)
+        ''' plot result of the scan CLs vs mu
+        if False:   
+            plot2 = ROOT.RooStats.HypoTestInverterPlot("HTI_Result_Plot", "CLs upper limit", r)
+            c2 = ROOT.TCanvas("HypoTestInverter Scan") 
+            c2.SetLogy(False)
+            plot2.Draw("2CL")
+            c2.SaveAs("SimpleCLsLimit.pdf") 
+        '''        
+    else:
+        upperLimit = 5.
+        upperLimit_exp = [5.,5.,5.,5.,5.]
+        
     
-    return upperLimit, clb
+    return upperLimit, upperLimit_exp
 
 #------------------------------------------------------------------
 
@@ -236,7 +270,12 @@ def calc_point(path, names, analysis, mbsr, systematics = 0, lumi = 0.017, ntoys
 
 
 
-def calc_cov(path, names, analysis, mbsr, systematics = 0, lumi = 0.017):
+def calc_cov(path, names, analysis, mbsr, calculator = "PLLC", corrmat = True, systematics = 0, lumi = 0.017):
+    # calculator = "PLLC"
+    # calculator = "ASYMP"
+    # corrmat = False
+    # corrmat = True
+    # in 1908_04722 corr = True chooses correlation matrix and aggressive error treatment; otherwise does nothing
     
     string = "================================\n Analysis: "+analysis+" , SR: "+mbsr+"\n"
     SRs = data_from_CMresults(path)
@@ -246,13 +285,7 @@ def calc_cov(path, names, analysis, mbsr, systematics = 0, lumi = 0.017):
     hepfiles_folder = Info.paths['data']+"/"   #<----Set the path of the folder with the models here.
     os.system("mkdir -p "+path+'/multibin_limits')
     
-    if os.path.isfile(hepfiles_folder+analysis+"/cov.json"):
-        with open(hepfiles_folder+analysis+"/cov.json") as serialized:
-            cov = json.load(serialized)
-        cov_mat=np.ones((int(np.sqrt(len(cov["values"]))),int(np.sqrt(len(cov["values"])))))
-        for i in range(len(cov["values"])):
-            cov_mat[int(float(cov["values"][i]["x"][0]["value"])-0.5),int(float(cov["values"][i]["x"][1]["value"])-0.5)]=float(cov["values"][i]["y"][0]["value"])
-    elif os.path.isfile(hepfiles_folder+analysis+"/corr.json"):
+    if corrmat and os.path.isfile(hepfiles_folder+analysis+"/corr.json"):
         with open(hepfiles_folder+analysis+"/corr.json") as serialized:
             corr = json.load(serialized)
         corr_mat=np.ones((int(np.sqrt(len(corr["values"]))),int(np.sqrt(len(corr["values"])))))
@@ -262,26 +295,34 @@ def calc_cov(path, names, analysis, mbsr, systematics = 0, lumi = 0.017):
         for i in range(corr_mat.shape[0]):
             for j in range(corr_mat.shape[0]):
                     cov_mat[i,j]=corr_mat[i,j]*db[i]*db[j]
+    elif os.path.isfile(hepfiles_folder+analysis+"/cov.json"):
+        with open(hepfiles_folder+analysis+"/cov.json") as serialized:
+            cov = json.load(serialized)
+        cov_mat=np.ones((int(np.sqrt(len(cov["values"]))),int(np.sqrt(len(cov["values"])))))
+        for i in range(len(cov["values"])):
+            cov_mat[int(float(cov["values"][i]["x"][0]["value"])-0.5),int(float(cov["values"][i]["x"][1]["value"])-0.5)]=float(cov["values"][i]["y"][0]["value"])
     else:
         AdvPrint.cout("\nNo covariance matrix found!")
         return 5.
         
-    obs_limit, clb_obs = upperlim_with_cov(o, b, db, s, ds, cov_mat)
-    exp_limit, clb_exp = upperlim_with_cov(b, b, db, s, ds, cov_mat)
+    obs_limit, exp_limits = upperlim_with_cov(o, b, db, s, ds, cov_mat, calculator)
+    #exp_limit, clb_exp = upperlim_with_cov(b, b, db, s, ds, cov_mat)
     
-    string += f"Limits with covariance matrix:\n\n"
-    string += f"Observed CL test results: {clb_obs:.10f}"+'\n'
+    string += f"Limits with covariance matrix (method = " + calculator + ", correlation matrix = "+ str(corrmat) + "):\n\n"
     if obs_limit < 5.:
         string += f"Upper limit (observed): mu = {obs_limit:.10f}"+'\n'
     else:
         string += f"Calculation of upper limit failed or the upper limit out of range\n"
-    string += f"Expected CL test results: {clb_exp:.10f}"+'\n'
-    if obs_limit < 5.:
-        string += f"Upper limit (expected): mu = {exp_limit:.10f}"+'\n'   
-    else:    
+    if calculator == "ASYMP" and exp_limits[2] < 5.:
+        #string += f"Upper limit (expected): mu = {exp_limit[2]:.10f}"+'\n'   
+        string += f"Expected upper limit (+/-2 sigma) (exp): mu = ["
+        for i in range(4):
+            string += f"{exp_limits[i]:.4f}, "
+        string += f"{exp_limits[4]:.4f}]"
+    elif calculator == "ASYMP" and exp_limits[2] >= 5.:    
         string += f"Calculation of upper limit failed or the upper limit out of range\n"
     string += "\n================================\n"
     with open(path+'/multibin_limits/'+"results.dat", "a") as write_file:
         write_file.write(string)
         
-    return clb_obs
+    return obs_limit
