@@ -59,6 +59,10 @@ This is a brief note on how to install CheckMATE from the master branch on https
 
 # current
 
+2023-07-06   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ added atlas_2202_07953
+
 2023-03-31   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 
     ~ more ATLAS analyses updated to multibin
