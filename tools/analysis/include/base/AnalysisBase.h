@@ -140,6 +140,7 @@ class AnalysisBase {
     std::vector<Muon*> muonsCombinedPlus; //!< Container of  all 'muonsLoose' that pass 'CBplusST' efficiency.
     std::vector<Muon*> muonsCombined; //!< Container of 'muonsCombinedPlus'  objects that pass 'CB' efficiency.
     std::vector<Jet*> jets; //!< Container of all reconstructed jets.
+    std::vector<Jet*> fatjets; //!< Container of all reconstructed jets.
     std::vector<Photon*> photons; //!< Container of all truth photons after detector smearing.
     std::vector<Photon*> photonsLoose; //!< Container of 'photons' that pass loose isolation condition.
     std::vector<Photon*> photonsMedium; //!< Container of 'photonsLoose'  that pass medium efficiency cut
@@ -451,6 +452,30 @@ class AnalysisBase {
       return filtered_leptons;
     }
 
+    template <class X>
+    std::vector<X*> Isolate_leptons_with_variable_track_isolation_cone_CMS(std::vector<X*> leptons, double dR_track_max, double dR_track_min, double pT_for_inverse_function_track, double pT_amount_track ) {
+      
+      std::vector<X*> filtered_leptons;
+      for(int i = 0; i < leptons.size(); i++) {
+        double dR_track = 0.;
+        double sumPT = 0.;
+        dR_track = std::min(dR_track_max, std::max(pT_for_inverse_function_track/leptons[i]->PT, dR_track_min));
+        
+        for (int t = 0; t < tracks.size(); t++) {
+          Track* neighbour = tracks[t];
+
+	    // Ignore the lepton's track itself
+          if(neighbour->Particle == leptons[i]->Particle) continue;
+          if(neighbour->PT < 1.) continue;
+          if (neighbour->P4().DeltaR(leptons[i]->P4()) > dR_track) continue;
+          sumPT += neighbour->PT;
+        }
+    
+        if( (leptons[i]->PT)*pT_amount_track > sumPT) filtered_leptons.push_back(leptons[i]);
+      }
+    
+      return filtered_leptons;
+    }    
 
     //! Checks if element x_i is in set y. If x_i is not in set y it will be deleted.
     /** 

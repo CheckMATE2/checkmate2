@@ -95,7 +95,7 @@ def upperlim(workspace, ntoys = -1):
     return poi_values, obs_limit, exp_limits, (scan, results) 
 ##--------------------------------------------------------------------------------------
 
-def upperlim_with_cov(_o, _b, _db, _s, _ds, _cov, calculator):
+def upperlim_with_cov(_o, _b, _db, _s, _ds, _cov, calculator, sigconstraint):
 
     import ROOT
     from array import array
@@ -124,11 +124,16 @@ def upperlim_with_cov(_o, _b, _db, _s, _ds, _cov, calculator):
     #  Define for all bins:
     # 1. A multivariate gaussian constraint term for all of the thb_i with thb_i as random variable, zero_i as mean and covariance matrix defined by cov
     # 2. The model p.d.f as the product of al poisson and constraint terms.
-    for i in range(nbins):           
-        wspace.factory("sum::nexp"+str(i)+"(0.0,prod::muS"+str(i)+"(mu,s_"+str(i)+"["+str(s[i])+",0,1e+30]),b0_"+str(i)+"["+str(b[i])+"],thb_"+str(i)+"["+str(o[i]-b[i]+0.1)+","+str(-b[i]+0.01)+","+str(5*db[i])+"])")
-        wspace.factory("Gaussian::constraints"+str(i)+"(s_"+str(i)+",s0_"+str(i)+"["+str(s[i])+",0,1e+7],"+str(ds[i])+")")
+    for i in range(nbins):
+        if sigconstraint:
+            wspace.factory("sum::nexp"+str(i)+"(0.0,prod::muS"+str(i)+"(mu,s_"+str(i)+"["+str(s[i])+",0,1e+30]),b0_"+str(i)+"["+str(b[i])+"],thb_"+str(i)+"["+str(o[i]-b[i]+0.1)+","+str(-b[i]+0.01)+","+str(5*db[i])+"])")
+            wspace.factory("Gaussian::constraints"+str(i)+"(s_"+str(i)+",s0_"+str(i)+"["+str(s[i])+",0,1e+7],"+str(ds[i])+")")
+        else:
+            wspace.factory("sum::nexp"+str(i)+"(0.0,prod::muS"+str(i)+"(mu,"+str(s[i])+"),b0_"+str(i)+"["+str(b[i])+"],thb_"+str(i)+"["+str(o[i]-b[i]+0.1)+","+str(-b[i]+0.01)+","+str(5*db[i])+"])")
         wspace.factory("RooPoisson::poiss"+str(i)+"(nobs"+str(i)+"["+str(o[i])+"],nexp"+str(i)+")")
-        pdf_string = pdf_string+"poiss"+str(i)+",constraints"+str(i)+","
+        pdf_string = pdf_string+"poiss"+str(i)+","
+        if sigconstraint:
+            pdf_string = pdf_string + "constraints"+str(i)+","
         wspace.factory("thb_0_"+str(i)+"[0]")#wspace.factory("zero_"+str(i)+"[0,-1e-10,1e-10]")
         wspace.var("thb_0_"+str(i)).setConstant()        
     constraintb=ROOT.RooMultiVarGaussian("constraintb","constraintb",ROOT.RooArgSet([wspace.var("thb_"+str(i)) for i in range(nbins)]),ROOT.RooArgSet([wspace.var("thb_0_"+str(i)) for i in range(nbins)]),cov)
@@ -141,19 +146,23 @@ def upperlim_with_cov(_o, _b, _db, _s, _ds, _cov, calculator):
     for i in range(nbins):
         wspace.var("b0_"+str(i)).setVal(b[i])
         wspace.var("b0_"+str(i)).setConstant(True)
-        wspace.var("s0_"+str(i)).setVal(s[i])
-        wspace.var("s0_"+str(i)).setConstant(True)
         wspace.var("thb_0_"+str(i)).setVal(0)
         wspace.var("thb_0_"+str(i)).setConstant(True)
-        wspace.var("s_"+str(i)).setMax(s[i]+3*ds[i])
-        wspace.var("s_"+str(i)).setMin(0)
         wspace.var("nobs"+str(i)).setVal(o[i])
         wspace.var("nobs"+str(i)).setConstant(True)
+        if sigconstraint:
+            wspace.var("s0_"+str(i)).setVal(s[i])
+            wspace.var("s0_"+str(i)).setConstant(True)
+            wspace.var("s_"+str(i)).setMax(s[i]+3*ds[i])
+            wspace.var("s_"+str(i)).setMin(0)
     ## Define sets of variables: data, constrained parameters and global observables
     wspace.defineSet("obs",ROOT.RooArgSet([wspace.var("nobs"+str(i)) for i in range(nbins) ]))
     data = ROOT.RooDataSet("data",'data',wspace.set("obs"))
     data.add(wspace.set("obs"))
-    wspace.defineSet("const_p",ROOT.RooArgSet([wspace.var("thb_"+str(i)) for i in range(nbins) ]+[wspace.var("s_"+str(i)) for i in range(nbins) ]))
+    if sigconstraint:
+        wspace.defineSet("const_p",ROOT.RooArgSet([wspace.var("thb_"+str(i)) for i in range(nbins) ]+[wspace.var("s_"+str(i)) for i in range(nbins) ]))
+    else:
+        wspace.defineSet("const_p",ROOT.RooArgSet([wspace.var("thb_"+str(i)) for i in range(nbins) ]))
     constrainedParams=ROOT.RooDataSet("constrainedParams",'constrainedParams',wspace.set("const_p"))
     constrainedParams.add(wspace.set("const_p"))
 
@@ -208,6 +217,9 @@ def upperlim_with_cov(_o, _b, _db, _s, _ds, _cov, calculator):
         asympCalc = ROOT.RooStats.AsymptoticCalculator(data,bModel,sbModel)
         asympCalc.SetOneSided(True)
         asympCalc.SetPrintLevel(0)
+        hypo = asympCalc.GetHypoTest()
+        print("CLs: "+str(1./hypo.CLs())) 
+        #hypo.Print()
         calc = ROOT.RooStats.HypoTestInverter(asympCalc)
         calc.SetVerbose(True)
         calc.SetConfidenceLevel(0.95)
@@ -270,12 +282,13 @@ def calc_point(path, names, analysis, mbsr, systematics = 0, lumi = 0.017, ntoys
 
 
 
-def calc_cov(path, names, analysis, mbsr, calculator = "PLLC", corrmat = True, systematics = 0, lumi = 0.017):
+def calc_cov(path, names, analysis, mbsr, calculator = "ASYMP", corrmat = True, sigconstraint = False, systematics = 0, lumi = 0.017):
     # calculator = "PLLC"
     # calculator = "ASYMP"
     # corrmat = False
     # corrmat = True
     # in 1908_04722 corr = True chooses correlation matrix and aggressive error treatment; otherwise does nothing
+    # sigconstraint: whether to include Gaussian constraints on signal numbers
     
     string = "================================\n Analysis: "+analysis+" , SR: "+mbsr+"\n"
     SRs = data_from_CMresults(path)
@@ -305,8 +318,9 @@ def calc_cov(path, names, analysis, mbsr, calculator = "PLLC", corrmat = True, s
         AdvPrint.cout("\nNo covariance matrix found!")
         return 5.
         
-    obs_limit, exp_limits = upperlim_with_cov(o, b, db, s, ds, cov_mat, calculator)
+    obs_limit, exp_limits = upperlim_with_cov(o, b, db, s, ds, cov_mat, calculator, sigconstraint)
     #exp_limit, clb_exp = upperlim_with_cov(b, b, db, s, ds, cov_mat)
+    obs_limit, exp_limits = upperlim_with_cov(o, b, db, s, ds, cov_mat, "PLLC", sigconstraint)
     
     string += f"Limits with covariance matrix (method = " + calculator + ", correlation matrix = "+ str(corrmat) + "):\n\n"
     if obs_limit < 5.:

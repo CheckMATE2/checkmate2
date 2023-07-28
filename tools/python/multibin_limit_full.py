@@ -174,7 +174,7 @@ def hypotest(workspace, ntoys=-1):
     test_poi = 1.0
     model = workspace.model()
     if ntoys<0:
-        result = pyhf.infer.hypotest(test_poi,workspace.data(model),model,test_stat="qtilde",return_expected_set=True)
+        result = pyhf.infer.hypotest(test_poi,workspace.data(model),model,test_stat="qtilde",return_expected_set=False)
     else:
         result = pyhf.infer.hypotest(test_poi,workspace.data(model),model,
             test_stat = "qtilde",
@@ -242,8 +242,8 @@ def calc_point(path, analysis, MB_set, full, systematics = 0,ntoys = -1):
         poi_values, obs_limit, exp_limits, (scan, results) = upperlim(workspace,ntoys)
 
     string = "================================\n Analysis: "+analysis+" , SR: "+MB_set+"\n"
-    string += f"Observed CLs for μ = 1: {result[0]}"+'\n'
-    string += f"Expected CLs band for μ = 1: {[exp.tolist() for exp in result[1]]}"+'\n'
+    string += f"Observed CLs for μ = 1: {result}"+'\n'
+    #string += f"Expected CLs band for μ = 1: {[exp.tolist() for exp in result[1]]}"+'\n'
 
     if full:
         string += f"Upper limit (obs): μ = {obs_limit:.4f}"+'\n'
@@ -258,5 +258,5 @@ def calc_point(path, analysis, MB_set, full, systematics = 0,ntoys = -1):
     if full:
         return obs_limit
     else:
-        return result[0]
+        return result
                                                                                                   

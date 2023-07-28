@@ -324,7 +324,6 @@ module FastJetFinder FastJetFinder {
   set JetPTMin 10.0
 }
 
-
 module TaggingParticlesSkimmer TagSkimmer {
 
   set ParticleInputArray Delphes/allParticles
