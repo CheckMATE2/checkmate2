@@ -31,6 +31,16 @@ def select_MBsr(names, SRs):
     b=[]
     db=[]
     o=[]
+    for sreg in names:
+        for sr in SRs:
+            if sr['SR'] == sreg:
+                b.append(sr['b'])  
+                db.append(sr['db'])  
+                o.append(round(sr['o'])) 
+                s.append(max(sr['s'],0.0))  
+                ds.append(max(min(sr['s'],sr['ds']),0.0001)) 
+                break
+    '''    
     for sr in SRs:
         if sr['SR'] in names:
             b.append(sr['b'])  
@@ -38,6 +48,7 @@ def select_MBsr(names, SRs):
             o.append(round(sr['o'])) 
             s.append(max(sr['s'],0.0))  
             ds.append(max(min(sr['s'],sr['ds']),0.0001)) 
+    '''        
     return o,b,db,s,ds
 
 #Creates the workspace from the data and exports it to a new folder path/multibin_limits/ in json format.
@@ -282,7 +293,7 @@ def calc_point(path, names, analysis, mbsr, systematics = 0, lumi = 0.017, ntoys
 
 
 
-def calc_cov(path, names, analysis, mbsr, calculator = "ASYMP", corrmat = True, sigconstraint = False, systematics = 0, lumi = 0.017):
+def calc_cov(path, names, analysis, mbsr, calculator = "ASYMP", corrmat = True, sigconstraint = True, systematics = 0, lumi = 0.017):
     # calculator = "PLLC"
     # calculator = "ASYMP"
     # corrmat = False
