@@ -16,7 +16,9 @@ void Atlas_2106_01676::initialize() {
 
 void Atlas_2106_01676::analyze() {
 
-  missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
+  missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out. Probably not since 3.4.2
+  
+  pTmiss = missingET->P4();
   
   std::vector<Electron*> electrons_off = filterPhaseSpace(electronsMedium, 8., -2.47, 2.47); 
   std::vector<Muon*> muons_off = filterPhaseSpace(muonsCombined, 8., -2.5, 2.5);    
@@ -35,14 +37,9 @@ void Atlas_2106_01676::analyze() {
               ele.Phi = true_particles[t]->Phi;
               ele.Eta = true_particles[t]->Eta;
               ele.P4() = true_particles[t]->P4();
-              //cout << "Mom: " << ele.P4().X() << "\n";
               ele.Particle = true_particles[t];
               ele.Charge = true_particles[t]->Charge;
-              //electrons_soft_true.push_back(ele);
-              //electrons_soft.push_back(&(*(electrons_soft_true.end()-1)));
-              //electronsMedium.push_back(&(*(electrons_soft_true.end()-1)));
               electrons_off.push_back(&ele);
-              //cout << "Mom: " << electrons_soft[electrons_soft.size()-1]->P4().X() << "\n";
         }
     }
     if ( abs(true_particles[t]->PID) == 13 and true_particles[t]->Status == 1 ) {
@@ -59,25 +56,34 @@ void Atlas_2106_01676::analyze() {
               muo.P4() = true_particles[t]->P4();
               muo.Particle = true_particles[t];
               muo.Charge = true_particles[t]->Charge;
-              //muons_soft_true.push_back(muo);
-              //muons_soft.push_back(&(*(muons_soft_true.end()-1)));
-              //muonsCombined.push_back(&(*(muons_soft_true.end()-1)));
               muons_off.push_back(&muo);
         }
     }
   }
   
+  truemet = TLorentzVector(0.,0.,0.,0.);
+  /*int nlsp = 0;
+  for (int t = 0; t < true_particles.size(); t++ ) 
+    if ( true_particles[t]->PID == 1000022 and true_particles[t]->Status == 1 ) {
+      truemet += true_particles[t]->P4();
+      nlsp++;
+    }
+  pTmiss = truemet;
+  cout << nlsp;*/
+  
   std::sort(electrons_off.begin(), electrons_off.end(), sortByPTEl);
   std::sort(muons_off.begin(), muons_off.end(), sortByPTMu);
   
   electronsLoose = filterPhaseSpace(electronsLoose, 4.5, -2.47, 2.47);
-  std::vector<Jet*> jets_off = filterPhaseSpace(jets, 20., -2.8, 2.8); 
+  jets_off.clear();
+  jets_off = filterPhaseSpace(jets, 20., -2.8, 2.8); 
   
   jets_off = overlapRemoval(jets_off, electronsLoose, 0.2, "y");
   jets_off = overlapRemoval_muon_jet_tracks(jets_off, muonsCombined, 0.4, 2);
   electronsLoose = overlapRemoval(electronsLoose, jets_off, 0.4, "y"); 
   electrons_off = overlapRemoval(electrons_off, jets_off, 0.4, "y");   
   muons_off = overlapRemoval(muons_off, jets_off, 0.4, "y"); 
+  //cout << jets_off.size() << endl;
   
   electrons_off = Isolate_leptons_with_inverse_track_isolation_cone(electrons_off, tracks, towers, 0.3, 10., 0.2, 0.15, 0.2, true);
   muons_off = Isolate_leptons_with_inverse_track_isolation_cone(muons_off,  tracks, towers, 0.3, 10., 0.2, 0.06, 0.06, false);
@@ -102,6 +108,68 @@ void Atlas_2106_01676::analyze() {
   
   if (!trigger) return;
   countCutflowEvent("soft_03_trigger");
+  
+  mllmin = 10000.;
+  double mllmax = 0.;
+  bool SFOS = false;
+  if ( electrons_off.size() == 2 and electrons_off[0]->Charge * electrons_off[1]->Charge < 0) {
+    SFOS = true;
+    lepton3 = new FinalStateObject(muons_off[0]);
+    pair = electrons_off[0]->P4() + electrons_off[1]->P4();
+    mllmin = mllmax = pair.M();
+  }
+  else if ( muons_off.size() == 2 and muons_off[0]->Charge * muons_off[1]->Charge < 0) {
+    SFOS = true;
+    lepton3 = new FinalStateObject(electrons_off[0]);
+    pair = muons_off[0]->P4() + muons_off[1]->P4();
+    mllmin = mllmax = pair.M();
+  }   
+  else if ( electrons_off.size() == 3 ) {
+    for (int i = 0; i < electrons_off.size() - 1; i++)
+      for (int j = 0; j < electrons_off.size(); j++) {
+          if ( electrons_off[i]->Charge * electrons_off[j]->Charge < 0)  {
+            double mll = (electrons_off[i]->P4() + electrons_off[j]->P4()).M();
+            SFOS = true;
+            if (mll > mllmax) mllmax = mll;
+            if (mll < mllmin) {
+              mllmin = mll;
+              pair = electrons_off[i]->P4() + electrons_off[1]->P4();
+              for (int k = 0; k < electrons_off.size(); k++)
+                if ( k!= i and k != j) lepton3 = new FinalStateObject(electrons_off[k]);
+            }
+          }
+      }
+  }
+  else if ( muons_off.size() == 3 ) {
+    for (int i = 0; i < muons_off.size() - 1; i++)
+      for (int j = 0; j < muons_off.size(); j++) {
+          if ( muons_off[i]->Charge * muons_off[j]->Charge < 0)  {
+            double mll = (muons_off[i]->P4() + muons_off[j]->P4()).M();
+            SFOS = true;
+            if (mll > mllmax) mllmax = mll;
+            if (mll < mllmin) {
+              mllmin = mll;
+              pair = muons_off[i]->P4() + muons_off[1]->P4();
+              for (int k = 0; k < muons_off.size(); k++)
+                if ( k!= i and k != j) lepton3 = new FinalStateObject(muons_off[k]);
+            }
+          }
+      }
+  }
+  
+  if ( !SFOS or mllmax > 75.) return;
+  countCutflowEvent("soft_04_mllmax");
+  
+  if (pass_SRoffWZhighnj( 1. , 11., 0.2, "a", true)) countSignalEvent("SR-offWZ-high-nja");
+  if (pass_SRoffWZhighnj( 11., 15., 0.2, "b", true)) countSignalEvent("SR-offWZ-high-njb");
+  if (pass_SRoffWZhighnj( 15., 20., 0.3, "c", false)) countSignalEvent("SR-offWZ-high-njc");
+  if (pass_SRoffWZhighnj( 20., 30., 0.3, "d", false)) countSignalEvent("SR-offWZ-high-njd");
+  if (pass_SRoffWZhighnj( 30., 40., 0.3, "e", false)) countSignalEvent("SR-offWZ-high-nje");
+  if (pass_SRoffWZhighnj( 40., 60., 1.0, "f", false)) countSignalEvent("SR-offWZ-high-njf");
+  if (pass_SRoffWZhighnj( 60., 75., 1.0, "g", false)) countSignalEvent("SR-offWZ-high-njg");
+  
+  if ( mllmin > 1. and mllmin < 11) countCutflowEvent("soft_05_bina");
+  if ( mllmin > 11 and mllmin < 15.) countCutflowEvent("soft_05_binb");
     
 }
 
@@ -144,4 +212,48 @@ std::vector<Jet*> Atlas_2106_01676::overlapRemoval_muon_jet_tracks(std::vector<J
   }
   
   return passed;
+}
+
+bool Atlas_2106_01676::pass_SRoffWZhighnj( double min, double max, double ptl, std::string bin, bool cutflow) {
+  
+  if (mllmin < min or mllmin > max) return false;
+  countCutflowEvent("soft_"+bin+"_05_mll");
+  
+  double mt2 = mT2chi2( pair, lepton3->P4(), 100., pTmiss );
+  if ( mt2 > 100.+max) return false;
+  countCutflowEvent("soft_"+bin+"_06_mT2");
+  
+  if ( !jets_off.size() or jets_off[0]->PT < 30.) return false;
+  countCutflowEvent("soft_"+bin+"_07_nj");
+  
+  if (pTmiss.Perp() < 200.) return false;
+  countCutflowEvent("soft_"+bin+"_08_MET");
+  
+  if ( false ) return false;
+  countCutflowEvent("soft_"+bin+"_09_METsig");
+  
+  if (lepton3->PT/pTmiss.Perp() > ptl) return false;
+  countCutflowEvent("soft_"+bin+"_10_PTl3");
+  
+  return true;
+}
+
+double Atlas_2106_01676::mT2chi2(const TLorentzVector & vis1, const TLorentzVector & vis2, double m_inv, const TLorentzVector & invis) {
+    // Setup mt2 evaluation object with top quarks. Modfified from AnalysisBase
+    mt2_bisect::mt2 mt2_event;
+    TLorentzVector zeroVector = TLorentzVector(0. ,0. ,0. ,0.);
+    // If no invis is given, use missingET. Note that pmiss[0] is irrelvant, which is why we set it to -1.
+    double pmiss[] = {-1, missingET->P4().Px(), missingET->P4().Py()};
+    if (invis != zeroVector) {
+        pmiss[0] = -1;
+        pmiss[1] = invis.Px();
+        pmiss[2] = invis.Py();
+    }
+ 
+    // Construct arrays that mt2_bisect needs as input and start evaluation
+    double p1[3] = {0.0, vis1.Px(), vis1.Py()};
+    double p2[3] = {0.0, vis2.Px(), vis2.Py()};
+    mt2_event.set_momenta( p1, p2, pmiss );
+    mt2_event.set_mn( m_inv );
+    return mt2_event.get_mt2();  
 }

@@ -654,5 +654,25 @@
   ],
   "tags": [
     "electroweakinos"
-  ]
+  ],
+  "likelihoods": "y",
+  "mb_signal_regions": {
+    "SR-offWZ": [
+        "SR-offWZ-high-0jb",
+    	"SR-offWZ-high-0jc",
+    	"SR-offWZ-high-0jd",
+    	"SR-offWZ-high-0je",
+    	"SR-offWZ-high-0jf1",
+    	"SR-offWZ-high-0jf2",
+    	"SR-offWZ-high-0jg1",
+    	"SR-offWZ-high-0jg2",
+    	"SR-offWZ-high-nja",
+    	"SR-offWZ-high-njb",
+    	"SR-offWZ-high-njc",
+    	"SR-offWZ-high-njd",
+    	"SR-offWZ-high-nje",
+    	"SR-offWZ-high-njf",
+    	"SR-offWZ-high-njg"
+    ] 
+   }
 }
