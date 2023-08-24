@@ -63,8 +63,10 @@ void Cms_sus_19_005::analyze() {
     else lightjets.push_back(jets[i]);
   
   lightjets = filterPhaseSpace(lightjets, 30., -2.4, 2.4);  
+  std::vector<Jet*> signaljets = filterPhaseSpace(jets, 30., -2.4, 2.4); ;  
   
-  int Nj = lightjets.size();
+  //int Nj = lightjets.size();
+  int Nj = signaljets.size();
   int Nb = bjets.size();
   if ( !Nj ) return;
   countCutflowEvent("04_Nj>=1");
@@ -84,7 +86,7 @@ void Cms_sus_19_005::analyze() {
   if ( MET < 30.) return;
   countCutflowEvent("05_MET<30");
   
-  if (  (missingET->P4() - HTmiss).Perp()/MET < 0.5) return;
+  if (  (missingET->P4() - HTmiss).Perp()/MET > 0.5) return;
   countCutflowEvent("06_MET-HTmiss");
   
   if ( HT < 250.) return;
@@ -94,7 +96,7 @@ void Cms_sus_19_005::analyze() {
   countCutflowEvent("08_MET>250");
   
   if (Nj > 1 ) {
-    std::vector<Jet*> sigjets = lightjets;
+    std::vector<Jet*> sigjets = lightjets; //same as signaljets
     sigjets.insert(sigjets.end(), bjets.begin(), bjets.end());
     std::sort(sigjets.begin(), sigjets.end(), sortByPT ); 
   
@@ -140,7 +142,8 @@ void Cms_sus_19_005::analyze() {
 
   }
   
-  double pT1 = lightjets[0]->PT;
+  //double pT1 = lightjets[0]->PT;
+  double pT1 = signaljets[0]->PT;
   if (Nj == 1 and pT1 > 250.) {
     
     if ( Nb == 0 and HT < 450. ) countSignalEvent("Mono-phi");

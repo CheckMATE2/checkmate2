@@ -322,9 +322,16 @@ def calc_cov(path, names, analysis, mbsr, calculator = "ASYMP", corrmat = True, 
     elif os.path.isfile(hepfiles_folder+analysis+"/cov.json"):
         with open(hepfiles_folder+analysis+"/cov.json") as serialized:
             cov = json.load(serialized)
-        cov_mat=np.ones((int(np.sqrt(len(cov["values"]))),int(np.sqrt(len(cov["values"])))))
+        if analysis == "cms_sus_19_005":
+            size = 282
+        else:
+            size = int(np.sqrt(len(cov["values"])))
+        cov_mat = np.identity(size)
+        offset = float(cov["values"][0]["x"][0]["value"])
+        print(offset)
+        print(len(cov["values"]))
         for i in range(len(cov["values"])):
-            cov_mat[int(float(cov["values"][i]["x"][0]["value"])-0.5),int(float(cov["values"][i]["x"][1]["value"])-0.5)]=float(cov["values"][i]["y"][0]["value"])
+            cov_mat[int(float(cov["values"][i]["x"][0]["value"])-offset),int(float(cov["values"][i]["x"][1]["value"])-offset)]=float(cov["values"][i]["y"][0]["value"])
     else:
         AdvPrint.cout("\nNo covariance matrix found!")
         return 5.
