@@ -34,6 +34,7 @@ class Info(dict):
         flags['skipparamcheck'] = False
         flags['skippythia'] = False
         flags['skipevaluation'] = False
+        flags['statonly'] = False
         flags['controlregions'] = False
         flags['run_atlas_analyses'] = False
         flags['run_cms_analyses'] = False
@@ -196,6 +197,7 @@ class Info(dict):
         parser.add_argument('-sa', '--skip-analysis', dest='skipanalysis', action='store_true', help='Skips analysis step (e.g. to only produce a Delphes root file.')
         parser.add_argument('-spy', '--skip-pythia', dest='skippythia', action='store_true', help='Skpis Pythia step. Delphes will work with the provided LHE file.')
         parser.add_argument('-se', '--skip-evaluation', dest='skipevaluation', action='store_true', help='Skips evaluation step.')
+        parser.add_argument('-so', '--statonly', dest='statonly', action='store_true', help='Skips Delphes, analysis and evaluation. Assumes that the evaluation files have been created in a previous run.')   
         parser.add_argument('-cr', '--control-regions', dest='controlregions', action='store_true', help='Analyses control regions instead of signal regions. Sets -se automatically.')
         parser.add_argument('-rs', '--random-seed', dest='randomseed', type=int, default=0, help='Chooses fixed seed for random number generator. 0 chooses a random seed automatically.')     
         parser.add_argument('-mb', '--multibin', dest='statcomb', default="none", type=str, help='Whether to perform multibin fit.')             
@@ -233,7 +235,9 @@ class Info(dict):
         if args.skippythia:
             cls.flags["skippythia"] = True
         if args.skipevaluation:
-            cls.flags['skipevaluation'] = True            
+            cls.flags['skipevaluation'] = True
+        if args.statonly:
+            cls.flags['statonly'] = True                 
         if args.fullcls:
             cls.flags["fullcls"] = True
         if args.bestcls:
@@ -304,6 +308,8 @@ class Info(dict):
                     args.skippythia = Config.getboolean("Parameters","skippythia")
                 elif optional_parameter == "skipevaluation":
                     args.skipevaluation = Config.getboolean("Parameters", "skipevaluation")
+                elif optional_parameter == "statonly":
+                    args.statonly = Config.getboolean("Parameters", "statonly")                    
                 elif optional_parameter == "controlregions":
                     args.controlregions = Config.getboolean("Parameters", "controlregions")
                 elif optional_parameter == "efftab":
@@ -388,7 +394,7 @@ class Info(dict):
                 Info.load(Info.files['internal_info'])
                 Info.parameters["outputexists"] = "add" # might have been overwritten during the loading process
 
-        elif os.path.isdir(Info.paths['output']):
+        elif os.path.isdir(Info.paths['output']) and Info.parameters["statonly"] == False:
             if Info.parameters["outputexists"] == "ask":
                 while True:
                     AdvPrint.cout("Output directory with incomplete results already exists!")

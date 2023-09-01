@@ -42,6 +42,7 @@ def get_information_from_file(pfile):
     flags['skipdelphes'] = False
     flags['skipevaluation'] = False
     flags['controlregions'] = False
+    flags['statonly'] = False
     flags['outputexists'] = "ask"
     flags['randomseed'] = 0
     flags['statcomb'] = "none"
@@ -83,6 +84,8 @@ def get_information_from_file(pfile):
                 flags['skipdelphes'] = Config.getboolean("Optional Parameters", "skipdelphes")
             elif optional_parameter == "skipevaluation":
                 flags['skipevaluation'] = Config.getboolean("Optional Parameters", "skipevaluation")
+            elif optional_parameter == "statonly":
+                flags['statonly'] = Config.getboolean("Optional Parameters", "statonly")                
             elif optional_parameter == "outputdirectory":
                 paths['results'] = Config.get("Optional Parameters", "outputdirectory")
             elif optional_parameter == "fullcl":
@@ -172,7 +175,8 @@ def get_information_from_parameters():
     parser.add_argument('-q', '--quiet', dest='quiet', action='store_true', help='Suppresses all output (sets --force automatially).')  
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true', help='Shows delphes and analysis output on stdout.')  
     parser.add_argument('-sp', '--skip-paramcheck', dest='force', action='store_true', help="Skip startup parameter check.")               
-    parser.add_argument('-sd', '--skip-delphes', dest='skipdelphes', action='store_true', help='Skips Delphes and runs analysis. Assumes that the ROOT files have been created in a previous run.')              
+    parser.add_argument('-sd', '--skip-delphes', dest='skipdelphes', action='store_true', help='Skips Delphes and runs analysis. Assumes that the ROOT files have been created in a previous run.')
+    parser.add_argument('-so', '--statonly', dest='statonly', action='store_true', help='Skips Delphes, analysis and evaluation. Assumes that the evaluation files have been created in a previous run.')    
     parser.add_argument('-t', '--temporary', dest='temp', action='store_true', help='Temporary mode; Delphes output is deleted after analysis step.')
     parser.add_argument('-se', '--skip-evaluation', dest='skipevaluation', action='store_true', help='Skips evaluation step.')              
     parser.add_argument('-cr', '--control-regions', dest='controlregions', action='store_true', help='Analyses control regions instead of signal regions. Sets -se automatically.')
@@ -198,6 +202,8 @@ def get_information_from_parameters():
         flags['verbosemode'] = True
     if args.skipdelphes:
       flags['skipdelphes'] = True
+    if args.statonly:
+      flags['statonly'] = True      
     if args.skipevaluation:
       flags['skipevaluation'] = True
     flags["outputexists"] = "ask"
