@@ -394,7 +394,7 @@ class Info(dict):
                 Info.load(Info.files['internal_info'])
                 Info.parameters["outputexists"] = "add" # might have been overwritten during the loading process
 
-        elif os.path.isdir(Info.paths['output']) and Info.parameters["statonly"] == False:
+        elif os.path.isdir(Info.paths['output']) and Info.flags["statonly"] == False:
             if Info.parameters["outputexists"] == "ask":
                 while True:
                     AdvPrint.cout("Output directory with incomplete results already exists!")

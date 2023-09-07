@@ -13,6 +13,10 @@ def init(path, analysis, MB_set):
     global f_patchset
     global SR_dict
     global histosize
+    
+    global hepfiles_folder
+
+    hepfiles_folder = Info.paths['data']+"/"
 
     if not os.path.exists(path+'/multibin_limits'):
         os.mkdir(path+'/multibin_limits')
@@ -215,9 +219,9 @@ def upperlim(workspace, ntoys = -1):
 
 def calc_point(path, analysis, MB_set, full, systematics = 0,ntoys = -1):
 
-    global hepfiles_folder
+    #global hepfiles_folder
 
-    hepfiles_folder = Info.paths['data']+"/"   #<----Set the path of the folder with the models here.
+    #hepfiles_folder = Info.paths['data']+"/"   #<----Set the path of the folder with the models here.
 
     init(path,analysis,MB_set)
     names = SR_dict.keys()

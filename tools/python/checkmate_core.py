@@ -21,6 +21,7 @@ from resultcollector import ResultCollector
 if sys.version_info[0] == 3:
     import multibin_limit as mb
     import multibin_limit_full as mbfull
+    import spey_wrapper
 
 class CheckMATE2(object):
     """ This is the main object whose instance corresponds to a full CheckMATE run """
@@ -318,6 +319,9 @@ class CheckMATE2(object):
         
         if sys.version_info[0] == 3 and (Info.parameters["statcomb"] == "simple" or Info.parameters["statcomb"] == "cls" or Info.parameters["statcomb"] == "full"):
             self.stateval()
+            
+        if sys.version_info[0] == 3 and Info.parameters["statcomb"] == "spey":    
+            spey_wrapper.get_limits()
 
     
         if Info.flags['zsig']:
