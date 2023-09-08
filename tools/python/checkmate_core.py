@@ -53,6 +53,7 @@ class CheckMATE2(object):
         if Info.flags['statonly']:
             if os.path.isdir(Info.paths['output']):
                 self.stateval()
+                #spey_wrapper.combination("a")
             else:
                 AdvPrint.cerr_exit("No results in the output directory")
         else:
@@ -321,7 +322,8 @@ class CheckMATE2(object):
             self.stateval()
             
         if sys.version_info[0] == 3 and Info.parameters["statcomb"] == "spey":    
-            spey_wrapper.get_limits()
+            #spey_wrapper.get_limits()
+            spey_wrapper.combination("a")
 
     
         if Info.flags['zsig']:

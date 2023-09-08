@@ -376,7 +376,7 @@ class Info(dict):
         pseudoEvaluator.line_from_data(cls.parameters['BestPerAnalysisEvaluationFileColumns'])
         
         _check_outputexists()
-        if os.path.isdir(Info.paths['output']) and os.path.isfile(Info.files['internal_info']):
+        if os.path.isdir(Info.paths['output']) and os.path.isfile(Info.files['internal_info']) and Info.flags["statonly"] == False:
             if Info.parameters["outputexists"] == "ask":
                 while True:
                     AdvPrint.cout("Output directory with results already exists!")
@@ -394,7 +394,7 @@ class Info(dict):
                 Info.load(Info.files['internal_info'])
                 Info.parameters["outputexists"] = "add" # might have been overwritten during the loading process
 
-        elif os.path.isdir(Info.paths['output']) and Info.flags["statonly"] == False:
+        elif os.path.isdir(Info.paths['output']):
             if Info.parameters["outputexists"] == "ask":
                 while True:
                     AdvPrint.cout("Output directory with incomplete results already exists!")
