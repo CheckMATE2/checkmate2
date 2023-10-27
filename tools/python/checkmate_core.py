@@ -51,11 +51,23 @@ class CheckMATE2(object):
         self.user_param_check()
         
         if Info.flags['statonly']:
-            if os.path.isdir(Info.paths['output']):
+            if os.path.isdir(Info.paths['output']) and sys.version_info[0] == 3 and (Info.parameters["statcomb"] == "select" or Info.parameters["statcomb"] == "scan" or Info.parameters["statcomb"] == "detailed"):
+            
+                if Info.parameters["statcomb"] == "scan":
+                    Info.flags["expected"] = False
+                    Info.flags["mbcls"] = True
+                    Info.flags["uplim"] = False
+                if Info.parameters["statcomb"] == "detailed":
+                    Info.flags["expected"] = True
+                    Info.flags["mbcls"] = True
+                    Info.flags["uplim"] = True    
+                if Info.flags["uplim"] == False and Info.flags["mbcls"] == False:
+                    Info.flags["uplim"] = True                
+                
                 self.stateval()
                 #spey_wrapper.combination("a")
             else:
-                AdvPrint.cerr_exit("No results in the output directory")
+                AdvPrint.cerr_exit("No results in the output directory or insufficient input parameters.")
         else:
             self.prepare_run()       
         
@@ -187,15 +199,21 @@ class CheckMATE2(object):
             AdvPrint.cout("\t - No Monte Carlo statistical uncertainty will be included in the evaluation")    
         if Info.flags['eff_tab']:
             AdvPrint.cout("\t - Efficiency tables will be calculated for each signal region of every analysis run")     
-        if Info.parameters["statcomb"] == "simple":
+        if Info.parameters["statmod"] == "simple":
             AdvPrint.cout("\t - Simplified likelihood calculation will be applied to multibin signal regions")    
-        if Info.parameters["statcomb"] == "cls":
-            AdvPrint.cout("\t - Full likelihood calculation of CLs will be applied to multibin signal regions")                      
-        if Info.parameters["statcomb"] == "full":
-            AdvPrint.cout("\t - Full likelihood calculation of CLs and upper limits will be applied to multibin signal regions")                        
+        if Info.parameters["statmod"] == "full":
+            AdvPrint.cout("\t - Full likelihood calculation using Spey interface will be applied to ATLAS multibin signal regions")    
+        if Info.parameters["statmod"] == "fullpyhf":
+            AdvPrint.cout("\t - Full likelihood calculation will be applied to ATLAS multibin signal regions")                
+        if Info.parameters["statcomb"] == "select":
+            AdvPrint.cout("\t - User selected statistics will be calculated")                      
+        if Info.parameters["statcomb"] == "scan":
+            AdvPrint.cout("\t - Observed CLs will be calculated")    
+        if Info.parameters["statcomb"] == "detailed":
+            AdvPrint.cout("\t - Observed, expected, CLs and upper limits will be calculated")                
         if Info.flags["controlregions"]:
             AdvPrint.cout("\t - Analysing control regions")
-        if Info.parameters["outputexists"] == "overwrite":
+        if Info.parameters["outputexists"] == "overwrite" and Info.flags["statonly"] == False:
             AdvPrint.cout("\t - Old results will be deleted")
         if Info.parameters["outputexists"] == "add":
             AdvPrint.cout("\t - New results will be added to old ones")
@@ -315,15 +333,25 @@ class CheckMATE2(object):
             #Info.parameters["statcomb"] = "skip"
             #AdvPrint.cout("\nThe point is excluded - skipping multibin analysis")
         
-        if sys.version_info[0] == 2 and (Info.parameters["statcomb"] == "simple" or Info.parameters["statcomb"] == "cls" or Info.parameters["statcomb"] == "full"):
+        if sys.version_info[0] == 2 and (Info.parameters["statcomb"] != "none"):
             AdvPrint.cout("Mutlibin signal regions require Python 3!")
         
-        if sys.version_info[0] == 3 and (Info.parameters["statcomb"] == "simple" or Info.parameters["statcomb"] == "cls" or Info.parameters["statcomb"] == "full"):
+        if sys.version_info[0] == 3 and (Info.parameters["statcomb"] == "select" or Info.parameters["statcomb"] == "scan" or Info.parameters["statcomb"] == "detailed"):
+            if Info.parameters["statcomb"] == "scan":
+                Info.flags["expected"] = False
+                Info.flags["mbcls"] = True
+                Info.flags["uplim"] = False
+            if Info.parameters["statcomb"] == "detailed":
+                Info.flags["expected"] = True
+                Info.flags["mbcls"] = True
+                Info.flags["uplim"] = True    
+            if Info.flags["uplim"] == False and Info.flags["mbcls"] == False:
+                Info.flags["uplim"] = True
             self.stateval()
             
-        if sys.version_info[0] == 3 and Info.parameters["statcomb"] == "spey":    
+        #if sys.version_info[0] == 3 and Info.parameters["statcomb"] == "spey":    
             #spey_wrapper.get_limits()
-            spey_wrapper.combination("a")
+            #spey_wrapper.combination("a")
 
     
         if Info.flags['zsig']:
@@ -332,88 +360,68 @@ class CheckMATE2(object):
             _print_likelihood(evaluators)  
             
     def stateval(self):        
-        best_invr=10.
-        best_cls=1.
-        best_analysis_r=""
-        best_sr_r=""
-        best_analysis_cls=""
-        best_sr_cls=""
-        full = "?"
+        best_param=10.
+        best_analysis = ""
+        best_sr = ""
+        cls_limit = False
         AdvPrint.cout("")
         for analysis in Info.analyses:
             if "mb_signal_regions" in Info.get_analysis_parameters(analysis):
                 mb_signal_regions = Info.get_analysis_parameters(analysis)["mb_signal_regions"]
                 for mbsr in mb_signal_regions:
-                    if (Info.parameters["statcomb"] == "simple" and Info.get_analysis_parameters(analysis)["likelihoods"] != "cov") or (Info.parameters["statcomb"] == "cls" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n") or (Info.parameters["statcomb"] == "full" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n"):
+                    if (Info.parameters["statmod"] == "simple" and Info.get_analysis_parameters(analysis)["likelihoods"] != "cov") or (Info.parameters["statmod"] == "full" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n") or (Info.parameters["statcomb"] == "fullpyhf" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n"):
                         sr_list = mb_signal_regions[mbsr]
-                        AdvPrint.cout("Calculating fast likelihood for analysis: "+analysis+", SR: "+mbsr+"... ")
-                        inv_r = mb.calc_point(Info.paths['output'] , sr_list, analysis, mbsr)
+                        AdvPrint.cout("Calculating simplified likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
+                        inv_r_obs, inv_r_exp, cls_obs, cls_exp = mb.calc_point(Info.paths['output'] , sr_list, analysis, mbsr)
                         AdvPrint.cout("Done!")
-                        if inv_r < best_invr:
-                            best_invr = inv_r
-                            best_analysis_r = analysis
-                            best_sr_r = mbsr
-                            full = "n"
-                    if Info.parameters["statcomb"] == "cls" and Info.get_analysis_parameters(analysis)["likelihoods"] == "y":
-                        AdvPrint.cout("Calculating full likelihood CLs for analysis: "+analysis+", SR: "+mbsr+"... ")
-                        cls = mbfull.calc_point(Info.paths['output'] , analysis, mbsr, False)
+                    if Info.parameters["statmod"] == "full" and Info.get_analysis_parameters(analysis)["likelihoods"] == "y":
+                        AdvPrint.cout("Calculating full likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
+                        inv_r_obs, inv_r_exp, cls_obs, cls_exp = spey_wrapper.calc_point(Info.paths['output'] , analysis, mbsr)
                         AdvPrint.cout("Done!")
-                        if cls < best_cls: 
-                            best_cls = cls
-                            best_analysis_cls = analysis
-                            best_sr_cls = mbsr
-                            full = "cls"
-                    if Info.parameters["statcomb"] == "full" and Info.get_analysis_parameters(analysis)["likelihoods"] == "y":
-                        AdvPrint.cout("Calculating full likelihood upper limits and CLs for analysis: "+analysis+", SR: "+mbsr+"... ")
-                        inv_r = mbfull.calc_point(Info.paths['output'] , analysis, mbsr, True)
+                    if Info.parameters["statmod"] == "fullpyhf" and Info.get_analysis_parameters(analysis)["likelihoods"] == "y":
+                        AdvPrint.cout("Calculating full likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
+                        inv_r_obs, inv_r_exp, cls_obs, cls_exp = mbfull.calc_point(Info.paths['output'] , analysis, mbsr)
                         AdvPrint.cout("Done!")
-                        if inv_r < best_invr:
-                            best_invr = inv_r
-                            best_analysis_r = analysis
-                            best_sr_r = mbsr
-                            full = "y"
-                    if (Info.parameters["statcomb"] == "full" or Info.parameters["statcomb"] == "cls" or Info.parameters["statcomb"] == "simple") and Info.get_analysis_parameters(analysis)["likelihoods"] == "cov":
+                    if (Info.parameters["statmod"] == "full" or Info.parameters["statmod"] == "fullpyhf" or Info.parameters["statmod"] == "simple") and Info.get_analysis_parameters(analysis)["likelihoods"] == "cov":
                         sr_list = mb_signal_regions[mbsr]
                         AdvPrint.cout("Calculating approximate likelihood with covariance matrix: "+analysis+", SR: "+mbsr+"... ")
-                        inv_r = mb.calc_cov(Info.paths['output'] , sr_list, analysis, mbsr)
+                        inv_r_obs, inv_r_exp, cls_obs, cls_exp = spey_wrapper.calc_cov(Info.paths['output'] , analysis, mbsr)
                         AdvPrint.cout("Done!")
-                        if inv_r < best_invr:
-                            best_invr = inv_r
-                            best_analysis_r = analysis
-                            best_sr_r = mbsr
-                            full = "cov"
+                    if Info.flags["uplim"] == True:
+                        param = inv_r_obs
+                    elif Info.flags["mbcls"] == True:
+                        param = cls_obs
+                        cls_limit = True
+                    if param < best_param:
+                        best_param = param
+                        best_analysis = analysis
+                        best_sr = mbsr
                             
-        if best_invr < 10.:
+        if best_param < 10. and cls_limit == False:
             AdvPrint.set_cout_file(Info.files["output_result"], False)
-            if full == "n":
-                AdvPrint.cout("\nTest: Calculation of approximate (fast) likelihood for multibin signal regions")
-            elif full == "y":
-                AdvPrint.cout("\nTest: Calculation of upper limit using full likelihood for multibin signal regions")
-            elif full == "cov":
-                AdvPrint.cout("\nTest: Calculation of upper limit using covariance matrix for multibin signal regions")                    
-            if best_invr < 1.:
+            AdvPrint.cout("\nTest: Calculation of upper limit from multibin signal regions")                 
+            if best_param < 1.:
                 result = "\033[31mExcluded\033[0m"
             else:
                 result = "\033[32mAllowed\033[0m"
             AdvPrint.cout("Result: "+result)
-            AdvPrint.cout("Result for 1/mu (r): "+str(1./best_invr))
-            AdvPrint.cout("Analysis: "+best_analysis_r)
-            AdvPrint.cout("MBSR: "+best_sr_r)
+            AdvPrint.cout("Result for 1/mu (r): "+str(1./best_param))
+            AdvPrint.cout("Analysis: "+best_analysis)
+            AdvPrint.cout("MBSR: "+best_sr)
             AdvPrint.set_cout_file("#None")
-        if best_cls < 1.:
+        elif best_param < 1. and cls_limit == True:
             AdvPrint.set_cout_file(Info.files["output_result"], False)
-            if full == "cls":
-                AdvPrint.cout("\nTest: Calculation of CLs using full likelihood for multibin signal regions")
-            if best_cls < 0.05:
+            AdvPrint.cout("\nTest: Calculation of CLs from multibin signal regions")
+            if best_param < 0.05:
                 result = "\033[31mExcluded\033[0m"
             else:
                 result = "\033[32mAllowed\033[0m"
             AdvPrint.cout("Result: "+result)
-            AdvPrint.cout("Result for CL: "+str(best_cls))
-            AdvPrint.cout("Analysis: "+best_analysis_cls)
-            AdvPrint.cout("MBSR: "+best_sr_cls)
+            AdvPrint.cout("Result for CL: "+str(best_param))
+            AdvPrint.cout("Analysis: "+best_analysis)
+            AdvPrint.cout("MBSR: "+best_sr)
             AdvPrint.set_cout_file("#None")
-        if best_invr == 10. and best_cls == 1.:
+        else:
             AdvPrint.cout("Results of approximate/fast likelihood to weak to exclude model or no multibin analysis available")        
           
     def get_resultCollectors(self):

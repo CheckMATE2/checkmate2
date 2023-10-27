@@ -44,11 +44,16 @@ This is a brief note on how to install CheckMATE from the master branch on https
      
 3) New features:
 
-  a) Multibin fits available in atlas_2010_14293, atlas_1908_03122, atlas_1911_12606, atlas_2101_01629, atlas_1908_08215, atlas_2004_14060:
-     For command line use "-mb simple/cls/full"; in input file "Multibin: simple/cls/full"
-     simple: simple fitting of shape in several bins as defined in a search, reasonably fast;
-     cls: calculates CLs using full likelihood provided by the collaboration, slower but still manageable
-     full: calculates CLs and upper limits using full likelihood but quite slow (extremely slow for atlas_2010_14293 - running time in days). 
+  a) Multibin fits available in atlas_2010_14293, atlas_1908_03122, atlas_1911_12606, atlas_2101_01629, atlas_1908_08215, atlas_2004_14060, 1911_06660, atlas_2106_01676, cms_1908_04722, cms_1909_03460, cms_2107_13021, cms_2205_09597:
+     For command line use "-mb select/scan/detailed"; in input file "Multibin: select/scan/detailed"; for chosing the calculation method: "-mod simple/full"; -exp, -mbcls, -uplim
+     select: calculates user selected statistics;
+     scan: just observed CLs for fast evalutaion;
+     detailed: observed, expected, CLs and upperlimits;
+     simple: calculates CLs and upper limits using simplified likelihood;
+     full: calculates CLs and upper limits using full likelihood but quite slow. 
+     -exp: calculate expected limits;
+     -mbcls: calculate CLs;
+     -uplim: calcuate upper limits.
      The results are stored in the multibin_limits folder.
      
   b) Neural nets implemented with ONNX Runtime, available in atlas_2106_09609 and atlas_2211_08028:

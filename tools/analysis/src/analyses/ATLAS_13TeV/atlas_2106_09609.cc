@@ -781,7 +781,7 @@ float Atlas_2106_09609::Passes_Cuts_NNSR(const std::vector<Jet*> sigjets, const 
   assert(sigjets.size() >= 4); 
   assert(sigjets.size() < 9); 
   assert(bjets.size() >= 4);
-  std::vector b_cat = jet_btag_category(sigjets, bjets);
+  std::vector<float> b_cat = jet_btag_category(sigjets, bjets);
   
   input_tensor_values.push_back(sigjets.size());
   input_tensor_values.push_back(3); // n_bjets >= 4;
@@ -865,9 +865,9 @@ double Atlas_2106_09609::min_dr(const std::vector<Jet*> sigjets, TLorentzVector 
    
 }
 
-std::vector<double> Atlas_2106_09609::jet_btag_category(const std::vector<Jet*> sigjets, const std::vector<Jet*> bjets) {
+std::vector<float> Atlas_2106_09609::jet_btag_category(const std::vector<Jet*> sigjets, const std::vector<Jet*> bjets) {
   
-  std::vector<double> cat;
+  std::vector<float> cat;
   int k = 0; //reduce number of loops
   for (int i = 0; i < sigjets.size(); i++) {
     bool btag = false;
@@ -879,12 +879,12 @@ std::vector<double> Atlas_2106_09609::jet_btag_category(const std::vector<Jet*> 
       }
     //if (btag) cat.push_back(5.); else cat.push_back(1.);
     if (btag) {
-      double tag = 1.45 + rand()/(RAND_MAX +1.) * 8.;// https://arxiv.org/pdf/1907.05120.pdf Fig. 1
+      float tag = 1.45 + rand()/(RAND_MAX +1.) * 8.;// https://arxiv.org/pdf/1907.05120.pdf Fig. 1
       //cat.push_back( tag);
       cat.push_back(5.); // ATLAS simiplified_analysis snippet
     }
     else {
-      double  tag = -4. + rand()/(RAND_MAX +1.) * 3.;
+      float tag = -4. + rand()/(RAND_MAX +1.) * 3.;
       //cat.push_back( tag);
       //cat.push_back(-3.);
       cat.push_back(1.);

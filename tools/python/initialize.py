@@ -46,6 +46,12 @@ def get_information_from_file(pfile):
     flags['outputexists'] = "ask"
     flags['randomseed'] = 0
     flags['statcomb'] = "none"
+    flags['statmod'] = "simple"
+    flags['observed'] = True
+    flags['expected'] = False
+    flags['mbcls'] = False
+    flags['uplim'] = False
+    flags['corr'] = False
     
     events['raw'] = []
     events['xsects'] = []
@@ -93,7 +99,17 @@ def get_information_from_file(pfile):
             elif optional_parameter == "likelihood":
                 flags['likelihood'] = Config.getboolean("Optional Parameters", "likelihood")
             elif optional_parameter == "multibin":
-                flags['statcomb'] = Config.get("Optional Parameters", "multibin")                           
+                flags['statcomb'] = Config.get("Optional Parameters", "multibin")     
+            elif optional_parameter == "model":
+                flags['statmod'] = Config.get("Optional Parameters", "model")    
+            elif optional_parameter == "corr":
+                flags['corr'] = Config.getboolean("Optional Parameters", "corr")                    
+            elif optional_parameter == "expected":
+                flags['expected'] = Config.getboolean("Optional Parameters", "expected")             
+            elif optional_parameter == "uplim":
+                flags['uplim'] = Config.getboolean("Optional Parameters", "uplim")        
+            elif optional_parameter == "mbcls":
+                flags['mbcls'] = Config.getboolean("Optional Parameters", "mbcls")                             
             elif optional_parameter == "randomseed":
                 flags['randomseed'] = Config.getint("Optional Parameters", "randomseed")
             elif optional_parameter == "controlregions":
@@ -181,7 +197,11 @@ def get_information_from_parameters():
     parser.add_argument('-se', '--skip-evaluation', dest='skipevaluation', action='store_true', help='Skips evaluation step.')              
     parser.add_argument('-cr', '--control-regions', dest='controlregions', action='store_true', help='Analyses control regions instead of signal regions. Sets -se automatically.')
     parser.add_argument('-rs', '--random-seed', dest='randomseed', type=int, default=0, help='Chooses fixed seed for random number generator. 0 chooses a random seed automatically.')             
-    parser.add_argument('-mb', '--multibin', dest='statcomb', default="none", type=str, help='Whether to perform multibin fit.')                    
+    parser.add_argument('-mb', '--multibin', dest='statcomb', default="none", type=str, help='Whether to perform multibin fit.')  
+    parser.add_argument('-mod', '--model', dest='statmod', default="simple", type=str, help='Which statistical (likelihood) model is used: simple, full, fullpyhf.')
+    parser.add_argument('-corr', '--corr', dest='corr', action='store_true', help='Which error correlation matrix use for CMS searches.')
+    parser.add_argument('-mbcls', '--mbcls', dest='mbcls', action='store_true', help='Whether to calculate multibin CLs.')
+    parser.add_argument('-uplim', '--uppperlimit', dest='uplim', action='store_true', help='Whether to calculate multibin upper limits.')    
     
     # Parse arguments and set return parameters
     args = parser.parse_args()
@@ -196,6 +216,7 @@ def get_information_from_parameters():
     flags["quietmode"] = False
     flags["verbosemode"] = False
     flags["controlregions"] = False
+    flags["corr"] = False
     if args.quiet:
         flags["quietmode"] = True
     if args.verbose:
@@ -218,13 +239,26 @@ def get_information_from_parameters():
     if args.controlregions:
       flags["controlregions"] = True
       flags["skipevaluation"] = True
-    if args.statcomb == "simple":
-      flags["statcomb"] = "simple"
-    elif args.statcomb == "full":
-      flags["statcomb"] = "full"      
-    elif args.statcomb == "cls":
-      flags["statcomb"] = "cls"            
-      
+    if args.statcomb == "select":
+      flags["statcomb"] = "select"
+    elif args.statcomb == "scan":
+      flags["statcomb"] = "scan"      
+    elif args.statcomb == "detailed":
+      flags["statcomb"] = "detailed"  
+    if args.expected:
+      flags["expected"] = True
+    if args.mbcls:
+      flags["mbcls"] = True  
+    if args.uplim:
+      flags["uplim"] = True      
+    if args.corr:
+      flags["corr"] = True      
+    if args.statmod == "simple":
+      flags["statmod"] = "simple"
+    elif args.statmod == "full":
+      flags["statmod"] = "full"
+    elif args.statmod == "fullpyhf":
+      flags["statmod"] = "fullpyhf"      
     
     # If analyses = "atlas", "cms" or "all", manually add all these to the list
     if args.analysis == "atlas":
@@ -367,12 +401,12 @@ def prepare_run(analyses, events, files, flags, output, paths):
         output.cout("\t - Delphes files are deleted after the analysis step")
     if flags["randomseed"] != 0:
         output.cout("\t - Fixed random seed of "+str(flags["randomseed"]))
-    if flags["statcomb"] == "simple":
+    if flags["statmod"] == "simple":
         output.cout("\t - Simplified likelihood calculation will be applied to multibin signal regions")    
-    if flags["statcomb"] == "full":
+    if flags["statmod"] == "fullpyhf":
         output.cout("\t - Full likelihood calculation of CLs and upper limits will be applied to multibin signal regions")                    
-    if flags["statcomb"] == "cls":
-        output.cout("\t - Full likelihood calculation of CLs will be applied to multibin signal regions")                            
+    if flags["statmod"] == "full":
+        output.cout("\t - Full likelihood calculation using Spey of CLs and upper limits will be applied to multibin signal regions")                            
     # Let user check correctness of parameters, unless in force-mode.
     if not flags['skipparamcheck']:
         while True:

@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import os
 import sys, subprocess
 from info import Info
+from advprint import AdvPrint
 
 def init(path, analysis, MB_set):
     global analysis_name
@@ -178,15 +179,20 @@ def hypotest(workspace, ntoys=-1):
     test_poi = 1.0
     model = workspace.model()
     if ntoys<0:
-        result = pyhf.infer.hypotest(test_poi,workspace.data(model),model,test_stat="qtilde",return_expected_set=False)
+        if Info.flags["expected"]:
+            cls_obs, cls_exp = pyhf.infer.hypotest(test_poi, workspace.data(model), model, test_stat="qtilde", return_expected_set = True)
+        else:    
+            cls_obs = pyhf.infer.hypotest(test_poi, workspace.data(model), model, return_expected = False)
+            cls_exp = 1.            
+        #result = pyhf.infer.hypotest(test_poi,workspace.data(model),model,test_stat="qtilde",return_expected_set=False)
     else:
-        result = pyhf.infer.hypotest(test_poi,workspace.data(model),model,
+        cls_obs, cls_exp = pyhf.infer.hypotest(test_poi,workspace.data(model),model,
             test_stat = "qtilde",
             return_expected_set = True,
             calctype = "toybased",
             ntoys = ntoys,
             track_progress = True)
-    return result   
+    return cls_obs, cls_exp   
   
 #Calculates the upper limit overs signal strenght. The CLs value is calculated for a set of 50 values between 0.1 and 5 and the 95% limit is calculated form the interpolated line. Returns:
 # poi_values = values of the signal strenght scanned (50 values between 0.1 and 5).
@@ -206,9 +212,9 @@ def upperlim(workspace, ntoys = -1):
     poi_values = np.logspace(np.log10(0.001), np.log10(mu_lim)-0.001, 50)
     model = workspace.model()
     if ntoys <= 0:
-        obs_limit, exp_limits, (scan, results) = pyhf.infer.intervals.upperlimit(workspace.data(model), model, poi_values, level=0.05, return_results=True)
+        obs_limit, exp_limits, (scan, results) = pyhf.infer.intervals.upper_limits.upper_limit(workspace.data(model), model, poi_values, level=0.05, return_results=True)
     else:
-        obs_limit, exp_limits, (scan, results) = pyhf.infer.intervals.upperlimit(workspace.data(model), model,
+        obs_limit, exp_limits, (scan, results) = pyhf.infer.intervals.upper_limits.upper_limit(workspace.data(model), model,
             poi_values,
             level = 0.05,
             return_results = True,
@@ -217,11 +223,16 @@ def upperlim(workspace, ntoys = -1):
             track_progress = True)
     return poi_values, obs_limit, exp_limits, (scan, results)
 
-def calc_point(path, analysis, MB_set, full, systematics = 0,ntoys = -1):
+def calc_point(path, analysis, MB_set, systematics = 0,ntoys = -1):
 
     #global hepfiles_folder
 
     #hepfiles_folder = Info.paths['data']+"/"   #<----Set the path of the folder with the models here.
+
+    obs_limit = 10.
+    exp_limits = [10.,10.,10.,10.,10.]
+    cls_obs = 1.
+    cls_exp = [1.,1.,1.,1.,1.]
 
     init(path,analysis,MB_set)
     names = SR_dict.keys()
@@ -237,21 +248,24 @@ def calc_point(path, analysis, MB_set, full, systematics = 0,ntoys = -1):
 
 
     workspace = pyhf.Workspace(spec)
-
-    result = hypotest(workspace,ntoys)
     
-    
-    
-    if full:
-        poi_values, obs_limit, exp_limits, (scan, results) = upperlim(workspace,ntoys)
-
     string = "================================\n Analysis: "+analysis+" , SR: "+MB_set+"\n"
-    string += f"Observed CLs for μ = 1: {result}"+'\n'
-    #string += f"Expected CLs band for μ = 1: {[exp.tolist() for exp in result[1]]}"+'\n'
-
-    if full:
-        string += f"Upper limit (obs): μ = {obs_limit:.4f}"+'\n'
-        string += f"Expected upper limit (+/-2 sigma) (exp): mu = ["
+    string += f"Limits with full likelihood (pyhf):\n"
+    
+    if Info.flags["mbcls"]:
+        AdvPrint.cout("Observed:")
+        cls_obs, cls_exp = hypotest(workspace, ntoys)
+        AdvPrint.cout("CL95: "+str(cls_obs) )
+        string += f"Observed CLs for mu = 1: {cls_obs}"+'\n'
+        if Info.flags["expected"]:
+            string = string+f"Expected CLs band for mu = 1: {[exp.tolist() for exp in cls_exp]}"+'\n'
+    
+    if Info.flags["uplim"]:
+        AdvPrint.cout("Observed:")
+        poi_values, obs_limit, exp_limits, (scan, results) = upperlim(workspace,ntoys)
+        AdvPrint.cout("Upper limit: "+str(obs_limit) )
+        string += f"Observed upper limit: μ = {obs_limit:.4f}"+'\n'
+        string += f"Expected upper limit (+/-2 sigma): mu = ["
         for i in range(4):
             string+=f"{exp_limits[i]:.4f}, "
         string+=f"{exp_limits[4]:.4f}]"
@@ -259,8 +273,5 @@ def calc_point(path, analysis, MB_set, full, systematics = 0,ntoys = -1):
     string += "\n================================\n"
     with open(path+'/multibin_limits/'+"results.dat", "a") as write_file:
         print(string, file = write_file)
-    if full:
-        return obs_limit
-    else:
-        return result
+    return obs_limit, exp_limits[2], cls_obs, cls_exp
                                                                                                   

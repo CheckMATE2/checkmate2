@@ -35,6 +35,11 @@ class Info(dict):
         flags['skippythia'] = False
         flags['skipevaluation'] = False
         flags['statonly'] = False
+        flags['observed'] = True
+        flags['expected'] = False
+        flags['mbcls'] = False
+        flags['uplim'] = False
+        flags['corr'] = False
         flags['controlregions'] = False
         flags['run_atlas_analyses'] = False
         flags['run_cms_analyses'] = False
@@ -54,6 +59,7 @@ class Info(dict):
         parameters['TotalEvaluationFileColumns'] = ['analysis', 'sr', 'o', 'b', 'db', 's', 'ds', 's95obs', 's95exp', 'robscons', 'rexpcons']
         parameters['BestPerAnalysisEvaluationFileColumns'] = ['analysis', 'sr', 'o', 'b', 'db', 's', 'ds', 's95obs', 's95exp', 'robscons', 'rexpcons']
         parameters['statcomb'] = "none"
+        parameters['statmod'] = "simple"
         
         cls.analysis_groups = {
                 "ATLAS_7TeV",
@@ -200,7 +206,12 @@ class Info(dict):
         parser.add_argument('-so', '--statonly', dest='statonly', action='store_true', help='Skips Delphes, analysis and evaluation. Assumes that the evaluation files have been created in a previous run.')   
         parser.add_argument('-cr', '--control-regions', dest='controlregions', action='store_true', help='Analyses control regions instead of signal regions. Sets -se automatically.')
         parser.add_argument('-rs', '--random-seed', dest='randomseed', type=int, default=0, help='Chooses fixed seed for random number generator. 0 chooses a random seed automatically.')     
-        parser.add_argument('-mb', '--multibin', dest='statcomb', default="none", type=str, help='Whether to perform multibin fit.')             
+        parser.add_argument('-mb', '--multibin', dest='statcomb', default="none", type=str, help='Whether to perform multibin fit.')
+        parser.add_argument('-mod', '--model', dest='statmod', default="simple", type=str, help='Which statistical (likelihood) model is used: simple, full, fullpyhf.')
+        parser.add_argument('-corr', '--corr', dest='corr', action='store_true', help='Which error correlation matrix use for CMS searches.')
+        parser.add_argument('-mbcls', '--mbcls', dest='mbcls', action='store_true', help='Whether to calculate multibin CLs.')
+        parser.add_argument('-uplim', '--uppperlimit', dest='uplim', action='store_true', help='Whether to calculate multibin upper limits.')
+        parser.add_argument('-exp', '--expected', dest='expected', action='store_true', help='Whether to expected CLs (upper limits).')
         
         # Parse arguments and set return parameters
         if emptyparser:
@@ -226,6 +237,7 @@ class Info(dict):
         cls.parameters['randomseed'] = args.randomseed
         cls.parameters["outputexists"] = args.output_exists
         cls.parameters["statcomb"] = args.statcomb
+        cls.parameters["statmod"] = args.statmod
         if args.force:
             cls.flags["skipparamcheck"] = True
         if args.quiet:
@@ -237,7 +249,17 @@ class Info(dict):
         if args.skipevaluation:
             cls.flags['skipevaluation'] = True
         if args.statonly:
-            cls.flags['statonly'] = True                 
+            cls.flags['statonly'] = True     
+        if args.corr:
+            cls.flags['corr'] = True
+        else:
+            cls.flags['corr'] = False
+        if args.mbcls:
+            cls.flags['mbcls'] = True           
+        if args.uplim:
+            cls.flags['uplim'] = True        
+        if args.expected:
+            cls.flags['expected'] = True                    
         if args.fullcls:
             cls.flags["fullcls"] = True
         if args.bestcls:
@@ -272,6 +294,21 @@ class Info(dict):
         output_name =  args.name.replace(" ", "_")
         cls.fill_output_paths_and_files(cls.paths['results'], output_name) 
         cls.check_info()
+        #make sure to override
+        cls.parameters["statcomb"] = args.statcomb
+        cls.parameters["statmod"] = args.statmod
+        if args.statonly:
+            cls.flags['statonly'] = True     
+        if args.corr:
+            cls.flags['corr'] = True
+        else:
+            cls.flags['corr'] = False
+        if args.mbcls:
+            cls.flags['mbcls'] = True           
+        if args.uplim:
+            cls.flags['uplim'] = True        
+        if args.expected:
+            cls.flags['expected'] = True            
  
     @classmethod
     def fill_info_from_parameters(cls):
@@ -356,6 +393,10 @@ class Info(dict):
                     args.analysis = Config.get("Parameters", "analyses")
                 elif optional_parameter == "multibin":
                     args.statcomb = Config.get("Parameters", "multibin")    
+                elif optional_parameter == "model":
+                    args.statmod = Config.get("Parameters", "model")              
+                elif optional_parameter == "corr":
+                    args.corr = Config.get("Parameters", "corr")                                  
                 else:
                     AdvPrint.cerr_exit("Unknown optional parameter '"+optional_parameter+"'")                    
         cls.fill_info_from_args(args)
@@ -393,6 +434,11 @@ class Info(dict):
                 AdvPrint.cout(" ('add' mode: settings of previous run are used and only new events/processes are added!)") 
                 Info.load(Info.files['internal_info'])
                 Info.parameters["outputexists"] = "add" # might have been overwritten during the loading process
+                
+        elif os.path.isdir(Info.paths['output']) and os.path.isfile(Info.files['internal_info']) and Info.flags["statonly"]:    
+            Info.load(Info.files['internal_info'])
+            Info.flags["statonly"] = True
+            AdvPrint.cout("Calculating statistical combinations")
 
         elif os.path.isdir(Info.paths['output']):
             if Info.parameters["outputexists"] == "ask":

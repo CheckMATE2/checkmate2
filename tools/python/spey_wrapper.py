@@ -7,6 +7,107 @@ from advprint import AdvPrint
 import multibin_limit as mb
 import multibin_limit_full as mbfull
 
+def calc_point( path, analysis, mbsr ):
+    
+    inv_r = 10. 
+    inv_r_exp = 10. 
+    cls_obs = 1. 
+    cls_exp = [1.,1.,1.,1.,1.]
+    
+    os.system("mkdir -p " + path + '/multibin_limits')
+    mbfull.init(path, analysis, mbsr)
+    names = mbfull.SR_dict.keys()
+    SRs = mbfull.data_from_CMresults(path)
+    o, b, db, s, ds = mbfull.select_MBsr(names, SRs)
+    patchset = mbfull.create_patchset(path, names, s, ds, systematics = 0)
+    signal0 = pyhf.PatchSet(patchset)["Signal0"]
+    
+    stat_wrapper = spey.get_backend ("pyhf")
+    
+    with open(Info.paths['data']+ "/" + analysis + "/pyhf_conf.json") as serialized:
+        conf = json.load(serialized)
+    ind = [x['name'] for x in conf["analysis"]].index(mbsr)
+    bkgonly = conf["analysis"][ind]['bkgonly']
+                
+    with open(Info.paths['data']+ "/" + analysis + '/Likelihoods/' + bkgonly) as serialized:
+        bckg_input = json.load(serialized)
+    
+    stat_model = stat_wrapper(analysis="simple_pyhf", background_only_model = bckg_input, signal_patch = signal0)
+    
+    string = "================================\n Analysis: "+analysis+" , SR: "+mbsr+"\n"
+    string += f"Limits with full likelihood (spey):\n"
+    if Info.flags["mbcls"]:
+        AdvPrint.cout("Observed:")
+        cls_obs = stat_model.exclusion_confidence_level(expected = spey.ExpectationType.observed)
+        AdvPrint.cout("CL95: "+str(1. - cls_obs[0]) )
+        string += f"Observed CLs for mu = 1: {1. - cls_obs[0]}"+'\n'
+        if Info.flags["expected"]:
+            cls_exp =  stat_model.exclusion_confidence_level(expected = spey.ExpectationType.apriori) 
+            string = string+f"Expected CLs band for mu = 1: {[1.-exp for exp in cls_exp]}"+'\n'
+    if Info.flags["uplim"]:
+        AdvPrint.cout("Observed:")
+        inv_r = stat_model.poi_upper_limit(expected = spey.ExpectationType.observed)
+        string = string+f"Observed upper limit: mu = {inv_r:.4f}"+'\n'
+        AdvPrint.cout("Upper limit: "+str(inv_r) )
+        if Info.flags["expected"]:
+            inv_r_exp =  stat_model.poi_upper_limit(expected = spey.ExpectationType.apriori) 
+            #inv_r_exp_1sigma =  stat_model.poi_upper_limit(expected = spey.ExpectationType.apriori, expected_pvalue="1sigma")  # for the band 1 (2) sigma band
+            string = string+f"Expected upper limit: mu = {inv_r_exp:.4f}"+'\n'
+    string += "\n================================\n"
+    
+    with open(path+'/multibin_limits/'+"results.dat", "a") as write_file:
+        write_file.write(string)
+
+    return inv_r, inv_r_exp, 1-cls_obs[0], cls_exp
+
+def calc_cov(path, analysis, mbsr):
+    
+    inv_r = 10. 
+    inv_r_exp = 10. 
+    cls_obs = 1. 
+    cls_exp = [1.,1.,1.,1.,1.]
+    
+    os.system("mkdir -p " + path + '/multibin_limits')
+    
+    mb_signal_regions = Info.get_analysis_parameters(analysis)["mb_signal_regions"]
+    sr_list = mb_signal_regions[mbsr]
+    o, b, db, s, ds = mb.select_MBsr(sr_list, mb.data_from_CMresults(Info.paths['output'])) #prepare data
+    stat_wrapper = spey.get_backend ("default_pdf.correlated_background")
+    
+    cov_mat = mb.get_cov(analysis, db, Info.flags["corr"])
+    if  Info.flags["corr"] and analysis == "cms_1908_04722":
+        covariance = "correlation"
+    else:    
+        covariance = "covariance"
+    stat_model = stat_wrapper(signal_yields = np.array(s), background_yields = np.array(b), data = np.array(o), covariance_matrix = np.array(cov_mat))
+    
+    string = "================================\n Analysis: "+analysis+" , SR: "+mbsr+"\n"
+    string = string + "Limits with "+ covariance + " matrix likelihood (spey):\n"
+    if Info.flags["mbcls"]:
+        AdvPrint.cout("Observed:")
+        cls_obs = stat_model.exclusion_confidence_level(expected = spey.ExpectationType.observed)
+        AdvPrint.cout("CL95: "+str(1. - cls_obs[0]) )
+        string += f"Observed CLs for mu = 1: {1. - cls_obs[0]}"+'\n'
+        if Info.flags["expected"]:
+            cls_exp =  stat_model.exclusion_confidence_level(expected = spey.ExpectationType.apriori) 
+            string = string+f"Expected CLs band for mu = 1: {[1.-exp for exp in cls_exp]}"+'\n'
+    if Info.flags["uplim"]:
+        AdvPrint.cout("Observed:")
+        inv_r = stat_model.poi_upper_limit(expected = spey.ExpectationType.observed)
+        string = string+f"Observed upper limit: mu = {inv_r:.4f}"+'\n'
+        AdvPrint.cout("Upper limit: "+str(inv_r) )
+        if Info.flags["expected"]:
+            inv_r_exp =  stat_model.poi_upper_limit(expected = spey.ExpectationType.apriori) 
+            #inv_r_exp_1sigma =  stat_model.poi_upper_limit(expected = spey.ExpectationType.apriori, expected_pvalue="1sigma")  # for the band 1 (2) sigma band
+            string = string+f"Expected upper limit: mu = {inv_r_exp:.4f}"
+    string += "\n================================\n"
+    
+    with open(path+'/multibin_limits/'+"results.dat", "a") as write_file:
+        write_file.write(string)
+
+    return inv_r, inv_r_exp, 1-cls_obs[0], cls_exp    
+
+
 def get_limits():
 
     best_invr=10.
@@ -24,6 +125,7 @@ def get_limits():
     for analysis in Info.analyses:
         if "mb_signal_regions" in Info.get_analysis_parameters(analysis) and Info.get_analysis_parameters(analysis)["likelihoods"] == "y": #ATLAS
             mb_signal_regions = Info.get_analysis_parameters(analysis)["mb_signal_regions"]
+            mb_signal_regions = ["SR-S-high-ee"]
             for mbsr in mb_signal_regions:
                 
                 AdvPrint.cout("Calculating full likelihood upper limits and CLs for analysis: "+analysis+", SR: "+mbsr+"... ")
