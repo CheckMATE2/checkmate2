@@ -155,6 +155,7 @@ libanalyses_la_SOURCES += include/analyses/CMS_13TeV/cms_1908_04722.h src/analys
 libanalyses_la_SOURCES += include/analyses/CMS_13TeV/cms_2107_13201.h src/analyses/CMS_13TeV/cms_2107_13201.cc
 libanalyses_la_SOURCES += include/analyses/CMS_13TeV/cms_2205_09597.h src/analyses/CMS_13TeV/cms_2205_09597.cc
 libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2106_01676.h src/analyses/ATLAS_13TeV/atlas_2106_01676.cc
+libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2006_05880.h src/analyses/ATLAS_13TeV/atlas_2006_05880.cc
 #@@extraanalysis@@
 
 libanalyses_la_LDFLAGS = -avoid-version -shared

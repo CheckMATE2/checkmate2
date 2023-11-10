@@ -2,21 +2,24 @@
 
 // AUTHOR: K. Rolbiecki
 //  EMAIL: krolb@fuw.edu.pl
+// AUTHOR: Inaki Lara Perez
+//  EMAIL: Inaki.Lara@fuw.edu.pl
 void Atlas_2004_14060::initialize() {
   setAnalysisName("atlas_2004_14060");          
   setInformation(""
     "# stops, leptoquarks, 0 lepton\n"
   "");
   setLuminosity(139.0*units::INVFB);      
-  bookSignalRegions("SRA-TT;SRA-TW;SRA-T0;SRB-TT;SRB-TW;SRB-T0;SRD0;SRD1;SRD2");
+  bookSignalRegions("SRA-TT;SRA-TW;SRA-T0;SRB-TT;SRB-TW;SRB-T0;SRC1;SRC2;SRC3;SRC4;SRC5;SRD0;SRD1;SRD2");
   // You can also book cutflow regions with bookCutflowRegions("CR1;CR2;..."). Note that the regions are
   //  always ordered alphabetically in the cutflow output files.
 
-  // You should initialize any declared variables here
+  // You should initialize any declared variables here  
+    
 }
 
 void Atlas_2004_14060::analyze() {
-
+  n++   ; 
   missingET->addMuons(muonsCombined); 
   
   electronsLoose = filterPhaseSpace(electronsLoose, 4.5, -2.47, 2.47);
@@ -48,7 +51,7 @@ void Atlas_2004_14060::analyze() {
   for (int i = 0; i < tracks.size(); i++) 
      if ( tracks[i]->PT > 0.5 and fabs(tracks[i]->Eta) < 2.5 ) track_MET -= tracks[i]->P4();   
 
-  pTmiss = TLorentzVector(0., 0., 0., 0.);
+   pTmiss = TLorentzVector(0., 0., 0., 0.);
   resolution = 0.;
   for (int i = 0; i < jets.size(); i++) 
     pTmiss -= jets[i]->P4();     
@@ -67,7 +70,7 @@ void Atlas_2004_14060::analyze() {
   }
   
   pTmiss += pTmiss_soft;
-  
+
   //for (int i = 0; i < jets.size(); i++)
   //   resolution += pow( 0.77*pow(jets[i]->PT, -0.39) * jets[i]->PT * cos(jets[i]->P4().DeltaPhi(pTmiss)), 2)*0.6; 
    //rough relative jet resolution fit from 2007.02645 fig. 29 : 0.77 * PT^(-0.39)  
@@ -98,12 +101,24 @@ void Atlas_2004_14060::analyze() {
   std::vector<fastjet::PseudoJet> largeR12 = sorted_by_pt(cs12.inclusive_jets());  
   std::vector<fastjet::PseudoJet> largeR08 = sorted_by_pt(cs08.inclusive_jets());  
 
+
   if ( SRA( jets, bjets, nonbjets, largeR12, largeR08, 120., 10000., 1.0, "SRA-TT") ) countSignalEvent("SRA-TT");
   if ( SRA( jets, bjets, nonbjets, largeR12, largeR08,  60.,   120.,-1.0, "SRA-TW") ) countSignalEvent("SRA-TW");
   if ( SRA( jets, bjets, nonbjets, largeR12, largeR08,   0.,    60.,-1.0, "SRA-T0") ) countSignalEvent("SRA-T0");
   if ( SRB( jets, bjets, nonbjets, largeR12, 120., 10000., "SRB-TT") ) countSignalEvent("SRB-TT");
   if ( SRB( jets, bjets, nonbjets, largeR12,  60.,   120., "SRB-TW") ) countSignalEvent("SRB-TW");
   if ( SRB( jets, bjets, nonbjets, largeR12,   0.,    60., "SRB-T0") ) countSignalEvent("SRB-T0");  
+  
+  
+  jigsaw(jets, bjets, nonbjets);
+  if ( SRC(jets, bjets, nonbjets,  "SRC" ) ) {
+     if ((0.3<=RISR)&&(RISR<0.4)) countSignalEvent("SRC1");    
+     if ((0.4<=RISR)&&(RISR<0.5)) countSignalEvent("SRC2");  
+     if ((0.5<=RISR)&&(RISR<0.6)) countSignalEvent("SRC3"); 
+     if ((0.6<=RISR)&&(RISR<0.7)) countSignalEvent("SRC4");  
+     if (RISR>0.7) countSignalEvent("SRC5"); 
+  }
+  //
   if ( SRD( nonbjets, "SRD" ) ) {
      
      btrackjets.clear(); 
@@ -120,6 +135,7 @@ void Atlas_2004_14060::analyze() {
   }
    
   //cout << "End event" << '\n';
+        
   return;
 }
 
@@ -150,7 +166,7 @@ bool Atlas_2004_14060::SRA( std::vector<Jet*> jets, std::vector<Jet*> bjets, std
   for (int i = 0; i < 4; i++)
     if ( fabs(jets[i]->P4().DeltaPhi(pTmiss)) < 0.4 ) return false;
   if  (cf != "") countCutflowEvent(cf+"_08_dPhi(jet,MET)");  
-  
+    
   if ( mTbmin(bjets) < 50. ) return false;
   if (cf != "") countCutflowEvent(cf+"_09_mTbmin>50");  
   
@@ -207,7 +223,7 @@ bool Atlas_2004_14060::SRA( std::vector<Jet*> jets, std::vector<Jet*> bjets, std
   if ( largeR08.size() == 0 or largeR08[0].m() < 60. ) return false;  
   if  (cf != "") countCutflowEvent(cf+"_16_m0j0.8");  
     
-  if (met/sqrt(ht) < 23.) return false;   //OK substitute here a simple significance aka "event-based"
+  //if (met/sqrt(ht) < 23.) return false;   //OK substitute here a simple significance aka "event-based"
 //  if (met/sqrt(resolution) < 25.) return false;
 //  if (calcMETSignificance(jets) < 25.) return false;
   if  (cf != "") countCutflowEvent(cf+"_17_S>25");
@@ -548,7 +564,6 @@ double Atlas_2004_14060::mT2chi2(const TLorentzVector & vis1, const TLorentzVect
 
 
 double Atlas_2004_14060::mTbmin(std::vector<Jet*> bjets) {
-  
   double dphi_min = 100.;
   int i_min = 100;
   for (int i = 0; i < bjets.size(); i++ ) {
@@ -560,6 +575,9 @@ double Atlas_2004_14060::mTbmin(std::vector<Jet*> bjets) {
     }
   }
 //  return mT(bjets[i_min]->P4(), missingET->P4(), 0.);
+     
+    
+  //return sqrt(2.*bjets[i_min]->PT*missingET->P4().Perp()*(1. - cos(bjets[i_min]->P4().DeltaPhi(pTmiss))));
   return sqrt(2.*bjets[i_min]->PT*pTmiss.Perp()*(1. - cos(bjets[i_min]->P4().DeltaPhi(pTmiss))));
 }
 
@@ -577,6 +595,7 @@ double Atlas_2004_14060::mTbmax(std::vector<Jet*> bjets) {
   }  
 //  return mT(bjets[i_max]->P4(), missingET->P4(), 0.);
   return sqrt(2.*bjets[i_max]->PT*pTmiss.Perp()*(1. - cos(bjets[i_max]->P4().DeltaPhi(pTmiss))));
+   // return sqrt(2.*bjets[i_max]->PT*missingET->P4().Perp()*(1. - cos(bjets[i_max]->P4().DeltaPhi(pTmiss))));  
 }
 
 std::vector<TLorentzVector> Atlas_2004_14060::findtrackjets(Jet* leading) {
@@ -678,3 +697,212 @@ double Atlas_2004_14060::calcMETSignificance(std::vector<Jet*> jets) {
   return significance;  
     
 }
+
+
+
+
+
+bool Atlas_2004_14060::SRC( std::vector<Jet*> jets, std::vector<Jet*> bjets, std::vector<Jet*> nonbjets,std::string cf) {
+
+
+
+
+
+ if (jets.size() < 4) return false;
+  if  (cf != "") countCutflowEvent(cf+"_03_4jets");    
+  
+  if (bjets.size() < 1) return false;
+  if  (cf != "") countCutflowEvent(cf+"_04_2bjets");    
+  
+  if (electronsLoose.size() + muonsCombined.size() != 0) return false;
+  if  (cf != "") countCutflowEvent(cf+"_05_lepton_veto");     
+
+  if (jets[3]->PT < 40.) return false;
+  if  (cf != "") countCutflowEvent(cf+"_06_jet4>40");  
+  
+  if (jets[1]->PT < 80.) return false;
+  if  (cf != "") countCutflowEvent(cf+"_07_jet2>80");      
+  
+  for (int i = 0; i < 4; i++){
+    if ( fabs(jets[i]->P4().DeltaPhi(pTmiss)) < 0.2 ) return false;}
+  if  (cf != "") countCutflowEvent(cf+"_08_dPhi(jet,MET)");  
+  
+  if  (cf != "") countCutflowEvent(cf+"_09_Significance>5");  
+    
+   if (NSj< 4.) return false; 
+  if  (cf != "") countCutflowEvent(cf+"_10_NSj>=4");   
+  
+     if (NSb< 2.) return false; 
+  if  (cf != "") countCutflowEvent(cf+"_11_NSb>=2");   
+
+     if (mS< 400.) return false; 
+  if  (cf != "") countCutflowEvent(cf+"_12_mS>400");    
+  
+     if (pTSb1< 40.) return false; 
+  if  (cf != "") countCutflowEvent(cf+"_13_pTSb1>40");      
+
+     if (fabs(delta_pTISR_miss)<3.00) return false; 
+  if  (cf != "") countCutflowEvent(cf+"_14_delta_pTISR_miss>3");      
+  
+     if (ptISR<400) return false; 
+  if  (cf != "") countCutflowEvent(cf+"_15_ptISR>400");   
+
+     if (pTS4<50) return false; 
+  if  (cf != "") countCutflowEvent(cf+"_16_pTS4>50");     
+ 
+ pTmiss_track = TLorentzVector(0.,0.,0.,0.);
+  for (int i = 0; i < tracks.size(); i++) 
+     if ( tracks[i]->PT > 0.5 and fabs(tracks[i]->Eta) < 2.5 ) pTmiss_track -= tracks[i]->P4(); 
+ 
+   if ( fabs(pTmiss_track.DeltaPhi( pTmiss )) > M_PI/3. ) return false;
+  if  (cf != "") countCutflowEvent(cf+"_17_dPhi2<pi/3");     
+  
+  if ( pTmiss_track.Perp() < 30. ) return false;
+  if  (cf != "") countCutflowEvent(cf+"_18_trackMET>30");   
+  
+      return true;
+  
+}
+
+std::vector<std::vector<int>> Atlas_2004_14060::combinations(int N, int K)
+{
+    std::vector<std::vector<int>> result;
+    std::string bitmask(K, 1); 
+    bitmask.resize(N, 0); 
+    
+    do {std::vector<int> combination;
+        for (int i = 0; i < N; ++i) 
+        {
+            if (bitmask[i]) combination.push_back(i);
+        }
+	result.push_back(combination);
+    } while (std::prev_permutation(bitmask.begin(), bitmask.end()));
+    return result;
+}
+
+
+void Atlas_2004_14060::jigsaw(std::vector<Jet*> jets, std::vector<Jet*> bjets, std::vector<Jet*> nonbjets)
+{
+
+
+	TLorentzVector pCM = TLorentzVector(0., 0., 0., 0.);
+	TLorentzVector pTMISS = TLorentzVector( missingET->P4().Px(), missingET->P4().Py(),0,missingET->P4().Et());
+	pCM=pCM+pTMISS;
+   
+	TLorentzVector pS_CM_temp= TLorentzVector(0., 0., 0., 0.);
+	TLorentzVector pISR_CM_temp= TLorentzVector(0., 0., 0., 0.);
+	std::vector<int> partition;
+	int partitionN=0;
+	for (int i=0;i<nonbjets.size();i++){
+		TLorentzVector Tjet=Tproject(nonbjets[i]);
+		pCM=pCM+Tjet;
+	}
+	for (int i=0;i<bjets.size();i++){
+		TLorentzVector Tjet=Tproject(bjets[i]);
+		pCM=pCM+Tjet;
+	}
+	TLorentzVector pI_CM = TLorentzVector(0., 0., 0., 0.);
+	pI_CM=pI_CM+pTMISS;
+	pI_CM.Boost(-pCM.BoostVector());
+	TLorentzVector pCM_CM =TLorentzVector(0., 0., 0., 0.);
+	pCM_CM=pCM;
+	pCM_CM.Boost(-pCM.BoostVector());
+	double MCM=pCM_CM.Mt();
+	double temp=0;
+	
+	for (int n=0;n<=nonbjets.size();n++){
+		std::vector<std::vector<int>> comb=combinations(nonbjets.size(),n);
+		for (int i=0;i<comb.size();i++){
+		TLorentzVector pS_LAB=TLorentzVector(0., 0., 0., 0.);
+		TLorentzVector pISR_LAB=TLorentzVector(0., 0., 0., 0.);
+		pS_LAB = pS_LAB+pTMISS;
+		for (int ii=0;ii<bjets.size();ii++){
+			pS_LAB=pS_LAB+Tproject(bjets[ii]);
+		}		
+
+			for (int j=0;j<nonbjets.size();j++){
+				bool isS=false;
+				for(int k=0;k<(comb[i]).size();k++){
+					if ((comb[i])[k]==j){
+					pS_LAB=pS_LAB+Tproject(nonbjets[j]);
+					;isS=true;break;}
+				}
+				if (!isS){
+				pISR_LAB=pISR_LAB+Tproject(nonbjets[j]);}
+				}
+			pS_LAB.Boost(-pCM.BoostVector());
+			pISR_LAB.Boost(-pCM.BoostVector());
+			TLorentzVector pS_CM=pS_LAB;
+			TLorentzVector pISR_CM=pISR_LAB;
+
+			if (fabs(pS_CM.Pt())>temp){
+				temp=fabs(pS_CM.Pt());
+				pS_CM_temp=pS_CM;
+				pISR_CM_temp=pISR_CM;				
+				partitionN=n;
+				partition=comb[i];
+			}
+		}
+	}
+	
+
+	std::vector<TLorentzVector> Sjets;
+	
+	NSj=partition.size()+bjets.size();
+	NSb=bjets.size();
+	TLorentzVector pISR=TLorentzVector(0., 0., 0., 0.);
+	TLorentzVector pS=TLorentzVector(0., 0., 0., 0.);
+    pS = pS+ pTMISS;
+        TLorentzVector pSb1=TLorentzVector(0., 0., 0., 0.);
+        TLorentzVector pS4=TLorentzVector(0., 0., 0., 0.);
+        bool flagb=true;
+
+	for (int i=0;i<nonbjets.size();i++){
+		bool isS=false;
+		for(int j=0;j<partition.size();j++){
+		if (partition[j]==i){
+		sjet =  Tproject(nonbjets[i]); Sjets.push_back(sjet);pS=pS+sjet;isS=true;}
+		}
+		if (!isS){
+		TLorentzVector pT = Tproject(nonbjets[i]);
+		pISR=pISR+pT;}
+	}
+	for (int i=0;i<bjets.size();i++){
+		sjet = Tproject(bjets[i]);
+	        Sjets.push_back(sjet);
+	        pS=pS+sjet;
+		if (flagb){pSb1=pSb1+sjet;flagb=false;}
+	}	
+
+        std::sort (Sjets.begin(), Sjets.end(), comparept);
+	if (Sjets.size()>3){
+	pS4=Sjets[3];}
+    pISR.Boost(-pCM.BoostVector());
+    pS.Boost(-pCM.BoostVector());
+    pS4.Boost(-pCM.BoostVector());
+    pSb1.Boost(-pCM.BoostVector());
+	ptISR=pISR.Pt();
+	pTSb1=pSb1.Pt();
+	pTS4=pS4.Pt();
+	mS=pS.Mt();
+	delta_pTISR_miss=fabs(pISR.DeltaPhi(pI_CM));
+	RISR=fabs(pI_CM.Pt()*cos(pI_CM.DeltaPhi(pISR)))/(fabs(ptISR));
+	
+	
+}
+
+template<class T>
+TLorentzVector Atlas_2004_14060::Tproject(T* p){
+
+TLorentzVector pT=TLorentzVector(0,0,0,0);
+double Et=std::sqrt(std::pow(p->P4().M(),2)+std::pow(p->P4().Pt(),2));
+double Px=p->P4().Px();
+double Py=p->P4().Py();
+double Pz=0;
+pT.SetPxPyPzE(Px,Py,Pz,Et);
+ return pT;
+}
+
+bool Atlas_2004_14060::comparept(TLorentzVector vect1,TLorentzVector vect2){
+ return ((vect1.Pt())>(vect2.Pt()));
+ }

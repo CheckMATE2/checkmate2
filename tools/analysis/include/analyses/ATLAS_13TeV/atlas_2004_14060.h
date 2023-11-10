@@ -14,7 +14,7 @@ class Atlas_2004_14060 : public AnalysisBase {
     void finalize();
 
   private:
-      
+          int n=0;
     TLorentzVector pTmiss, pTmiss_track; double ht, met, resolution;
     std::vector<TLorentzVector> trackjets, btrackjets; std::vector<Track*> softtracks;
     
@@ -26,6 +26,7 @@ class Atlas_2004_14060 : public AnalysisBase {
     double mTbmax(std::vector<Jet*> bjets);
     bool SRA( std::vector<Jet*> jets, std::vector<Jet*> bjets, std::vector<Jet*> nonbjets, std::vector<fastjet::PseudoJet> largeR12, std::vector<fastjet::PseudoJet> largeR08, double lR1_cutlow, double lR1_cuthigh, double deltaRbb, std::string cf);
     bool SRB( std::vector<Jet*> jets, std::vector<Jet*> bjets, std::vector<Jet*> nonbjets, std::vector<fastjet::PseudoJet> largeR12, double lR1_cutlow, double lR1_cuthigh, std::string cf);
+    bool SRC(std::vector<Jet*> jets, std::vector<Jet*> bjets, std::vector<Jet*> nonbjets,std::string cf);
     bool SRD( std::vector<Jet*> nonbjets, std::string cf); 
     bool SRD0(  std::vector<Jet*> jets, std::vector<Jet*> bjets, std::vector<Jet*> nonbjets, std::string cf );
     bool SRD1( std::vector<Jet*> bjets, std::vector<Jet*> nonbjets, std::string cf );
@@ -34,6 +35,15 @@ class Atlas_2004_14060 : public AnalysisBase {
     bool trackbtag( TLorentzVector jetin);
     void rotateXY(TMatrix &mat, TMatrix &mat_new, double phi);
     double calcMETSignificance(std::vector<Jet*> jets);
+    std::vector<std::vector<int>> combinations(int N,int K);
+    
+       int NSj,NSb;
+   float ptISR,pTSb1,pTS4,mS,delta_pTISR_miss,RISR;
+   void jigsaw(std::vector<Jet*> jets, std::vector<Jet*> bjets, std::vector<Jet*> nonbjets);
+   static bool comparept(TLorentzVector vect1,TLorentzVector vect2);
+   TLorentzVector sjet;
+   template<class T>
+   TLorentzVector Tproject(T* p);
 };
 
 #endif

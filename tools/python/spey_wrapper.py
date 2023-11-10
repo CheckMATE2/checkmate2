@@ -17,22 +17,29 @@ def calc_point( path, analysis, mbsr ):
     os.system("mkdir -p " + path + '/multibin_limits')
     
     if analysis == "atlas_2101_01629":
+        zeroev = True
         for mbhist in Info.get_analysis_parameters(analysis)["mb_histos"]:
             mbfull.init(path, analysis, mbhist)
             names = mbfull.SR_dict.keys()
             SRs = mbfull.data_from_CMresults(path)
             o, b, db, s, ds = mbfull.select_MBsr(names, SRs)
+            if max(s) > 0.:
+                zeroev = False
             if mbhist == "2J_bveto":
                 patchset = mbfull.create_patchset(path, names, s, ds, systematics = 0)
             else:    
-                patchset = mbfull.add_patchset(path, names, s, ds, patchset, systematics = 0)        
+                patchset = mbfull.add_patchset(path, names, s, ds, patchset, systematics = 0)       
+            if zeroev:
+                AdvPrint.cout("No signal events in the selected SRs! Skipping")
+                return 10., 10., 1., 1.
+                
     else:        
         mbfull.init(path, analysis, mbsr)
         names = mbfull.SR_dict.keys()
         SRs = mbfull.data_from_CMresults(path)
         o, b, db, s, ds = mbfull.select_MBsr(names, SRs)
         if max(s) == 0.:
-            AdvPrint.cout("No signal events in the selected SRs!")
+            AdvPrint.cout("No signal events in the selected SRs! Skipping")
             return 10., 10., 1., 1.
         patchset = mbfull.create_patchset(path, names, s, ds, systematics = 0)
     
