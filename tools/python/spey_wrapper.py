@@ -15,11 +15,29 @@ def calc_point( path, analysis, mbsr ):
     cls_exp = [1.,1.,1.,1.,1.]
     
     os.system("mkdir -p " + path + '/multibin_limits')
-    mbfull.init(path, analysis, mbsr)
-    names = mbfull.SR_dict.keys()
-    SRs = mbfull.data_from_CMresults(path)
-    o, b, db, s, ds = mbfull.select_MBsr(names, SRs)
-    patchset = mbfull.create_patchset(path, names, s, ds, systematics = 0)
+    
+    if analysis == "atlas_2101_01629":
+        for mbhist in Info.get_analysis_parameters(analysis)["mb_histos"]:
+            mbfull.init(path, analysis, mbhist)
+            names = mbfull.SR_dict.keys()
+            SRs = mbfull.data_from_CMresults(path)
+            o, b, db, s, ds = mbfull.select_MBsr(names, SRs)
+            if mbhist == "2J_bveto":
+                patchset = mbfull.create_patchset(path, names, s, ds, systematics = 0)
+            else:    
+                patchset = mbfull.add_patchset(path, names, s, ds, patchset, systematics = 0)        
+    else:        
+        mbfull.init(path, analysis, mbsr)
+        names = mbfull.SR_dict.keys()
+        SRs = mbfull.data_from_CMresults(path)
+        o, b, db, s, ds = mbfull.select_MBsr(names, SRs)
+        if max(s) == 0.:
+            AdvPrint.cout("No signal events in the selected SRs!")
+            return 10., 10., 1., 1.
+        patchset = mbfull.create_patchset(path, names, s, ds, systematics = 0)
+    
+    with open(path+'/multibin_limits/'+"workspace.json", "w") as write_file:
+        json.dump(patchset, write_file, indent=4)       
     signal0 = pyhf.PatchSet(patchset)["Signal0"]
     
     stat_wrapper = spey.get_backend ("pyhf")
@@ -39,6 +57,9 @@ def calc_point( path, analysis, mbsr ):
     if Info.flags["mbcls"]:
         AdvPrint.cout("Observed:")
         cls_obs = stat_model.exclusion_confidence_level(expected = spey.ExpectationType.observed)
+        if 1. - cls_obs[0] < 0.00000001:
+            cls_obs[0] = 0.
+            AdvPrint.cout("CLs calculation unreliable.")
         AdvPrint.cout("CL95: "+str(1. - cls_obs[0]) )
         string += f"Observed CLs for mu = 1: {1. - cls_obs[0]}"+'\n'
         if Info.flags["expected"]:

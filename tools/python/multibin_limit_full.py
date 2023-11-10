@@ -96,8 +96,8 @@ def select_MBsr(names, SRs):
             b.append(sr['b'])
             db.append(sr['db'])
             o.append(sr['o'])
-            s.append(max(sr['s'],1e-3))
-            ds.append(max(min(sr['s'],sr['ds']),1e-4))
+            s.append(max(sr['s'],0.))
+            ds.append(max(min(sr['s'],sr['ds']),0.))
     return o,b,db,s,ds
 
 #Creates a patch for the sample passed, based in the workspace in spec.
@@ -149,6 +149,50 @@ def patch(sample, spec, systematics = 0):
         }
         )
     return patch
+
+def add_patch(patch, sample, spec, systematics = 0):
+    
+    for i,channel in zip(range(len(spec['channels'])),[x["name"] for x in spec['channels']]):
+        path = "/channels/"+str(i)+"/samples/"+str(len(spec['channels'][i]['samples']))
+        if channel in [ name for name in sample["SRs"]]:
+            if histosize == 1:
+                names = [name for name in sample["SRs"]]
+                s = [sample["s"][names.index(channel)]]
+                ds = [sample["ds"][names.index(channel)]]
+            else:
+                names = [name+"["+str(i)+"]" for name,i in zip(sample["SRs"],range(histosize))]
+                s = sample["s"]
+                ds = sample["ds"]
+
+            for i in range(14):
+                if path == patch["patches"][0]["patch"][i]["path"]:
+                    patch["patches"][0]["patch"][i] = {"op": "add","path": path,"value": {"data": s,"modifiers": [
+                            {
+                                "data": None,
+                                "name": "lumi",
+                                "type": "lumi"
+                            },
+                            {
+                                "data": None,
+                                "name": "mu_SIG",
+                                "type": "normfactor"
+                            },
+                            {
+                                "data": ds,
+                                "name": "staterror_"+channel,
+                                "type": "staterror"
+                            },
+                            {   "name": "sistematics",
+                                "type": "normsys",
+                                "data": {"hi": 1+systematics, "lo": 1-systematics}
+                            }
+                        ],
+                        "name":sample["name"]
+                }
+            }
+                            
+    return patch
+                
     
 #Creates the patchset from the data and exports it to a new folder path/pyhf/ in json format.
 def create_patchset(path, names, s, ds, systematics = 0):
@@ -163,14 +207,48 @@ def create_patchset(path, names, s, ds, systematics = 0):
     else:
         samples = [{"name":'Signal0',"id":len(spec_patchset["patches"][0]["metadata"]["values"])*[''],"SRs":[x[:-3] for x in names],"s":s,"ds":ds}]
 
+    with open(path+'/multibin_limits/'+"sample.json", "w") as write_file:
+        json.dump(samples, write_file, indent=4)
+
     if "analysis_id" in spec_patchset["metadata"]:
         temp_key = spec_patchset["metadata"]["analysis_id"]
     else:
         temp_key = "random_analysis"
     workspace_new = {"metadata": {"analysis_id": temp_key,"description": spec_patchset["metadata"]["description"],"digests": {"sha256": ""},"labels": spec_patchset["metadata"]["labels"],"references": {"hepdata": spec_patchset["metadata"]["references"]["hepdata"]}},"patches": [],"version": "1.0.0"}
     for sample in samples:
+        #print("sample "+str(sample)+'\n')
         workspace_new["patches"].append(patch(sample,spec,systematics))
     workspace_new["metadata"]["digests"]["sha256"]=hashlib.sha256(json.dumps(workspace_new).encode('utf8')).hexdigest()
+    #with open(path+'/multibin_limits/'+"workspace.json", "w") as write_file:
+    #    json.dump(workspace_new, write_file, indent=4)
+    return workspace_new
+
+def add_patchset(path, names, s, ds, workspace_new, systematics = 0):
+    import hashlib
+    with open(hepfiles_folder+analysis_name+"/Likelihoods/"+bkgonly) as serialized:
+        spec = json.load(serialized)
+    with open(hepfiles_folder+analysis_name+"/Likelihoods/"+f_patchset) as serialized:
+        spec_patchset = json.load(serialized)
+
+    if histosize == 1:
+        samples = [{"name":'Signal0',"id":len(spec_patchset["patches"][0]["metadata"]["values"])*[''],"SRs":names,"s":s,"ds":ds}]
+    else:
+        samples = [{"name":'Signal0',"id":len(spec_patchset["patches"][0]["metadata"]["values"])*[''],"SRs":[x[:-3] for x in names],"s":s,"ds":ds}]
+
+    with open(path+'/multibin_limits/'+"sample2.json", "w") as write_file:
+        json.dump(samples, write_file, indent=4)
+
+    if "analysis_id" in spec_patchset["metadata"]:
+        temp_key = spec_patchset["metadata"]["analysis_id"]
+    else:
+        temp_key = "random_analysis"
+    #workspace_new = {"metadata": {"analysis_id": temp_key,"description": spec_patchset["metadata"]["description"],"digests": {"sha256": ""},"labels": spec_patchset["metadata"]["labels"],"references": {"hepdata": spec_patchset["metadata"]["references"]["hepdata"]}},"patches": [],"version": "1.0.0"}
+    for sample in samples:
+        #workspace_new["patches"].append(patch(sample,spec,systematics))
+        workspace_new = add_patch(workspace_new, sample, spec, systematics)
+    workspace_new["metadata"]["digests"]["sha256"]=hashlib.sha256(json.dumps(workspace_new).encode('utf8')).hexdigest()
+    with open(path+'/multibin_limits/'+"workspace.json", "w") as write_file:
+        json.dump(workspace_new, write_file, indent=4)
     return workspace_new
 
 

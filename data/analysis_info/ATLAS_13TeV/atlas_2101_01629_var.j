@@ -349,6 +349,36 @@
   ],
   "likelihoods": "y",
   "mb_signal_regions": {
+      "combined": [
+      "2J_bveto_700", 
+      "2J_bveto_1300", 
+      "2J_bveto_1900",
+      "2J_btag_700", 
+      "2J_btag_1300", 
+      "2J_btag_1900",
+      "4J_lx_bveto_1000", 
+      "4J_lx_bveto_1600", 
+      "4J_lx_bveto_2200",
+      "4J_lx_btag_1000", 
+      "4J_lx_btag_1600", 
+      "4J_lx_btag_2200",
+      "4J_hx_bveto_1000", 
+      "4J_hx_bveto_1600", 
+      "4J_hx_bveto_2200",
+      "4J_hx_btag_1000", 
+      "4J_hx_btag_1600", 
+      "4J_hx_btag_2200",
+      "6J_bveto_700", 
+      "6J_bveto_1400", 
+      "6J_bveto_2100", 
+      "6J_bveto_2800",
+      "6J_btag_700", 
+      "6J_btag_1400", 
+      "6J_btag_2100", 
+      "6J_btag_2800"
+    ]
+  },
+  "!mb_signal_regions": {
     "2J_bveto": [  
       "2J_bveto_700", 
       "2J_bveto_1300", 
@@ -391,5 +421,49 @@
       "6J_btag_2100", 
       "6J_btag_2800"
     ]
-  }          
+  },
+  "mb_histos": {
+    "2J_bveto": [  
+      "2J_bveto_700", 
+      "2J_bveto_1300", 
+      "2J_bveto_1900"
+    ],
+    "2J_btag": [    
+      "2J_btag_700", 
+      "2J_btag_1300", 
+      "2J_btag_1900"
+    ],
+    "4J_lx_bveto": [    
+      "4J_lx_bveto_1000", 
+      "4J_lx_bveto_1600", 
+      "4J_lx_bveto_2200"
+    ],
+    "4J_lx_btag": [
+      "4J_lx_btag_1000", 
+      "4J_lx_btag_1600", 
+      "4J_lx_btag_2200"
+    ],
+    "4J_hx_bveto": [     
+      "4J_hx_bveto_1000", 
+      "4J_hx_bveto_1600", 
+      "4J_hx_bveto_2200"
+    ],
+    "4J_hx_btag": [       
+      "4J_hx_btag_1000", 
+      "4J_hx_btag_1600", 
+      "4J_hx_btag_2200"
+    ],
+    "6J_bveto": [
+      "6J_bveto_700", 
+      "6J_bveto_1400", 
+      "6J_bveto_2100", 
+      "6J_bveto_2800"
+    ],
+    "6J_btag": [
+      "6J_btag_700", 
+      "6J_btag_1400", 
+      "6J_btag_2100", 
+      "6J_btag_2800"
+    ]
+  }                    
 }
