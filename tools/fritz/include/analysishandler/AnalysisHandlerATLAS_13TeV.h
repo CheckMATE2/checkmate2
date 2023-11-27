@@ -55,6 +55,7 @@
 #include "atlas_2211_08028.h"
 #include "atlas_2106_01676.h"
 #include "atlas_2006_05880.h"
+#include "atlas_2111_08372.h"
 //@extraheader@
 #include "AnalysisBase.h"
 

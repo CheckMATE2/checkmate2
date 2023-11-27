@@ -276,10 +276,11 @@ def get_cov(analysis, db, corrmat = False):
     if corrmat and os.path.isfile(hepfiles_folder+analysis+"/corr.json"):
         with open(hepfiles_folder+analysis+"/corr.json") as serialized:
             corr = json.load(serialized)
-        corr_mat=np.ones((int(np.sqrt(len(corr["values"]))),int(np.sqrt(len(corr["values"])))))
+        corr_mat=np.identity((int(np.sqrt(len(corr["values"]))),int(np.sqrt(len(corr["values"])))))
         for i in range(len(corr["values"])):
             corr_mat[int(float(corr["values"][i]["x"][0]["value"])-0.5),int(float(corr["values"][i]["x"][1]["value"])-0.5)]=float(corr["values"][i]["y"][0]["value"])
-        cov_mat=np.ones((int(np.sqrt(len(corr["values"]))),int(np.sqrt(len(corr["values"])))))
+            corr_mat[int(float(corr["values"][i]["x"][1]["value"])-0.5),int(float(corr["values"][i]["x"][0]["value"])-0.5)]=float(corr["values"][i]["y"][0]["value"])
+        cov_mat=np.identity((int(np.sqrt(len(corr["values"]))),int(np.sqrt(len(corr["values"])))))
         for i in range(corr_mat.shape[0]):
             for j in range(corr_mat.shape[0]):
                     cov_mat[i,j]=corr_mat[i,j]*db[i]*db[j]
@@ -296,6 +297,7 @@ def get_cov(analysis, db, corrmat = False):
         #print(len(cov["values"]))
         for i in range(len(cov["values"])):
             cov_mat[int(float(cov["values"][i]["x"][0]["value"])-offset),int(float(cov["values"][i]["x"][1]["value"])-offset)]=float(cov["values"][i]["y"][0]["value"])
+            cov_mat[int(float(cov["values"][i]["x"][1]["value"])-offset),int(float(cov["values"][i]["x"][0]["value"])-offset)]=float(cov["values"][i]["y"][0]["value"])
     else:
         AdvPrint.cerr_exit("Missing covariance matrix!")
         

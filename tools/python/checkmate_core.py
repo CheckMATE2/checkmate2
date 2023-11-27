@@ -199,7 +199,7 @@ class CheckMATE2(object):
             AdvPrint.cout("\t - No Monte Carlo statistical uncertainty will be included in the evaluation")    
         if Info.flags['eff_tab']:
             AdvPrint.cout("\t - Efficiency tables will be calculated for each signal region of every analysis run")     
-        if Info.parameters["statmod"] == "simple":
+        if Info.parameters["statmod"] == "simple" and Info.parameters["statcomb"] != "none":
             AdvPrint.cout("\t - Simplified likelihood calculation will be applied to multibin signal regions")    
         if Info.parameters["statmod"] == "full":
             AdvPrint.cout("\t - Full likelihood calculation using Spey interface will be applied to ATLAS multibin signal regions")    

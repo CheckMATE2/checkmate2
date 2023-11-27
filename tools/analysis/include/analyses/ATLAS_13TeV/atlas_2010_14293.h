@@ -16,7 +16,7 @@ class Atlas_2010_14293 : public AnalysisBase {
 
   private:
     
-    TFile *hfile;  TH1F *ggd1, *ggo1;  
+    TFile *hfile;  TH1F *ggd1, *ggd2, *ggd3, *ggd4, *ggo1, *ggo2, *ggo3, *ggo4;  
     
     double met;
     

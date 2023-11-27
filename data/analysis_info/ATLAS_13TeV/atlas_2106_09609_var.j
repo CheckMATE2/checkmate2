@@ -82,6 +82,13 @@
   ], 
   "photon_niso": 1, 
   "reference_data": {
+    "SR0": {
+      "S95_exp": "27.2", 
+      "S95_obs": "12.3", 
+      "bkg": "145", 
+      "bkg_err": "6.0", 
+      "obs": "126"
+    },   
     "SR1": {
       "S95_exp": "12.3", 
       "S95_obs": "12.2", 
@@ -232,6 +239,7 @@
   }, 
   "short_info": "Search for RPV SUSY in final states with leptons and many jets", 
   "signal_regions": [
+    "SR0",
     "SR1", 
     "SR2", 
     "SR3", 

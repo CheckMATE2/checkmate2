@@ -107,6 +107,13 @@ def calc_cov(path, analysis, mbsr):
         covariance = "correlation"
     else:    
         covariance = "covariance"
+    #dim = 200    
+    #det = np.linalg.det(np.array(cov_mat)[0:dim,0:dim])
+    #sign, logdet = np.linalg.slogdet(np.array(cov_mat)[0:dim,0:dim])
+    #AdvPrint.cout("Det: " + str(det))
+    #AdvPrint.cout("Log det: " + str(sign) + " " + str(logdet))
+    #AdvPrint.cout(str(s))
+    #stat_model = stat_wrapper(signal_yields = np.array(s)[0:dim], background_yields = np.array(b)[0:dim], data = np.array(o)[0:dim], covariance_matrix = np.array(cov_mat)[0:dim,0:dim])
     stat_model = stat_wrapper(signal_yields = np.array(s), background_yields = np.array(b), data = np.array(o), covariance_matrix = np.array(cov_mat))
     
     string = "================================\n Analysis: "+analysis+" , SR: "+mbsr+"\n"

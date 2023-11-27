@@ -234,12 +234,15 @@ module Calorimeter Calorimeter {
 
   add EnergyFraction {1000012} {0.0 0.0}
   add EnergyFraction {5000012} {0.0 0.0}
+  add EnergyFraction {5000022} {0.0 0.0}
   add EnergyFraction {1000022} {0.0 0.0}
   add EnergyFraction {1000023} {0.0 0.0}
   add EnergyFraction {1000025} {0.0 0.0}
   add EnergyFraction {1000035} {0.0 0.0}
   add EnergyFraction {1000039} {0.0 0.0}
   add EnergyFraction {1000045} {0.0 0.0}
+  add EnergyFraction {52} {0.0 0.0}
+  add EnergyFraction {-52} {0.0 0.0}
   add EnergyFraction {310} {0.3 0.7}
   add EnergyFraction {3122} {0.3 0.7}
   set ECalResolutionFormula {                  (abs(eta) <= 3.2) * sqrt(energy^2*0.0017^2 + energy*0.101^2) +
