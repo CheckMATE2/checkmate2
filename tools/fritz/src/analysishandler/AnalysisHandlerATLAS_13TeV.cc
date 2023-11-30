@@ -128,6 +128,8 @@ void AnalysisHandlerATLAS_13TeV::bookAnalysis(std::string analysisName,
         a = new Atlas_2006_05880();
     else if(analysisName == "atlas_2111_08372")
         a = new Atlas_2111_08372();
+    else if(analysisName == "atlas_2202_07953")
+        a = new Atlas_2202_07953();
     else //@@extracode@@
         Global::abort(name,
                       "Cannot load analysis "+analysisName+
