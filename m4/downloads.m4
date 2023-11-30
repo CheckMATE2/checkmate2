@@ -74,6 +74,16 @@ AC_DEFUN([DOWNLOADS],
       mkdir "$srcdir/data/atlas_1911_12606/Likelihoods"
     fi    
     `tar -xvzf "$srcdir/data/atlas_1911_12606/likelihoods_1911_12606.tar.gz" --strip-components=1 -C "$srcdir/data/atlas_1911_12606/Likelihoods"`
-  fi 
+  fi
+  # Likelihoods for atlas_2106_01676
+  if ! test -f "$srcdir/data/atlas_2106_01676/likelihoods_2106_01676.tar.gz"
+    then
+    `curl -JLH "Accept: application/x-tar" -o "$srcdir/data/atlas_2106_01676/likelihoods_2106_01676.tar.gz" "https://doi.org/10.17182/hepdata.95751.v2/r3"`
+    if ! test -d "$srcdir/data/atlas_2106_01676/Likelihoods/"
+      then
+      mkdir "$srcdir/data/atlas_2106_01676/Likelihoods"
+    fi    
+    `tar -xvzf "$srcdir/data/atlas_2106_01676/likelihoods_2106_01676.tar.gz" -C "$srcdir/data/atlas_2106_01676/Likelihoods"`
+  fi  
   AC_MSG_RESULT([])
 ])
