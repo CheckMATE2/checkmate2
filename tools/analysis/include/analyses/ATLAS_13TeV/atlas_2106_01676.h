@@ -18,13 +18,18 @@ class Atlas_2106_01676 : public AnalysisBase {
     TLorentzVector pTmiss;
     TLorentzVector truemet;
     FinalStateObject* lepton3;
-    std::vector<Jet*> jets_off;
-    double mllmin;
+    std::vector<Muon*> muons_off;
+    std::vector<Electron*> electrons_off;
+    std::vector<FinalStateObject*> leptons;
+    std::vector<Jet*> jets_off, jets_signal;
+    double mllmin, HT, mllmax, drmin;
     static bool sortByPTEl(Electron *i, Electron *j);
     static bool sortByPTMu(Muon *i, Muon *j);
     bool check_nTrack_jet(Jet* jet, std::vector<Track*> tracks, int nTracksMin) ;    
     std::vector<Jet*> overlapRemoval_muon_jet_tracks(std::vector<Jet*> cand_jets, std::vector<Muon*> cand_muons, double deltaR, int nTracks);  
     bool pass_SRoffWZhighnj( double min, double max, double ptl, std::string bin, bool cutflow);
+    bool pass_SRoffWZhigh0j( double min, double max, double mTminmll, std::string bin, bool cutflow);
+    bool pass_SRoffWZlow( double min, double max, double mTminmll, double ptl, bool jets, std::string bin, bool cutflow);
     double mT2chi2(const TLorentzVector & vis1, const TLorentzVector & vis2, double m_inv, const TLorentzVector & invis);
 };
 
