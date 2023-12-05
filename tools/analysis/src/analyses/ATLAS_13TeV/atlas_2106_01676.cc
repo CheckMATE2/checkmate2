@@ -117,10 +117,10 @@ void Atlas_2106_01676::analyze() {
   bveto = false;
   for (int i = 0; i < jets_off.size(); i++) 
     if ( fabs(jets_off[i]->Eta) < 2.5 && checkBTag(jets_off[i]) ) {bveto = true; break;}
-  countCutflowEvent("02_bveto");  
+  //countCutflowEvent("02_bveto");  
   
-  if (!trigger) return;
-  countCutflowEvent("03_trigger");
+  //if (!trigger) return;
+  //countCutflowEvent("03_trigger");
   
   mllmin = 10000.;
   mllmax = 0.;
@@ -177,11 +177,11 @@ void Atlas_2106_01676::analyze() {
       }
   }
   
-  if ( !SFOS or mllmax > 75.) return;
-  countCutflowEvent("04_mllmax");
+  //if ( !SFOS or mllmax > 75.) return;
+  //countCutflowEvent("04_mllmax");
   
-  if ( drmin < 0.4) return;
-  countCutflowEvent("05_dr>0.4");
+  //if ( drmin < 0.4) return;
+  //countCutflowEvent("05_dr>0.4");
   
   HT = 0.;
   for (int i = 0; i < jets_off.size(); i++) 
@@ -198,7 +198,99 @@ void Atlas_2106_01676::analyze() {
   }
   std::sort( leptons.begin(), leptons.end(), sortByPT );  
   
-  if (preselection_offWZ()) {
+  double mt = mT(lepton3->P4(), pTmiss, 0.);
+  
+  if (preselection_Wh(true)) {
+    if ( mllmax < 75.) {
+      countCutflowEvent("WhSF_08_mllmax<75");
+      if (jets_off.size() == 0) {
+        countCutflowEvent("WhSF_09_0j");
+        if (mt < 100.) 
+          if (met < 100.) countSignalEvent("SR-Wh-SF-01");
+          else if (met < 150.) countSignalEvent("SR-Wh-SF-02");
+          else countSignalEvent("SR-Wh-SF-03");  
+        else if (mt < 160.)
+          if (met < 100.) countSignalEvent("SR-Wh-SF-04");
+          else countSignalEvent("SR-Wh-SF-05");
+        else
+          if (met < 100.) countSignalEvent("SR-Wh-SF-06");
+          else countSignalEvent("SR-Wh-SF-07");
+      }
+      if (jets_off.size() and HT < 200.) {
+        countCutflowEvent("WhSF_09_nj");
+        if (mt < 50. and met < 100.) countSignalEvent("SR-Wh-SF-08");
+        if (mt > 50 and mt < 100. and met < 100.) countSignalEvent("SR-Wh-SF-09");
+        if (mt < 100 and met > 100. and met < 150) countSignalEvent("SR-Wh-SF-10");
+        if (mt < 100 and met > 150) countSignalEvent("SR-Wh-SF-11");
+        if (mt > 100 and mt < 160. and met < 100) countSignalEvent("SR-Wh-SF-12");
+        if (mt > 100 and mt < 160. and met > 100 and met < 150.) countSignalEvent("SR-Wh-SF-13");
+        if (mt > 100 and mt < 160. and met > 150.) countSignalEvent("SR-Wh-SF-14");
+        if (mt > 160. and met < 150.) countSignalEvent("SR-Wh-SF-15");
+        if (mt > 160. and met > 150.) countSignalEvent("SR-Wh-SF-16");
+      }
+    }
+    else if ( mllmax > 105.) {
+      countCutflowEvent("WhSF_18_mllmax>75");
+      if (jets_off.size() == 0 and mt > 100. and met < 100.) countSignalEvent("SR-Wh-SF-17");
+      if (jets_off.size() == 0 and mt > 100. and met > 100. and met < 200.) countSignalEvent("SR-Wh-SF-18");
+      if (jets_off.size() == 0 and mt > 100. and met > 200.) countSignalEvent("SR-Wh-SF-19");
+    }          
+  }
+  
+  if (preselection_WhDF(false)) {
+  }
+  
+  if (preselection_onWZ(true)) {
+    if (jets_off.size() == 0) {
+      countCutflowEvent("onWZ_09_0j");
+      if (mt > 100. and mt < 160.) {
+        countCutflowEvent("onWZ_10_mt<160");
+        if (met < 100.) countSignalEvent("SR-WZ-01");
+        else if (met < 150.) countSignalEvent("SR-WZ-02");
+        else if (met < 200.) countSignalEvent("SR-WZ-03");
+        else countSignalEvent("SR-WZ-04");
+      }
+      else if (mt > 160.) {
+        countCutflowEvent("onWZ_11_mt>160");
+        if (met < 150.) countSignalEvent("SR-WZ-05");
+        else if (met < 200.) countSignalEvent("SR-WZ-06");
+        else if (met < 350.) countSignalEvent("SR-WZ-07");
+        else countSignalEvent("SR-WZ-08");
+      }
+    }
+    else if ( jets_off.size() > 0 and HT < 200.) {
+      countCutflowEvent("onWZ_19_njHTlow");
+      if (mt > 100. and mt < 160.) {
+        countCutflowEvent("onWZ_20_mt<160");
+        if (met > 100 and met < 150.) countSignalEvent("SR-WZ-09");
+        else if (met > 150. and met < 250) countSignalEvent("SR-WZ-10");
+        else if (met > 250. and met < 300) countSignalEvent("SR-WZ-11");
+        else if (met > 300.) countSignalEvent("SR-WZ-12");        
+      }
+      else if (mt > 160.) {
+        countCutflowEvent("onWZ_21_mt>160");
+        if (met < 150.) countSignalEvent("SR-WZ-13");
+        else if (met < 250.) countSignalEvent("SR-WZ-14");
+        else if (met < 400.) countSignalEvent("SR-WZ-15");        
+        else countSignalEvent("SR-WZ-16");
+      }      
+    }
+    else if ( jets_off.size() > 0 and HT < 200.) {
+      countCutflowEvent("onWZ_29_njHThigh");
+      if ( leptons[0]->PT + leptons[1]->PT + leptons[2]->PT < 350.) {
+        countCutflowEvent("onWZ_30_njHTlep");
+        if (mt > 100.) {
+          countCutflowEvent("onWZ_31_mt>100");
+          if (met > 150. and met < 200.) countSignalEvent("SR-WZ-17");
+          else if (met > 200. and met < 300.) countSignalEvent("SR-WZ-18");
+          else if (met > 300. and met < 400.) countSignalEvent("SR-WZ-19");
+          else if (met > 400.) countSignalEvent("SR-WZ-20");
+        }
+      }
+    }
+  }
+  
+  if (preselection_offWZ(true)) {
   
     if (pass_SRoffWZhighnj( 1. , 12., 0.2, "a", true)) countSignalEvent("SR-offWZ-high-nja");
     if (pass_SRoffWZhighnj( 12., 15., 0.2, "b", true)) countSignalEvent("SR-offWZ-high-njb");
@@ -284,31 +376,92 @@ std::vector<Jet*> Atlas_2106_01676::overlapRemoval_muon_jet_tracks(std::vector<J
   return passed;
 }
 
-bool Atlas_2106_01676::preselection_onWZ() {
+bool Atlas_2106_01676::preselection_onWZ(bool cutflow) {
   
+  if (leptons.size() < 3 or leptons[0]->PT < 25. or leptons[1]->PT < 20. or leptons[2]->PT < 10.) return false;
+  if (pTmiss.Perp() < 50.) return false;
+  if (cutflow) countCutflowEvent("onWZ_02_pTlep");
   
-  return true;
-}
-
-bool Atlas_2106_01676::preselection_Wh() {
-  
-  
-  return true;
-}
-
-bool Atlas_2106_01676::preselection_offWZ() {
-
-  if (bveto) return false;
-  countCutflowEvent("offall_02_bveto");  
+  if ( !SFOS ) return false;
+  if (cutflow) countCutflowEvent("onWZ_03_SFOS");
   
   if (!trigger) return false;
-  countCutflowEvent("offall_03_trigger");
+  if (cutflow) countCutflowEvent("onWZ_04_trigger"); 
+  
+  if (bveto) return false;
+  if (cutflow) countCutflowEvent("onWZ_05_bveto");    
+  
+  if ( mllmin < 12.) return false;
+  if (cutflow) countCutflowEvent("onWZ_06_resveto");  
+  
+  if ( fabs( (leptons[0]->P4() + leptons[1]->P4() + leptons[2]->P4()).M() - 91.2) <  15. ) return false;
+  if (cutflow) countCutflowEvent("onWZ_07_Zveto");  
+  
+  if ( mllmax < 75. or mllmax > 105.) return false;
+  if (cutflow) countCutflowEvent("onWZ_08_onZ");  
+  
+  return true;
+}
+
+bool Atlas_2106_01676::preselection_Wh(bool cutflow) {
+  
+  if (leptons.size() < 3 or leptons[0]->PT < 25. or leptons[1]->PT < 20. or leptons[2]->PT < 10.) return false;
+  if (pTmiss.Perp() < 50.) return false;
+  if (cutflow) countCutflowEvent("WhSF_02_pTlep");
+  
+  if (!trigger) return false;
+  if (cutflow) countCutflowEvent("WhSF_03_trigger"); 
+  
+  if (bveto) return false;
+  if (cutflow) countCutflowEvent("WhSF_04_bveto");    
+  
+  if ( !SFOS ) return false;
+  if (cutflow) countCutflowEvent("WhSF_05_SFOS");
+  
+  if ( mllmin < 12.) return false;
+  if (cutflow) countCutflowEvent("WhSF_06_resveto");
+  
+  if ( fabs( (leptons[0]->P4() + leptons[1]->P4() + leptons[2]->P4()).M() - 91.2) <  15. ) return false;
+  if (cutflow) countCutflowEvent("WhSF_07_Zveto");
+  
+  return true;
+}
+
+bool Atlas_2106_01676::preselection_WhDF(bool cutflow) {
+  
+  if (leptons.size() < 3 or leptons[0]->PT < 25. or leptons[1]->PT < 20. or leptons[2]->PT < 10.) return false;
+  if (pTmiss.Perp() < 50.) return false;
+  if (!trigger) return false;
+  if (bveto) return false;
+  if ( SFOS ) return false;
+  if (cutflow) countCutflowEvent("WhDF_05_DFOS");
+  
+  return true;
+  
+}
+
+bool Atlas_2106_01676::pass_SRWhDF0j(bool cutflow) {
+  
+  if ( jets_off.size() ) return false;
+  if (cutflow) countCutflowEvent("WhDF0j_06_DFOS");
+  
+    
+  
+}
+  
+bool Atlas_2106_01676::preselection_offWZ(bool cutflow) {
+
+  if (bveto) return false;
+  if (cutflow) countCutflowEvent("offall_02_bveto");  
+  
+  if (!trigger) return false;
+  if (cutflow) countCutflowEvent("offall_03_trigger");
   
   if ( !SFOS or mllmax > 75.) return false;
-  countCutflowEvent("offall_04_mllmax");
+  if (cutflow) countCutflowEvent("offall_04_mllmax");
   
   if ( drmin < 0.4) return false;
-  countCutflowEvent("offall_05_dr>0.4");  
+  if (cutflow) countCutflowEvent("offall_05_dr>0.4");  
   
   
   return true;  
