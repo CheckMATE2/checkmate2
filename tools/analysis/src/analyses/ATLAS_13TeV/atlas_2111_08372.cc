@@ -8,7 +8,7 @@ void Atlas_2111_08372::initialize() {
     "#  boson with an invisibly decaying Higgs boson or dark matter candidates \n"
   "");
   setLuminosity(139.0*units::INVFB);      
-  bookSignalRegions("SR1");
+  bookSignalRegions("SR1;mT_0200;mT_0250;mT_0300;mT_0350;mT_0400;mT_0450;mT_0500;mT_0550;mT_0600;mT_0650;mT_0700;mT_0750;mT_0800;mT_0850;mT_0900;mT_0950;mT_1000;mT_1100;mT_1200;mT_1300;mT_1400;mT_1600");
   // You can also book cutflow regions with bookCutflowRegions("CR1;CR2;..."). Note that the regions are
   //  always ordered alphabetically in the cutflow output files.
 
@@ -105,6 +105,32 @@ void Atlas_2111_08372::analyze() {
   countCutflowEvent("08_"+lepton+"_mT");
   
   countSignalEvent("SR1");
+  
+  if (mt < 250.) countSignalEvent("mT_0200");
+  else if (mt < 300.) countSignalEvent("mT_0250");
+  else if (mt < 350.) countSignalEvent("mT_0300");
+  else if (mt < 400.) countSignalEvent("mT_0350");
+  else if (mt < 450.) countSignalEvent("mT_0400");
+  else if (mt < 500.) countSignalEvent("mT_0450");
+  else if (mt < 550.) countSignalEvent("mT_0500");
+  else if (mt < 600.) countSignalEvent("mT_0550");
+  else if (mt < 650.) countSignalEvent("mT_0600");
+  else if (mt < 700.) countSignalEvent("mT_0650");
+  else if (mt < 750.) countSignalEvent("mT_0700");
+  else if (mt < 800.) countSignalEvent("mT_0750");
+  else if (mt < 850.) countSignalEvent("mT_0800");
+  else if (mt < 900.) countSignalEvent("mT_0850");
+  else if (mt < 950.) countSignalEvent("mT_0900");
+  else if (mt < 1000.) countSignalEvent("mT_0950");
+  else if (mt < 1100.) countSignalEvent("mT_1000");
+  else if (mt < 1200.) countSignalEvent("mT_1100");
+  else if (mt < 1300.) countSignalEvent("mT_1200");
+  else if (mt < 1400.) countSignalEvent("mT_1300");
+  else if (mt < 1600.) countSignalEvent("mT_1400");
+  else countSignalEvent("mT_1600");
+  
+  return;
+  
 }
 
 void Atlas_2111_08372::finalize() {
