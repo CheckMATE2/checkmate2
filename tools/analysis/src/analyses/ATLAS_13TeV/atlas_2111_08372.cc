@@ -99,12 +99,13 @@ void Atlas_2111_08372::analyze() {
   if ( HT != 0 and met/sqrt(HT) < 9.) return;
   countCutflowEvent("07_"+lepton+"_METsig");
   
+  countSignalEvent("SR1");
+  
   double mZ2 = 91.1876*91.1876;
   double mt = sqrt( pow(sqrt(mZ2 + pll.Perp2()) + sqrt(mZ2 + met*met), 2) - ( pow(pll.X() + missingET->P4().X(), 2) + pow(pll.Y() + missingET->P4().Y(), 2) ) );
   if (mt < 200.) return;
   countCutflowEvent("08_"+lepton+"_mT");
   
-  countSignalEvent("SR1");
   
   if (mt < 250.) countSignalEvent("mT_0200");
   else if (mt < 300.) countSignalEvent("mT_0250");
