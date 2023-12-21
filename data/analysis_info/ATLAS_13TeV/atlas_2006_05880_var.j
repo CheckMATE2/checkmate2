@@ -323,7 +323,7 @@
   ],
   "likelihoods": "n",
   "mb_signal_regions": {
-    "MB-Z1A&h1A&h1AB": [
+    "MB-Zh-A": [
       "SR-Z-1A-MB200",
       "SR-Z-1A-MB250",
       "SR-Z-1A-MB300",
@@ -334,7 +334,7 @@
       "SR-h-1A-MB2-12",
       "SR-h-1AB-MB"
     ],
-    "MB-Z1B&h1B&h1AB": [
+    "MB-Zh-B": [
       "SR-Z-1B-MB150",
       "SR-Z-1B-MB300",
       "SR-Z-1B-MB450",
@@ -345,7 +345,7 @@
       "SR-h-1B-MB_6_2",
       "SR-h-1AB-MB"
     ],
-    "MB-Z2A&Z2B":[    
+    "MB-Z-AB": [    
       "SR-Z-2A-MB",
       "SR-Z-2B-MB300_50",
       "SR-Z-2B-MB350_50",
