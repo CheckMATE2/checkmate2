@@ -207,8 +207,8 @@ def create_patchset(path, names, s, ds, systematics = 0):
     else:
         samples = [{"name":'Signal0',"id":len(spec_patchset["patches"][0]["metadata"]["values"])*[''],"SRs":[x[:-3] for x in names],"s":s,"ds":ds}]
 
-    with open(path+'/multibin_limits/'+"sample.json", "w") as write_file:
-        json.dump(samples, write_file, indent=4)
+    #with open(path+'/multibin_limits/'+"sample.json", "w") as write_file:
+    #    json.dump(samples, write_file, indent=4)
 
     if "analysis_id" in spec_patchset["metadata"]:
         temp_key = spec_patchset["metadata"]["analysis_id"]
@@ -235,8 +235,8 @@ def add_patchset(path, names, s, ds, workspace_new, systematics = 0):
     else:
         samples = [{"name":'Signal0',"id":len(spec_patchset["patches"][0]["metadata"]["values"])*[''],"SRs":[x[:-3] for x in names],"s":s,"ds":ds}]
 
-    with open(path+'/multibin_limits/'+"sample2.json", "w") as write_file:
-        json.dump(samples, write_file, indent=4)
+    #with open(path+'/multibin_limits/'+"sample2.json", "w") as write_file:
+    #    json.dump(samples, write_file, indent=4)
 
     if "analysis_id" in spec_patchset["metadata"]:
         temp_key = spec_patchset["metadata"]["analysis_id"]
@@ -247,8 +247,8 @@ def add_patchset(path, names, s, ds, workspace_new, systematics = 0):
         #workspace_new["patches"].append(patch(sample,spec,systematics))
         workspace_new = add_patch(workspace_new, sample, spec, systematics)
     workspace_new["metadata"]["digests"]["sha256"]=hashlib.sha256(json.dumps(workspace_new).encode('utf8')).hexdigest()
-    with open(path+'/multibin_limits/'+"workspace.json", "w") as write_file:
-        json.dump(workspace_new, write_file, indent=4)
+    #with open(path+'/multibin_limits/'+"workspace.json", "w") as write_file:
+    #    json.dump(workspace_new, write_file, indent=4)
     return workspace_new
 
 

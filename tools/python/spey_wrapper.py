@@ -43,8 +43,8 @@ def calc_point( path, analysis, mbsr ):
             return 10., 10., 1., 1.
         patchset = mbfull.create_patchset(path, names, s, ds, systematics = 0)
     
-    with open(path+'/multibin_limits/'+"workspace.json", "w") as write_file:
-        json.dump(patchset, write_file, indent=4)       
+    #with open(path+'/multibin_limits/'+"workspace.json", "w") as write_file:
+    #    json.dump(patchset, write_file, indent=4)       
     signal0 = pyhf.PatchSet(patchset)["Signal0"]
     
     stat_wrapper = spey.get_backend ("pyhf")

@@ -151,7 +151,7 @@ void Atlas_2106_01676::analyze() {
             if (mll > mllmax) mllmax = mll;
             if (mll < mllmin) {
               mllmin = mll;
-              pair = electrons_off[i]->P4() + electrons_off[1]->P4();
+              pair = electrons_off[i]->P4() + electrons_off[j]->P4();
               for (int k = 0; k < electrons_off.size(); k++)
                 if ( k!= i and k != j) lepton3 = new FinalStateObject(electrons_off[k]);
             }
@@ -169,7 +169,7 @@ void Atlas_2106_01676::analyze() {
             if (mll > mllmax) mllmax = mll;
             if (mll < mllmin) {
               mllmin = mll;
-              pair = muons_off[i]->P4() + muons_off[1]->P4();
+              pair = muons_off[i]->P4() + muons_off[j]->P4();
               for (int k = 0; k < muons_off.size(); k++)
                 if ( k!= i and k != j) lepton3 = new FinalStateObject(muons_off[k]);
             }
@@ -198,7 +198,9 @@ void Atlas_2106_01676::analyze() {
   }
   std::sort( leptons.begin(), leptons.end(), sortByPT );  
   
-  double mt = mT(lepton3->P4(), pTmiss, 0.);
+  double mt = 0.;
+  
+  if (SFOS) mt = mT(lepton3->P4(), pTmiss, 0.);
   
   if (preselection_Wh(true)) {
     if ( mllmax < 75.) {
