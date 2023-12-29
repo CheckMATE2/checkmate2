@@ -78,14 +78,17 @@ void Atlas_2106_01676::analyze() {
   std::sort(electrons_off.begin(), electrons_off.end(), sortByPTEl);
   std::sort(muons_off.begin(), muons_off.end(), sortByPTMu);
   
-  electronsLoose = filterPhaseSpace(electronsLoose, 4.5, -2.47, 2.47);
+  electronsLoose = filterPhaseSpace(electronsLoose, 20, -2.47, 2.47);
+  std::vector<Muon*> muons_overlap = filterPhaseSpace(muonsCombined, 20, -2.47, 2.47);
   jets_off.clear();
   jets_signal.clear();
   jets_off = filterPhaseSpace(jets, 20., -2.8, 2.8); 
   jets_signal = filterPhaseSpace(jets, 20., -2.8, 2.8); 
   
   jets_off = overlapRemoval(jets_off, electronsLoose, 0.2, "y");
-  jets_off = overlapRemoval_muon_jet_tracks(jets_off, muonsCombined, 0.4, 2);
+  jets_off = overlapRemoval_muon_jet_tracks(jets_off, muons_overlap, 0.4, 2);
+  //jets_off = overlapRemoval(jets_off, electrons_off, 0.2, "y");
+  //jets_off = overlapRemoval_muon_jet_tracks(jets_off, muons_off, 0.4, 2);  
   jets_signal = overlapRemoval(jets_signal, electronsLoose, 0.2, "y");
   jets_signal = overlapRemoval_muon_jet_tracks(jets_signal, muonsCombined, 0.4, 2);  
   electronsLoose = overlapRemoval(electronsLoose, jets_off, 0.4, "y"); 
@@ -296,16 +299,16 @@ void Atlas_2106_01676::analyze() {
   
     if (pass_SRoffWZhighnj( 1. , 12., 0.2, "a", true)) countSignalEvent("SR-offWZ-high-nja");
     if (pass_SRoffWZhighnj( 12., 15., 0.2, "b", true)) countSignalEvent("SR-offWZ-high-njb");
-    if (pass_SRoffWZhighnj( 15., 20., 0.3, "c", false)) countSignalEvent("SR-offWZ-high-njc");
-    if (pass_SRoffWZhighnj( 20., 30., 0.3, "d", false)) countSignalEvent("SR-offWZ-high-njd");
-    if (pass_SRoffWZhighnj( 30., 40., 0.3, "e", false)) countSignalEvent("SR-offWZ-high-nje");
-    if (pass_SRoffWZhighnj( 40., 60., 1.0, "f", false)) countSignalEvent("SR-offWZ-high-njf");
-    if (pass_SRoffWZhighnj( 60., 75., 1.0, "g", false)) countSignalEvent("SR-offWZ-high-njg");
+    if (pass_SRoffWZhighnj( 15., 20., 0.3, "c", true)) countSignalEvent("SR-offWZ-high-njc");
+    if (pass_SRoffWZhighnj( 20., 30., 0.3, "d", true)) countSignalEvent("SR-offWZ-high-njd");
+    if (pass_SRoffWZhighnj( 30., 40., 0.3, "e", true)) countSignalEvent("SR-offWZ-high-nje");
+    if (pass_SRoffWZhighnj( 40., 60., 1.0, "f", true)) countSignalEvent("SR-offWZ-high-njf");
+    if (pass_SRoffWZhighnj( 60., 75., 1.0, "g", true)) countSignalEvent("SR-offWZ-high-njg");
   
     //if ( mllmin > 1. and mllmin < 12. ) countCutflowEvent("soft_05_bina");
     //if ( mllmin > 12. and mllmin < 15. ) countCutflowEvent("soft_05_binb");
   
-    if (pass_SRoffWZhigh0j( 12., 15., 50., "b", true)) countSignalEvent("SR-offWZ-high-0jb");
+    if (pass_SRoffWZhigh0j( 12., 15., 50., "b", false)) countSignalEvent("SR-offWZ-high-0jb");
     if (pass_SRoffWZhigh0j( 15., 20., 50., "c", false)) countSignalEvent("SR-offWZ-high-0jc");
     if (pass_SRoffWZhigh0j( 20., 30., 60., "d", false)) countSignalEvent("SR-offWZ-high-0jd");
     if (pass_SRoffWZhigh0j( 30., 40., 60., "e", false)) countSignalEvent("SR-offWZ-high-0je");
@@ -314,7 +317,7 @@ void Atlas_2106_01676::analyze() {
     if (pass_SRoffWZhigh0j( 60., 75., 70., "g1", false)) countSignalEvent("SR-offWZ-high-0jg1");  
     if (pass_SRoffWZhigh0j( 60., 75., 90., "g2", false)) countSignalEvent("SR-offWZ-high-0jg2");  
   
-    if (pass_SRoffWZlow( 12., 15., 50., 1.1, false, "b", true)) countSignalEvent("SR-offWZ-low-0jb");
+    if (pass_SRoffWZlow( 12., 15., 50., 1.1, false, "b", false)) countSignalEvent("SR-offWZ-low-0jb");
     if (pass_SRoffWZlow( 15., 20., 50., 1.1, false, "c", false)) countSignalEvent("SR-offWZ-low-0jc");
     if (pass_SRoffWZlow( 20., 30., 50., 1.1, false, "d", false)) countSignalEvent("SR-offWZ-low-0jd");
     if (pass_SRoffWZlow( 30., 40., 60., 1.3, false, "e", false)) countSignalEvent("SR-offWZ-low-0je");
@@ -323,7 +326,7 @@ void Atlas_2106_01676::analyze() {
     if (pass_SRoffWZlow( 60., 75., 60., 1.4, false, "g1", false)) countSignalEvent("SR-offWZ-low-0jg1");  
     if (pass_SRoffWZlow( 60., 75., 90., 1.4, false, "g2", false)) countSignalEvent("SR-offWZ-low-0jg2");    
   
-    if (pass_SRoffWZlow( 12., 15., 50., 1.0, true, "b", true)) countSignalEvent("SR-offWZ-low-njb");
+    if (pass_SRoffWZlow( 12., 15., 50., 1.0, true, "b", false)) countSignalEvent("SR-offWZ-low-njb");
     if (pass_SRoffWZlow( 15., 20., 50., 1.0, true, "c", false)) countSignalEvent("SR-offWZ-low-njc");
     if (pass_SRoffWZlow( 20., 30., 50., 1.0, true, "d", false)) countSignalEvent("SR-offWZ-low-njd");
     if (pass_SRoffWZlow( 30., 40., 60., 1.0, true, "e", false)) countSignalEvent("SR-offWZ-low-nje");
