@@ -5,6 +5,8 @@
 #include <fstream>
 #include <string>
 
+using namespace std;
+
 // List of keys that are understood by pythia handlers
 static const std::string keyName = "name";
 static const std::string keySettings = "settings";
@@ -233,7 +235,7 @@ void PythiaHandler::setup(Properties props) {
     if(mgParamCard != "") madgraph->addCard(mgParamCard,"param_card.dat");
     if(mgRunCard != "") madgraph->addCard(mgRunCard,"run_card.dat");
     if(mgConfigCard != "") madgraph->addCard(mgConfigCard,"me5_configuration.txt");
-    mainPythia->setLHAupPtr(madgraph);
+    mainPythia->setLHAupPtr((Pythia8::LHAupPtr)madgraph);
     
     // Set LHE file by hand
     //if(!madgraph->setInit())
@@ -305,6 +307,7 @@ void PythiaHandler::setup(Properties props) {
     nEvents = 10000;
 
   // Killer mode: If threshold is set and LHE mode is used, set nEvents to 0 if threshold is not passed
+  
   if (haveXSectThresh && madgraph != NULL && (madgraph->getXS() < xsectThresh)) {
       Global::print(name, "MG5 returned partonic process with cross section "+Global::doubleToStr(madgraph->getXS())+" pb which is smaller than the given threshold.");
       Global::print(name, "Setting nEvents to 0!");
