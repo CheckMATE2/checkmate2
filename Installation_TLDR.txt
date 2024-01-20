@@ -12,7 +12,7 @@ This is a brief note on how to install CheckMATE from the master branch on https
      https://gitlab.cern.ch:8443/hepmc/HepMC/-/tags
   
   optional:
-  d) Pythia; we currently only support 8.2 series
+  d) Pythia; we currently only support 8.3 series
   e) MadGraph5_aMC@NLO; versions >=2.7 should work just fine; 
      with 3-series there are some hiccups but you should get the result anyway; follow the messages on screen 
      
