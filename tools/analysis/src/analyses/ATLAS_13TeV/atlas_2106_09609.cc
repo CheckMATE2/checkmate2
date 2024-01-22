@@ -880,18 +880,19 @@ std::vector<float> Atlas_2106_09609::jet_btag_category(const std::vector<Jet*> s
     //if (btag) cat.push_back(5.); else cat.push_back(1.);
     if (btag) {
       float tag = 1.45 + rand()/(RAND_MAX +1.) * 7.;// https://arxiv.org/pdf/1907.05120.pdf Fig. 1
-      cat.push_back( tag);
-      //cat.push_back(5.); // ATLAS simiplified_analysis snippet
+      //cat.push_back( tag);
+      cat.push_back(5.); // ATLAS simiplified_analysis snippet
       //cat.push_back(1.);
     }
     else {
       float tag = -1. + rand()/(RAND_MAX +1.) * 2.;
-      cat.push_back( tag);
+      //cat.push_back( tag); //v7
       //cat.push_back(-3.); //v3
       //cat.push_back(1.); //v1
       //cat.push_back(0.); //v4
       //cat.push_back(2.); //v5
       //cat.push_back(-1.); //v6
+      cat.push_back(-0.5); //v8
     }
   }
   
