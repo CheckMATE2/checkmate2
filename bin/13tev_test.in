@@ -1,8 +1,15 @@
 [Parameters]
-Name: 13TeV-test-py2
+Name: 13TeV-test
 Analyses: atlas13TeV
-SLHAFile: ./example_run_cards/auxiliary/testspectrum.slha
+SLHAFile: ./bin/example_run_cards/auxiliary/testspectrum.slha
 
-[13TeV-test]
+[13TeV-pythia]
 Pythia8Process: p p > go go
 MaxEvents: 100
+
+[13TeV-mg5]
+MGCommand: import model MSSM-SLHA2;
+           define  sq = ul ur sl sr dl dr cl cr ul~ ur~ sl~ sr~ dl~ dr~ cl~ cr~;
+           generate p p > sq sq;
+KFactor: 1.96
+MaxEvents: 10000

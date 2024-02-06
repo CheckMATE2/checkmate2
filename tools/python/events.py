@@ -2,7 +2,7 @@ from __future__ import division
 
 from builtins import str
 from past.utils import old_div
-import os, sys
+import os, sys, shutil
 from math import sqrt
 from copy import deepcopy
 from resultcollector import ResultCollector
@@ -334,10 +334,12 @@ class Pythia8Events(Events):
 class LHEEvents(Pythia8Events):
     # an lhe events object is a list of physical files which requires the functionalities of a pythia8events object
     full_filenames = list()
+    py8aux = ""
     
-    def __init__(self, name, full_filenames):
+    def __init__(self, name, full_filenames, py8aux = ""):
         Events.__init__(self, name)
         self.full_filenames = full_filenames
+        self.py8aux = py8aux
         
     def check(self):
         pass # nothing to check
@@ -351,44 +353,48 @@ class LHEEvents(Pythia8Events):
         procnum = len(Info.files['pythia_cards'])
         filename = self.name+"card_"+str(procnum)+".in"
         fpath = os.path.join(out_path,filename)
-        with open(fpath,'w') as f:            
-            # generate LHE showering card with hepmc output
-            with open(Info.files['pythia_lhe_template'],'r') as default:
-                for line in default:
-                    f.write(line)
-                if len(Info.files["slha"]) > 0 :
-                    f.write('SLHA:file = ')
-                    f.write(Info.files["slha"] + '\n')
-
-                iRun = 0
-                run_str = list()
-                for lhe_filename in self.full_filenames:
-                    # Check file exists, else skip file
-                    if not os.path.isfile(lhe_filename):
-                        AdvPrint.cerr("\t Process:genPy8card():: File not readable:"+lhe_filename)
-                        continue
-                    iRun+=1
-                    run_str.append("Main:subrun = "+str(iRun)+"\n")
-                    if iRun == 1:
-                        run_str.append("Beams:frameType = 4\n")
-                    else:
-                        run_str.append("Beams:newLHEFsameInit = on\n")
-                    run_str.append("Beams:LHEF = "+lhe_filename+"\n\n")
-
-                # Exit if no valid files
-                if iRun < 1:
-                    AdvPrint.cerr_exit("\t Process:genPy8card():: No valid LHE files found")
-
-                # Write out all subruns
-                if iRun > 1:
-                    subrun_str = "Main:numberOfSubruns = "+str(iRun)
-                    f.write( subrun_str + '\n\n' )
-                    for line in run_str:
+        
+        if self.py8aux != "":
+            shutil.copy(Info.check_and_absolutize_file(self.py8aux), fpath)
+        else:
+            with open(fpath,'w') as f:            
+                # generate LHE showering card with hepmc output
+                with open(Info.files['pythia_lhe_template'],'r') as default:
+                    for line in default:
                         f.write(line)
-                else:
-                    f.write("Beams:frameType = 4\n")
-                    f.write("Beams:LHEF = "+lhe_filename+"\n\n")
-                default.close()
+                    if len(Info.files["slha"]) > 0 :
+                        f.write('SLHA:file = ')
+                        f.write(Info.files["slha"] + '\n')
+
+                    iRun = 0
+                    run_str = list()
+                    for lhe_filename in self.full_filenames:
+                        # Check file exists, else skip file
+                        if not os.path.isfile(lhe_filename):
+                            AdvPrint.cerr("\t Process:genPy8card():: File not readable:"+lhe_filename)
+                            continue
+                        iRun+=1
+                        run_str.append("Main:subrun = "+str(iRun)+"\n")
+                        if iRun == 1:
+                            run_str.append("Beams:frameType = 4\n")
+                        else:
+                            run_str.append("Beams:newLHEFsameInit = on\n")
+                        run_str.append("Beams:LHEF = "+lhe_filename+"\n\n")
+
+                    # Exit if no valid files
+                    if iRun < 1:
+                        AdvPrint.cerr_exit("\t Process:genPy8card():: No valid LHE files found")
+
+                    # Write out all subruns
+                    if iRun > 1:
+                        subrun_str = "Main:numberOfSubruns = "+str(iRun)
+                        f.write( subrun_str + '\n\n' )
+                        for line in run_str:
+                            f.write(line)
+                    else:
+                        f.write("Beams:frameType = 4\n")
+                        f.write("Beams:LHEF = "+lhe_filename+"\n\n")
+                    default.close()
             
         Info.files['pythia_cards'].append(fpath)
         self.py8_infile = fpath
@@ -405,6 +411,8 @@ class LHEEvents(Pythia8Events):
             counter += 1        
         if self.py8_infile != "":
             AdvPrint.cout("\t\t\t - Pythia8 .in settings file for showering: "+self.py8_infile)
+        if self.py8aux != "":
+            AdvPrint.cout("\t\t\t - Pythia8 auxiliary settings file for showering: "+self.py8aux)            
         if self.maxEvents > 0:
             AdvPrint.cout("\t\t\t - at most "+str(self.maxEvents)+" events are generated/analysed")
         if self.processed:
@@ -441,7 +449,7 @@ class LHEEvents(Pythia8Events):
             
             
 class MG5Events(Pythia8Events):
-    mg5_cards = {'run': "", 'param': "", 'proc': "", 'config': ""}
+    mg5_cards = {'run': "", 'param': "", 'proc': "", 'config': "", 'pythia8': ""}
     commandstring = "" # optional: can contain what is inside the proc card
     
     have_xsth = False # cross section provided by user?
@@ -450,7 +458,7 @@ class MG5Events(Pythia8Events):
     
     def __init__(self, name):
         Pythia8Events.__init__(self, name)
-        self.mg5_cards = {'run': "", 'param': "", 'proc': "", 'config': ""}
+        self.mg5_cards = {'run': "", 'param': "", 'proc': "", 'config': "", 'pythia8': ""}
         self.commandstring = ""        
         self.have_xsth = False 
         self.xsth = 0.0 
@@ -467,6 +475,9 @@ class MG5Events(Pythia8Events):
 
     def set_configcard(self, configcard):
         self.mg5_cards["config"] = configcard
+        
+    def set_py8card(self, py8card):
+        self.mg5_cards["pythia8"] = py8card        
         
     def set_commandstring(self, commandstring):
         self.commandstring = commandstring
@@ -491,11 +502,14 @@ class MG5Events(Pythia8Events):
             self.mg5_cards["param"] = Info.files["slha"]
         if self.py8_infile == "":
             self.py8_infile = os.path.join(Info.paths["output_pythia"], self.identifier+"_showercard.in")
-            with open(self.py8_infile, "w") as f:
-                with open(Info.files['pythia_mg5minimal_template'], "r") as g:
-                    for line in g:
-                        f.write(line)
-                f.write("SLHA:file = "+self.mg5_cards["param"]+"\n")
+            if self.mg5_cards["pythia8"] != "":  # use user provided showering card
+                shutil.copy(self.mg5_cards["pythia8"], self.py8_infile)
+            else: # use standard showering card    
+                with open(self.py8_infile, "w") as f:
+                    with open(Info.files['pythia_mg5minimal_template'], "r") as g:
+                        for line in g:
+                            f.write(line)
+                    f.write("SLHA:file = "+self.mg5_cards["param"]+"\n")
         if self.mg5_cards["run"] == "":
             # copy template and fill rlevant information
             self.mg5_cards["run"] = os.path.join(Info.paths["output_mg5"], self.identifier+"_run_card.dat")

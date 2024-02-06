@@ -178,9 +178,9 @@ class CheckMATE2(object):
         if Info.files['slha'] != "":
             AdvPrint.cout("\t - SLHA file "+Info.files['slha']+" will be used for event generation")
         if Info.parameters['invisiblePIDs'] != []:
-            AdvPrint.cout("\t - The following PIDs will be considered as invisible for the detector: "+str(Info.parameters['invisiblePIDs']).translate(None, "[]'"))
+            AdvPrint.cout("\t - The following PIDs will be considered as invisible for the detector: "+str(Info.parameters['invisiblePIDs']).translate({91: None, 93: None}))
         if Info.parameters['longlivedPIDs'] != []:
-            AdvPrint.cout("\t - The following PIDs will be considered as long lived for the detector: "+str(Info.parameters['longlivedPIDs']).translate(None, "[]'"))            
+            AdvPrint.cout("\t - The following PIDs will be considered as long lived for the detector: "+str(Info.parameters['longlivedPIDs']).translate({91: None, 93: None}))            
         if Info.flags['skipanalysis']:
             AdvPrint.cout("\t - No analysis step")
         if Info.flags['skippythia']:

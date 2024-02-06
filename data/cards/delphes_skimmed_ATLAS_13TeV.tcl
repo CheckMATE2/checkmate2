@@ -242,6 +242,7 @@ module Calorimeter Calorimeter {
   add EnergyFraction {1000039} {0.0 0.0}
   add EnergyFraction {1000045} {0.0 0.0}
   add EnergyFraction {52} {0.0 0.0}
+  #add EnergyFraction {35} {0.0 0.0}  
   add EnergyFraction {-52} {0.0 0.0}
   add EnergyFraction {310} {0.3 0.7}
   add EnergyFraction {3122} {0.3 0.7}

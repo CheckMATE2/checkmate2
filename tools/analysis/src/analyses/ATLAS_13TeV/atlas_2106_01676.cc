@@ -16,7 +16,7 @@ void Atlas_2106_01676::initialize() {
 
 void Atlas_2106_01676::analyze() {
 
-  //missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out. Probably not since 3.4.2
+  missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out. Probably not since 3.4.2
   
   pTmiss = missingET->P4();
   
