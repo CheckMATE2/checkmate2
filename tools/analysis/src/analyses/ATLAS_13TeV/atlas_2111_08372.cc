@@ -13,6 +13,13 @@ void Atlas_2111_08372::initialize() {
   //  always ordered alphabetically in the cutflow output files.
 
   // You should initialize any declared variables here
+  
+  int ifile = bookFile("atlas_2111_08372.root", true);
+  const char *rootFileName = fNames[ifile].c_str() ;
+  hfile = new TFile(rootFileName, "RECREATE", "Saving Histograms");
+  mT_hist = new TH1F("mt", "mT", 25, 150., 1650.);
+  MET_hist = new TH1F("met", "MET", 20, 90., 290.);  
+  mT_MET = new TH2D("mt_MET", "mt vs MET", 25, 150., 1650., 20, 90., 290. );
 }
 
 void Atlas_2111_08372::analyze() {
@@ -103,6 +110,11 @@ void Atlas_2111_08372::analyze() {
   
   double mZ2 = 91.1876*91.1876;
   double mt = sqrt( pow(sqrt(mZ2 + pll.Perp2()) + sqrt(mZ2 + met*met), 2) - ( pow(pll.X() + missingET->P4().X(), 2) + pow(pll.Y() + missingET->P4().Y(), 2) ) );
+  
+  mT_hist->Fill(mt, weight);
+  MET_hist->Fill(met, weight);
+  mT_MET->Fill(mt, met, weight);
+  
   if (mt < 200.) return;
   countCutflowEvent("08_"+lepton+"_mT");
   
@@ -136,6 +148,8 @@ void Atlas_2111_08372::analyze() {
 
 void Atlas_2111_08372::finalize() {
   // Whatever should be done after the run goes here
+  hfile->Write();
+  hfile->Close();
 }       
 
 
