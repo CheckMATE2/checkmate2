@@ -91,13 +91,15 @@ def select_MBsr(names, SRs):
     db = []
     o = []
     _names = [SR_dict[x] for x in SR_dict.keys()]
-    for sr in SRs:
-        if sr['SR'] in _names:
-            b.append(sr['b'])
-            db.append(sr['db'])
-            o.append(sr['o'])
-            s.append(max(sr['s'],0.))
-            ds.append(max(min(sr['s'],sr['ds']),0.))
+#    for sr in SRs:
+#        if sr['SR'] in _names:
+    for name in _names:
+        sr = np.array(SRs)[np.array([x['SR']==name for x in SRs])][0]
+        b.append(sr['b'])
+        db.append(sr['db'])
+        o.append(sr['o'])
+        s.append(max(sr['s'],0.))
+        ds.append(max(min(sr['s'],sr['ds']),0.))
     return o,b,db,s,ds
 
 #Creates a patch for the sample passed, based in the workspace in spec.
