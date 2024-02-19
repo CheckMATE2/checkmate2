@@ -1,7 +1,7 @@
 {"analysis" :[
 	{"name":"Combined",
-	"bkgonly":"Likelihoods/BkgOnly.json",
-        "patchset":"Likelihoods/patchset.json",
+	"bkgonly":"BkgOnly.json",
+        "patchset":"patchset.json",
         "histosize":"1",
 	"SR_dict": {"SR1cut_cuts":"SRlowMass","SR2cut_cuts":"SRhighMass"
 	}}
