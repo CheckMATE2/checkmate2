@@ -96,5 +96,15 @@ AC_DEFUN([DOWNLOADS],
     `tar -xvzf "$srcdir/data/atlas_1911_06660/likelihoods_1911_06660.tar.gz" "Region-combined"`
     `mv "$srcdir/data/atlas_1911_06660/Region-combined/" "$srcdir/data/atlas_1911_06660/Likelihoods/"`
   fi  
+  # BDT weights for atlas_2209_13935
+  if ! test -f "$srcdir/data/atlas_2209_13935/SimpleAnalysisFiles.tar.gz"
+    then
+    if ! test -d "$srcdir/data/atlas_2209_13935"
+    then 
+      mkdir "$srcdir/data/atlas_2209_13935"
+    fi  
+    `curl -JLH "Accept: application/x-tar" -o "$srcdir/data/atlas_2209_13935/SimpleAnalysisFiles.tar.gz" "https://doi.org/10.17182/hepdata.134068.v1/r3"`
+    `tar -xvzf "$srcdir/data/atlas_2209_13935/SimpleAnalysisFiles.tar.gz" -C "$srcdir/data/atlas_2209_13935"`
+  fi  
   AC_MSG_RESULT([])
 ])

@@ -17,8 +17,10 @@ void Atlas_2111_08372::initialize() {
   int ifile = bookFile("atlas_2111_08372.root", true);
   const char *rootFileName = fNames[ifile].c_str() ;
   hfile = new TFile(rootFileName, "RECREATE", "Saving Histograms");
-  mT_hist = new TH1F("mt", "mT", 25, 150., 1650.);
-  MET_hist = new TH1F("met", "MET", 20, 90., 290.);  
+  mT_hist = new TH1F("mt", "mT", 25, 0., 1500.);
+  mT_hist_bc = new TH1F("mt_bc", "mT before cuts", 25, 0., 1500.);
+  mll_hist = new TH1F("mll", "lepton invariant mass", 24, 0., 120.);
+  MET_hist = new TH1F("met", "MET", 30, 0., 300.);  
   mT_MET = new TH2D("mt_MET", "mt vs MET", 25, 150., 1650., 20, 90., 290. );
 }
 
@@ -74,28 +76,35 @@ void Atlas_2111_08372::analyze() {
   }
   
   if (lepton == "?") return;
-  countCutflowEvent("01_"+lepton+"_2SFleptons");
+  countCutflowEvent(lepton+"_01_2SFleptons");
   
   if (electronsMedium.size() + PFmuonsTight.size() > 2) return;
   if (electronsLoose.size() or PFmuonsLoose.size() ) return;
-  countCutflowEvent("02_"+lepton+"_3lepveto");
+  countCutflowEvent(lepton+"_02_3lepveto");
     
   if (!ossf) return;
-  countCutflowEvent("03_"+lepton+"_OSSF");
+  countCutflowEvent(lepton+"_03_OSSF");
+  
+  mll_hist->Fill(mll, weight);
   
   if (mll < 76. or mll > 106.) return;
-  countCutflowEvent("04_"+lepton+"_mll");
+  countCutflowEvent(lepton+"_04_mll");
   
   for (int i = 0; i < jets.size(); i++) 
     if ( fabs(jets[i]->Eta) < 2.5 && checkBTag(jets[i]) ) return;
-  countCutflowEvent("05_"+lepton+"_bveto");
+  countCutflowEvent(lepton+"_05_bveto");
   
   double met = missingET->P4().Et();
+  double mZ2 = 91.1876*91.1876;
+  double mt = sqrt( pow(sqrt(mZ2 + pll.Perp2()) + sqrt(mZ2 + met*met), 2) - ( pow(pll.X() + missingET->P4().X(), 2) + pow(pll.Y() + missingET->P4().Y(), 2) ) );  
+  mT_hist_bc->Fill(mt, weight);
+  MET_hist->Fill(met, weight);
+  
   if (met < 90.) return;
-  countCutflowEvent("06_"+lepton+"_MET");
+  countCutflowEvent(lepton+"_06_MET");
     
   if (Rll > 1.8) return;
-  countCutflowEvent("06_"+lepton+"_Rll");
+  countCutflowEvent(lepton+"_07_Rll");
   
   double HT = 0.;
   for (int i = 0; i < jets.size(); i++) {
@@ -104,19 +113,15 @@ void Atlas_2111_08372::analyze() {
   }
   
   if ( HT != 0 and met/sqrt(HT) < 9.) return;
-  countCutflowEvent("07_"+lepton+"_METsig");
+  countCutflowEvent(lepton+"_08_METsig");
   
   countSignalEvent("SR1");
   
-  double mZ2 = 91.1876*91.1876;
-  double mt = sqrt( pow(sqrt(mZ2 + pll.Perp2()) + sqrt(mZ2 + met*met), 2) - ( pow(pll.X() + missingET->P4().X(), 2) + pow(pll.Y() + missingET->P4().Y(), 2) ) );
-  
   mT_hist->Fill(mt, weight);
-  MET_hist->Fill(met, weight);
   mT_MET->Fill(mt, met, weight);
   
   if (mt < 200.) return;
-  countCutflowEvent("08_"+lepton+"_mT");
+  countCutflowEvent(lepton+"_09_mT");
   
   
   if (mt < 250.) countSignalEvent("mT_0200");

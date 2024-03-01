@@ -37,7 +37,8 @@ atlas_2211_08028     22   search for gluinos decaying via 3rd gen; multi b-jets 
 atlas_2106_01676     72   electroweakinos, 3 leptons, WZ, Wh, on+off-shell                                            139   no  
 atlas_2006_05880     28   Search for top squarks in events whith a Higgs or a Z boson                                 139   no  
 atlas_2111_08372     23   dark matter and invisible Higgs with Z boson                                                139   no  
-atlas_2202_07953     17   invisible Higgs decays in VBF                                                               139   no  
+atlas_2202_07953     17   invisible Higgs decays in VBF                                                               139   no 
+atlas_2209_13935     59   search for charginos and sleptons in 2-lepton final states                                  139   no  
 
 #Superseded:          
 #atlas_1602_09058     4    2 ss leptons or 3 leptons                                                                   3.2   no   

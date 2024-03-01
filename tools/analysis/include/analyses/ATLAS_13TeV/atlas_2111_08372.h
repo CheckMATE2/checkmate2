@@ -16,7 +16,7 @@ class Atlas_2111_08372 : public AnalysisBase {
 
   private:
     
-    TFile *hfile;  TH1F *mT_hist, *MET_hist; TH2D *mT_MET;
+    TFile *hfile;  TH1F *mT_hist, *mT_hist_bc, *mll_hist, *MET_hist; TH2D *mT_MET;
     
     template <class X>
 std::vector<X*> PFisolation(std::vector<X*> leptons, std::vector<Track*> tracks, std::vector<Tower*> towers, double dR_track_max, double pT_for_inverse_function_track, double dR_tower, double pT_amount);
