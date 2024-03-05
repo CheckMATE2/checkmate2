@@ -78,19 +78,19 @@ void Cms_1908_04722::analyze() {
   countCutflowEvent("08_etrackVeto");    
   
   if (photonsMedium.size() ) return;
-  countCutflowEvent("08_photVeto");    
+  countCutflowEvent("09_photVeto");    
   
   if (fabs(Hmiss.DeltaPhi(signal_jets[0]->P4())) < 0.5) return;
-  countCutflowEvent("09_dPhi_j1");   
+  countCutflowEvent("10_dPhi_j1");   
   
   if (fabs(Hmiss.DeltaPhi(signal_jets[1]->P4())) < 0.5) return;
-  countCutflowEvent("10_dPhi_j2");     
+  countCutflowEvent("11_dPhi_j2");     
   
   if (signal_jets.size() > 2 and fabs(Hmiss.DeltaPhi(signal_jets[2]->P4())) < 0.3) return;
-  countCutflowEvent("11_dPhi_j3");     
+  countCutflowEvent("12_dPhi_j3");     
 
   if (signal_jets.size() > 3 and fabs(Hmiss.DeltaPhi(signal_jets[3]->P4())) < 0.3) return;
-  countCutflowEvent("11_dPhi_j4");     
+  countCutflowEvent("13_dPhi_j4");     
   
   int Nb = 0;
   for (int i = 0; i < signal_jets.size(); i++) 

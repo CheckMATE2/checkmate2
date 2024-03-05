@@ -16,7 +16,7 @@ class Atlas_2209_13935 : public AnalysisBase {
     void finalize();
 
   private:
-    ofstream f1;
+    //ofstream f1;
     std::vector<Electron*> signal_el = {};
     std::vector<Muon*> signal_mu = {};
     bool check_nTrack_jet(Jet* jet, std::vector<Track*> tracks, int nTracksMin) ;
@@ -26,15 +26,15 @@ class Atlas_2209_13935 : public AnalysisBase {
     double calcMETSignificance(std::vector<FinalStateObject*> objects,double met);
     
     int eventNumber;
-    /*
+    
     MVAUtils::BDT *bdt_DF[2];
     MVAUtils::BDT *bdt_SF[2];
     void MVAUtilsReader(const std::string &name,
                                const std::string fname1,
-                               const std::string fname2, MVAUtils::BDT *m_bdt1, MVAUtils::BDT *m_bdt2);
+                               const std::string fname2, MVAUtils::BDT *m_bdt[2]);//1, MVAUtils::BDT *m_bdt2);
     std::vector<double> evaluateBDT(const std::vector<double> &values,
                               int numClasses, MVAUtils::BDT *m_bdt[2]);
-                              */
+                              
     
 };
 

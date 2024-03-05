@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = subdir-objects
 
-AM_CXXFLAGS = @ROOTCFLAGS@ @DELPHESCFLAGS@ -Iinclude/base -Iinclude/kinematics -Iinclude/kinematics/mctlib \
+AM_CXXFLAGS = @ROOTCFLAGS@ @DELPHESCFLAGS@ -Iinclude/base -Iinclude/base/MVAUtils -Iinclude/kinematics -Iinclude/kinematics/mctlib \
              -Iinclude/kinematics/mt2family -Iinclude/kinematics/topness -Iinclude/global \
              -Iinclude/analyses/ATLAS_7TeV -Iinclude/analyses/ATLAS_8TeV -Iinclude/analyses/ATLAS_13TeV -Iinclude/analyses/ATLAS_14TeV_HighLumi \
              -Iinclude/analyses/CMS_7TeV -Iinclude/analyses/CMS_8TeV -Iinclude/analyses/CMS_13TeV -Iinclude/analyses/CMS_14TeV_HighLumi
@@ -15,6 +15,11 @@ mylib_LTLIBRARIES = libanalyses.la
 libanalyses_la_SOURCES =	\
              src/global/Global.cc src/include/Global.h \
              src/base/AnalysisBase.cc include/base/AnalysisBase.h \
+             src/base/MVAUtils/BDT.cc include/base/MVAUtils/BDT.h \
+             src/base/MVAUtils/ForestLGBM.cc include/base/MVAUtils/ForestLGBM.h \
+             src/base/MVAUtils/ForestTMVA.cc include/base/MVAUtils/ForestTMVA.h \
+             src/base/MVAUtils/ForestXGBoost.cc include/base/MVAUtils/ForestXGBoost.h \
+             src/base/MVAUtils/NodeImpl.cc include/base/NodeImpl.h \
              src/base/ETMiss.cc include/base/ETMiss.h \
              src/base/FinalStateObject.cc include/base/FinalStateObject.h \
              src/base/Units.cc include/base/Units.h \

@@ -14,15 +14,22 @@ void Atlas_2209_13935::initialize() {
   //  always ordered alphabetically in the cutflow output files.
   bookCutflowRegions("Cutflow-OJ-01-total;Cutflow-OJ-02-2l;Cutflow-OJ-03-ptl1>27;Cutflow-OJ-04-nj<2;Cutflow-OJ-05-ptl2>20;Cutflow-OJ-06-SF;Cutflow-OJ-07-OS;Cutflow-OJ-08-ml>11;Cutflow-OJ-09-ml<76>106;Cutflow-OJ-10-ETsig>7;Cutflow-OJ-11-nj0;Cutflow-OJ-12-ptllboost<5;Cutflow-OJ-13-costhetall<02;Cutflow-OJ-14-deltaphi_ptmissl1>22;Cutflow-OJ-15-deltaphill>22;Cutflow-OJ-16-ptl1>140;Cutflow-1J-01-total;Cutflow-1J-02-2l;Cutflow-1J-03-ptl1>27;Cutflow-1J-04-nj<2;Cutflow-1J-05-ptl2>20;Cutflow-1J-06-SF;Cutflow-1J-07-OS;Cutflow-1J-08-ml>11;Cutflow-1J-09-ml<76>106;Cutflow-1J-10-ETsig>7;Cutflow-1J-11-nj1;Cutflow-1J-12-nb0;Cutflow-1J-13-mll>60;Cutflow-1J-14-costhetall<01;Cutflow-1J-15-deltaphill>22;Cutflow-1J-16-ptl2>50;Cutflow-1J-17-ptl2>100;Cutflow-SF-01-total;Cutflow-SF-02-2l;Cutflow-SF-03-ptl1>27;Cutflow-SF-04-nj<2;Cutflow-SF-05-ml>11;Cutflow-SF-06-OS;Cutflow-SF-07-ETsig>8;Cutflow-SF-08-m0T2>50;Cutflow-SF-09-nj0;Cutflow-SF-10-SF;Cutflow-SF-11-ml<76>106;Cutflow-SF-12-BDTsignal;Cutflow-SF-13-BDTsignalother;Cutflow-DF-01-total;Cutflow-DF-02-2l;Cutflow-DF-03-ptl1>27;Cutflow-DF-04-nj<2;Cutflow-DF-05-ml>11;Cutflow-DF-06-OS;Cutflow-DF-07-ETsig>8;Cutflow-DF-08-m0T2>50;Cutflow-DF-09-nj0;Cutflow-DF-10-DF;Cutflow-DF-11-BDTsignal");
   // You should initialize any declared variables here
-  f1.open("2016_050.txt",std::ofstream::trunc);
-  f1.close();
+//  f1.open("2016_050.txt",std::ofstream::trunc);
+//  f1.close();
+  
+  char *a = Global::get_maindir();
+  std::string maindir(a, strlen(a));
+  
+  
+  MVAUtilsReader("lgbm_DF",  maindir  + std::string("/data/atlas_2209_13935/ANA-SUSY-2019-02_DF0J_trained_odd.root"), maindir  + std::string("/data/atlas_2209_13935/ANA-SUSY-2019-02_DF0J_trained_even.root"), bdt_DF);
+  MVAUtilsReader("lgbm_SF",  maindir  + std::string("/data/atlas_2209_13935/ANA-SUSY-2019-02_SF0J_trained_odd.root"), maindir  + std::string("/data/atlas_2209_13935/ANA-SUSY-2019-02_SF0J_trained_even.root"), bdt_SF);  
   
   eventNumber = 0;
 }
 
 void Atlas_2209_13935::analyze() {
   eventNumber++;
-f1.open("2016_050.txt",std::ofstream::app);
+//f1.open("2016_050.txt",std::ofstream::app);
   signal_el.clear();
   signal_mu.clear();
   missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out. Probably not since 3.4.2
@@ -195,7 +202,7 @@ if (leptons[1]->PT>20){
 						countCutflowEvent("Cutflow-1J-10-ETsig>7");
 						if(jets.size()==0){countCutflowEvent("Cutflow-OJ-11-nj0");
 							double ptllboost=(leptons[0]->P4()+leptons[1]->P4()+pTmiss).Pt();
-							f1<<ptllboost<<" "<<(leptons[0]->P4()+leptons[1]->P4()).Pt()<<" "<<pTmiss.Pt()<<" "<<missingET->P4().Et()<<"\n";
+							//cout<<ptllboost<<" "<<(leptons[0]->P4()+leptons[1]->P4()).Pt()<<" "<<pTmiss.Pt()<<" "<<missingET->P4().Et()<<"\n";
 							if((leptons[0]->P4()+leptons[1]->P4()+pTmiss).Pt()<5){countCutflowEvent("Cutflow-OJ-12-ptllboost<5");
 								//f1<<std::tanh(std::abs(leptons[0]->P4().PseudoRapidity()-leptons[1]->P4().PseudoRapidity())/2)<<"\n";
 								if(std::tanh(std::abs(leptons[0]->P4().PseudoRapidity()-leptons[1]->P4().PseudoRapidity())/2)<0.2){countCutflowEvent("Cutflow-OJ-13-costhetall<02");
@@ -265,18 +272,32 @@ if (leptons[1]->PT>20){
 					if(leptons[0]->Type==leptons[1]->Type){	
 						countCutflowEvent("Cutflow-SF-10-SF");
 							if((((leptons[0]->P4()+leptons[1]->P4()).M()>106)||((leptons[0]->P4()+leptons[1]->P4()).M()<76))){
-								countCutflowEvent("Cutflow-SF-11-ml<76>106");                                
-								if(false){
-									countCutflowEvent("Cutflow-SF-12-BDTsignal");
-									if(false){countCutflowEvent("Cutflow-SF-12-BDTsignalother");
+								countCutflowEvent("Cutflow-SF-11-ml<76>106");
+                                double cosTstar = fabs(std::tanh(0.5*(leptons[0]->Eta - leptons[1]->Eta)));
+                                double DPhib = fabs(missingET->P4().DeltaPhi(leptons[0]->P4() + leptons[1]->P4() + pTmiss));
+                                double dphiMETl1 = fabs(missingET->P4().DeltaPhi(leptons[0]->P4()));
+                                double dphiMETl2 = fabs(missingET->P4().DeltaPhi(leptons[1]->P4()));
+                                std::vector<double> inSF{leptons[0]->PT, leptons[1]->PT, pTmiss.Perp(), mT0, (leptons[0]->P4()+leptons[1]->P4()).M(), DPhib, dphiMETl1, dphiMETl2, cosTstar, ETmiss_S};
+                                auto BDTresult = evaluateBDT(inSF, 4, bdt_SF);                                
+								if(BDTresult[1] > 0.77){
+                                    countCutflowEvent("Cutflow-SF-12-BDTsignal");
+									if(BDTresult[3] < 0.01){countCutflowEvent("Cutflow-SF-13-BDTsignalother");
 									}}}}						
 					if(leptons[0]->Type!=leptons[1]->Type){	
 						countCutflowEvent("Cutflow-DF-10-DF");
-                        //auto BDT = evaluateBDT();
-						if(false){countCutflowEvent("Cutflow-DF-11-BDTsignal");}}					
+                        double cosTstar = fabs(std::tanh(0.5*(leptons[0]->Eta - leptons[1]->Eta)));
+                        double DPhib = fabs(missingET->P4().DeltaPhi(leptons[0]->P4() + leptons[1]->P4() + pTmiss));
+                        double dphiMETl1 = fabs(missingET->P4().DeltaPhi(leptons[0]->P4()));
+                        double dphiMETl2 = fabs(missingET->P4().DeltaPhi(leptons[1]->P4()));
+                        std::vector<double> inDF{leptons[0]->PT, leptons[1]->PT, pTmiss.Perp(), mT0, (leptons[0]->P4()+leptons[1]->P4()).M(), DPhib, dphiMETl1, dphiMETl2, cosTstar, ETmiss_S};
+                        auto BDTresult = evaluateBDT(inDF, 4, bdt_DF);
+                        cout << BDTresult[0] << "   " << BDTresult[1] << "   " << BDTresult[2] << "   " << BDTresult[3] << endl;
+						if(BDTresult[1] > 0.81){countCutflowEvent("Cutflow-DF-11-BDTsignal");}}					
 					}}}}}
 }
-f1.close();}
+//f1.close();
+  
+}
  
 void Atlas_2209_13935::finalize() {
 }       
@@ -381,24 +402,24 @@ double Atlas_2209_13935::calcMETSignificance(std::vector<FinalStateObject*> obje
     
 }
 
-/*
+
 void Atlas_2209_13935::MVAUtilsReader(const std::string &name,
                                const std::string fname1,
-                               const std::string fname2, MVAUtils::BDT *m_bdt1, MVAUtils::BDT *m_bdt2) {
+                               const std::string fname2, MVAUtils::BDT *m_bdt[2]) {//1, MVAUtils::BDT *m_bdt2) {
   TFile *f1 = TFile::Open(fname1.c_str(), "READ");
   TTree *tree1 = nullptr;
   f1->GetObject(name.c_str(), tree1);
   if (tree1 == nullptr)
     throw std::runtime_error("Did not find MVA tree");
-  m_bdt1 = new MVAUtils::BDT(tree1);
-  m_bdt2 = nullptr;
+  m_bdt[0] = new MVAUtils::BDT(tree1);
+  m_bdt[1] = nullptr;
   if (fname2 != "") {
     TFile *f2 = TFile::Open(fname2.c_str(), "READ");
     TTree *tree2 = nullptr;
     f2->GetObject(name.c_str(), tree2);
     if (tree2 == nullptr)
       throw std::runtime_error("Did not find MVA tree");
-    m_bdt2 = new MVAUtils::BDT(tree2);
+    m_bdt[1] = new MVAUtils::BDT(tree2);
   }
 }
 
@@ -414,5 +435,5 @@ std::vector<double> Atlas_2209_13935::evaluateBDT(const std::vector<double> &val
 
   std::vector<double> doubleResult(results.begin(), results.end());
   return doubleResult;
-}*/
+}
 
