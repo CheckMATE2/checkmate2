@@ -200,8 +200,9 @@ def get_information_from_parameters():
     parser.add_argument('-mb', '--multibin', dest='statcomb', default="none", type=str, help='Whether to perform multibin fit.')  
     parser.add_argument('-mod', '--model', dest='statmod', default="simple", type=str, help='Which statistical (likelihood) model is used: simple, full, fullpyhf.')
     parser.add_argument('-corr', '--corr', dest='corr', action='store_true', help='Which error correlation matrix use for CMS searches.')
-    parser.add_argument('-mbcls', '--mbcls', dest='mbcls', action='store_true', help='Whether to calculate multibin CLs.')
+    parser.add_argument('-cls', '--mbcls', dest='mbcls', action='store_true', help='Whether to calculate multibin CLs.')
     parser.add_argument('-uplim', '--uppperlimit', dest='uplim', action='store_true', help='Whether to calculate multibin upper limits.')    
+    parser.add_argument('-exp', '--expected', dest='expected', action='store_true', help='Whether to calculate expected multibin statistics.')    
     
     # Parse arguments and set return parameters
     args = parser.parse_args()

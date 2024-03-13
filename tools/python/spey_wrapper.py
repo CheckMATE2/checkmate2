@@ -63,12 +63,13 @@ def calc_point( path, analysis, mbsr ):
     string += f"Limits with full likelihood (spey):\n"
     if Info.flags["mbcls"]:
         AdvPrint.cout("Observed:")
-        cls_obs = stat_model.exclusion_confidence_level(expected = spey.ExpectationType.observed)
-        if 1. - cls_obs[0] < 0.00000001:
-            cls_obs[0] = 0.
+        cls_obs_all = stat_model.exclusion_confidence_level(expected = spey.ExpectationType.observed)
+        cls_obs = cls_obs_all[0]
+        if 1. - cls_obs < 0.00000001:
+            cls_obs = 0.
             AdvPrint.cout("CLs calculation unreliable.")
-        AdvPrint.cout("CL95: "+str(1. - cls_obs[0]) )
-        string += f"Observed CLs for mu = 1: {1. - cls_obs[0]}"+'\n'
+        AdvPrint.cout("CL95: "+str(1. - cls_obs) )
+        string += f"Observed CLs for mu = 1: {1. - cls_obs}"+'\n'
         if Info.flags["expected"]:
             cls_exp =  stat_model.exclusion_confidence_level(expected = spey.ExpectationType.apriori) 
             string = string+f"Expected CLs band for mu = 1: {[1.-exp for exp in cls_exp]}"+'\n'
@@ -85,8 +86,9 @@ def calc_point( path, analysis, mbsr ):
     
     with open(path+'/multibin_limits/'+"results.dat", "a") as write_file:
         write_file.write(string)
+        write_file.close()
 
-    return inv_r, inv_r_exp, 1-cls_obs[0], cls_exp
+    return inv_r, inv_r_exp, 1-cls_obs, cls_exp
 
 def calc_cov(path, analysis, mbsr):
     

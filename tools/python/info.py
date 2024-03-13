@@ -212,7 +212,7 @@ class Info(dict):
         parser.add_argument('-corr', '--corr', dest='corr', action='store_true', help='Which error correlation matrix use for CMS searches.')
         parser.add_argument('-mbcls', '--mbcls', dest='mbcls', action='store_true', help='Whether to calculate multibin CLs.')
         parser.add_argument('-uplim', '--uppperlimit', dest='uplim', action='store_true', help='Whether to calculate multibin upper limits.')
-        parser.add_argument('-exp', '--expected', dest='expected', action='store_true', help='Whether to expected CLs (upper limits).')
+        parser.add_argument('-exp', '--expected', dest='expected', action='store_true', help='Whether to calculate expected multibin statitics.')
         
         # Parse arguments and set return parameters
         if emptyparser:
@@ -330,7 +330,7 @@ class Info(dict):
         
         # spaces in "name" are replaced by underscores to prevent problems in the file handling
         output_name = "CheckMATE_run"
-        analyses_to_load = "atlas & 8TeV, cms & 8TeV"
+        analyses_to_load = "atlas & 13TeV, cms & 13TeV"
         cls.files["slha"] = ""
         if "Parameters" in sections:
             for optional_parameter in Config.options("Parameters"):
@@ -397,9 +397,15 @@ class Info(dict):
                 elif optional_parameter == "model":
                     args.statmod = Config.get("Parameters", "model")              
                 elif optional_parameter == "corr":
-                    args.corr = Config.get("Parameters", "corr")                                  
+                    args.corr = Config.getboolean("Parameters", "corr")                          
+                elif optional_parameter == "expected":
+                    args.expected = Config.getboolean("Parameters", "expected")         
+                elif optional_parameter == "cls":
+                    args.mbcls = Config.getboolean("Parameters", "mbcls")                   
+                elif optional_parameter == "uplim":
+                    args.uplim = Config.getboolean("Parameters", "uplim")                                       
                 else:
-                    AdvPrint.cerr_exit("Unknown optional parameter '"+optional_parameter+"'")                    
+                    AdvPrint.cerr_exit("Unknown optional parameter '"+optional_parameter+"'")         
         cls.fill_info_from_args(args)
        
     @classmethod
