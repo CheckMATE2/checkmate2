@@ -94,7 +94,7 @@ def calc_cov(path, analysis, mbsr):
     
     inv_r = 10. 
     inv_r_exp = 10. 
-    cls_obs = 1. 
+    cls_obs = 1.
     cls_exp = [1.,1.,1.,1.,1.]
     
     os.system("mkdir -p " + path + '/multibin_limits')
@@ -122,9 +122,9 @@ def calc_cov(path, analysis, mbsr):
     string = string + "Limits with "+ covariance + " matrix likelihood (spey):\n"
     if Info.flags["mbcls"]:
         AdvPrint.cout("Observed:")
-        cls_obs = stat_model.exclusion_confidence_level(expected = spey.ExpectationType.observed)
-        AdvPrint.cout("CL95: "+str(1. - cls_obs[0]) )
-        string += f"Observed CLs for mu = 1: {1. - cls_obs[0]}"+'\n'
+        cls_obs = stat_model.exclusion_confidence_level(expected = spey.ExpectationType.observed)[0]
+        AdvPrint.cout("CL95: "+str(1. - cls_obs) )
+        string += f"Observed CLs for mu = 1: {1. - cls_obs}"+'\n'
         if Info.flags["expected"]:
             cls_exp =  stat_model.exclusion_confidence_level(expected = spey.ExpectationType.apriori) 
             string = string+f"Expected CLs band for mu = 1: {[1.-exp for exp in cls_exp]}"+'\n'
@@ -142,7 +142,7 @@ def calc_cov(path, analysis, mbsr):
     with open(path+'/multibin_limits/'+"results.dat", "a") as write_file:
         write_file.write(string)
 
-    return inv_r, inv_r_exp, 1-cls_obs[0], cls_exp    
+    return inv_r, inv_r_exp, 1-cls_obs, cls_exp    
 
 
 def get_limits():

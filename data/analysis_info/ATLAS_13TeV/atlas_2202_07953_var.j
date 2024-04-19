@@ -224,7 +224,7 @@
     "VBF"
   ],
   "likelihoods": "n",
-  "!mb_signal_regions": {
+  "mb_signal_regions": {
     "Combined": [
       "Bin01", 
       "Bin02", 
