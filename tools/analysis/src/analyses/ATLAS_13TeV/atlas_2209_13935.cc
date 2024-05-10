@@ -51,22 +51,10 @@ void Atlas_2209_13935::analyze() {
   std::vector<Jet*> baseline_jets=filterPhaseSpace(jets, 20., -2.4, 2.4);
 //--------------------Overlap cleaning----------------------------------------
   jets = overlapRemoval(jets, electronsLoose, 0.2);
-  jets=overlapRemoval_muon_jet_tracks(jets, muonsCombined, 0.4, 3);
-  double dr=0;
-  for (int j = 0; j < signal_el.size(); j++) {
-  	for (int i = 0; i < jets.size(); i++) 
-  	{
-  		dr=jets[i]->P4().DeltaR(signal_el[j]->P4());
-  		if (dr<std::min(0.4,0.04+10/signal_el[j]->PT)){signal_el.erase(signal_el.begin()+j);}
-  	}
-  }
-  for (int j = 0; j < signal_mu.size(); j++) {
-  	for (int i = 0; i < jets.size(); i++) 
-  	{
-  		dr=jets[i]->P4().DeltaR(signal_mu[j]->P4());
-  		if (dr<std::min(0.4,0.04+10/signal_mu[j]->PT)){signal_mu.erase(signal_mu.begin()+j);}
-  	}
-  }
+  jets = overlapRemoval_muon_jet_tracks(jets, muonsCombined, 0.4, 3);
+  signal_el = specialoverlap( signal_el, jets);
+  signal_mu = specialoverlap( signal_mu, jets);
+
 //--------------------identify b-jets------------------------------------------------------------
   std::vector<Jet*> bjets={};
   std::vector<Jet*> nonbjets={};
@@ -437,3 +425,24 @@ std::vector<double> Atlas_2209_13935::evaluateBDT(const std::vector<double> &val
   return doubleResult;
 }
 
+template <class X, class Y>
+std::vector<X*> Atlas_2209_13935::specialoverlap(std::vector<X*> candidates, std::vector<Y*> neighbours) {
+      // If neighbours are empty, return candidates
+      if(neighbours.size() == 0)
+        return candidates;
+      std::vector<X*> passed_candidates;
+      // Loop over candidates
+      for(int i = 0; i < candidates.size(); i++) {
+        bool overlap = false;
+        // If a neighbour is too close, declare overlap, break and don't save candidate
+        for(int j = 0; j < neighbours.size(); j++) {
+          if (candidates[i]->P4().DeltaR(neighbours[j]->P4()) > 0.2 and candidates[i]->P4().DeltaR(neighbours[j]->P4()) < std::min(0.4, 0.04 + 10./candidates[i]->PT) ) {
+            overlap = true;
+            break;
+          }
+        }
+        if (!overlap)
+          passed_candidates.push_back(candidates[i]);
+      }
+      return passed_candidates;
+    }

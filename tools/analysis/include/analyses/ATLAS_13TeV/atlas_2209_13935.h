@@ -24,6 +24,8 @@ class Atlas_2209_13935 : public AnalysisBase {
     std::vector<Jet*> overlapRemoval_muon_jet_tracks(std::vector<Jet*> cand_jets, std::vector<Muon*> cand_muons, double deltaR, int nTracks);
     void  rotateXY(TMatrix &mat, TMatrix &mat_new, double phi);
     double calcMETSignificance(std::vector<FinalStateObject*> objects,double met);
+    template <class X, class Y>
+    std::vector<X*> specialoverlap(std::vector<X*> candidates, std::vector<Y*> neighbours);
     
     int eventNumber;
     
