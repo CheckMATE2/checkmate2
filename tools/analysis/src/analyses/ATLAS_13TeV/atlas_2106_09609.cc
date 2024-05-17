@@ -618,7 +618,8 @@ void Atlas_2106_09609::finalize() {
 
 #ifdef HAVE_ONNX  
   for (int i = 0; i < 5; i++)
-    delete session[i];
+    //delete session[i];
+    session[i]->release();
 #endif  
   
 }       
