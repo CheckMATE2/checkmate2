@@ -269,7 +269,7 @@ def upperlim_with_cov(_o, _b, _db, _s, _ds, _cov, calculator, sigconstraint):
 
 #------------------------------------------------------------------
 
-def get_cov(analysis, db, corrmat = False):
+def get_cov(analysis, db, corrmat = False, mbsr = None):
     global hepfiles_folder
     hepfiles_folder = Info.paths['data']+"/"   #<----Set the path of the folder with the models here.
     
@@ -287,17 +287,22 @@ def get_cov(analysis, db, corrmat = False):
     elif os.path.isfile(hepfiles_folder+analysis+"/cov.json"):
         with open(hepfiles_folder+analysis+"/cov.json") as serialized:
             cov = json.load(serialized)
-        if analysis == "cms_sus_19_005":
-            size = 282
+        offset2 = 0.    
+        if analysis == "cms_sus_19_005" and mbsr == "low":
+            size = 163
+        elif analysis == "cms_sus_19_005" and mbsr == "high":
+            size = 119
+            offset2 = 163.
         else:
             size = int(np.sqrt(len(cov["values"])))
         cov_mat = np.identity(size)
-        offset = float(cov["values"][0]["x"][0]["value"])
+        offset = float(cov["values"][0]["x"][0]["value"])+offset2
         #print(offset)
         #print(len(cov["values"]))
         for i in range(len(cov["values"])):
-            cov_mat[int(float(cov["values"][i]["x"][0]["value"])-offset),int(float(cov["values"][i]["x"][1]["value"])-offset)]=float(cov["values"][i]["y"][0]["value"])
-            cov_mat[int(float(cov["values"][i]["x"][1]["value"])-offset),int(float(cov["values"][i]["x"][0]["value"])-offset)]=float(cov["values"][i]["y"][0]["value"])
+            if int(float(cov["values"][i]["x"][0]["value"])-offset) >= 0 and int(float(cov["values"][i]["x"][1]["value"])-offset) >= 0 and int(float(cov["values"][i]["x"][1]["value"])-offset) < size and int(float(cov["values"][i]["x"][0]["value"])-offset) < size:
+                cov_mat[int(float(cov["values"][i]["x"][0]["value"])-offset),int(float(cov["values"][i]["x"][1]["value"])-offset)]=float(cov["values"][i]["y"][0]["value"])
+                cov_mat[int(float(cov["values"][i]["x"][1]["value"])-offset),int(float(cov["values"][i]["x"][0]["value"])-offset)]=float(cov["values"][i]["y"][0]["value"])
     else:
         AdvPrint.cerr_exit("Missing covariance matrix!")
         

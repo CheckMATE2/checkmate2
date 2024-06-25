@@ -365,6 +365,9 @@ class CheckMATE2(object):
         best_sr = ""
         cls_limit = False
         AdvPrint.cout("")
+        combination_list = [["cms_sus_19_005", "low"], ["cms_sus_19_005", "high"]]
+        combine = False
+        combination_models = []
         for analysis in Info.analyses:
             if "mb_signal_regions" in Info.get_analysis_parameters(analysis):
                 mb_signal_regions = Info.get_analysis_parameters(analysis)["mb_signal_regions"]
@@ -385,7 +388,9 @@ class CheckMATE2(object):
                     if (Info.parameters["statmod"] == "full" or Info.parameters["statmod"] == "fullpyhf" or Info.parameters["statmod"] == "simple") and Info.get_analysis_parameters(analysis)["likelihoods"] == "cov":
                         sr_list = mb_signal_regions[mbsr]
                         AdvPrint.cout("Calculating approximate likelihood with covariance matrix: "+analysis+", SR: "+mbsr+"... ")
-                        inv_r_obs, inv_r_exp, cls_obs, cls_exp = spey_wrapper.calc_cov(Info.paths['output'] , analysis, mbsr)
+                        inv_r_obs, inv_r_exp, cls_obs, cls_exp, stat_model = spey_wrapper.calc_cov(Info.paths['output'] , analysis, mbsr)
+                        if combine and [analysis, mbsr] in combination_list:
+                            combination_models.append(stat_model)
                         AdvPrint.cout("Done!")
                     if Info.flags["uplim"] == True:
                         param = inv_r_obs
@@ -422,7 +427,10 @@ class CheckMATE2(object):
             AdvPrint.cout("MBSR: "+best_sr)
             AdvPrint.set_cout_file("#None")
         else:
-            AdvPrint.cout("Results of approximate/fast likelihood to weak to exclude model or no multibin analysis available")        
+            AdvPrint.cout("Results of approximate/fast likelihood to weak to exclude model or no multibin analysis available")       
+            
+        if combine:
+            spey_wrapper.combination_stat(combination_models)
           
     def get_resultCollectors(self):
         """ Finds the results of all events within all processes and sums and averages them """

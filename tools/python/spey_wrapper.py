@@ -104,19 +104,23 @@ def calc_cov(path, analysis, mbsr):
     o, b, db, s, ds = mb.select_MBsr(sr_list, mb.data_from_CMresults(Info.paths['output'])) #prepare data
     stat_wrapper = spey.get_backend ("default_pdf.correlated_background")
     
-    cov_mat = mb.get_cov(analysis, db, Info.flags["corr"])
+    cov_mat = mb.get_cov(analysis, db, Info.flags["corr"], mbsr)
     if  Info.flags["corr"] and analysis == "cms_1908_04722":
         covariance = "correlation"
     else:    
         covariance = "covariance"
-    #dim = 200    
+    #dim = 2
+    #AdvPrint.cout(np.array(cov_mat)[0,0])
     #det = np.linalg.det(np.array(cov_mat)[0:dim,0:dim])
+    #det = np.linalg.det(np.array(cov_mat))
     #sign, logdet = np.linalg.slogdet(np.array(cov_mat)[0:dim,0:dim])
+    #sign, logdet = np.linalg.slogdet(np.array(cov_mat))
+    #AdvPrint.cout(mbsr)
     #AdvPrint.cout("Det: " + str(det))
     #AdvPrint.cout("Log det: " + str(sign) + " " + str(logdet))
     #AdvPrint.cout(str(s))
     #stat_model = stat_wrapper(signal_yields = np.array(s)[0:dim], background_yields = np.array(b)[0:dim], data = np.array(o)[0:dim], covariance_matrix = np.array(cov_mat)[0:dim,0:dim])
-    stat_model = stat_wrapper(signal_yields = np.array(s), background_yields = np.array(b), data = np.array(o), covariance_matrix = np.array(cov_mat))
+    stat_model = stat_wrapper(analysis = analysis+mbsr , signal_yields = np.array(s), background_yields = np.array(b), data = np.array(o), covariance_matrix = np.array(cov_mat))
     
     string = "================================\n Analysis: "+analysis+" , SR: "+mbsr+"\n"
     string = string + "Limits with "+ covariance + " matrix likelihood (spey):\n"
@@ -142,7 +146,7 @@ def calc_cov(path, analysis, mbsr):
     with open(path+'/multibin_limits/'+"results.dat", "a") as write_file:
         write_file.write(string)
 
-    return inv_r, inv_r_exp, 1-cls_obs, cls_exp    
+    return inv_r, inv_r_exp, 1-cls_obs, cls_exp, stat_model    
 
 
 def get_limits():
@@ -324,3 +328,7 @@ def combination(analyses):
     combined = spey.UnCorrStatisticsCombiner(*[stat_model1, stat_model2])
     AdvPrint.cout("Combined upper limit: " + str(combined.poi_upper_limit(expected = spey.ExpectationType.observed)) )
     
+def combination_stat(model_list):
+    #AdvPrint.cout(model_list)
+    combined = spey.UnCorrStatisticsCombiner(*model_list)
+    AdvPrint.cout("Combined upper limit: " + str(combined.poi_upper_limit(expected = spey.ExpectationType.observed)) )
