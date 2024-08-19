@@ -23,7 +23,7 @@ atlas_1909_08457     5    search for squarks and gluinos with same-sign leptons 
 atlas_conf_2019_020  2    Search for chargino-neutralino production with mass splittings near the electroweak scale   139   no
 atlas_1803_02762     20   Search for electroweakino production in final states with two or three leptons	          36.1  no
 atlas_2101_01629     32   squarks/gluinos, 1 lepton, jets, MET                                                        139   no
-atlas_conf_2020_048  26   Search for dark matter with monojets                                                        139   no
+#atlas_conf_2020_048  26   Search for dark matter with monojets                                                        139   no
 atlas_2004_14060     14   stops, leptoquarks, 0 lepton                                                                139   no 
 atlas_1908_03122     10   0 leptons, 3 or more b-jets, sbottoms                                                       139   no
 atlas_1911_12606     87   search for sleptons and electroweakinos with soft leptons                                   139   no
@@ -39,6 +39,7 @@ atlas_2006_05880     28   Search for top squarks in events whith a Higgs or a Z 
 atlas_2111_08372     23   dark matter and invisible Higgs with Z boson                                                139   no  
 atlas_2202_07953     17   invisible Higgs decays in VBF                                                               139   no 
 atlas_2209_13935     59   search for charginos and sleptons in 2-lepton final states                                  139   no  
+atlas_2102_10874     26   monojet                                                                                     139   no
 
 #Superseded:          
 #atlas_1602_09058     4    2 ss leptons or 3 leptons                                                                   3.2   no   

@@ -1,4 +1,4 @@
-import spey
+import spey, spey_pyhf
 import json, pyhf
 import numpy as np
 import os
@@ -47,6 +47,11 @@ def calc_point( path, analysis, mbsr ):
     #    json.dump(patchset, write_file, indent=4)       
     signal0 = pyhf.PatchSet(patchset)["Signal0"]
     
+    if "tensorflow" in spey_pyhf.manager.available_backends and pyhf.tensorlib.name != "tensorflow":
+        pyhf.set_backend("tensorflow")
+        pyhf.set_backend("tensorflow")
+    print("Pyhf backend: "+pyhf.tensorlib.name)
+
     stat_wrapper = spey.get_backend ("pyhf")
     
     with open(Info.paths['data']+ "/" + analysis + "/pyhf_conf.json") as serialized:

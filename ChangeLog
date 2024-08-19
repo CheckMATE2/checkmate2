@@ -1,5 +1,13 @@
 CheckMATE - Changelog
 
+Ver 2.0.40
+---------
+
+2024-08-19   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ added atlas_2102_10874
+    ~ Tensorflow backend for pyhf
+
 Ver 2.0.37
 ---------
 

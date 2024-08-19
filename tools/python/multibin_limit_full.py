@@ -60,7 +60,8 @@ def data_from_CMresults(path):
             f_CR=open(path+'/analysis/'+CR_path,'r')
             table_CR=f_CR.read()
             f_CR.close()
-            MCevents=table_CR.split('\n')[5].split()[1]
+            MCevents=float(table_CR.split('\n')[5].split()[1])
+            NormEvents=float(table_CR.split('\n')[8].split()[2])
             for line in table_CR.split('\n')[11:]:
                     if line!='':
                         ind_i=-1
@@ -73,14 +74,14 @@ def data_from_CMresults(path):
                                 'b':float(0),
                                 'db':float(0),
                                 's':float(line.split()[4]),
-                                'ds':float(line.split()[4])
+                                'ds':np.sqrt(float(line.split()[4])*NormEvents/MCevents)
                                 })
                         else:
                             SRs[i]['o']=float(0)
                             SRs[i]['b']=float(0)
                             SRs[i]['db']=float(0)
                             SRs[i]['s']=SRs[i]['s']+float(line.split()[4])
-                            SRs[i]['ds']=np.sqrt(SRs[i]['ds']**2+(float(line.split()[4])/np.sqrt(MCevents))**2)
+                            SRs[i]['ds']=np.sqrt(SRs[i]['ds']**2 + float(line.split()[4])*NormEvents/MCevents)
     return SRs
 
 #Creates arrays with the data for the list of SRs passed. 

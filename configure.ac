@@ -28,7 +28,7 @@ AM_PATH_PYTHON([2.7.3], ,AC_MSG_ERROR(You need Python 2.7.3+ to run CheckMATE. U
 ROOT_PATH([5.20], , AC_MSG_ERROR(ROOT could not be initialised. Try using --with-rootsys and check whether you have ver. 5.34/06 or newer.))
 # removed due to incompatibility with newer root versions (around 6.20); future check should have 'pyroot' instead
 #ROOT_FEATURE(python, ,AC_MSG_ERROR(ROOT could be initialised but apparently it has been configured without Python functionality. Checkout the manual to find out how to add it.))
-ROOT_FEATURE(minuit2, ,AC_MSG_ERROR(ROOT could be initialised but apparently it has been configured without Minuit2 functionality. Checkout the manual to find out how to add it.))
+#ROOT_FEATURE(minuit2, ,AC_MSG_ERROR(ROOT could be initialised but apparently it has been configured without Minuit2 functionality. Checkout the manual to find out how to add it.))
 #ROOT_FEATURE(roofit, ,AC_MSG_ERROR(ROOT could be initialised but apparently it has been configured without RooFit functionality. Checkout the manual to find out how to add it.))
 AC_SUBST(ROOTSYS)
 AC_SUBST(LD_LIBRARY_PATH)
