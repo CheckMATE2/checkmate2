@@ -1,6 +1,6 @@
 SR               obs     bkg     bkg_err  S95_obs  S95_exp  
 2j_loose         41      37      14       28       26       
-2j_tight         13      18.7    4.2      8.3      11.1     
+2j_tight         13      10.7    4.2      12.5     11.0
 4j_loose         72      54      13       44       31       
 4j_tight         10      6.4     2.5      11.5     8.8      
 7j_loose         72      63      13       35       31       

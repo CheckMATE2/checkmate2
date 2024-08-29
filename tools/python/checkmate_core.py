@@ -230,7 +230,9 @@ class CheckMATE2(object):
         if Info.parameters["TotalEvaluationFileColumns"] != ['analysis', 'sr', 'o', 'b', 'db', 's', 'ds', 's95obs', 's95exp', 'robscons', 'rexpcons']:
             AdvPrint.cout("\t - print columns "+str(Info.parameters['TotalEvaluationFileColumns']).translate(None, "[]'")+" in total evaluation files!")
         if Info.parameters["BestPerAnalysisEvaluationFileColumns"] != ['analysis', 'sr', 'o', 'b', 'db', 's', 'ds', 's95obs', 's95exp', 'robscons', 'rexpcons']:
-            AdvPrint.cout("\t - print columns "+str(Info.parameters['BestPerAnalysisEvaluationFileColumns']).translate(None, "[]'")+" in bert-per-analysis evaluation files!")
+            AdvPrint.cout("\t - print columns "+str(Info.parameters['BestPerAnalysisEvaluationFileColumns']).translate(None, "[]'")+" in best-per-analysis evaluation files!")
+        if Info.parameters["srcombination"] != "":
+            AdvPrint.cout("\t - Multibin signal regions for statistical combination: " + str(Info.parameters["srcombination"]) )
             
         # Let user check correctness of parameters, unless in skipparamcheck.
         if not Info.flags['skipparamcheck']:
@@ -365,9 +367,13 @@ class CheckMATE2(object):
         best_sr = ""
         cls_limit = False
         AdvPrint.cout("")
-        combination_list = [["cms_sus_19_005", "low"], ["cms_sus_19_005", "high"]]
+        #combination_list = [["cms_sus_19_005", "low"], ["cms_sus_19_005", "high"]]
+        combination_in = Info.parameters["srcombination"]
         combine = False
+        if combination_in:
+            combine = True
         combination_models = []
+        combination_list = []
         for analysis in Info.analyses:
             if "mb_signal_regions" in Info.get_analysis_parameters(analysis):
                 mb_signal_regions = Info.get_analysis_parameters(analysis)["mb_signal_regions"]
@@ -389,8 +395,9 @@ class CheckMATE2(object):
                         sr_list = mb_signal_regions[mbsr]
                         AdvPrint.cout("Calculating approximate likelihood with covariance matrix: "+analysis+", SR: "+mbsr+"... ")
                         inv_r_obs, inv_r_exp, cls_obs, cls_exp, stat_model = spey_wrapper.calc_cov(Info.paths['output'] , analysis, mbsr)
-                        if combine and [analysis, mbsr] in combination_list:
+                        if combine and [analysis, mbsr] in combination_in:
                             combination_models.append(stat_model)
+                            combination_list.append( [analysis, mbsr])
                         AdvPrint.cout("Done!")
                     if Info.flags["uplim"] == True:
                         param = inv_r_obs
@@ -429,8 +436,10 @@ class CheckMATE2(object):
         else:
             AdvPrint.cout("Results of approximate/fast likelihood to weak to exclude model or no multibin analysis available")       
             
-        if combine:
-            spey_wrapper.combination_stat(combination_models)
+        if combine and combination_list:
+            spey_wrapper.combination_stat(combination_models, combination_list)
+        elif combine:
+            AdvPrint.cout("Something wrong with the signal region combination list. Skipping.")
           
     def get_resultCollectors(self):
         """ Finds the results of all events within all processes and sums and averages them """

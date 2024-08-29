@@ -114,6 +114,8 @@ def get_information_from_file(pfile):
                 flags['randomseed'] = Config.getint("Optional Parameters", "randomseed")
             elif optional_parameter == "controlregions":
                 flags['controlregions'] = Config.getboolean("Optional Parameters", "controlregions")
+            elif optional_parameter == "srcombination":
+                flags['srcombination'] = Config.get("Optional Parameters", "srcombination")
             else:
                 output.cerr_exit("Unknown optional parameter '"+optional_parameter+"'")
         sections.remove("Optional Parameters")

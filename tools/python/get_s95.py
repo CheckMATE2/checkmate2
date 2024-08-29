@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Calculates CLs and S95 limits for simple one bin counting experiments.
 

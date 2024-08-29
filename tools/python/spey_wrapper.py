@@ -333,7 +333,17 @@ def combination(analyses):
     combined = spey.UnCorrStatisticsCombiner(*[stat_model1, stat_model2])
     AdvPrint.cout("Combined upper limit: " + str(combined.poi_upper_limit(expected = spey.ExpectationType.observed)) )
     
-def combination_stat(model_list):
+def combination_stat(model_list, sr_list):
     #AdvPrint.cout(model_list)
     combined = spey.UnCorrStatisticsCombiner(*model_list)
-    AdvPrint.cout("Combined upper limit: " + str(combined.poi_upper_limit(expected = spey.ExpectationType.observed)) )
+    obs = combined.poi_upper_limit(expected = spey.ExpectationType.observed)
+    AdvPrint.cout("Observed combined upper limit: " + str(obs) )
+    string = "==========Combination=============\n"
+    string += str(sr_list) + '\n'
+    string += "Observed combined upper limit: " + str(obs) + '\n'
+    if Info.flags["expected"]:
+        exp = combined.poi_upper_limit(expected = spey.ExpectationType.apriori )
+        AdvPrint.cout("Expected combined upper limit: " + str(exp) )
+        string += "Expected combined upper limit: " + str(exp) + '\n'
+    with open(Info.paths['output'] + '/multibin_limits/'+"results.dat", "a") as write_file:
+        write_file.write(string)

@@ -8,6 +8,7 @@ import os, shutil,  sys
 import json, pickle
 import argparse
 import configparser
+import ast
 from advprint import AdvPrint
 
 class Info(dict):
@@ -60,6 +61,7 @@ class Info(dict):
         parameters['BestPerAnalysisEvaluationFileColumns'] = ['analysis', 'sr', 'o', 'b', 'db', 's', 'ds', 's95obs', 's95exp', 'robscons', 'rexpcons']
         parameters['statcomb'] = "none"
         parameters['statmod'] = "simple"
+        parameters['srcombination'] = []
         
         cls.analysis_groups = {
                 "ATLAS_7TeV",
@@ -289,6 +291,14 @@ class Info(dict):
             cls.parameters["EventResultFileColumns"] = args.erfc.split(",")
         if args.bpaefc != "":
             cls.parameters["BestPerAnalysisEvaluationFileColumns"] = args.bpaefc.split(",") 
+        if args.srcombination != "":
+            cls.parameters["srcombination"] = ast.literal_eval(args.srcombination)
+            #print(type(cls.parameters["srcombination"]))
+            #print(cls.parameters["srcombination"][0][1])
+            #if cls.parameters["srcombination"] is not list: #what's the problem with that?
+            #    AdvPrint.cout("Signal regions for combination is not a list. Skipping.")
+            #    cls.parameters["srcombination"] = []
+
         cls.make_flags_consistent()
         
         cls.load_analyses(args.analysis)
@@ -403,7 +413,9 @@ class Info(dict):
                 elif optional_parameter == "cls":
                     args.mbcls = Config.getboolean("Parameters", "mbcls")                   
                 elif optional_parameter == "uplim":
-                    args.uplim = Config.getboolean("Parameters", "uplim")                                       
+                    args.uplim = Config.getboolean("Parameters", "uplim")
+                elif optional_parameter == "srcombination":
+                    args.srcombination = Config.get("Parameters", "srcombination")
                 else:
                     AdvPrint.cerr_exit("Unknown optional parameter '"+optional_parameter+"'")         
         cls.fill_info_from_args(args)
