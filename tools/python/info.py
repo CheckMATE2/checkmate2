@@ -215,6 +215,7 @@ class Info(dict):
         parser.add_argument('-mbcls', '--mbcls', dest='mbcls', action='store_true', help='Whether to calculate multibin CLs.')
         parser.add_argument('-uplim', '--uppperlimit', dest='uplim', action='store_true', help='Whether to calculate multibin upper limits.')
         parser.add_argument('-exp', '--expected', dest='expected', action='store_true', help='Whether to calculate expected multibin statitics.')
+        parser.add_argument('-srcomb', '--srcombination', dest='srcombination', default="", help='Whether to combine multibin signal regions or different searches .')
         
         # Parse arguments and set return parameters
         if emptyparser:

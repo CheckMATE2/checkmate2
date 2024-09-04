@@ -231,7 +231,7 @@ class CheckMATE2(object):
             AdvPrint.cout("\t - print columns "+str(Info.parameters['TotalEvaluationFileColumns']).translate(None, "[]'")+" in total evaluation files!")
         if Info.parameters["BestPerAnalysisEvaluationFileColumns"] != ['analysis', 'sr', 'o', 'b', 'db', 's', 'ds', 's95obs', 's95exp', 'robscons', 'rexpcons']:
             AdvPrint.cout("\t - print columns "+str(Info.parameters['BestPerAnalysisEvaluationFileColumns']).translate(None, "[]'")+" in best-per-analysis evaluation files!")
-        if Info.parameters["srcombination"] != "":
+        if Info.parameters["srcombination"]:
             AdvPrint.cout("\t - Multibin signal regions for statistical combination: " + str(Info.parameters["srcombination"]) )
             
         # Let user check correctness of parameters, unless in skipparamcheck.
