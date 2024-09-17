@@ -53,6 +53,10 @@ void Cms_sus_19_005::analyze() {
   countCutflowEvent("02_softlep_veto");
   
   jets = filterPhaseSpace(jets, 20., -4.7, 4.7);
+  jets = overlapRemoval(jets, electronsMedium, 0.3, "y");
+  jets = overlapRemoval(jets, muonsCombined, 0.3, "y");
+  jets = overlapRemoval(jets, photonsMedium, 0.3, "y");
+
   if (dPhi(jets, 0) < 0.3) return;
   countCutflowEvent("03_dPhi_min");
   
@@ -73,34 +77,48 @@ void Cms_sus_19_005::analyze() {
   
   double  HT = 0.;
   TLorentzVector HTmiss = TLorentzVector(0.,0.,0.,0.);
-  for (int i = 0; i < lightjets.size(); i++) {
+  for (int i = 0; i < signaljets.size(); i++) {
+    HT += signaljets[i]->PT;
+    HTmiss -= signaljets[i]->P4();
+  }
+  /*for (int i = 0; i < lightjets.size(); i++) {
     HT += lightjets[i]->PT;
     HTmiss -= lightjets[i]->P4();
   }
   for (int i = 0; i < bjets.size(); i++) {
     HT += bjets[i]->PT;
     HTmiss -= bjets[i]->P4();
-  }
+  }*/
   
   double MET = missingET->P4().Perp();
   if ( MET < 30.) return;
   countCutflowEvent("05_MET<30");
   
+  bool trigger = false;
+  if (MET > 120. and HTmiss.Perp() > 120.) trigger = true;
+  if (HT > 60. and MET > 120. and  HTmiss.Perp() > 120.) trigger = true;
+  if (HT > 500. and MET > 100. and  HTmiss.Perp() > 100.) trigger = true;
+  if (HT > 800. and MET > 75. and  HTmiss.Perp() > 75.) trigger = true;
+  if (HT > 1050. ) trigger = true;
+  if (signaljets[0]->PT > 500.) trigger = true;
+  if (!trigger) return;
+  countCutflowEvent("06_trigger");
+
   if (  (missingET->P4() - HTmiss).Perp()/MET > 0.5) return;
-  countCutflowEvent("06_MET-HTmiss");
+  countCutflowEvent("07_MET-HTmiss");
   
   if ( HT < 250.) return;
-  countCutflowEvent("07_HT>250");
+  countCutflowEvent("08_HT>250");
   
   if ( (HT < 1200. or Nj == 1) and MET < 250.) return;
-  countCutflowEvent("08_MET>250");
+  countCutflowEvent("09_MET>250");
   
   if (Nj > 1 ) {
-    std::vector<Jet*> sigjets = lightjets; //same as signaljets
+    /*std::vector<Jet*> sigjets = lightjets; //same as signaljets
     sigjets.insert(sigjets.end(), bjets.begin(), bjets.end());
-    std::sort(sigjets.begin(), sigjets.end(), sortByPT ); 
+    std::sort(sigjets.begin(), sigjets.end(), sortByPT ); */
   
-    std::vector<LundCluster> clusters = cluster_jets(sigjets);
+    std::vector<LundCluster> clusters = cluster_jets(signaljets);
     
     /*for (int j = 0; j < 2; j++) {
       cout << "Cluster "+ std::to_string(j) << endl;
@@ -111,10 +129,11 @@ void Cms_sus_19_005::analyze() {
       }
     } */
     
-    double MT2 = mT2(clusters[0].P4(), clusters[1].P4(), 0., missingET->P4());
+    double MT2 = mT2(clusters[0].P4(), clusters[1].P4(), 0., missingET->P4(), false);
     
-    if (MT2 < 200.) return;
-    countCutflowEvent("09_MT2>200");
+    if (MT2 < 200. and HT < 1500.) return;
+    if (MT2 < 400.) return;
+    countCutflowEvent("10_MT2>200");
     
     fill_bins_2j(Nj, Nb, HT, MT2);
     
@@ -248,14 +267,16 @@ std::vector<LundCluster> Cms_sus_19_005::cluster_jets(std::vector<Jet*> input) {
     k++;
     for (int i = 0; i < cluster1.constituents.size(); i++) 
       if (cluster1.Lund_dist(cluster1.constituents[i]) > cluster2.Lund_dist(cluster1.constituents[i]) ) {
+        Jet* tmp = cluster1.constituents[i];
         cluster1.remove_jet(cluster1.constituents[i]);
-        cluster2.add_jet(cluster1.constituents[i]);
+        cluster2.add_jet(tmp);
         stable = 0;
       }
     for (int i = 0; i < cluster2.constituents.size(); i++) 
       if (cluster2.Lund_dist(cluster2.constituents[i]) > cluster1.Lund_dist(cluster2.constituents[i]) ) {
+        Jet* tmp = cluster2.constituents[i];
         cluster2.remove_jet(cluster2.constituents[i]);
-        cluster1.add_jet(cluster2.constituents[i]);
+        cluster1.add_jet(tmp);
         stable = 0;
       }         
   }

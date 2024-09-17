@@ -594,7 +594,7 @@ class AnalysisBase {
      * 
      * For more information, see http://arxiv.org/abs/0810.5178.
      */
-    double mT2(const TLorentzVector & vis1, const TLorentzVector & vis2, double m_inv, const TLorentzVector & invis = TLorentzVector(0., 0., 0., 0.));
+    double mT2(const TLorentzVector & vis1, const TLorentzVector & vis2, double m_inv, const TLorentzVector & invis = TLorentzVector(0., 0., 0., 0.), bool massive = true);
 
     //! Evaluates normal \f$M_{CT}\f$.
     /** The definition is
