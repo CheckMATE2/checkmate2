@@ -38,5 +38,5 @@ std::vector<X*> Isolate_leptons_with_variable_track_isolation_cone_CMS(std::vect
     std::vector<LundCluster> cluster_jets(std::vector<Jet*> input);
     bool fill_bins_2j(int Nj, int Nb, double HT, double MT2);
 };
-
+  
 #endif

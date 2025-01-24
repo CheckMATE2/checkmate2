@@ -36,18 +36,20 @@ void Atlas_2209_13935::analyze() {
 //--------------------Lepton object definition--------------------
   electronsLoose=filterPhaseSpace( electronsLoose, 9., -2.47, 2.47);
   electronsTight=filterPhaseSpace( electronsTight, 9., -2.47, 2.47);
+  electronsMedium=filterPhaseSpace( electronsMedium, 9., -2.47, 2.47);
   muonsCombined =filterPhaseSpace(muonsCombined, 9., -2.6, 2.6);
 //--------------------Calorimeter filtering----------------------------------------
   electronsLoose=filterIsolation(electronsLoose);
-  electronsTight=filterIsolation(electronsTight);
+  electronsMedium=filterIsolation(electronsMedium);
   muonsCombined =filterIsolation(muonsCombined);
   signal_el = Isolate_leptons_with_inverse_track_isolation_cone(electronsTight, tracks, towers, 0.2, 10., 0.2, 0.15, 0.2, false);
+  //signal_el = Isolate_leptons_with_inverse_track_isolation_cone(electronsMedium, tracks, towers, 0.2, 10., 0.2, 0.15, 0.2, false);
   signal_mu = Isolate_leptons_with_inverse_track_isolation_cone(muonsCombined, tracks, towers, 0.3, 10., 0.2, 0.15, 1., false); 
   
 
   
 //--------------------Jets------------------------------------------------------------
-  jets = filterPhaseSpace(jets, 20., -2.4, 2.4);
+  jets = filterPhaseSpace(jets, 22., -2.4, 2.4);
   std::vector<Jet*> baseline_jets=filterPhaseSpace(jets, 20., -2.4, 2.4);
 //--------------------Overlap cleaning----------------------------------------
   jets = overlapRemoval(jets, electronsLoose, 0.2);
