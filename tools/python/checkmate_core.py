@@ -44,7 +44,7 @@ class CheckMATE2(object):
         else:
             Info.fill_info_from_parameters()
             self.procList = Info.fill_processes_from_parameters()        
-        if Info.parameters["outputexists"] == "add":            
+        if Info.parameters["outputexists"] == "add" and os.path.isdir(Info.paths['output']):
             self.load(Info.files['internal_processes'])         
         for p in self.procList:               
             p.checkInputConsistency()    
