@@ -5,6 +5,8 @@
 #include <fstream>
 #include <string>
 
+using namespace std;
+
 // List of keys that are understood by pythia handlers
 static const std::string keyName = "name";
 static const std::string keySettings = "settings";
