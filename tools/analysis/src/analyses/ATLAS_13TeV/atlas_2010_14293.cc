@@ -163,7 +163,13 @@ void Atlas_2010_14293::initialize() {
   const char *rootFileName = fNames[ifile].c_str() ;
   hfile = new TFile(rootFileName, "RECREATE", "Saving Histograms");
   ggd1 = new TH1F("ggd1", "BDT GGd1 output", 20, -1., 1.);
+  ggd2 = new TH1F("ggd3", "BDT GGd2 output", 20, -1., 1.);
+  ggd3 = new TH1F("ggd3", "BDT GGd3 output", 20, -1., 1.);
+  ggd4 = new TH1F("ggd4", "BDT GGd4 output", 20, -1., 1.);
   ggo1 = new TH1F("ggo1", "BDT GGo1 output", 20, -1., 1.);
+  ggo2 = new TH1F("ggo2", "BDT GGo2 output", 20, -1., 1.);
+  ggo3 = new TH1F("ggo3", "BDT GGo3 output", 20, -1., 1.);
+  ggo4 = new TH1F("ggo4", "BDT GGo4 output", 20, -1., 1.);
   
 }
 
@@ -357,10 +363,46 @@ void Atlas_2010_14293::finalize() {
   can1.Close();
   
   TCanvas can2;
-  //ggo1->SetMinimum(0.1);
+  //ggd1->SetMinimum(0.1);
   can2.SetLogy();
-  ggo1->Draw("hist");
+  ggd2->Draw("hist");
   can2.Close();  
+  
+  TCanvas can3;
+  //ggd1->SetMinimum(0.1);
+  can3.SetLogy();
+  ggd3->Draw("hist");
+  can3.Close();    
+  
+  TCanvas can4;
+  //ggd1->SetMinimum(0.1);
+  can4.SetLogy();
+  ggd4->Draw("hist");
+  can4.Close();    
+  
+  TCanvas can5;
+  //ggo1->SetMinimum(0.1);
+  can5.SetLogy();
+  ggo1->Draw("hist");
+  can5.Close();  
+  
+  TCanvas can6;
+  //ggo1->SetMinimum(0.1);
+  can6.SetLogy();
+  ggo2->Draw("hist");
+  can6.Close();    
+  
+  TCanvas can7;
+  //ggo1->SetMinimum(0.1);
+  can7.SetLogy();
+  ggo3->Draw("hist");
+  can7.Close();      
+  
+  TCanvas can8;
+  //ggo1->SetMinimum(0.1);
+  can8.SetLogy();
+  ggo4->Draw("hist");
+  can8.Close();        
   
   hfile->Write();
   hfile->Close();
@@ -648,7 +690,13 @@ bool Atlas_2010_14293::Passes_Cuts_BDT(std::vector<Jet*> jets, int NJetMin, doub
   double bdt = (rand()/(RAND_MAX+1.) < 0.5) ? reader[rder][0]->EvaluateMVA( "BDT" ) : reader[rder][1]->EvaluateMVA( "BDT" );; 
   
   if (sr == "BDT-GGd1") ggd1->Fill( bdt, weight);
+  if (sr == "BDT-GGd2") ggd2->Fill( bdt, weight);
+  if (sr == "BDT-GGd3") ggd3->Fill( bdt, weight);
+  if (sr == "BDT-GGd4") ggd4->Fill( bdt, weight);
   if (sr == "BDT-GGo1") ggo1->Fill( bdt, weight);
+  if (sr == "BDT-GGo2") ggo2->Fill( bdt, weight);
+  if (sr == "BDT-GGo3") ggo3->Fill( bdt, weight);
+  if (sr == "BDT-GGo4") ggo4->Fill( bdt, weight);
   
   if (bdt < BDTscore) return false;
   if (cutflow) countCutflowEvent(sr+"_07_BDT");    
