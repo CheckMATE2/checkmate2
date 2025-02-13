@@ -1,0 +1,84 @@
+\documentclass[12pt,fleqn]{article}
+\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\newcommand{\Checkmate}{\texttt{CheckMATE}}
+\newcommand{\ifb}{$\mathrm{fb}^{-1}$}
+\newcommand{\etmiss}{$\slashed{E}_T$}
+
+\setlength{\textheight}{22.5cm} \setlength{\textwidth}{17cm}
+\setlength{\topmargin}{1.2cm} \setlength{\headheight}{14.5pt}
+\setlength{\oddsidemargin}{-1.cm} \setlength{\evensidemargin}{-0.5cm}
+
+\begin{document}
+\global\advance\voffset by -1 true in
+
+
+\begin{table}[h!] \begin{center}
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|c|c|c|c|c|c|c|c} \toprule
+   $m_{\tilde{g}}$ & \multicolumn{2}{|c|}{2200} &  \multicolumn{2}{|c|}{2200}  & \multicolumn{2}{|c|}{1800} & \multicolumn{2}{|c}{1400} \\
+   $m_{\tilde{\chi}_1^0}$ & \multicolumn{2}{|c|}{500} &  \multicolumn{2}{|c|}{1000} & \multicolumn{2}{|c|}{1000} &\multicolumn{2}{|c}{1000} \\ \midrule
+   & A  & C & A & C & A  & C & A  & C\\ \midrule
+   GGd1 & 14.1 & 12.5  & 7.04 &  5.5  & 5.5  & 4.2  & 3.0 & 3.0\\
+   GGd2 & 14.3 & 13.4  & 11.4 &  10.1 & 19.4 & 14.3 & 8.8 & 9.9\\
+   GGd3 & 14.4 & 14.1  & 14.4 &  13.8 & 71.7 & 62.0 & 49.1 & 43.7\\
+   GGd3 & 2.9  &  3.4  & 6.0  &  6.1  & 60.5 & 54.0 & 89.6 & 85.8\\
+  \bottomrule
+ \end{tabular}\end{center}
+\end{table} 
+
+\newpage
+
+\begin{table}[h!] \begin{center}
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|c|c} \toprule
+  $\tilde{\chi}_{1,2} \to tbs$ & ATLAS & CheckMATE \\ \midrule
+  All & 14491 & 14491 \\
+  Lead lep $p_T > 27$ GeV & 5413 & 3304 \\ \midrule
+  == 4 jets & 681 & 549 \\
+  == 5 jets & 1101 & 766 \\
+  == 6 jets & 1188 & 734 \\
+  == 7 jets & 840 & \textcolor{red}{466} \\
+  == 8 jets & 420 & \textcolor{red}{186} \\ \midrule
+  == 4 jets, $\geq$ 4b  & 7 & 5.4 \\
+  == 5 jets, $\geq$ 4b  & 29 & 33 \\
+  == 6 jets, $\geq$ 4b  & 57 & 43 \\
+  == 7 jets, $\geq$ 4b  & 61 & 41 \\
+  == 8 jets, $\geq$ 4b  & 39 & \textcolor{red}{21} \\ \midrule
+  NN$_{4j}$ bin 4 & 2.9 & 0.7 \\
+  NN$_{5j}$ bin 4 & 8.7 & 6 \\
+  NN$_{6j}$ bin 4 & 17.4 & 11 \\
+  NN$_{7j}$ bin 4 & 18.9 & 19 \\
+  NN$_{8j}$ bin 4 & 14.5 & 10 \\ \bottomrule
+ \end{tabular}
+ \end{center}
+\end{table} 
+
+\newpage
+
+\begin{table}[h!] \begin{center}
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|c|c} \toprule
+  & ATLAS & CheckMATE \\ \midrule
+  \multicolumn{3}{c}{Gtt selection} \\ \midrule
+  Common rquirem. & 7.66 &  7.30\\
+  SR-Gtt-2100-1 & 2.63 &  1.94  \\
+  SR-Gtt-1800-1 & 2.80 &  2.11\\
+  SR-Gtt-2300-1200 & 2.95 & 2.62\\
+  SR-Gtt-1900-1400 & 0.19 & 0.27\\
+  \midrule
+  \multicolumn{3}{c}{Gbb selection}\\ \midrule
+  Common rquirem. & 80 &  65\\
+  SR-Gbb-2800-1400 & 22   & 14 \\
+  SR-Gbb-2300-1000 & 21   & 14 \\
+  SR-Gbb-2100-1600 & 6.20 & 6.80 \\
+  SR-Gbb-2000-1800 & 0.19 & 0.58 \\ \bottomrule
+  \end{tabular}
+ \end{center}
+\end{table} 
+  
+\end{document}

@@ -1,0 +1,257 @@
+\documentclass[10pt,fleqn]{article}
+\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{url}
+\usepackage{color}
+\newcommand{\Checkmate}{\texttt{CheckMATE}}
+\newcommand{\ifb}{$\mathrm{fb}^{-1}$}
+\newcommand{\etmiss}{$\slashed{E}_T$}
+\newcommand{\met}{E^\mathrm{miss}_\mathrm{T}}
+\newcommand{\meff}{m_\mathrm{eff}}
+
+\setlength{\textheight}{24cm} \setlength{\textwidth}{18cm}
+\setlength{\topmargin}{0cm} \setlength{\headheight}{14.5pt}
+\setlength{\oddsidemargin}{-1.5cm} \setlength{\evensidemargin}{-0.5cm}
+
+\begin{document}
+\global\advance\voffset by -1 true in
+\begin{center}
+{\LARGE\bf
+Search for squarks and gluinos in final states with jets and missing transverse momentum using 139/fb of $\sqrt{s} = 13$ TeV $pp$ collision data with the ATLAS detector, \texttt{atlas\_conf\_2019\_040}
+}\\ \vspace{0.5cm}
+\today
+\end{center}
+
+\section{Summary}
+This is an implementation of a search for the supersymmetric partners of quarks and gluons (squarks and gluinos) in final states containing hadronic jets and missing transverse momentum. Events with an electron or muon are vetoed. The analysis is performed using data at $\sqrt{s}=13$~TeV collected with the ATLAS detector during Run 2 of the Large Hadron Collider, corresponding to an integrated luminosity of $139$ \ifb~\cite{atlas-conf-2019-040}. The results are interpreted in the context of various $R$-parity-conserving models where squarks and gluinos are pair-produced and the neutralino is the lightest supersymmetric particle. An exclusion limit at the 95\% confidence level on the mass of the gluino is set at 2.35 TeV for a simplified model incorporating only a gluino and the lightest neutralino, assuming the lightest neutralino is massless. For a simplified model involving the strong production of mass-degenerate first- and second-generation squarks, the results exclude at 95\% confidence level squark masses below 1.94 TeV are excluded if the lightest neutralino is massless. This is \Checkmate{} implementation validated for version 2~\cite{Kim:2015wza,Dercks:2016npn}.
+
+\section{Validation}
+
+\noindent Processes analyzed for validation: 
+ \begin{itemize}
+ \item $ p\, p \to \tilde{g}\, \tilde{g} \to q\, \bar{q}\, \tilde{\chi}_1^0\, q\, \bar{q}\, \tilde{\chi}_1^0$\\
+ squarks decoupled\\
+ Events generated with \texttt{MG5\_aMC 2.6.0}~\cite{Alwall:2014hca} interfaced to \texttt{Pythia8}~\cite{Sjostrand:2007gs} with up to two extra partons (CKKW-L).
+ \item $ p\, p \to \tilde{g}\, \tilde{g} \to q\, \bar{q}'\,  \tilde{\chi}_1^\pm\, q\, \bar{q}'\, \tilde{\chi}_1^\pm; \qquad\qquad \tilde{\chi}_1^\pm \to W^\pm\,  \tilde{\chi}_1^0$\\
+ squarks decoupled\\
+ Events generated with \texttt{MG5\_aMC 2.6.0}~\cite{Alwall:2014hca} interfaced to \texttt{Pythia8}~\cite{Sjostrand:2007gs} with up to two extra partons (CKKW-L).
+ \item $ p\, p \to \tilde{q}\, \tilde{q} \to q\,  \tilde{\chi}_1^0\, q\, \tilde{\chi}_1^0$\\
+ gluinos decoupled\\
+ Events generated with \texttt{MG5\_aMC 2.6.0}~\cite{Alwall:2014hca} interfaced to \texttt{Pythia8}~\cite{Sjostrand:2007gs} with up to two extra partons (CKKW-L).
+ \item $ p\, p \to \tilde{q}\, \tilde{q} \to q'\,  \tilde{\chi}_1^\pm\, q'\, \tilde{\chi}_1^\pm; \qquad\qquad \tilde{\chi}_1^\pm \to W^\pm\,  \tilde{\chi}_1^0$\\
+ gluinos decoupled\\
+ Events generated with \texttt{MG5\_aMC 2.6.0}~\cite{Alwall:2014hca} interfaced to \texttt{Pythia8}~\cite{Sjostrand:2007gs} with up to two extra partons (CKKW-L).
+ \end{itemize}
+
+
+\newpage \thispagestyle{empty}
+
+\begin{table}[H]  \centering
+ \renewcommand*{\arraystretch}{1.}
+ \begin{tabular}{c|l|c|c|c|c|c|c} \toprule
+      & Selection & \multicolumn{2}{c|}{$m_{\tilde{q}} = 1200$ GeV}      & \multicolumn{2}{c|}{$m_{\tilde{q}} = 1400$ GeV}         & \multicolumn{2}{c}{$m_{\tilde{q}} = 1600$ GeV}         \\ 
+      &           & \multicolumn{2}{c|}{$m_{\tilde{\chi}^0_1} = 600$ GeV}  & \multicolumn{2}{c|}{$m_{\tilde{\chi}^0_1} = 600$ GeV}   & \multicolumn{2}{c}{$m_{\tilde{\chi}^0_1} = 400$ GeV}     \\ \midrule
+      &           & ATLAS             &  ~CM~~                           & ATLAS             & ~CM~~                            & ATLAS             & ~CM~~                            \\ \midrule
+\multicolumn{2}{l|}{Generated MC events}                       &   10000    &   10000   &  6000      &  10000    &      6000    &  10000         \\ \midrule   
+Common       & Preselection, $\met > 300$ GeV,                 &          &   &   &  & & \\ 
+Requirements & $p_T(j_1) > 200$ GeV, $\meff > 800$ GeV         &     1763   &   1780    &  541       &   546     &      174     &   176         \\
+             & jet multiplicity $\geq 2$                       &     1763   &   1780    &  541       &   546     &      174     &   176         \\
+             & Cleaning cuts                                   &     1746   &   --      &  535       &   --      &      173     &   --          \\ \midrule
+SR-2j-1600   & $\Delta\phi(j_{1,2,(3)},\met) > 0.8$            &     1433   &   1434    &  431       &   433     &      136     &   139         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.4$                &     1377   &   1353    &  411       &   410     &      129     &   130         \\
+             & $p_T(j_2) > 250$ GeV                            &      853   &    850    &  311       &   310     &      111     &   112         \\      
+             & $|\eta(j_{1,2})|< 2.0$                          &      836   &    832    &  306       &   305     &      109     &   110         \\                   
+             & $\met/\sqrt{H_T} > 16$ GeV$^{1/2}$              &      568   &    554    &  228       &   227     &      86.4    &   87.3         \\    
+             & $\meff(\mathrm{incl.}) > 1600$ GeV              &      366   &    362    &  202       &   195     &      83.5    &   84.2         \\ \midrule           
+SR-2j-2200   & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     1603   &   1619    &  483       &   492     &      156     &   158         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     1567   &   1566    &  470       &   476     &      151     &   153         \\
+             & $p_T(j_1) > 600$ GeV                            &      509   &    514    &  269       &   259     &      120     &   121         \\                     
+             & $\met/\sqrt{H_T} > 16$ GeV$^{1/2}$              &      337   &    339    &  201       &   188     &      94.6    &   95.7         \\    
+             & $\meff(\mathrm{incl.}) > 2200$ GeV              &      101   &    96     &  108       &   101     &      76.1    &   76.4         \\ \midrule                       
+SR-2j-2800   & $\Delta\phi(j_{1,2,(3)},\met) > 0.8$            &     1433   &   1434    &  431       &   433     &      136     &   138         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.4$                &     1377   &   1352    &  411       &   410     &      129     &   130         \\
+             & $p_T(j_2) > 250$ GeV                            &      853   &    850    &  311       &   311     &      111     &   112         \\      
+             & $|\eta(j_{1,2})|< 1.2$                          &      655   &    653    &  235       &   239     &      82.3    &   84.3         \\                   
+             & $\met/\sqrt{H_T} > 16$ GeV$^{1/2}$              &      439   &    433    &  173       &   178     &      64.6    &   66.4         \\    
+             & $\meff(\mathrm{incl.}) > 2800$ GeV              &     15.6   &   10.5    &  18.8      &   15.1    &      29.1    &   27.0         \\  \bottomrule                 
+ \end{tabular}
+ \caption{Events normalized to the nominal cross section at NNLO-NNLL and 139 \ifb.}
+\end{table}  
+
+\thispagestyle{empty}
+\begin{table}[H]  \centering
+ \renewcommand*{\arraystretch}{1.}
+ \begin{tabular}{c|l|c|c|c|c|c|c} \toprule
+      & Selection & \multicolumn{2}{c|}{$m_{\tilde{g}} = 1400$ GeV}      & \multicolumn{2}{c|}{$m_{\tilde{q}} = 1800$ GeV}         & \multicolumn{2}{c}{$m_{\tilde{q}} = 2200$ GeV}         \\ 
+      &           & \multicolumn{2}{c|}{$m_{\tilde{\chi}^0_1} = 1000$ GeV}  & \multicolumn{2}{c|}{$m_{\tilde{\chi}^0_1} = 1000$ GeV}   & \multicolumn{2}{c}{$m_{\tilde{\chi}^0_1} = 600$ GeV}     \\ \midrule
+      &           & ATLAS             &  ~CM~~                           & ATLAS             & ~CM~~                            & ATLAS             & ~CM~~                            \\ \midrule
+\multicolumn{2}{l|}{Generated MC events}                       &   60000    &   60000   &  60000     &  10000    &     50000    &   5000         \\ \midrule   
+Common& Preselection, $\met > 300$ GeV,&          &   &   &  & & \\ 
+Requirements & $p_T(j_1) > 200$ GeV, $\meff > 800$ GeV         &     2562   &   2561    &  467       &   467     &      57.6    &   57.7         \\
+             & jet multiplicity $\geq 2$                       &     2562   &   2561    &  467       &   467     &      57.6    &   57.7         \\
+             & Cleaning cuts                                   &     2532   &   --      &  461       &   --      &      56.8    &   --          \\ \midrule
+SR4j-1000    & jet multiplicity $\geq 4$                       &     1931   &   1991    &  410       &   421     &      53.5    &   54.4         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     1718   &   1778    &  357       &   365     &      44.7    &   45.6         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     1583   &   1629    &  322       &   330     &      39.8    &   40.2         \\
+             & $p_T(j_4) > 100$ GeV                            &      661   &    697    &  234       &   234     &      35.3    &   34.9         \\      
+             & $|\eta(j_{1,2,3,4})|< 2.0$                      &      574   &    600    &  214       &   215     &      32.1    &   31.9         \\           
+             & Aplanarity $> 0.04$                             &      429   &    484    &  159       &   168     &      22.3    &   22.7         \\           
+             & $\met/\sqrt{H_T} > 16$ GeV$^{1/2}$              &      149   &    164    &  82.7      &   86.0    &      13.9    &   14.0         \\    
+             & $\meff(\mathrm{incl.}) > 1000$ GeV              &      149   &    163    &  82.7      &   86.0    &      13.9    &   14.0         \\ \midrule                 
+SR4j-2200    & jet multiplicity $\geq 4$                       &     1931   &   1991    &  410       &   421     &      53.5    &   54.4         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     1718   &   1778    &  357       &   365     &      44.7    &   45.6         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     1583   &   1629    &  322       &   330     &      39.8    &   40.2         \\
+             & $p_T(j_4) > 100$ GeV                            &      661   &    697    &  234       &   233     &      35.3    &   34.9         \\      
+             & $|\eta(j_{1,2,3,4})|< 2.0$                      &      574   &    600    &  214       &   215     &      32.1    &   31.9         \\           
+             & Aplanarity $> 0.04$                             &      429   &    484    &  159       &   168     &      22.3    &   22.7         \\           
+             & $\met/\sqrt{H_T} > 16$ GeV$^{1/2}$              &      149   &    164    &  82.7      &   86.0    &      13.9    &   14.0         \\    
+             & $\meff(\mathrm{incl.}) > 2200$ GeV              &     13.7   &   13.4    &  34.9      &   37.6    &      13.6    &   13.7         \\ \midrule             
+SR4j-3400    & jet multiplicity $\geq 4$                       &     1931   &   1991    &  410       &   421     &      53.5    &   54.4         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     1718   &   1778    &  357       &   365     &      44.7    &   45.6         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     1583   &   1629    &  322       &   330     &      39.8    &   40.2         \\
+             & $p_T(j_4) > 100$ GeV                            &      661   &    697    &  234       &   233     &      35.3    &   34.9         \\      
+             & $|\eta(j_{1,2,3,4})|< 2.0$                      &      574   &    600    &  214       &   215     &      32.1    &   31.9         \\           
+             & Aplanarity $> 0.04$                             &      429   &    484    &  159       &   168     &      22.3    &   22.7         \\           
+             & $\met/\sqrt{H_T} > 10$ GeV$^{1/2}$              &      398   &    446    &  142       &   151     &      19.6    &   20.0         \\    
+             & $\meff(\mathrm{incl.}) > 3400$ GeV              &    0.279   &      0    &  1.43      &   2.52    &      8.04    &   7.6         \\ \bottomrule 
+\end{tabular}
+\caption{ATLAS cross section normalization seems to be wrong. Events for \Checkmate{} normalized to ATLAS preselection row. The $\Delta\phi(j_{i>3},\met)$ cut in Table~17 of \cite{atlas-conf-2019-040} does not match Table~8: $\Delta\phi(j_{i>3},\met)> 0.2$ vs.\ $\Delta\phi(j_{i>3},\met)>0.4$.  The numbers here were produced according to prescription in this table, ie.\ not with the cut implemented in the final version.}
+\end{table}             
+
+\thispagestyle{empty}
+\begin{table}[H]  \centering
+ \renewcommand*{\arraystretch}{1.}
+ \begin{tabular}{c|l|c|c|c|c|c|c} \toprule
+      & Selection & \multicolumn{2}{c|}{$m_{\tilde{g}} = 1400$ GeV}      & \multicolumn{2}{c|}{$m_{\tilde{g}} = 2000$ GeV}         & \multicolumn{2}{c}{$m_{\tilde{g}} = 2200$ GeV}         \\ 
+      &           & \multicolumn{2}{c|}{$m_{\tilde{\chi}^\pm_1} = 1100$ GeV}  & \multicolumn{2}{c|}{$m_{\tilde{\chi}^\pm_1} = 1500$ GeV}   & \multicolumn{2}{c}{$m_{\tilde{\chi}^\pm_1} = 1200$ GeV}     \\      
+      &           & \multicolumn{2}{c|}{$m_{\tilde{\chi}^0_1} = 800$ GeV}  & \multicolumn{2}{c|}{$m_{\tilde{\chi}^0_1} = 1000$ GeV}   & \multicolumn{2}{c}{$m_{\tilde{\chi}^0_1} = 200$ GeV}     \\ \midrule
+      &           & ATLAS             &  ~CM~~                           & ATLAS             & ~CM~~                            & ATLAS             & ~CM~~                            \\ \midrule
+\multicolumn{2}{l|}{Generated MC events}                       &   30000    &   30000   &  30000     &  20000    &     30000    &   5000         \\ \midrule   
+Common& Preselection, $\met > 300$ GeV,&          &   &   &  & & \\ 
+Requirements & $p_T(j_1) > 200$ GeV, $\meff > 800$ GeV         &     1160   &   1131    &  64.3      &   64.0    &      25.4    &   26.0         \\
+             & jet multiplicity $\geq 2$                       &     1160   &   1131    &  64.3      &   64.0    &      25.4    &   26.0         \\
+             & Cleaning cuts                                   &     1147   &   --      &  63.5      &   --      &      25.1    &   --          \\ \midrule      
+SR5j-1600    & jet multiplicity $\geq 5$                       &     1022   &   1026    &  60.2      &   60.1    &      24.2    &   25.4         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     895    &   892     &  52.0      &   52.5    &      20.4    &   21.2         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     783    &   765     &  43.6      &   43.3    &      16.5    &   16.9         \\      
+             & $p_T(j_1) > 600$ GeV                            &     46.2   &   43.1    &  10.7      &   9.9     &      13.1    &   13.4         \\           
+             & $\met/\sqrt{H_T} > 16$ GeV$^{1/2}$              &     18.6   &   15.4    &  4.86      &   4.27    &      6.38    &   6.33         \\    
+             & $\meff(\mathrm{incl.}) > 1600$ GeV              &     18.4   &   15.2    &  4.86      &   4.27    &      6.38    &   6.33         \\ \midrule       
+SR6j-1000    & jet multiplicity $\geq 6$                       &     798    &   824     &  50.7      &   52.4    &      21.7    &   23.0         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     700    &   717     &  43.6      &   45.3    &      18.1    &   19.2         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     600    &   604     &  35.9      &   36.7    &      14.4    &   15.2         \\      
+             & $p_T(j_6) > 75$ GeV                             &     313    &   329     &  25.7      &   26.0    &      12.3    &   13.0         \\           
+             & $|\eta(j_{1,2,3,4,5,6})|< 2.0$                  &     260    &   277     &  22.6      &   22.6    &      10.5    &   11.1         \\           
+             & Aplanarity $> 0.08$                             &     171    &   199     &  16.0      &   16.8    &      7.28    &   7.80        \\                      
+             & $\met/\sqrt{H_T} > 16$ GeV$^{1/2}$              &     42.8   &   47.1    &  6.91      &   6.7     &      3.58    &   3.74         \\    
+             & $\meff(\mathrm{incl.}) > 1000$ GeV              &     42.8   &   47.1    &  6.91      &   6.7     &      3.58    &   3.74         \\ \midrule        
+SR6j-2200    & jet multiplicity $\geq 6$                       &     798    &   823     &  50.7      &   52.4    &      21.7    &   23.0         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     700    &   717     &  43.6      &   45.3    &      18.1    &   19.2         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     600    &   604     &  35.9      &   36.7    &      14.4    &   15.2         \\      
+             & $p_T(j_6) > 75$ GeV                             &     313    &   329     &  25.7      &   26.0    &      12.3    &   13.0        \\       
+             & $|\eta(j_{1,2,3,4,5,6})|< 2.0$                  &     260    &   277     &  22.6      &   22.6    &      10.5    &   11.1         \\                        
+             & Aplanarity $> 0.08$                             &     171    &   199     &  16.0      &   16.8    &      7.28    &   7.80        \\         
+             & $\met/\sqrt{H_T} > 16$ GeV$^{1/2}$              &     42.8   &   47.1    &  6.91      &   6.7     &      3.58    &   3.74        \\    
+             & $\meff(\mathrm{incl.}) > 2200$ GeV              &     4.96   &   5.6     &  4.87      &   4.6     &      3.57    &   3.73        \\ \midrule    
+SR6j-3400    & jet multiplicity $\geq 6$                       &     798    &   823     &  50.7      &   52.4    &      21.7    &   23.0         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     700    &   717     &  43.6      &   45.3    &      18.1    &   19.2         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     600    &   604     &  35.9      &   36.7    &      14.4    &   15.2         \\      
+             & $p_T(j_6) > 75$ GeV                             &     313    &   329     &  25.7      &   26.0    &      12.3    &   13.0        \\      
+             & $|\eta(j_{1,2,3,4,5,6})|< 2.0$                  &     260    &   277     &  22.6      &   22.6    &      10.5    &   11.1         \\                      
+             & Aplanarity $> 0.08$                             &     171    &   199     &  16.0      &   16.8    &      7.28    &   7.80        \\         
+             & $\met/\sqrt{H_T} > 10$ GeV$^{1/2}$              &     143    &   165     &  13.5      &   14.1    &      6.03    &   6.44        \\    
+             & $\meff(\mathrm{incl.}) > 3400$ GeV              &     0.152  &      0    &  0.260     &   0.294   &      3.56    &   3.53        \\ \bottomrule                 
+\end{tabular}
+\caption{Events normalized to the nominal cross section at NNLO-NNLL and 139 \ifb.}
+\end{table}   
+
+\thispagestyle{empty}
+\begin{table}[H] \centering
+ \renewcommand*{\arraystretch}{1.}
+ \begin{tabular}{c|l|c|c} \toprule
+      & Selection & \multicolumn{2}{c}{$m_{\tilde{q}} = 800$ GeV}       \\ 
+      &           & \multicolumn{2}{c}{$m_{\tilde{\chi}^\pm_1} = 600$ GeV}    \\      
+      &           & \multicolumn{2}{c}{$m_{\tilde{\chi}^0_1} = 400$ GeV}   \\ \midrule
+      &           & ATLAS             &  ~CM~~                         \\ \midrule
+\multicolumn{2}{l|}{Generated MC events}                       &   30000    &   50000        \\ \midrule   
+Common       & Preselection, $\met > 300$ GeV,                 &            &                \\ 
+Requirements & $p_T(j_1) > 200$ GeV, $\meff > 800$ GeV         &     6101   &   6095         \\
+             & jet multiplicity $\geq 2$                       &     6101   &   6095         \\
+             & Cleaning cuts                                   &     6039   &   --           \\ \midrule      
+SR5j-1600    & jet multiplicity $\geq 5$                       &     3513   &   3914         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     2985   &   3280          \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     2669   &   2887          \\      
+             & $p_T(j_1) > 600$ GeV                            &      240   &   284         \\           
+             & $\met/\sqrt{H_T} > 16$ GeV$^{1/2}$              &     68.4   &   101         \\    
+             & $\meff(\mathrm{incl.}) > 1600$ GeV              &     68.4   &   101         \\ \midrule       
+SR6j-1000    & jet multiplicity $\geq 6$                       &     1752   &   2311          \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     1448   &   1910          \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     1252   &   1608         \\      
+             & $p_T(j_6) > 75$ GeV                             &     388    &   561          \\           
+             & $|\eta(j_{1,2,3,4,5,6})|< 2.0$                  &     250    &   411          \\           
+             & Aplanarity $> 0.08$                             &     123    &   216          \\                      
+             & $\met/\sqrt{H_T} > 16$ GeV$^{1/2}$              &     10.4   &   16.3         \\    
+             & $\meff(\mathrm{incl.}) > 1000$ GeV              &     10.4   &   16.3         \\ \midrule        
+SR6j-2200    & jet multiplicity $\geq 6$                       &     1752   &   2311          \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     1448   &   1910          \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     1252   &   1608         \\      
+             & $p_T(j_6) > 75$ GeV                             &     388    &   561          \\       
+             & $|\eta(j_{1,2,3,4,5,6})|< 2.0$                  &     250    &   411          \\                        
+             & Aplanarity $> 0.08$                             &     123    &   216          \\         
+             & $\met/\sqrt{H_T} > 16$ GeV$^{1/2}$              &     10.4   &   16.3         \\    
+             & $\meff(\mathrm{incl.}) > 2200$ GeV              &     3.31   &   1.22          \\ \midrule    
+SR6j-3400    & jet multiplicity $\geq 6$                       &     1752   &   2311         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     1448   &   1910         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     1252   &   1608          \\      
+             & $p_T(j_6) > 75$ GeV                             &     388    &   561          \\      
+             & $|\eta(j_{1,2,3,4,5,6})|< 2.0$                  &     250    &   411          \\                      
+             & Aplanarity $> 0.08$                             &     123    &   216          \\         
+             & $\met/\sqrt{H_T} > 10$ GeV$^{1/2}$              &     84.6   &   177          \\    
+             & $\meff(\mathrm{incl.}) > 3400$ GeV              &     0      &    2.4         \\ \bottomrule                 
+\end{tabular}
+\caption{Events normalized to the nominal cross section at NNLO-NNLL and 139 \ifb. This does not seem to fit well. With other cutflows in agreement this might be due to modeling problems. }
+\end{table}   
+
+
+
+\begin{thebibliography}{99}
+
+\bibitem{atlas-conf-2019-040}
+  The ATLAS collaboration [ATLAS Collaboration],
+  ``Search for squarks and gluinos in final states with jets and missing transverse momentum using 139 fb$^{-1}$ of $\sqrt{s}$ =13 TeV $pp$ collision data with the ATLAS detector,''
+  ATLAS-CONF-2019-040.
+  
+\bibitem{Kim:2015wza}
+  J.~S.~Kim, D.~Schmeier, J.~Tattersall and K.~Rolbiecki,
+  ``A framework to create customised LHC analyses within CheckMATE,''
+  Comput.\ Phys.\ Commun.\  {\bf 196} (2015) 535
+  [arXiv:1503.01123 [hep-ph]].  
+  
+\bibitem{Dercks:2016npn}
+  D.~Dercks, N.~Desai, J.~S.~Kim, K.~Rolbiecki, J.~Tattersall and T.~Weber,
+  ``CheckMATE 2: From the model to the limit,''
+  Comput.\ Phys.\ Commun.\  {\bf 221} (2017) 383
+  [arXiv:1611.09856 [hep-ph]].
+ 
+ 
+\bibitem{Alwall:2014hca}
+  J.~Alwall {\it et al.},
+  ``The automated computation of tree-level and next-to-leading order differential cross sections, and their matching to parton shower simulations,''
+  JHEP {\bf 1407} (2014) 079
+  [arXiv:1405.0301 [hep-ph]]. 
+ 
+\bibitem{Sjostrand:2007gs}
+  T.~Sjostrand, S.~Mrenna and P.~Z.~Skands,
+  ``A Brief Introduction to PYTHIA 8.1,''
+  Comput.\ Phys.\ Commun.\  {\bf 178} (2008) 852
+  [arXiv:0710.3820 [hep-ph]]. 
+
+  
+  
+\end{thebibliography}
+ 
+\end{document}

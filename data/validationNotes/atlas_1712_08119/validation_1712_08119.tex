@@ -1,0 +1,75 @@
+\documentclass[12pt,fleqn]{article}
+\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\newcommand{\Checkmate}{\texttt{CheckMATE}}
+\newcommand{\ifb}{$\mathrm{fb}^{-1}$}
+\newcommand{\etmiss}{$\slashed{E}_T$}
+
+\setlength{\textheight}{22.5cm} \setlength{\textwidth}{17cm}
+\setlength{\topmargin}{1.2cm} \setlength{\headheight}{14.5pt}
+\setlength{\oddsidemargin}{-1.cm} \setlength{\evensidemargin}{-0.5cm}
+
+\begin{document}
+\global\advance\voffset by -1 true in
+\begin{center}
+{\LARGE\bf
+Electroweak search with soft leptons \texttt{arXiv:1712.08119}\\\vspace{0.5cm}
+}
+\end{center}
+
+\section{Validation}
+ Process: $ p p \to \tilde{\ell}^+ \tilde{\ell}^- \to \ell^+ \ell^- \tilde{\chi}_1^0 \tilde{\chi}_1^0$, $\ell = e, \mu$\\
+ $m_{\ell} = 110$~GeV, $m_{\tilde{\chi}_1^0} = 100$~GeV
+ Events generated with \texttt{MG5\_aMC 2.6.0} interfaced to \texttt{Pythia8} with up to two extra partons.
+ 60000 MC events weighted to 36.1/fb.
+
+\begin{table}[h!] 
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Total                                                                           & 19900    & 19855           \\
+  $E_\mathrm{T}^\mathrm{miss} > 200$ GeV                                          & 476      & 521   \\
+  $N^\ell_\mathrm{baseline}$                                                      & 267      & 285   \\
+  $N^\ell_\mathrm{signal}$                                                        & 165      & 196   \\
+  Same flavour                                                                    & 162      & 196   \\
+  Opposite charge                                                                 & 162      & 196   \\ 
+  $p_T^{\ell_1} > 5$ GeV                                                          & 162      & 196    \\ 
+  $N_\mathrm{b-jets}=0$                                                           & 134      & 157    \\
+  $p_T(j_1) > 100$ GeV                                                            & 133      & 155    \\ 
+  $\Delta\phi(j_1, \mathbf{p}_T^\mathrm{miss}) > 2$                               & 133      & 154   \\
+  $\mathrm{min}(\Delta\phi(\mathrm{any\ jet}, \mathbf{p}_T^\mathrm{miss})) > 0.4$ & 129      & 142  \\
+  Veto $m_{\tau\tau} \in [0, 160]$ GeV                                            & 113      & 125  \\
+  $m_{\ell\ell}> 1$ GeV                                                           & 112      & 125  \\
+  Veto $m_{\ell\ell} \in [3,3.2]$ GeV                                             & 112      & 125  \\
+  $m_{\ell\ell}< 60$ GeV                                                          & 89       & 96   \\
+  $\Delta R_{\ell\ell} > 0.05 $                                                   & 89       & 96   \\ \midrule
+  \multicolumn{3}{l}{SR$\ell\ell$-$m_{\ell\ell}$ selection (uncertainties essentially the same)}\\ \midrule
+  $E_\mathrm{T}^\mathrm{miss}/H_\mathrm{T}^\mathrm{lep} > \mathrm{max}(5,15-2 m_{\ell\ell}/\mathrm{GeV})$ & $68 \pm 4$ & 75 \\
+  $\Delta R_{\ell\ell} < 2    $                                                   & $37\pm3.5$  & 39 \\
+  $m_\mathrm{T}^{\ell_1} < 70$ GeV                                                & $30\pm3 $   & 31 \\
+  $m_{\ell\ell}<40$ GeV                                                           & $29\pm3$    & 29 \\
+  $m_{\ell\ell}<30$ GeV                                                           & $23.8\pm3$  & $24.2$ \\
+  $m_{\ell\ell}<20$ GeV                                                           & $14.3\pm2$  & $13.6$ \\
+  $m_{\ell\ell}<10$ GeV                                                           & $4.7\pm1.2$ & $3.6$ \\
+  $m_{\ell\ell}<5 $ GeV                                                           & $1.2\pm0.6$ & $1.0$ \\
+  $m_{\ell\ell}<3 $ GeV                                                           & $0.5\pm0.4$ & 0 \\ \midrule
+  \multicolumn{3}{l}{SR$\ell\ell$-$m_\mathrm{T2}^{100}$ selection (uncertainties essentially the same)}\\ \midrule
+  $E_\mathrm{T}^\mathrm{miss}/H_\mathrm{T}^\mathrm{lep} > \mathrm{max}(3,15-2 (m_\mathrm{T2}^{100}/\mathrm{GeV} - 100))$ & $65 \pm 4$ & 71 \\
+  $m_\mathrm{T2}^{100} < 130$ GeV                                                 & $65\pm4$    & 71 \\
+  $m_\mathrm{T2}^{100} < 120$ GeV                                                 & $65\pm4$    & 71 \\
+  $m_\mathrm{T2}^{100} < 110$ GeV                                                 & $63\pm4$    & 69  \\
+  $m_\mathrm{T2}^{100} < 105$ GeV                                                 & $23\pm3$    & 26 \\
+  $m_\mathrm{T2}^{100} < 102$ GeV                                                 & $3.7\pm1.1$ & 4.3 \\ \bottomrule
+ \end{tabular}
+\end{table} 
+ 
+
+ 
+
+
+
+ 
+\end{document}

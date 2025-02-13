@@ -1,0 +1,236 @@
+\documentclass[10pt,fleqn]{article}
+\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{pdflscape}
+\newcommand{\Checkmate}{\texttt{CheckMATE}}
+\newcommand{\ifb}{$\mathrm{fb}^{-1}$}
+\newcommand{\etmiss}{$\slashed{E}_T$}
+\newcommand{\met}{E^\mathrm{miss}_\mathrm{T}}
+\newcommand{\meff}{m_\mathrm{eff}}
+
+\setlength{\textheight}{24cm} \setlength{\textwidth}{17cm}
+\setlength{\topmargin}{0cm} \setlength{\headheight}{14.5pt}
+\setlength{\oddsidemargin}{-1.cm} \setlength{\evensidemargin}{-0.5cm}
+
+\begin{document}
+\global\advance\voffset by -1 true in
+\begin{center}
+{\LARGE\bf
+Search for squarks and gluinos in final states with
+jets and missing transverse momentum using $36\ \mathrm{fb}^{−1}$ of $\sqrt{s} =13$\ TeV $pp$ collision data with the
+ATLAS detector, \texttt{arxiv:1712.02332}\\\vspace{0.5cm}
+}
+\end{center}
+
+\section{Validation}
+ Processes: 
+ \begin{itemize}
+ \item $ p p \to \tilde{g} \tilde{g} \to j j j j \tilde{\chi}_1^0 \tilde{\chi}_1^0$\\
+ $m_{g} = 2000$~GeV, $m_{\tilde{\chi}_1^0} = 0$~GeV, squarks decoupled\\
+ Events generated with \texttt{MG5\_aMC 2.6.0} interfaced to \texttt{Pythia8} with up to two extra partons (CKKW-L).
+ 10000 MC events weighted to 36.1/fb. 
+ \item $ p p \to \tilde{q} \tilde{q} \to j j \tilde{\chi}_1^0 \tilde{\chi}_1^0$\\
+ $m_{g} = 1200$~GeV, $m_{\tilde{\chi}_1^0} = 600$~GeV, gluinos decoupled\\
+ Events generated with \texttt{MG5\_aMC 2.6.0} interfaced to \texttt{Pythia8} with up to two extra partons (CKKW-L).
+ 10000 MC events weighted to 36.1/fb.
+ \item $ p p \to \tilde{q} \tilde{q} \to j j \tilde{\chi}_1^0 \tilde{\chi}_1^0$\\
+ $m_{g} = 1500$~GeV, $m_{\tilde{\chi}_1^0} = 0$~GeV, gluinos decoupled\\
+ Events generated with \texttt{MG5\_aMC 2.6.0} interfaced to \texttt{Pythia8} with up to two extra partons (CKKW-L).
+ 10000 MC events weighted to 36.1/fb. 
+ \end{itemize}
+
+\begin{table}[h!] 
+ \renewcommand*{\arraystretch}{1.}
+ \begin{tabular}{c|l|c|c|c|c|c|c} \toprule
+      & Selection & \multicolumn{2}{c|}{$m_{\tilde{g}} = 2000$ GeV}      & \multicolumn{2}{c|}{$m_{\tilde{q}} = 1200$ GeV}         & \multicolumn{2}{c}{$m_{\tilde{q}} = 1500$ GeV}         \\ 
+      &           & \multicolumn{2}{c|}{$m_{\tilde{\chi}^0_1} = 0$ GeV}  & \multicolumn{2}{c|}{$m_{\tilde{\chi}^0_1} = 600$ GeV}   & \multicolumn{2}{c}{$m_{\tilde{\chi}^0_1} = 0$ GeV}     \\ \midrule
+      &           & ATLAS             &  ~CM~~                           & ATLAS             & ~CM~~                            & ATLAS             & ~CM~~                            \\ \midrule
+Common& Preselection, $\met > 250$ GeV,&          &   &   &  & & \\ 
+Requirements & $p_T(j_1) > 200$ GeV, $\meff > 800$ GeV         &     31.6   &   31.7    &  376       &   376     &      68.4    &   67.2         \\
+             & jet multiplicity $\geq 2$                       &     31.6   &   31.7    &  373       &   372     &      67.9    &   66.6         \\
+             & Cleaning cuts                                   &     31.1   &   --      &  365       &   --      &      66.4    &   --          \\ \midrule
+SR2j-1200    & $\Delta\phi(j_{1,2,(3)},\met) > 0.8$            &     19.0   &   19.4    &  293       &   296     &      51.8    &   51.2         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.4$                &     14.3   &   14.9    &  279       &   279     &      48.9    &   47.6         \\
+             & $p_T(j_2) > 250$ GeV                            &     14.1   &   14.8    &  180       &   187     &      42.4    &   41.3         \\      
+             & $|\eta(j_{1,2})|< 0.8$                          &     7.51   &   8.11    &  83.7      &   85.1    &      18.9    &   18.8         \\                   
+             & $\met/\sqrt{H_T} > 14$ GeV$^{1/2}$              &     5.13   &   5.16    &  60.5      &   59.5    &      15.7    &   15.6         \\    
+             & $\meff(\mathrm{incl.}) > 1200$ GeV              &     5.13   &   5.16    &  59.0      &   58.0    &      15.7    &   15.5         \\ \midrule   
+SR2j-1600    & $\Delta\phi(j_{1,2,(3)},\met) > 0.8$            &     19.0   &   19.4    &  293       &   296     &      51.8    &   51.2         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.4$                &     14.3   &   14.9    &  279       &   279     &      48.9    &   47.6         \\
+             & $p_T(j_2) > 300$ GeV                            &     13.8   &   14.6    &  138       &   144     &      38.9    &   38.3         \\      
+             & $|\eta(j_{1,2})|< 1.2$                          &     11.4   &   12.3    &  109       &   114     &      29.1    &   29.4         \\                   
+             & $\met/\sqrt{H_T} > 18$ GeV$^{1/2}$              &     5.74   &   5.68    &  55.8      &   55.1    &      20.6    &   20.6         \\    
+             & $\meff(\mathrm{incl.}) > 1600$ GeV              &     5.74   &   5.68    &  45.4      &   44.8    &      20.4    &   20.5         \\ \midrule     
+SR2j-2000    & $\Delta\phi(j_{1,2,(3)},\met) > 0.8$            &     19.0   &   19.4    &  293       &   296     &      51.8    &   51.2         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.4$                &     14.3   &   14.9    &  279       &   279     &      48.9    &   47.6         \\
+             & $p_T(j_2) > 350$ GeV                            &     13.2   &   14.1    &  99.7      &   106     &      34.9    &   34.7         \\      
+             & $|\eta(j_{1,2})|< 1.2$                          &     11.1   &   12.0    &  81.7      &   87.1    &      26.9    &   27.3         \\                   
+             & $\met/\sqrt{H_T} > 18$ GeV$^{1/2}$              &     5.54   &   5.45    &  38.1      &   37.5    &      18.8    &   18.9         \\    
+             & $\meff(\mathrm{incl.}) > 2000$ GeV              &     5.54   &   5.44    &  16.7      &   14.8    &      17.6    &   18.0         \\ \midrule          
+SR2j-2100    & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     25.2   &   25.8    &  331       &   337     &      59.5    &   59.1         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     22.0   &   22.6    &  322       &   326     &      57.7    &   56.7         \\
+             & $p_T(j_1) > 600$ GeV                            &     19.8   &   20.6    &  106       &   122     &      45.5    &   47.5         \\                     
+             & $\met/\sqrt{H_T} > 26$ GeV$^{1/2}$              &     3.48   &   2.94    &  22.3      &   20.1    &      20.7    &   19.1         \\    
+             & $\meff(\mathrm{incl.}) > 2100$ GeV              &     3.47   &   2.94    &  9.30      &   9.25    &      19.2    &   18.1         \\ \midrule        
+SR2j-2400    & $\Delta\phi(j_{1,2,(3)},\met) > 0.8$            &     19.0   &   19.4    &  293       &   296     &      51.8    &   51.2         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.4$                &     14.3   &   14.9    &  279       &   279     &      48.9    &   47.6         \\
+             & $p_T(j_2) > 350$ GeV                            &     13.2   &   14.1    &  99.7      &   106     &      34.9    &   34.7         \\      
+             & $|\eta(j_{1,2})|< 1.2$                          &     11.1   &   12.0    &  81.7      &   87.1    &      26.9    &   27.3         \\                   
+             & $\met/\sqrt{H_T} > 18$ GeV$^{1/2}$              &     5.54   &   5.45    &  38.1      &   37.5    &      18.8    &   18.9         \\    
+             & $\meff(\mathrm{incl.}) > 2400$ GeV              &     5.44   &   5.34    &  6.22      &   5.59    &      14.3    &   15.2         \\ \midrule                     
+SR2j-2800    & $\Delta\phi(j_{1,2,(3)},\met) > 0.8$            &     19.0   &   19.4    &  293       &   296     &      51.8    &   51.2         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.4$                &     14.3   &   14.9    &  279       &   279     &      48.9    &   47.6         \\
+             & $p_T(j_2) > 350$ GeV                            &     13.2   &   14.1    &  99.7      &   106     &      34.9    &   34.7         \\      
+             & $|\eta(j_{1,2})|< 1.2$                          &     11.1   &   12.0    &  81.7      &   87.1    &      26.9    &   27.3         \\                   
+             & $\met/\sqrt{H_T} > 18$ GeV$^{1/2}$              &     5.54   &   5.45    &  38.1      &   37.5    &      18.8    &   18.9         \\    
+             & $\meff(\mathrm{incl.}) > 2800$ GeV              &     4.94   &   4.80    &  2.23      &   1.94    &      9.22    &   10.0         \\ \midrule             
+SR2j-3600    & $\Delta\phi(j_{1,2,(3)},\met) > 0.8$            &     19.0   &   19.4    &  293       &   296     &      51.8    &   51.2         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.4$                &     14.3   &   14.9    &  279       &   279     &      48.9    &   47.6         \\
+             & $p_T(j_2) > 350$ GeV                            &     13.2   &   14.1    &  99.7      &   106     &      34.9    &   34.7         \\                        
+             & $\met/\sqrt{H_T} > 18$ GeV$^{1/2}$              &     6.70   &   6.37    &  46.2      &   45.1    &      24.3    &   24.0         \\    
+             & $\meff(\mathrm{incl.}) > 2800$ GeV              &     2.60   &   2.78    &  0.35      &   0.43    &      2.09    &   2.06         \\ \midrule         
+SR2jB-1600   & $\Delta\phi(j_{1,2,(3)},\met) > 0.6$            &     0.308  &   0.629   &  7.04      &   5.09    &      1.21    &   2.31         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.4$                &     0.232  &   0.502   &  6.72      &   4.91    &      1.18    &   2.19         \\                        
+             & $\met/\sqrt{H_T} > 20$ GeV$^{1/2}$              &     0.102  &   0.160   &  2.97      &   1.41    &      0.716   &   1.23         \\    
+             & $\meff(\mathrm{incl.}) > 1600$ GeV              &     0.099  &   0.156   &  1.77      &   1.00    &      0.679   &   1.22         \\ \midrule      
+SR2jB-2400   & $\Delta\phi(j_{1,2,(3)},\met) > 0.6$            &     0.308  &   0.629   &  7.04      &   5.09    &      1.21    &   2.31         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.4$                &     0.232  &   0.502   &  6.72      &   4.91    &      1.18    &   2.19         \\                        
+             & $\met/\sqrt{H_T} > 20$ GeV$^{1/2}$              &     0.102  &   0.160   &  2.97      &   1.41    &      0.716   &   1.23         \\    
+             & $\meff(\mathrm{incl.}) > 2400$ GeV              &     0.092  &   0.139   &  0.296     &   0.415   &      0.374   &   0.932        \\ \bottomrule                 
+ \end{tabular}
+\end{table}  
+
+
+\begin{table}[h!] 
+ \renewcommand*{\arraystretch}{1.}
+ \begin{tabular}{c|l|c|c|c|c|c|c} \toprule
+      & Selection & \multicolumn{2}{c|}{$m_{\tilde{g}} = 2000$ GeV}      & \multicolumn{2}{c|}{$m_{\tilde{q}} = 1200$ GeV}         & \multicolumn{2}{c}{$m_{\tilde{q}} = 1500$ GeV}         \\ 
+      &           & \multicolumn{2}{c|}{$m_{\tilde{\chi}^0_1} = 0$ GeV}  & \multicolumn{2}{c|}{$m_{\tilde{\chi}^0_1} = 600$ GeV}   & \multicolumn{2}{c}{$m_{\tilde{\chi}^0_1} = 0$ GeV}     \\ \midrule
+      &           & ATLAS             &  ~CM~~                           & ATLAS             & ~CM~~                            & ATLAS             & ~CM~~                            \\ \midrule
+Common& Preselection, $\met > 250$ GeV,&          &   &   &  & & \\ 
+Requirements & $p_T(j_1) > 200$ GeV, $\meff > 800$ GeV         &     31.6   &   31.7    &  376       &   376     &      68.4    &   67.2         \\
+             & jet multiplicity $\geq 2$                       &     31.6   &   31.7    &  373       &   372     &      67.9    &   66.6         \\
+             & Cleaning cuts                                   &     31.1   &   --      &  365       &   --      &      66.4    &   --          \\ \midrule
+SR3j-1300    & jet multiplicity $\geq 3$                       &     31.0   &   31.6    &  262       &   271     &      50.1    &   50.8         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     25.1   &   25.8    &  231       &   239     &      44.0    &   44.0         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     21.9   &   22.6    &  222       &   229     &      42.2    &   41.7         \\
+             & $p_T(j_1) > 700$ GeV                            &     17.4   &   18.5    &  40.2      &   47.3    &      26.5    &   28.2         \\                       
+             & $\met/\sqrt{H_T} > 18$ GeV$^{1/2}$              &     7.65   &   8.82    &  20.3      &   27.0    &      18.1    &   21.3         \\    
+             & $\meff(\mathrm{incl.}) > 1300$ GeV              &     7.65   &   8.82    &  20.3      &   27.0    &      18.1    &   21.3         \\ \midrule    
+SR4j-1000    & jet multiplicity $\geq 4$                       &     29.8   &   30.4    &  134       &   150     &      28.2    &   30.6         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     24.1   &   24.8    &  119       &   133     &      24.9    &   26.6         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.4$                &     18.2   &   18.7    &  102       &   113     &      21.5    &   22.2         \\
+             & $p_T(j_4) > 100$ GeV                            &     16.3   &   16.9    &  39.2      &   41.7    &      9.84    &   9.92         \\      
+             & $|\eta(j_{1,2,3,4})|< 1.2$                      &     7.95   &   8.04    &  12.5      &   11.4    &      2.95    &   3.24         \\           
+             & Aplanarity $> 0.04$                             &     5.52   &   5.61    &  8.39      &   8.05    &      1.52    &   1.70         \\           
+             & $\met/\meff(4j) > 0.3$                          &     2.02   &   1.63    &  5.13      &   4.72    &      0.964   &   1.15         \\    
+             & $\meff(\mathrm{incl.}) > 1000$ GeV              &     2.02   &   1.63    &  5.13      &   4.72    &      0.964   &   1.15         \\ \midrule                 
+SR4j-1400    & jet multiplicity $\geq 4$                       &     29.8   &   30.4    &  134       &   150     &      28.2    &   30.6         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     24.1   &   24.8    &  119       &   133     &      24.9    &   26.6         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.4$                &     18.2   &   18.7    &  102       &   113     &      21.5    &   22.2         \\
+             & $p_T(j_4) > 100$ GeV                            &     16.3   &   16.9    &  39.2      &   41.7    &      9.84    &   9.92         \\      
+             & $|\eta(j_{1,2,3,4})|< 2.0$                      &     14.9   &   15.2    &  30.6      &   31.4    &      7.79    &   7.84         \\           
+             & Aplanarity $> 0.04$                             &     10.1   &   10.5    &  19.5      &   20.3    &      4.00    &   3.98         \\           
+             & $\met/\meff(4j) > 0.25$                         &     5.73   &   5.27    &  15.4      &   16.7    &      3.25    &   3.28         \\    
+             & $\meff(\mathrm{incl.}) > 1400$ GeV              &     5.73   &   5.27    &  13.9      &   15.0    &      3.23    &   3.27         \\ \midrule           
+SR4j-1800    & jet multiplicity $\geq 4$                       &     29.8   &   30.4    &  134       &   150     &      28.2    &   30.6         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     24.1   &   24.8    &  119       &   133     &      24.9    &   26.6         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.4$                &     18.2   &   18.7    &  102       &   113     &      21.5    &   22.2         \\
+             & $p_T(j_4) > 100$ GeV                            &     16.3   &   16.9    &  39.2      &   41.7    &      9.84    &   9.92         \\      
+             & $|\eta(j_{1,2,3,4})|< 2.0$                      &     14.9   &   15.2    &  30.6      &   31.4    &      7.79    &   7.84         \\           
+             & Aplanarity $> 0.04$                             &     10.1   &   10.5    &  19.5      &   20.3    &      4.00    &   3.98         \\           
+             & $\met/\meff(4j) > 0.25$                         &     5.73   &   5.27    &  15.4      &   16.7    &      3.25    &   3.28         \\    
+             & $\meff(\mathrm{incl.}) > 1400$ GeV              &     5.69   &   5.24    &  9.17      &   10.5    &      3.03    &   3.10         \\ \midrule     
+SR4j-2200    & jet multiplicity $\geq 4$                       &     29.8   &   30.4    &  134       &   150     &      28.2    &   30.6         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     24.1   &   24.8    &  119       &   133     &      24.9    &   26.6         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.4$                &     18.2   &   18.7    &  102       &   113     &      21.5    &   22.2         \\
+             & $p_T(j_4) > 100$ GeV                            &     16.3   &   16.9    &  39.2      &   41.7    &      9.84    &   9.92         \\      
+             & $|\eta(j_{1,2,3,4})|< 2.0$                      &     14.9   &   15.2    &  30.6      &   31.4    &      7.79    &   7.84         \\           
+             & Aplanarity $> 0.04$                             &     10.1   &   10.5    &  19.5      &   20.3    &      4.00    &   3.98         \\           
+             & $\met/\meff(4j) > 0.25$                         &     5.73   &   5.27    &  15.4      &   16.7    &      3.25    &   3.28         \\    
+             & $\meff(\mathrm{incl.}) > 2200$ GeV              &     5.55   &   5.10    &  4.37      &   4.84    &      2.60    &   2.63         \\ \midrule             
+SR4j-2600    & jet multiplicity $\geq 4$                       &     29.8   &   30.4    &  134       &   150     &      28.2    &   30.6         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     24.1   &   24.8    &  119       &   133     &      24.9    &   26.6         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.4$                &     18.2   &   18.7    &  102       &   113     &      21.5    &   22.2         \\
+             & $p_T(j_4) > 150$ GeV                            &     13.9   &   14.3    &  15.4      &   15.5    &      4.70    &   4.37         \\      
+             & $|\eta(j_{1,2,3,4})|< 2.0$                      &     13.1   &   13.2    &  12.8      &   12.7    &      3.97    &   3.64         \\           
+             & Aplanarity $> 0.04$                             &     9.21   &   9.44    &  8.93      &   8.96    &      2.43    &   2.21         \\           
+             & $\met/\meff(4j) > 0.2$                          &     6.64   &   6.38    &  7.92      &   7.89    &      2.16    &   1.97         \\    
+             & $\meff(\mathrm{incl.}) > 2600$ GeV              &     6.00   &   5.81    &  1.74      &   1.71    &      1.46    &   1.40         \\ \bottomrule 
+\end{tabular}
+\end{table}             
+
+\begin{table}[h!] 
+ \renewcommand*{\arraystretch}{1.}
+ \begin{tabular}{c|l|c|c|c|c|c|c} \toprule
+      & Selection & \multicolumn{2}{c|}{$m_{\tilde{g}} = 2000$ GeV}      & \multicolumn{2}{c|}{$m_{\tilde{q}} = 1200$ GeV}         & \multicolumn{2}{c}{$m_{\tilde{q}} = 1500$ GeV}         \\ 
+      &           & \multicolumn{2}{c|}{$m_{\tilde{\chi}^0_1} = 0$ GeV}  & \multicolumn{2}{c|}{$m_{\tilde{\chi}^0_1} = 600$ GeV}   & \multicolumn{2}{c}{$m_{\tilde{\chi}^0_1} = 0$ GeV}     \\ \midrule
+      &           & ATLAS             &  ~CM~~                           & ATLAS             & ~CM~~                            & ATLAS             & ~CM~~                            \\ \midrule
+Common& Preselection, $\met > 250$ GeV,&          &   &   &  & & \\ 
+Requirements & $p_T(j_1) > 200$ GeV, $\meff > 800$ GeV         &     31.6   &   31.7    &  376       &   376     &      68.4    &   67.2         \\
+             & jet multiplicity $\geq 2$                       &     31.6   &   31.7    &  373       &   372     &      67.9    &   66.6         \\
+             & Cleaning cuts                                   &     31.1   &   --      &  365       &   --      &      66.4    &   --          \\ \midrule
+SR4j-3000    & jet multiplicity $\geq 4$                       &     29.8   &   30.4    &  134       &   150     &      28.2    &   30.6         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     24.1   &   24.8    &  119       &   133     &      24.9    &   26.6         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.4$                &     18.2   &   18.7    &  102       &   113     &      21.5    &   22.2         \\
+             & $p_T(j_4) > 150$ GeV                            &     13.9   &   14.3    &  15.4      &   15.5    &      4.70    &   4.37         \\      
+             & $|\eta(j_{1,2,3,4})|< 2.0$                      &     13.1   &   13.2    &  12.8      &   12.7    &      3.97    &   3.64         \\           
+             & Aplanarity $> 0.04$                             &     9.21   &   9.44    &  8.93      &   8.96    &      2.43    &   2.21         \\           
+             & $\met/\meff(4j) > 0.2$                          &     6.64   &   6.38    &  7.92      &   7.89    &      2.16    &   1.97         \\    
+             & $\meff(\mathrm{incl.}) > 3000$ GeV              &     5.01   &   4.83    &  0.489     &   0.493   &      0.942   &   0.789        \\ \midrule          
+SR5j-1600    & jet multiplicity $\geq 5$                       &     22.5   &   23.3    &  53.3      &   67.6    &      12.5    &   14.5         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     18.2   &   19.0    &  47.1      &   59.1    &      11.0    &   12.7         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     15.4   &   16.1    &  42.1      &   52.3    &      9.85    &   10.9         \\      
+             & Aplanarity $> 0.08$                             &     6.35   &   6.61    &  12.7      &   16.4    &      2.67    &   2.70         \\           
+             & $\met/\meff(5j) > 0.15$                         &     5.49   &   5.49    &  12.4      &   16.1    &      2.59    &   2.63         \\    
+             & $\meff(\mathrm{incl.}) > 1600$ GeV              &     5.47   &   4.47    &  9.30      &   11.6    &      2.45    &   2.52         \\ \midrule       
+SR5j-1700    & jet multiplicity $\geq 5$                       &     22.5   &   23.3    &  53.3      &   67.6    &      12.5    &   14.5         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     18.2   &   19.0    &  47.1      &   59.1    &      11.0    &   12.7         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     15.4   &   16.1    &  42.1      &   52.3    &      9.85    &   10.9         \\      
+             & $p_T(j_1) > 700$ GeV                            &     12.0   &   12.9    &  7.40      &   9.34    &      5.48    &   6.78         \\           
+             & $\met/\meff(5j) > 0.3$                          &     3.56   &   3.54    &  3.27      &   4.49    &      3.31    &   4.20         \\    
+             & $\meff(\mathrm{incl.}) > 1700$ GeV              &     3.56   &   3.54    &  3.25      &   4.49    &      3.30    &   4.20         \\ \midrule   
+SR6j-1200    & jet multiplicity $\geq 6$                       &     13.3   &   14.2    &  17.9      &   26.0    &      4.81    &   6.07         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     10.8   &   11.6    &  15.6      &   22.9    &      4.24    &   5.34         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     8.73   &   9.46    &  13.1      &   19.1    &      3.68    &   4.41         \\      
+             & $|\eta(j_{1,2,3,4,5,6})|< 2.0$                  &     6.66   &   6.97    &  7.34      &   11.3    &      2.27    &   2.65         \\           
+             & $\met/\meff(6j) > 0.25$                         &     3.02   &   2.88    &  5.21      &   8.12    &      1.68    &   1.97         \\    
+             & $\meff(\mathrm{incl.}) > 1200$ GeV              &     3.02   &   2.88    &  5.08      &   7.95    &      1.68    &   1.97         \\ \midrule        
+SR6j-1800    & jet multiplicity $\geq 6$                       &     13.3   &   14.2    &  17.9      &   26.0    &      4.81    &   6.07         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     10.8   &   11.6    &  15.6      &   22.9    &      4.24    &   5.34         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     8.73   &   9.46    &  13.1      &   19.1    &      3.68    &   4.41         \\      
+             & $p_T(j_6) > 100$ GeV                            &     3.45   &   3.83    &  1.65      &   1.73    &      0.487   &   0.614        \\      
+             & $|\eta(j_{1,2,3,4})|< 2.0$                      &     2.81   &   3.02    &  1.07      &   1.12    &      0.341   &   0.383        \\           
+             & Aplanarity $> 0.04$                             &     2.32   &   2.51    &  0.916     &   0.996   &      0.261   &   0.347        \\         
+             & $\met/\meff(6j) > 0.2$                          &     1.33   &   1.42    &  0.652     &   0.804   &      0.226   &   0.311        \\    
+             & $\meff(\mathrm{incl.}) > 1800$ GeV              &     1.32   &   1.42    &  0.513     &   0.745   &      0.219   &   0.302        \\ \midrule   
+SR6j-2200    & jet multiplicity $\geq 6$                       &     13.3   &   14.2    &  17.9      &   26.0    &      4.81    &   6.07         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     10.8   &   11.6    &  15.6      &   22.9    &      4.24    &   5.34         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     8.73   &   9.46    &  13.1      &   19.1    &      3.68    &   4.41         \\      
+             & $p_T(j_6) > 100$ GeV                            &     3.45   &   3.83    &  1.65      &   1.73    &      0.487   &   0.614        \\             
+             & Aplanarity $> 0.08$                             &     1.74   &   2.07    &  0.921     &   0.946   &      0.215   &   0.248        \\         
+             & $\met/\meff(6j) > 0.2$                          &     1.05   &   1.23    &  0.674     &   0.741   &      0.190   &   0.229        \\    
+             & $\meff(\mathrm{incl.}) > 2200$ GeV              &     1.04   &   1.23    &  0.366     &   0.448   &      0.167   &   0.202        \\ \midrule    
+SR6j-2600    & jet multiplicity $\geq 6$                       &     13.3   &   14.2    &  17.9      &   26.0    &      4.81    &   6.07         \\
+             & $\Delta\phi(j_{1,2,(3)},\met) > 0.4$            &     10.8   &   11.6    &  15.6      &   22.9    &      4.24    &   5.34         \\
+             & $\Delta\phi(j_{i>3},\met) > 0.2$                &     8.73   &   9.46    &  13.1      &   19.1    &      3.68    &   4.41         \\      
+             & $p_T(j_6) > 100$ GeV                            &     3.45   &   3.83    &  1.65      &   1.73    &      0.487   &   0.614        \\             
+             & Aplanarity $> 0.08$                             &     1.74   &   2.07    &  0.921     &   0.946   &      0.215   &   0.248        \\         
+             & $\met/\meff(6j) > 0.15$                         &     1.39   &   1.64    &  0.891     &   0.875   &      0.206   &   0.238        \\    
+             & $\meff(\mathrm{incl.}) > 2600$ GeV              &     1.29   &   1.58    &  0.373     &   0.253   &      0.161   &   0.175        \\ \bottomrule                 
+\end{tabular}
+\end{table}   
+ \pagestyle{empty}
+%\newpage
+%\begin{landscape}
+
+
+%\end{landscape} 
+
+
+
+ 
+\end{document}

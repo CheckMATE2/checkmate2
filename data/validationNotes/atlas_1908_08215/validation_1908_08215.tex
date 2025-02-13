@@ -1,0 +1,202 @@
+\documentclass[10pt,fleqn]{article}
+\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{url}
+\usepackage{color}
+\newcommand{\Checkmate}{\texttt{CheckMATE}}
+\newcommand{\ifb}{$\mathrm{fb}^{-1}$}
+\newcommand{\etmiss}{$\slashed{E}_T$}
+\newcommand{\met}{E^\mathrm{miss}_\mathrm{T}}
+\newcommand{\meff}{m_\mathrm{eff}}
+
+\setlength{\textheight}{24cm} \setlength{\textwidth}{18cm}
+\setlength{\topmargin}{0cm} \setlength{\headheight}{14.5pt}
+\setlength{\oddsidemargin}{-1.cm} \setlength{\evensidemargin}{-0.5cm}
+
+\begin{document}
+\global\advance\voffset by -1 true in
+\begin{center}
+{\LARGE\bf
+Search for electroweak production of charginos and sleptons decaying into final states with two leptons and missing transverse momentum in $\sqrt{s}=13$ TeV $pp$ collisions using the ATLAS detector, \texttt{arXiv:1908.08215}
+}\\ \vspace{0.5cm}
+\today
+\end{center}
+
+\section{Summary}
+This is a \Checkmate{} implementation of a search~\cite{Aad:2019vnb} for the electroweak production of charginos and sleptons. It targets the final states with two leptons (electrons and/or muons). The analysis uses $139$ \ifb of proton-proton collision data recorded by the ATLAS experiment at $\sqrt{s}=13$~TeV from 2015 to 2018. Three $R$-parity-conserving scenarios where the lightest neutralino is the lightest supersymmetric particle are considered: the production of chargino pairs with decays via either $W$ bosons or sleptons, and the direct production of slepton pairs. The results are in agreement with the Standard Model expectation and therefore 95\% confidence level limits are set on the masses of charginos and sleptons. Under assumptions of the massless lightest neutralino, the chargino masses up to 420~GeV are excluded for scenarios with $W$ boson mediated chargino decays, while the limit of 1~TeV is obtained when slepton mediated decays are assumed. This is a \Checkmate{} implementation validated for version~2~\cite{Kim:2015wza,Dercks:2016npn}.
+
+\newpage
+\section{Validation} 
+ 
+\begin{enumerate}
+\item{\bf Chargino production with $W$ mediated decays}
+
+ Process: $ p p \to \tilde{\chi}^+_1 \tilde{\chi}^-_1 \to \tilde{\chi}^0_1 W^+ \tilde{\chi}^0_1 W^-$\\
+ $m_{\tilde{\chi}^\pm_1} = 300$~GeV, $m_{\tilde{\chi}_1^0} = 50$~GeV\\
+ Events generated with \texttt{MG5\_aMC 2.6.6}~\cite{Alwall:2014hca} interfaced to \texttt{Pythia8}~\cite{Sjostrand:2007gs} with up to two extra partons.
+ 100000 MC events weighted to 139 \ifb. 
+ 
+\begin{table}[h!] \centering 
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{1.5cm}|p{1.5cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Total weighted events                                                           & 26432    &   26433      \\
+  Trigger                                                                         &   793    &   1058\\
+  OS signal leptons                                                               &   661    &    777\\
+  $p_T^{\ell_1,\ell_2} > 25$ GeV                                                  &   565    &   608.7\\
+  $m_{\ell_1,\ell_2} > 25  $ GeV                                                  &   559    &   600\\
+  number of $b$-jets                                                              &   526    &   568\\   \midrule
+  SR-DF-0J  & &\\ \midrule
+  different flavour and number of light jets $=0$                                 &  122.7   &   141\\
+  $m_{\ell_1,\ell_2} > 100  $ GeV                                                 &  94.2    &   107\\
+  $E_T^\mathrm{miss} > 110$ GeV                                                   &  46.5    &   53\\
+  $E_T^\mathrm{miss}$ significance > 10                                           &  42.2    &   52\\
+  $m_{T2} >  100$ GeV                                                             &  26.4    &   $28.6 \pm 3.1$\\ \midrule   
+  SR-DF-1J  & &\\ \midrule
+  different flavour and number of light jets $=1$                                 &  81.9    &   91\\
+  $m_{\ell_1,\ell_2} > 100  $ GeV                                                 &  62.3    &   68\\
+  $E_T^\mathrm{miss} > 110$ GeV                                                   &  33.8    &   41\\
+  $E_T^\mathrm{miss}$ significance > 10                                           &  27.2    &   38\\
+  $m_{T2} >  100$ GeV                                                             &  15.3    &   $19.1 \pm 2.5$\\ \midrule     
+  SR-SF-0J  & &\\ \midrule
+  different flavour and number of light jets $=0$                                 & 138.7    &   155\\
+  $m_{\ell_1,\ell_2} > 121.2  $ GeV                                               &  92.4    &   98\\
+  $E_T^\mathrm{miss} > 110$ GeV                                                   &  47.1    &   55\\
+  $E_T^\mathrm{miss}$ significance > 10                                           &  42.9    &   54\\
+  $m_{T2} >  100$ GeV                                                             &  25.4    &   $27.2 \pm 3.0$ \\ \midrule     
+  SR-SF-1J  & &\\ \midrule
+  different flavour and number of light jets $=1$                                 & 88.8     &   90\\
+  $m_{\ell_1,\ell_2} > 121.2  $ GeV                                               & 58.9     &   59\\
+  $E_T^\mathrm{miss} > 110$ GeV                                                   & 32.6     &   33\\
+  $E_T^\mathrm{miss}$ significance > 10                                           & 26.9     &   30\\
+  $m_{T2} >  100$ GeV                                                             & 14.0     &   $17.3 \pm 2.4$\\ \bottomrule
+ \end{tabular}
+\end{table} 
+ 
+\newpage 
+ 
+\item{\bf Chargino production with $\tilde{\ell}$ mediated decays (3 flavours)}
+
+ Process: $ p p \to \tilde{\chi}^+_1 \tilde{\chi}^-_1$ followed by decays (3 flavours included)\\
+ $\tilde{\chi}^+_1 \to \tilde{\ell}^+ \nu_\ell \to \tilde{\chi}^0_1 \ell \nu_\ell \qquad \tilde{\chi}^+_1 \to \tilde{\nu}_\ell \ell \to \tilde{\chi}^0_1 \ell \nu_\ell $\\
+ $m_{\tilde{\chi}^\pm_1} = 600$~GeV, $m_{\tilde{\ell}^\pm} = 300$~GeV,  $m_{\tilde{\chi}_1^0} = 1$~GeV\\
+ Events generated with \texttt{MG5\_aMC 2.6.6}~\cite{Alwall:2014hca} interfaced to \texttt{Pythia8}~\cite{Sjostrand:2007gs} with up to two extra partons.
+ 10000 MC events weighted to 139 \ifb. 
+ 
+\begin{table}[h!] \centering 
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{1.5cm}|p{1.5cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Total weighted events                                                           &  1320    &   1320      \\
+  Trigger                                                                         &   516    &   637\\
+  OS signal leptons                                                               &   439    &   479\\
+  $p_T^{\ell_1,\ell_2} > 25$ GeV                                                  &   430    &   461\\
+  $m_{\ell_1,\ell_2} > 25  $ GeV                                                  &   429    &   460\\
+  number of $b$-jets                                                              &   401    &   431\\   \midrule
+  SR-DF-0J  & &\\ \midrule
+  different flavour and number of light jets $=0$                                 &  82.8    &   103\\
+  $m_{\ell_1,\ell_2} > 100  $ GeV                                                 &  77.8    &    96\\
+  $E_T^\mathrm{miss} > 110$ GeV                                                   &  66.8    &    82\\
+  $E_T^\mathrm{miss}$ significance > 10                                           &  62.9    &    78\\
+  $m_{T2} >  100$ GeV                                                             &  53.8    &    $66.2\pm 3.1$\\ \midrule   
+  SR-DF-1J  & &\\ \midrule
+  different flavour and number of light jets $=1$                                 &  66.3    &    68\\
+  $m_{\ell_1,\ell_2} > 100  $ GeV                                                 &  61.3    &    62\\
+  $E_T^\mathrm{miss} > 110$ GeV                                                   &  53.4    &    53\\
+  $E_T^\mathrm{miss}$ significance > 10                                           &  48.6    &    50\\
+  $m_{T2} >  100$ GeV                                                             &  40.7    &    $39.4\pm 2.5$\\ \midrule     
+  SR-SF-0J  & &\\ \midrule
+  different flavour and number of light jets $=0$                                 &  89.8    &   102\\
+  $m_{\ell_1,\ell_2} > 121.2  $ GeV                                               &  82.2    &    93\\
+  $E_T^\mathrm{miss} > 110$ GeV                                                   &  68.7    &    82\\
+  $E_T^\mathrm{miss}$ significance > 10                                           &  63.5    &    76\\
+  $m_{T2} >  100$ GeV                                                             &  56.0    &    $63.2 \pm 3.1$ \\ \midrule     
+  SR-SF-1J  & &\\ \midrule
+  different flavour and number of light jets $=1$                                 &  74.0    &    60\\
+  $m_{\ell_1,\ell_2} > 121.2  $ GeV                                               &  65.5    &    55\\
+  $E_T^\mathrm{miss} > 110$ GeV                                                   &  55.9    &    50\\
+  $E_T^\mathrm{miss}$ significance > 10                                           &  49.7    &    45\\
+  $m_{T2} >  100$ GeV                                                             &  41.7    &    $37.1 \pm 2.4$\\ \bottomrule
+ \end{tabular}
+\end{table}  
+ 
+\newpage 
+ 
+\item{\bf Selectron/smuon production}
+
+ Process: $ p p \to \tilde{\ell}^+ \tilde{\ell}^- \to \tilde{\chi}^0_1 \ell^+ \tilde{\chi}^0_1 \ell^-$\\
+ $m_{\tilde{\ell}^\pm} = 400$~GeV, $m_{\tilde{\chi}_1^0} = 200$~GeV\\
+ Events generated with \texttt{MG5\_aMC 2.6.6}~\cite{Alwall:2014hca} interfaced to \texttt{Pythia8}~\cite{Sjostrand:2007gs} with up to two extra partons.
+ 5000 MC events weighted to 139 \ifb. 
+ 
+\begin{table}[h!] \centering 
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{1.5cm}|p{1.5cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Total weighted events                                                           &   503   &    503     \\
+  Trigger                                                                         &   352   &    415\\
+  OS signal leptons                                                               &   318   &    314\\
+  $p_T^{\ell_1,\ell_2} > 25$ GeV                                                  &   316   &    310\\
+  $m_{\ell_1,\ell_2} > 25  $ GeV                                                  &   315   &    309\\
+  number of $b$-jets                                                              &   298   &    288\\   \midrule
+  SR-SF-0J  & &\\ \midrule
+  different flavour and number of light jets $=0$                                 &  136.0    &  138 \\
+  $m_{\ell_1,\ell_2} > 121.2  $ GeV                                               &  123.5    &  123.6 \\
+  $E_T^\mathrm{miss} > 110$ GeV                                                   &   97.5    &  93.3 \\
+  $E_T^\mathrm{miss}$ significance > 10                                           &   88.5   &   85.3\\
+  $m_{T2} >  100$ GeV                                                             &   75.1   &   $71.0 \pm 2.7$\\ \midrule     
+  SR-SF-1J  & &\\ \midrule
+  different flavour and number of light jets $=1$                                 &   99.2   &   87.5\\
+  $m_{\ell_1,\ell_2} > 121.2  $ GeV                                               &   90.3   &   78.4\\
+  $E_T^\mathrm{miss} > 110$ GeV                                                   &   71.8   &   62.5\\
+  $E_T^\mathrm{miss}$ significance > 10                                           &   61.3   &   52.8\\
+  $m_{T2} >  100$ GeV                                                             &   51.1   &   $42.8 \pm 2.1$\\ \bottomrule
+ \end{tabular}
+\end{table} 
+ 
+ 
+\end{enumerate}
+
+
+
+\begin{thebibliography}{99}
+
+\bibitem{Aad:2019vnb}
+  G.~Aad {\it et al.} [ATLAS Collaboration],
+  ``Search for electroweak production of charginos and sleptons decaying into final states with two leptons and missing transverse momentum in $\sqrt{s}=13$ TeV $pp$ collisions using the ATLAS detector,''
+  arXiv:1908.08215 [hep-ex].
+  
+\bibitem{Kim:2015wza}
+  J.~S.~Kim, D.~Schmeier, J.~Tattersall and K.~Rolbiecki,
+  ``A framework to create customised LHC analyses within CheckMATE,''
+  Comput.\ Phys.\ Commun.\  {\bf 196} (2015) 535
+  [arXiv:1503.01123 [hep-ph]].  
+  
+\bibitem{Dercks:2016npn}
+  D.~Dercks, N.~Desai, J.~S.~Kim, K.~Rolbiecki, J.~Tattersall and T.~Weber,
+  ``CheckMATE 2: From the model to the limit,''
+  Comput.\ Phys.\ Commun.\  {\bf 221} (2017) 383
+  [arXiv:1611.09856 [hep-ph]].
+ 
+ 
+\bibitem{Alwall:2014hca}
+  J.~Alwall {\it et al.},
+  ``The automated computation of tree-level and next-to-leading order differential cross sections, and their matching to parton shower simulations,''
+  JHEP {\bf 1407} (2014) 079
+  [arXiv:1405.0301 [hep-ph]]. 
+ 
+\bibitem{Sjostrand:2007gs}
+  T.~Sjostrand, S.~Mrenna and P.~Z.~Skands,
+  ``A Brief Introduction to PYTHIA 8.1,''
+  Comput.\ Phys.\ Commun.\  {\bf 178} (2008) 852
+  [arXiv:0710.3820 [hep-ph]]. 
+
+  
+  
+\end{thebibliography}
+ 
+\end{document}

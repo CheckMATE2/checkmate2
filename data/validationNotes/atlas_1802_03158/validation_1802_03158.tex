@@ -1,0 +1,201 @@
+\documentclass[12pt,fleqn]{article}
+\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\newcommand{\Checkmate}{\texttt{CheckMATE}}
+\newcommand{\ifb}{$\mathrm{fb}^{-1}$}
+\newcommand{\etmiss}{$\slashed{E}_T$}
+
+\setlength{\textheight}{22.5cm} \setlength{\textwidth}{17cm}
+\setlength{\topmargin}{1.2cm} \setlength{\headheight}{14.5pt}
+\setlength{\oddsidemargin}{-1.cm} \setlength{\evensidemargin}{-0.5cm}
+
+\begin{document}
+\global\advance\voffset by -1 true in
+\begin{center}
+{\LARGE\bf
+Search for photonic signatures of gauge-mediated supersymmetry in 13 TeV $pp$ collisions with the ATLAS detector \texttt{arXiv:1802.03158}\\\vspace{0.5cm}
+}
+\end{center}
+
+\begin{enumerate}
+\item{$\mathrm{SR}^{\gamma\gamma}_{\mathrm{S-L}}$\\}
+ Process: $ p p \to \tilde{g} \tilde{g}$\\
+ gluino-bino model\\
+ $m_{\tilde{g}} = 1900$~GeV, $m_{\tilde{\chi}_1^0} = 300$~GeV\\
+ Events generated with \texttt{MG5\_aMC 2.6.0} interfaced to \texttt{Pythia8} with up to two extra partons.
+ 10000 MC events weighted to 36.1/fb.
+
+\begin{table}[h!] 
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Initial events                                                                  & 58.8     &  58.8          \\
+  Two photons                                                                     & 17.9     &  17.9 \\
+  Photon $p_T>75$ GeV                                                             & 15.2     &  15.2 \\
+  $E_T^\mathrm{miss} > 150$ GeV                                                   & 13.1     &  13.4 \\
+  $H_T > 2750$ GeV                                                                & 11.7     &  11.5  \\ 
+  $\Delta\phi(\mathrm{jet},E_T^\mathrm{miss}) > 0.5$                              &  8.9     &   9.3 \\   \bottomrule
+ \end{tabular}
+\end{table} 
+ 
+
+\item{$\mathrm{SR}^{\gamma\gamma}_{\mathrm{S-H}}$\\}
+ Process: $ p p \to \tilde{g} \tilde{g}$\\
+ gluino-bino model\\
+ $m_{\tilde{g}} = 1900$~GeV, $m_{\tilde{\chi}_1^0} = 1700$~GeV\\
+ Events generated with \texttt{MG5\_aMC 2.6.0} interfaced to \texttt{Pythia8} with up to two extra partons.
+ 10000 MC events weighted to 36.1/fb.
+
+\begin{table}[h!] 
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Initial events                                                                  & 58.8     &  58.8          \\
+  Two photons                                                                     & 17.0     &  20.0 \\
+  Photon $p_T>75$ GeV                                                             & 16.9     &  19.8 \\
+  $E_T^\mathrm{miss} > 250$ GeV                                                   & 15.8     &  18.7 \\
+  $H_T > 2000$ GeV                                                                & 15.6     &  18.1  \\ 
+  $\Delta\phi(\mathrm{jet},E_T^\mathrm{miss}) > 0.5$                              & 14.9     &  13.6  \\  
+  $\Delta\phi(\gamma,E_T^\mathrm{miss}) > 0.5$                                    & 14.8     &  12.8  \\ \bottomrule
+ \end{tabular}
+\end{table} 
+
+\newpage
+\item{$\mathrm{SR}^{\gamma\gamma}_{\mathrm{S-L}}$\\}
+ Process: $ p p \to \tilde{q} \tilde{q}^*$\\
+ squark-bino model\\
+ $m_{\tilde{q}} = 1700$~GeV, $m_{\tilde{\chi}_1^0} = 200$~GeV
+ Events (just $\tilde{u}_L\tilde{u}_L^*$) generated with \texttt{MG5\_aMC 2.6.0} interfaced to \texttt{Pythia8} with up to two extra partons.
+ 10000 MC events weighted to 36.1/fb.
+
+\begin{table}[h!] 
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Initial events                                                                  & 27.5     &  27.4          \\
+  Two photons                                                                     & 11.0     &  11.8 \\
+  Photon $p_T>75$ GeV                                                             &  9.5     &   9.9 \\
+  $E_T^\mathrm{miss} > 150$ GeV                                                   &  8.7     &   9.0 \\
+  $H_T > 2750$ GeV                                                                &  7.1     &   7.2  \\ 
+  $\Delta\phi(\mathrm{jet},E_T^\mathrm{miss}) > 0.5$                              &  5.3     &   6.3 \\   \bottomrule
+ \end{tabular}
+\end{table} 
+
+\item{$\mathrm{SR}^{\gamma\gamma}_{\mathrm{S-H}}$\\}
+ Process: $ p p \to \tilde{q} \tilde{q}^*$\\
+ squark-bino model\\
+ $m_{\tilde{q}} = 1700$~GeV, $m_{\tilde{\chi}_1^0} = 1600$~GeV
+ Events (just $\tilde{u}_L\tilde{u}_L^*$) generated with \texttt{MG5\_aMC 2.6.0} interfaced to \texttt{Pythia8} with up to two extra partons.
+ 10000 MC events weighted to 36.1/fb.
+
+\begin{table}[h!] 
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Initial events                                                                  & 27.5     &  27.4          \\
+  Two photons                                                                     &  8.4     &   9.8 \\
+  Photon $p_T>75$ GeV                                                             &  8.4     &   9.7 \\
+  $E_T^\mathrm{miss} > 250$ GeV                                                   &  7.8     &   9.1 \\
+  $H_T > 2000$ GeV                                                                &  7.5     &   8.7  \\ 
+  $\Delta\phi(\mathrm{jet},E_T^\mathrm{miss}) > 0.5$                              &  7.2     &   6.6 \\   
+  $\Delta\phi(\gamma,E_T^\mathrm{miss}) > 0.5$                                    &  7.2     &   6.3  \\ \bottomrule  
+ \end{tabular}
+\end{table}  
+ 
+\newpage
+\item{$\mathrm{SR}^{\gamma\gamma}_{\mathrm{W-L}}$\\}
+ Process: $ p p \to \tilde{\chi}^+_1 \tilde{\chi}^0_2$\\
+ wino-bino model\\
+ $m_{\tilde{\chi}_1^\pm} = 1000$~GeV, $m_{\tilde{\chi}_2^0} = 1000$~GeV, $m_{\tilde{\chi}_1^0} = 200$~GeV\\
+ Events generated with \texttt{MG5\_aMC 2.6.0} interfaced to \texttt{Pythia8} with up to two extra partons.
+ 1000 MC events weighted to 36.1/fb.
+\begin{table}[h!] 
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Initial events                                                                  & 70.8     &  70.8          \\
+  Two photons                                                                     & 26.3     &  27.9 \\
+  Photon $p_T>75$ GeV                                                             & 21.3     &  20.9 \\
+  $E_T^\mathrm{miss} > 150$ GeV                                                   & 16.9     &  16.6 \\
+  $H_T > 1500$ GeV                                                                & 14.7     &  13.3  \\ 
+  $\Delta\phi(\mathrm{jet},E_T^\mathrm{miss}) > 0.5$                              & 11.0     &  11.0  \\ \bottomrule
+ \end{tabular}
+\end{table} 
+
+\item{$\mathrm{SR}^{\gamma\gamma}_{\mathrm{W-H}}$\\}
+ Process: $ p p \to \tilde{\chi}^+_1 \tilde{\chi}^0_2$\\
+ wino-bino model\\
+ $m_{\tilde{\chi}_1^\pm} = 1000$~GeV, $m_{\tilde{\chi}_2^0} = 1000$~GeV, $m_{\tilde{\chi}_1^0} = 800$~GeV\\
+ Events generated with \texttt{MG5\_aMC 2.6.0} interfaced to \texttt{Pythia8} with up to two extra partons.
+ 1000 MC events weighted to 36.1/fb.
+
+\begin{table}[h!] 
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Initial events                                                                  & 70.8     &  70.8          \\
+  Two photons                                                                     & 19.6     &  22.4 \\
+  Photon $p_T>75$ GeV                                                             & 19.2     &  21.7 \\
+  $E_T^\mathrm{miss} > 250$ GeV                                                   & 15.6     &  17.0 \\
+  $H_T > 1000$ GeV                                                                & 15.6     &  16.8  \\ 
+  $\Delta\phi(\mathrm{jet},E_T^\mathrm{miss}) > 0.5$                              & 14.8     &  12.7  \\  
+  $\Delta\phi(\gamma,E_T^\mathrm{miss}) > 0.5$                                    & 14.6     &  12.3  \\ \bottomrule
+ \end{tabular}
+\end{table} 
+
+\newpage
+\item{$\mathrm{SR}^{\gamma j}_{\mathrm{L}}$\\}
+ Process: $ p p \to \tilde{g} \tilde{g}$\\
+ higgsino-bino model\\
+ $m_{\tilde{g}} = 1974$~GeV, $m_{\tilde{\chi}_1^0} = 442$~GeV\\
+ Events generated with \texttt{MG5\_aMC 2.6.0} interfaced to \texttt{Pythia8} with up to two extra partons.
+ 10000 MC events weighted to 36.1/fb.
+
+\begin{table}[h!] 
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Initial events                                                                  & 40.3     &  40.3          \\
+  At least one photon $p_T>140$ GeV                                               & 17.0     &  19.0 \\
+  Lepton veto                                                                     & 10.3     &  9.4 \\   
+  Photon $p_T>145$ GeV                                                            &  9.7     &  7.8 \\
+  $E_T^\mathrm{miss} > 300$ GeV                                                   &  6.6     &  5.4 \\
+  Number of jets $\geq 5$                                                         &  6.5     &  5.3 \\
+  $\Delta\phi(\mathrm{jet},E_T^\mathrm{miss}) > 0.4$                              &  5.6     &  4.6 \\  
+  $\Delta\phi(\gamma,E_T^\mathrm{miss}) > 0.4$                                    &  4.9     &  4.1 \\
+  $m_{\mathrm{eff}} > 2000$ GeV                                                   &  4.8     &  4.1 \\
+  $R^4_T < 0.9$                                                                   &  4.0     &  3.6 \\ 
+ \bottomrule
+ \end{tabular}
+\end{table} 
+ 
+\item{$\mathrm{SR}^{\gamma j}_{\mathrm{H}}$\\}
+ Process: $ p p \to \tilde{g} \tilde{g}$\\
+ higgsino-bino model\\
+ $m_{\tilde{g}} = 1974$~GeV, $m_{\tilde{\chi}_1^0} = 1868$~GeV\\
+ Events generated with \texttt{MG5\_aMC 2.6.0} interfaced to \texttt{Pythia8} with up to two extra partons.
+ 10000 MC events weighted to 36.1/fb.
+
+\begin{table}[h!] 
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Initial events                                                                  & 40.3     &  40.3          \\
+  At least one photon $p_T>140$ GeV                                               & 23.4     &  24.7 \\
+  Lepton veto                                                                     & 22.0     &  22.8 \\   
+  Photon $p_T>400$ GeV                                                            & 20.7     &  16.8 \\
+  $E_T^\mathrm{miss} > 400$ GeV                                                   & 18.5     &  15.2 \\
+  Number of jets $\geq 3$                                                         & 14.8     &  13.1 \\
+  $\Delta\phi(\mathrm{jet},E_T^\mathrm{miss}) > 0.4$                              & 12.2     &  11.1 \\  
+  $\Delta\phi(\gamma,E_T^\mathrm{miss}) > 0.4$                                    & 12.2     &  11.1 \\
+  $m_{\mathrm{eff}} > 2400$ GeV                                                   &  8.9     &   8.5 \\
+ \bottomrule
+ \end{tabular}
+\end{table}  
+
+\end{enumerate}
+ 
+\end{document}

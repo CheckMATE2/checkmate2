@@ -1,0 +1,111 @@
+\documentclass[10pt,fleqn]{article}
+\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{pdflscape}
+\newcommand{\Checkmate}{\texttt{CheckMATE}}
+\newcommand{\ifb}{$\mathrm{fb}^{-1}$}
+\newcommand{\etmiss}{$\slashed{E}_T$}
+\newcommand{\met}{E^\mathrm{miss}_\mathrm{T}}
+\newcommand{\meff}{m_\mathrm{eff}}
+
+\setlength{\textheight}{24cm} \setlength{\textwidth}{17cm}
+\setlength{\topmargin}{0cm} \setlength{\headheight}{14.5pt}
+\setlength{\oddsidemargin}{-1.cm} \setlength{\evensidemargin}{-0.5cm}
+
+\begin{document}
+\global\advance\voffset by -1 true in
+\begin{center}
+{\LARGE\bf
+Search for squarks and gluinos in final states with
+same-sign leptons and jets using   $139\ \mathrm{fb}^{-1}$ of data collected with the
+ATLAS detector, \texttt{arxiv:1909.08457}\\\vspace{0.5cm}
+}
+\end{center}
+
+\section{Validation}
+ Processes: 
+ \begin{itemize}
+ 
+\item \textbf{Rpc2L0b}\\ $ p p \to \tilde{g} \tilde{g} $, $\tilde{g} \to q \bar{q}' W Z \tilde{\chi}_1^0$\\
+ $m_{g} = 1200$~GeV, $m_{\tilde{\chi}_1^\pm} = 1200$ GeV, $m_{\tilde{\chi}_2^0} = 1000$ GeV, $m_{\tilde{\chi}_1^0} = 800$~GeV, squarks decoupled\\
+ Events generated with \texttt{MG5\_aMC 2.6.6} interfaced to \texttt{Pythia8} with up to two extra partons (CKKW-L).
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+                                           &  ATLAS           & CM  \\ \midrule
+ MC events generated                       &  12000           & 10000 \\ \midrule
+ Trigger                                   &  $262.2\pm 3.6$  & 818.9 \\
+ $\geq 2$ SS leptons ($p_T > 20$ GeV)      &  $50.0\pm 1.6$   & $59.0 \pm 2.7$  \\ 
+ 0 $b$-jet ($p_T > 20$ GeV)                &  $33.8\pm 1.3$   & $36.2 \pm 2.1$ \\
+ $\geq 6$ jets ($p_T > 40$ GeV)            &  $22.4\pm 1.1$   & $24.7 \pm 1.8$ \\
+ $\met  > 200$ GeV                         &  $16.0\pm 0.9$   & $19.2 \pm 1.6$ \\
+ $\meff \geq 1000$ GeV                     &  $16.0\pm 0.9$   & $19.2 \pm 1.6$ \\
+ $\met/\meff \geq 0.2$                     &  $9.35\pm 0.7$   & $11.7 \pm 1.2$ \\   \bottomrule
+ \end{tabular}   
+  
+ 
+ 
+ \item \textbf{Rpc2L1b}\\ $ p p \to \tilde{b}_1 \tilde{b}_1^* $, $\tilde{b}_1 \to t \tilde{\chi}_1^\pm$, $\tilde{\chi}_1^\pm \to W^\pm \tilde{\chi}_1^0$\\
+ $m_{\tilde{b}} = 850$~GeV, $m_{\tilde{\chi}_1^\pm} = 500$~GeV, $m_{\tilde{\chi}_1^0} = 400$~GeV, squarks decoupled\\
+ Events generated with \texttt{MG5\_aMC 2.6.6} interfaced to \texttt{Pythia8} with up to two extra partons (CKKW-L).
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+                                           &  ATLAS           & CM    \\ \midrule
+ MC events generated                       &  6000            & 50000 \\ \midrule
+ Trigger                                   & $243.8\pm 3.9$   &  1471.9\\
+ $\geq 2$ SS leptons ($p_T > 20$ GeV)      & $116.4\pm 2.7$   &  $139.9 \pm 2.8$\\ 
+ $\geq 1$ $b$-jets ($p_T > 20$ GeV)        & $97.7\pm 2.4$    &  $117.2 \pm 2.6$\\
+ $\geq 6$ jets ($p_T > 40$ GeV)            & $17.4\pm 1.0$    &  $22.1 \pm 1.2$\\
+ $\met/\meff > 0.25 $                      & $ 5.5\pm 0.6$    &  $6.1 \pm 0.6$ \\   \bottomrule
+ \end{tabular}
+ 
+ 
+ \item \textbf{Rpc2L2b}\\ $ p p \to \tilde{b}_1 \tilde{b}_1^* $, $\tilde{b}_1 \to t \tilde{\chi}_1^\pm$, $\tilde{\chi}_1^\pm \to W^\pm \tilde{\chi}_1^0$\\
+ $m_{\tilde{b}} = 850$~GeV, $m_{\tilde{\chi}_1^\pm} = 500$~GeV, $m_{\tilde{\chi}_1^0} = 400$~GeV, squarks decoupled\\
+ Events generated with \texttt{MG5\_aMC 2.6.6} interfaced to \texttt{Pythia8} with up to two extra partons (CKKW-L).
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+                                           &  ATLAS           & CM    \\ \midrule
+ MC events generated                       &  6000            & 50000 \\ \midrule
+ Trigger                                   & $243.8\pm 3.9 $  &  1471.9  \\
+ $\geq 2$ SS leptons ($p_T > 20$ GeV)      & $116.4\pm 2.7$   &  $139.9 \pm 2.8$ \\  
+ $\geq 2$ $b$-jets ($p_T > 20$ GeV)        & $43.3 \pm 1.6 $  &  $53.6 \pm 1.8$  \\
+ $\geq 6$ jets ($p_T > 25$ GeV)            & $20.0 \pm 1.1 $  &  $26.4 \pm 1.3$\\
+ $\met > 300$ GeV                          & $6.6 \pm 0.7$    &  $6.1 \pm 0.6$\\
+ $\meff > 1.4$ TeV                         & $2.8 \pm 0.4$    &  $2.1 \pm 0.4$\\
+ $\met/\meff > 0.14$                       & $2.8\pm 0.4$     &  $2.1 \pm 0.4$\\   \bottomrule
+ \end{tabular} 
+ 
+
+ \item \textbf{Rpv2L}\\ $ p p \to \tilde{g} \tilde{g} $, $\tilde{g} \to t \tilde{t}_1$, $\tilde{t}_1 \to \bar{b} \bar{d} $\\
+ $m_{\tilde{g}} = 1600$~GeV, $m_{\tilde{t}_1} = 800$~GeV, other squarks decoupled\\
+ Events generated with \texttt{MG5\_aMC 2.6.1} interfaced to \texttt{Pythia8} with up to two extra partons (CKKW-L).
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+                                           &  ATLAS           & CM    \\ \midrule
+ MC events generated                       &  30000           &  15000 \\ \midrule
+ Trigger                                   & $320.6\pm 4.0 $  &  393 \\
+ $\geq 2$ SS leptons ($p_T > 20$ GeV)      & $13.3\pm 0.8$    &  $15.8 \pm 1.1$ \\  
+ $\geq 6$ jets ($p_T > 40$ GeV)            & $11.6 \pm 0.8 $  &  $14.5 \pm 1.1$\\
+ $\meff > 2.6$ TeV                         & $8.04\pm 0.63$   &  $8.9 \pm 0.8$\\  \bottomrule
+ \end{tabular}  
+ 
+ \item \textbf{Rpc3LSS1b}\\ 
+ Note: the agreement is poor. ATLAS errors are nonsense: the number of simulated events is only 3 times the total number of events, unless generator filters were applied.\\
+ $ p p \to \tilde{t}_1 \tilde{t}_1^* $, $\tilde{t}_1 \to t \tilde{\chi}_2^0$, $\tilde{\chi}_2^0 \to W^+ \tilde{\chi}_1^- $, $\tilde{\chi}_1^- \to \tilde{\chi}_1^0 + \mathrm{soft}$ \\
+ $m_{\tilde{t}_1} = 800$~GeV,  $m_{\tilde{\chi}_2^0} = 625$~GeV,  $m_{\tilde{\chi}_1^\pm} \approx m_{\tilde{\chi}_1^0} = 525$~GeV, other squarks decoupled\\
+ Events generated with \texttt{MG5\_aMC 2.6.1} interfaced to \texttt{Pythia8} with up to two extra partons (CKKW-L).
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+                                           &  ATLAS           & CM    \\ \midrule
+ MC events generated                       &  12000           &  49000 \\ \midrule
+ Trigger                                   & $446\pm 4.9 $    &  $1030 \pm 10$ \\
+ $\geq 2$ SS leptons ($p_T > 20$ GeV)      & $164.7\pm 2.9$   &  $199  \pm 5$  \\  
+ $\geq 1$ $b$-jet                          & $134.1\pm 2.6 $  &  $164  \pm 4$\\
+ $\geq 3$ SS leptons                       & $6.11\pm 0.54 $  &  $8.9  \pm 1$\\ 
+ veto $81 < m_{e^\pm e^\pm} < 101$ GeV     & $5.21\pm 0.50 $  &  $8.3 \pm  0.9$\\  
+ $\met/\meff > 0.14$                       & $3.90\pm 0.44$   &  $7.3 \pm  0.9$\\  \bottomrule
+ \end{tabular}   
+
+ 
+\end{itemize}
+
+ 
+\end{document}

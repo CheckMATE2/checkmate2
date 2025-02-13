@@ -1,0 +1,74 @@
+\documentclass[12pt,fleqn]{article}
+\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\newcommand{\Checkmate}{\texttt{CheckMATE}}
+\newcommand{\ifb}{$\mathrm{fb}^{-1}$}
+\newcommand{\etmiss}{$\slashed{E}_T$}
+
+\setlength{\textheight}{22.5cm} \setlength{\textwidth}{17cm}
+\setlength{\topmargin}{1.2cm} \setlength{\headheight}{14.5pt}
+\setlength{\oddsidemargin}{-1.cm} \setlength{\evensidemargin}{-0.5cm}
+
+\begin{document}
+\global\advance\voffset by -1 true in
+\begin{center}
+{\LARGE\bf
+Electroweak search with tau leptons \texttt{arXiv:1708.07875}\\\vspace{0.5cm}
+}
+\end{center}
+
+\section{$\tilde{\chi}^+_1 \tilde{\chi}^-_1$}
+ Process: $ p p \to \tilde{\chi}^+_1 \tilde{\chi}^-_1$\\
+ $\tilde{\chi}_1^\pm \to \tau^\pm \tilde{\nu}\ (50\%) \quad \tilde{\chi}^\pm_1 \to \tilde{\tau}^\pm {\nu}\ (50\%) $ \\
+ $m_{\tilde{\chi}_1^\pm} = 600$~GeV, $m_{\tilde{\tau}_1} = 300$~GeV, $m_{\tilde{\chi}_1^0} = 0$~GeV
+ Events generated with \texttt{MG5\_aMC 2.6.0} interfaced to \texttt{Pythia8} with up to two extra partons.
+ 10000 MC events weighted to 36.1/fb.
+
+\begin{table}[h!] 
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Total                                                                           & 342.3    &  343          \\
+  at least 2 medium taus and trigger                                              & 21.2     &  22.1  \\
+  OS tau pair                                                                     & 21.0     &  21.5  \\
+  $b$ veto                                                                        & 20.3     &  20.4  \\
+  $Z$ veto                                                                        & 19.7     &  19.4  \\ \midrule
+  at least one tight tau                                                          & 16.3     &  12.6  \\ 
+  $p_{T,\tau_1} > 80$ GeV                                                         & 16.1     &  12.5   \\ 
+  $m(\tau_1, \tau_2) > 110$ GeV                                                   & 13.5     &  12.1   \\
+  $E_T^\mathrm{miss} > 110$ GeV                                                   & 12.5     &  9.6   \\ 
+  $m_\mathrm{T2} > 90$ GeV                                                        & $10.0\pm 0.4$     & $7.5 \pm 0.6$   \\ \bottomrule
+ \end{tabular}
+\end{table} 
+ 
+
+\section{$\tilde{\chi}^\pm_1 \tilde{\chi}^0_2$}
+ Process: $ p p \to \tilde{\chi}^+_1 \tilde{\chi}^0_2$\\
+ $\tilde{\chi}_1^\pm \to \tau^\pm \tilde{\nu}\ (50\%) \quad \tilde{\chi}^\pm_1 \to \tilde{\tau}^\pm {\nu}\ (50\%) $ \\
+ $\tilde{\chi}_2^0 \to \tau^\pm \tilde{\tau}^\pm\ (50\%) \quad \tilde{\chi}^0_2 \to \tilde{\nu} {\nu}\ (50\%) $ \\
+ $m_{\tilde{\chi}_1^\pm} = 600$~GeV, $m_{\tilde{\tau}_1} = 300$~GeV, $m_{\tilde{\chi}_1^0} = 0$~GeV
+ Events generated with \texttt{MG5\_aMC 2.6.0} interfaced to \texttt{Pythia8} with up to two extra partons.
+ 10000 MC events weighted to 36.1/fb.
+
+\begin{table}[h!] 
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Total                                                                           & 727    &  720          \\
+  at least 2 medium taus and trigger                                              & 33.5        &  28.3  \\
+  OS tau pair                                                                     & 24.0        &  19.7  \\
+  $b$ veto                                                                        & 22.2        &  18.5  \\
+  $Z$ veto                                                                        & 21.3        &  17.8  \\ \midrule
+  di-tau + $E_T^\mathrm{miss}$ trigger                                            & 13.3        &  10.7  \\ 
+  $m_\mathrm{T2} > 70$ GeV                                                        & $11.8\pm0.4$     &  $9.0\pm0.4$    \\ \bottomrule
+ \end{tabular}
+\end{table} 
+  
+
+
+
+ 
+\end{document}

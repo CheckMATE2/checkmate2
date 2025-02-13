@@ -1,0 +1,227 @@
+\documentclass[12pt,fleqn]{article}
+\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\newcommand{\Checkmate}{\texttt{CheckMATE}}
+\newcommand{\ifb}{$\mathrm{fb}^{-1}$}
+\newcommand{\etmiss}{$\slashed{E}_T$}
+
+\setlength{\textheight}{22.5cm} \setlength{\textwidth}{17cm}
+\setlength{\topmargin}{1.2cm} \setlength{\headheight}{14.5pt}
+\setlength{\oddsidemargin}{-1.cm} \setlength{\evensidemargin}{-0.5cm}
+
+\begin{document}
+\global\advance\voffset by -1 true in
+\begin{center}
+{\LARGE\bf
+Searches for electroweak production of supersymmetric particles with compressed mass spectra in $\sqrt{s} = 13$ TeV $pp$ collisions with the ATLAS detector, \texttt{arXiv:1911.12606}\\\vspace{0.5cm}
+}
+\end{center}
+
+\begin{enumerate}
+\item{Selection S-low}\\
+ Process: $ p p \to \tilde{e}_L \tilde{e}_L + \tilde{\mu}_L \tilde{\mu}_L $\\
+ $m_{\tilde{\ell}} = 150$~GeV, $m_{\tilde{\chi}_1^0} = 140$~GeV\\
+ Events generated with \texttt{MG5\_aMC 2.7.3} interfaced to \texttt{Pythia8} with up to two extra partons.
+ 100000 MC events for each flavour weighted to 86.58 fb each.
+
+\begin{table}[h!] \begin{center}
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Initial events                                                                  & 24069     &  24069          \\
+  $E_T^\mathrm{miss}$ trigger                                                     & 2355      &  2763 \\
+  2 leptons                                                                       & 1014     &   829\\
+  veto $J/\psi$                                                                   & 1013     &   828 \\ 
+  min$(\Delta\phi(\mathrm{jet}, \vec{p}_T^\mathrm{miss})>0.4$                     & 970     &    794\\   
+  $\Delta\phi(j_1, \vec{p}_T^\mathrm{miss})>2.0$                                  & 961     &    777\\
+  $1 < m_{\ell \ell} < 60$ GeV                                                    & 828     &    775\\
+  $\Delta R_{\ell_1 \ell_2}$                                                      & 826     &    775\\
+  leading lepton $p_T > 5$ GeV                                                    & 824     &    774\\
+  number of jets $\geq 1$                                                         & 811     &    757\\
+  leading jet $p_T > 100 $ GeV                                                    & 706     &    610\\ 
+  $b$-jet veto                                                                    & 611     &    511\\
+  $m_{\tau\tau} < 0$ or $m_{\tau\tau} < 160$ GeV                                  & 533     &    457\\
+  $ee$ or $\mu\mu$                                                                & 532     &    457\\
+  $150 < E_T^\mathrm{miss} < 200$ GeV                                             & 146     &    132.2\\
+  $0.8 < R_{\mathrm{ISR}}< 1.0 $                                                   & 108     &    92.7 \\
+  sub-leading lepton $p_T > \mathrm{min}(15.0,\ 7.5 + 0.75 \cdot (m_{T2}^{100} - 100))$  &  53   &  52.6 \\
+  \bottomrule
+ \end{tabular}\end{center}
+\end{table} 
+ 
+\newpage
+
+\item{Selection S-high}
+
+\begin{table}[h!] \begin{center}
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Initial events                                                                  & 24069     &  24069          \\
+  $E_T^\mathrm{miss}$ trigger                                                     & 2355      &  2763 \\
+  2 leptons                                                                       & 1014     &   829\\
+  veto $J/\psi$                                                                   & 1013     &   828 \\ 
+  min$(\Delta\phi(\mathrm{jet}, \vec{p}_T^\mathrm{miss})>0.4$                     & 970     &    794\\   
+  $\Delta\phi(j_1, \vec{p}_T^\mathrm{miss})>2.0$                                  & 961     &    777\\
+  $1 < m_{\ell \ell} < 60$ GeV                                                    & 828     &    775\\
+  $\Delta R_{\ell_1 \ell_2}$                                                      & 826     &    775\\
+  leading lepton $p_T > 5$ GeV                                                    & 824     &    774\\
+  number of jets $\geq 1$                                                         & 811     &    757\\
+  leading jet $p_T > 100 $ GeV                                                    & 706     &    610\\ 
+  $b$-jet veto                                                                    & 611     &    511\\
+  $m_{\tau\tau} < 0$ or $m_{\tau\tau} < 160$ GeV                                  & 533     &    457\\
+  $ee$ or $\mu\mu$                                                                & 532     &    457\\
+  $E_T^\mathrm{miss} < 200$ GeV                                                   & 229     &    187   \\
+  max$(0.85,\ 0.98 - 0.02 \cdot m_{T2}^{100}) < R_\mathrm{ISR} < 1.0$             & 160      &    108   \\
+  sub-leading lepton $p_T > \mathrm{min}(20.0,\ 2.5 + 2.5 \cdot (m_{T2}^{100} - 100))$ &   70.7    & 60.2  \\
+  \bottomrule
+ \end{tabular}\end{center}
+\end{table} 
+ 
+\newpage
+ 
+\item{Selection E-low}\\
+ Process: $ p p \to \tilde{\chi}_2^0 \tilde{\chi}_1^0 + \tilde{\chi}_1^\pm \tilde{\chi}_1^0 ,\quad \tilde{\chi}_2^0\to\ell+\ell^-\tilde{\chi}_2^0$\\
+ $m_{\tilde{\chi}_2^0} = -155$~GeV, $m_{\tilde{\chi}_1^\pm} = 152.5$~GeV, $m_{\tilde{\chi}_1^0} = 150$~GeV\\
+ Events generated with \texttt{MG5\_aMC 2.7.3} interfaced to \texttt{Pythia8} with one extra parton $p_T>50$ GeV.
+ Two separate batches of 50000 MC events for neutral ($\sigma = \sigma_\textrm{MG5} \cdot K \cdot BR = 134 \cdot 1.4 \cdot 0.0894 = 15$ fb) and charged ($\sigma =  26.9$ fb) process. Three body neutralino decays included in hard ME in MG5. BR$(\tilde{\chi}_2^0\to\ell^+\ell^-\tilde{\chi}_2^0) = 3.92\%$, $\ell = e,\mu$. In the ATLAS cutflow BR seems to be 10\%, but this is not in agreement with \texttt{SUSYHIT}. Filters: 1 jet $p_T > 50$ GeV, at least 2 truth leptons $p_T > 2$ GeV, truth $E_T^\mathrm{miss} > 75$ GeV.
+
+\begin{table}[h!] \begin{center}
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Initial events $\times$ BR                                                      &  25328    &  5824          \\
+  Initial events, 1 jet $p_T > 50$                                                &  5909    &  4933         \\
+  Filters                                                                         &  1273    &  1592  \\
+  $E_T^\mathrm{miss}$ trigger                                                     &   715    &  1118 \\
+  2 leptons                                                                       &   105    &  77.1 \\
+  veto $J/\psi$                                                                   &  99.2    &  73 \\ 
+  min$(\Delta\phi(\mathrm{jet}, \vec{p}_T^\mathrm{miss})>0.4$                     &  95.4    &  70.5 \\   
+  $\Delta\phi(j_1, \vec{p}_T^\mathrm{miss})>2.0$                                  &  94.4    &  69  \\
+  $1 < m_{\ell \ell} < 60$ GeV                                                    &  83.9    &  57.8  \\
+  $\Delta R_{\ell_1 \ell_2}$                                                      &  73.3    &  57.8\\
+  leading lepton $p_T > 5$ GeV                                                     &  60.0    &  49.8  \\
+  number of jets $\geq 1$                                                         &  59.4    &  49.8  \\
+  leading jet $p_T > 100 $ GeV                                                    &  53.9    &  42.4  \\ 
+  $b$-jet veto                                                                    &  46.3    &  35.5  \\
+  $m_{\tau\tau} < 0$ or $m_{\tau\tau} < 160$ GeV                                  &  39.2    &  31.1  \\
+  $ee$ or $\mu\mu$                                                                &  37.5    &  29.3  \\
+  $120 < E_T^\mathrm{miss} < 200$ GeV                                             &  14.8    &  12.3  \\
+  $E_T^\mathrm{miss}/H^{\mathrm{lep}}_T < 10$                                     &  4.19    &  3.08  \\
+  $0.8 < R_\mathrm{ISR} < 1.0$                                                    &  3.20    &  2.46  \\
+  sub-leading lepton $p_T > 5+m_{\ell\ell}/4$                                     &  2.15    &  1.60  \\
+  $10 < m_T^{\ell_1} < 60$ GeV                                                    &  1.54    &  1.12  \\
+   \bottomrule
+ \end{tabular} \end{center}
+\end{table}  
+ 
+\newpage 
+ 
+ \item{Selection E-med}
+
+\begin{table}[h!] \begin{center}
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Initial events $\times$ BR                                                      &  25328    &  5824          \\
+  Initial events, 1 jet $p_T > 50$                                                &  5909    &  4933         \\
+  Filters                                                                         &  1273    &  1592  \\
+  $E_T^\mathrm{miss}$ trigger                                                     &   715    &  1118 \\
+  2 leptons                                                                       &   105    &  77.1 \\
+  veto $J/\psi$                                                                   &  99.2    &  73 \\ 
+  min$(\Delta\phi(\mathrm{jet}, \vec{p}_T^\mathrm{miss})>0.4$                     &  95.4    &  70.5 \\   
+  $\Delta\phi(j_1, \vec{p}_T^\mathrm{miss})>2.0$                                  &  94.4    &  69  \\
+  $1 < m_{\ell \ell} < 60$ GeV                                                    &  83.9    &  57.8  \\
+  $\Delta R_{\ell_1 \ell_2}$                                                      &  73.3    &  57.8\\
+  leading lepton $p_T > 5$ GeV                                                     &  60.0    &  49.8  \\
+  number of jets $\geq 1$                                                         &  59.4    &  49.8  \\
+  leading jet $p_T > 100 $ GeV                                                    &  53.9    &  42.4  \\ 
+  $b$-jet veto                                                                    &  46.3    &  35.5  \\
+  $m_{\tau\tau} < 0$ or $m_{\tau\tau} < 160$ GeV                                  &  39.2    &  31.1  \\
+  $ee$ or $\mu\mu$                                                                &  37.5    &  29.3  \\
+  $120 < E_T^\mathrm{miss} < 200$ GeV                                             &  14.8    &  12.3  \\
+  $E_T^\mathrm{miss}/H^{\mathrm{lep}}_T > 10$                                      &  10.7    &  9.21  \\
+  $M_T^S < 50$ GeV                                                                &  6.71    &  6.51  \\
+  \bottomrule
+ \end{tabular} \end{center}
+\end{table}
+ 
+\newpage 
+ 
+\item{Selection E-high}
+
+\begin{table}[h!] \begin{center}
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+  Selection                                                                       & ATLAS    & CheckMATE       \\ \midrule
+  Initial events $\times$ BR                                                      &  25328    &  5824          \\
+  Initial events, 1 jet $p_T > 50$                                                &  5909    &  4933         \\
+  Filters                                                                         &  1273    &  1592  \\
+  $E_T^\mathrm{miss}$ trigger                                                     &   715    &  1118 \\
+  2 leptons                                                                       &   105    &  77.1 \\
+  veto $J/\psi$                                                                   &  99.2    &  73 \\ 
+  min$(\Delta\phi(\mathrm{jet}, \vec{p}_T^\mathrm{miss})>0.4$                     &  95.4    &  70.5 \\   
+  $\Delta\phi(j_1, \vec{p}_T^\mathrm{miss})>2.0$                                  &  94.4    &  69  \\
+  $1 < m_{\ell \ell} < 60$ GeV                                                    &  83.9    &  57.8  \\
+  $\Delta R_{\ell_1 \ell_2}$                                                      &  73.3    &  57.8\\
+  leading lepton $p_T > 5$ GeV                                                     &  60.0    &  49.8  \\
+  number of jets $\geq 1$                                                         &  59.4    &  49.8  \\
+  leading jet $p_T > 100 $ GeV                                                    &  53.9    &  42.4  \\ 
+  $b$-jet veto                                                                    &  46.3    &  35.5  \\
+  $m_{\tau\tau} < 0$ or $m_{\tau\tau} < 160$ GeV                                  &  39.2    &  31.1  \\
+  $ee$ or $\mu\mu$                                                                &  37.5    &  29.3  \\
+  $E_T^\mathrm{miss} > 200$ GeV                                                   &          &  15.9  \\
+  $ m_T^{\ell_1} < 60$ GeV                                                        &  32.3    &  12.7  \\
+  $E_T^\mathrm{miss} > 200$ GeV                                                   &  16.6    &        \\
+  $\mathrm{max}(0.85,\ 0.98-0.02 \cdot m_{\ell\ell}) < R_\mathrm{ISR} <1$         &  12.5    &  9.5  \\
+  sub-leading lepton $p_T > \mathrm{min}(10,\ 2+m_{\ell\ell}/3)$                  &  12.0    &   8.8  \\
+  \bottomrule
+ \end{tabular} \end{center}
+\end{table} 
+ 
+\newpage 
+ 
+\item{Selection E-1L1T}\\
+Note: according to ATLAS the majority of events before the invariant mass cut originates from pile-up. Filters: 1 jet $p_T > 50$ GeV, at least 1 truth lepton $p_T > 2$ GeV, truth $E_T^\mathrm{miss} > 50$ GeV.
+
+\begin{table}[h!] \begin{center}
+ \renewcommand*{\arraystretch}{1.2}
+ \begin{tabular}{l|p{3cm}|p{3cm}} \toprule
+  Selection                                                                       & ATLAS     & CheckMATE       \\ \midrule
+  Initial events $\times$ BR                                                      &  25328    &   5824         \\
+  Initial events, 1 jet $p_T > 50$                                                &  5909     &   4929        \\
+  Filters                                                                         &  3141     &   3955   \\
+  $E_T^\mathrm{miss}$ trigger                                                     &  1217     &   2171  \\
+  1 lepton and $\geq$ track                                                       &   443     &    78   \\
+  veto $J/\psi$                                                                   &   440     &    75 \\ 
+  $E_T^\mathrm{miss} > 200$ GeV                                                   &   179     &    31 \\
+  min$(\Delta\phi(\mathrm{jet}, \vec{p}_T^\mathrm{miss})>0.4$                     &   171     &    30\\   
+  $\Delta\phi(j_1, \vec{p}_T^\mathrm{miss})>2.0$                                  &   169     &    30  \\
+  $0.5 < m_{\ell,\mathrm{track}} < 5$ GeV                                         &   15.3    &    24  \\
+  $\Delta R_{\ell,\mathrm{track}} > 0.05$                                         &   15.3    &    24  \\
+  number of jets $\geq 1$                                                         &   15.3    &    24  \\
+  leading jet $p_T > 100 $ GeV                                                    &   15.2    &    23  \\ 
+  $E_T^\mathrm{miss}/H^{\mathrm{lep}}_T > 30$                                     &   8.60    &    10.5  \\
+  $\Delta R_{\ell,\mathrm{track}} < 1.5$                                          &   8.40    &    10.2  \\
+  lepton $p_T < 10$ GeV                                                           &   7.88    &     9.2 \\
+  track $p_T < 5$ GeV                                                             &   7.88    &     8.0     \\
+  $\Delta\phi(\ell,  E_T^\mathrm{miss} ) < 1.0$                                   &   5.81    &     5.8 \\
+  same flavour lepton-track pair                                                  &   5.62    &     5.2\\
+  opposite charge lepton-track pair                                               &   5.39    &     4.7  \\
+  $m_{\ell,\mathrm{track}} < 5$ GeV                                               &   5.39    &     4.7  \\
+  $m_{\ell,\mathrm{track}} < 4$ GeV                                               &   5.03    &     4.2  \\
+  $m_{\ell,\mathrm{track}} < 3$ GeV                                               &   3.66    &     3.3  \\
+  $m_{\ell,\mathrm{track}} < 2$ GeV                                               &   1.55    &     1.74  \\
+  $m_{\ell,\mathrm{track}} < 1.5$ GeV                                             &   0.55    &     1.2  \\
+  $m_{\ell,\mathrm{track}} < 1$ GeV                                               &   0.00    &     0.5  \\
+  \bottomrule
+ \end{tabular} \end{center}
+\end{table} 
+ 
+ 
+\end{enumerate}
+ 
+\end{document}
