@@ -47,7 +47,16 @@ def calc_point( path, analysis, mbsr ):
     #    json.dump(patchset, write_file, indent=4)       
     signal0 = pyhf.PatchSet(patchset)["Signal0"]
     
-    if "tensorflow" in spey_pyhf.manager.available_backends and pyhf.tensorlib.name != "tensorflow":
+    #pyhf.set_backend("pytorch")
+    #print(Info.parameters["backend"])
+    if Info.parameters["backend"] == "":
+        try:
+            pyhf.set_backend("pytorch") # if backend unspecified try pytorch
+        except ImportBackendError:
+            pass
+    if Info.parameters["backend"] == "pytorch" and pyhf.tensorlib.name != "pytorch":
+        pyhf.set_backend("pytorch")
+    if Info.parameters["backend"] == "tensorflow" and "tensorflow" in spey_pyhf.manager.available_backends and pyhf.tensorlib.name != "tensorflow":
         pyhf.set_backend("tensorflow")
         pyhf.set_backend("tensorflow")
     print("Pyhf backend: "+pyhf.tensorlib.name)
@@ -84,9 +93,10 @@ def calc_point( path, analysis, mbsr ):
         string = string+f"Observed upper limit: mu = {inv_r:.4f}"+'\n'
         AdvPrint.cout("Upper limit: "+str(inv_r) )
         if Info.flags["expected"]:
-            inv_r_exp =  stat_model.poi_upper_limit(expected = spey.ExpectationType.apriori) 
-            #inv_r_exp_1sigma =  stat_model.poi_upper_limit(expected = spey.ExpectationType.apriori, expected_pvalue="1sigma")  # for the band 1 (2) sigma band
-            string = string+f"Expected upper limit: mu = {inv_r_exp:.4f}"+'\n'
+            #inv_r_exp =  stat_model.poi_upper_limit(expected = spey.ExpectationType.apriori)
+            inv_r_exp_down, inv_r_exp, inv_r_exp_up =  stat_model.poi_upper_limit(expected = spey.ExpectationType.apriori, expected_pvalue="1sigma")  # for the band 1 (2) sigma band
+            #string = string+f"Expected upper limit: mu = {inv_r_exp:.4f}"+'\n'
+            string = string+f"Expected (+/-1sigma) upper limit: mu = {inv_r_exp_down:.4f}   {inv_r_exp:.4f}   {inv_r_exp_up:.4f}"+'\n'
     string += "\n================================\n"
     
     with open(path+'/multibin_limits/'+"results.dat", "a") as write_file:

@@ -62,6 +62,7 @@ class Info(dict):
         parameters['statcomb'] = "none"
         parameters['statmod'] = "simple"
         parameters['srcombination'] = []
+        parameters['backend'] = ""
         
         cls.analysis_groups = {
                 "ATLAS_7TeV",
@@ -216,6 +217,7 @@ class Info(dict):
         parser.add_argument('-uplim', '--uppperlimit', dest='uplim', action='store_true', help='Whether to calculate multibin upper limits.')
         parser.add_argument('-exp', '--expected', dest='expected', action='store_true', help='Whether to calculate expected multibin statitics.')
         parser.add_argument('-srcomb', '--srcombination', dest='srcombination', default="", help='Whether to combine multibin signal regions or different searches .')
+        parser.add_argument('-backend', '--backend', dest='backend', default="", help='Which backend for spey-pyhf.')
         
         # Parse arguments and set return parameters
         if emptyparser:
@@ -299,6 +301,8 @@ class Info(dict):
             #if cls.parameters["srcombination"] is not list: #what's the problem with that?
             #    AdvPrint.cout("Signal regions for combination is not a list. Skipping.")
             #    cls.parameters["srcombination"] = []
+        if args.backend != "":
+            cls.parameters["backend"] = args.backend
 
         cls.make_flags_consistent()
         
@@ -417,6 +421,8 @@ class Info(dict):
                     args.uplim = Config.getboolean("Parameters", "uplim")
                 elif optional_parameter == "srcombination":
                     args.srcombination = Config.get("Parameters", "srcombination")
+                elif optional_parameter == "backend":
+                    args.backend = Config.get("Parameters", "backend")
                 else:
                     AdvPrint.cerr_exit("Unknown optional parameter '"+optional_parameter+"'")         
         cls.fill_info_from_args(args)

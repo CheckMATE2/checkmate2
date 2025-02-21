@@ -19,6 +19,9 @@ def init(path, analysis, MB_set):
 
     hepfiles_folder = Info.paths['data']+"/"
 
+    #pyhf.set_backend("pytorch") #crashes
+    #print("Pyhf backend: "+pyhf.tensorlib.name)
+    #pyhf.set_backend("tensorflow") #crashes
     if not os.path.exists(path+'/multibin_limits'):
         os.mkdir(path+'/multibin_limits')
     analysis_name = analysis
