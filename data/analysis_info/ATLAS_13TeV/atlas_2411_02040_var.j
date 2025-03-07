@@ -31,9 +31,10 @@
   ],
   "jets_btagging": "y",
   "jets_btagging_eff": [
+    "100.0",
     "77.0"
   ],
-  "jets_btagging_n": 1,
+  "jets_btagging_n": 2,
   "jets_tautagging": "n",
   "long_info": [
     "triple Higgs search in the 6b final state with NN"

@@ -26,14 +26,18 @@ void Atlas_2411_02040::analyze() {
   electronsLoose = filterIsolation(electronsLoose);
   muonsCombined = filterPhaseSpace(muonsCombined, 20, -2.5, 2.5);
   muonsCombined = filterIsolation(muonsCombined);
-  jets = filterPhaseSpace(jets, 20., -2.5, 2.5);
+  jets = filterPhaseSpace(jets, 17., -2.5, 2.5);
   
   std::vector<Jet*> nonbjets={};
   std::vector<Jet*> bjets={};
-  for (int i = 0; i < jets.size(); i++) 
-    if ( fabs(jets[i]->Eta) < 2.5 and checkBTag(jets[i]) ) 
+  std::vector<Jet*> bjets_truth={};
+  for (int i = 0; i < jets.size(); i++) {
+    if ( fabs(jets[i]->Eta) < 2.5 and checkBTag(jets[i], 0) )
+      bjets_truth.push_back(jets[i]);
+    if ( fabs(jets[i]->Eta) < 2.5 and checkBTag(jets[i], 1) )
       bjets.push_back(jets[i]);
     else nonbjets.push_back(jets[i]);
+  }
   
   countCutflowEvent("00_all");
   
@@ -49,11 +53,14 @@ void Atlas_2411_02040::analyze() {
   
   if (bjets.size() > 3) countCutflowEvent("00_overlap4j");
   
+  if (bjets_truth.size() < 4) return;
+  countCutflowEvent("00_filter4b");
+
   if (bjets.size() + nonbjets.size() < 4) return;
   std::vector<Jet*> bjets35 = filterPhaseSpace(bjets, 35., -2.5, 2.5);
   std::vector<Jet*> nonbjets35 = filterPhaseSpace(nonbjets, 35., -2.5, 2.5);
   std::vector<Jet*> bjets40 = filterPhaseSpace(bjets, 40., -2.5, 2.5);
-  std::vector<Jet*> nonbjets40 = filterPhaseSpace(nonbjets, 40., -2.5, 2.5);  
+  std::vector<Jet*> nonbjets40 = filterPhaseSpace(nonbjets, 40., -2.5, 2.5);
   bool trigger = false;
   if (rand()/(RAND_MAX +1.) < 0.7) 
     if (bjets35.size() > 1 and bjets35.size() + nonbjets35.size() > 3) trigger = true; 
@@ -92,12 +99,12 @@ void Atlas_2411_02040::analyze() {
   double pTH1, pTH2, pTH3, mH1, mH2, mH3;
   for (int i = 0; i < 15; i++) {
     std::vector<int> tmp_p = {-1, -1, -1, -1, -1, -1,};
-    double pTHa = (sigjets[pairings[i][0][0]]->PT + sigjets[pairings[i][0][1]]->PT);
-    double mHa = (sigjets[pairings[i][0][0]]->P4() + sigjets[pairings[i][0][1]]->P4()).M();
-    double pTHb = (sigjets[pairings[i][1][0]]->PT + sigjets[pairings[i][1][1]]->PT);
-    double mHb = (sigjets[pairings[i][1][0]]->P4() + sigjets[pairings[i][1][1]]->P4()).M();
-    double pTHc = (sigjets[pairings[i][2][0]]->PT + sigjets[pairings[i][2][1]]->PT);
-    double mHc = (sigjets[pairings[i][2][0]]->P4() + sigjets[pairings[i][2][1]]->P4()).M();   
+    double pTHa = (sigjets[pairings[i][0][0]-1]->PT + sigjets[pairings[i][0][1]-1]->PT);
+    double mHa = (sigjets[pairings[i][0][0]-1]->P4() + sigjets[pairings[i][0][1]-1]->P4()).M();
+    double pTHb = (sigjets[pairings[i][1][0]-1]->PT + sigjets[pairings[i][1][1]-1]->PT);
+    double mHb = (sigjets[pairings[i][1][0]-1]->P4() + sigjets[pairings[i][1][1]-1]->P4()).M();
+    double pTHc = (sigjets[pairings[i][2][0]-1]->PT + sigjets[pairings[i][2][1]-1]->PT);
+    double mHc = (sigjets[pairings[i][2][0]-1]->P4() + sigjets[pairings[i][2][1]-1]->P4()).M();
     if ((pTHa >= pTHb) and (pTHb >= pTHc)) {
       pTH1 = pTHa; pTH2 = pTHb; pTH3 = pTHc; mH1 = mHa; mH2 = mHb; mH3 = mHc;
       tmp_p[0] = pairings[i][0][0]; tmp_p[1] = pairings[i][0][1]; 
