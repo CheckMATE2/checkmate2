@@ -1,6 +1,9 @@
 #include "atlas_2411_02040.h"
 // AUTHOR: KR
 //  EMAIL: krolb@fuw.edu.pl
+#ifdef HAVE_ONNX
+#include "onnxruntime_cxx_api.h"
+#endif
 
 std::vector<std::vector<std::vector<size_t>>> pairings = {{{1, 2},{3, 4},{5, 6}},{{1, 2},{3, 5},{4, 6}},{{1, 2},{3, 6},{5, 4}},{{1, 3},{2, 4},{5, 6}},{{1, 3},{2, 5},{4, 6}},{{1, 3},{2, 6},{5, 4}},{{1, 4},{3, 2},{5, 6}},{{1, 4},{3, 5},{2, 6}},{{1, 4},{3, 6},{5, 2}},{{1, 5},{3, 4},{2, 6}},{{1, 5},{3, 2},{4, 6}},{{1, 5},{3, 6},{2, 4}},{{1, 6},{3, 4},{5, 2}},{{1, 6},{3, 5},{4, 2}},{{1, 6},{3, 2},{5, 4}}}; 
 
@@ -15,6 +18,72 @@ void Atlas_2411_02040::initialize() {
   //  always ordered alphabetically in the cutflow output files.
 
   // You should initialize any declared variables here
+#ifdef HAVE_ONNX
+  char *a = Global::get_maindir();
+  std::string maindir(a, strlen(a));
+
+  Ort::AllocatorWithDefaultOptions allocator;
+  std::vector<const char*> input_node_names;
+  std::vector<const char*> output_node_names;
+  std::vector<int64_t> input_node_dims;
+
+  Ort::Env env[6];
+  for (int i = 0; i < 6; i++)
+    env[i] = Ort::Env(ORT_LOGGING_LEVEL_WARNING, "TRIH");
+
+  std::vector<std::string> onnx_files = {
+    maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_nonresDNN_model_even.onnx",
+    maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_nonresDNN_model_odd.onnx",
+    maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_resDNN_model_even.onnx",
+    maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_resDNN_model_odd.onnx",
+    maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_heavyresDNN_model_even.onnx",
+    maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_heavyresDNN_model_odd.onnx"};
+  Ort::SessionOptions session_options[6];
+  for (int i = 0; i < 6; i++)
+    session[i] = new Ort::Session(env[i], onnx_files[i].c_str(), session_options[i]);
+
+  const size_t num_input_nodes = session[0]->GetInputCount();
+  cout << "Number input nodes: " << num_input_nodes << endl;
+  input_node_names.reserve(num_input_nodes);
+
+  for (size_t i = 0; i < num_input_nodes; i++) {
+    auto type_info = session[0]->GetInputTypeInfo(i);
+    auto tensor_info = type_info.GetTensorTypeAndShapeInfo();
+    auto input_name = session[0]->GetInputNameAllocated(i, allocator);
+    std::cout << "Input " << i << " : name = " << input_name.get() << std::endl;
+    input_node_names.push_back(input_name.get());
+    input_names.push_back(input_name.get());
+    ONNXTensorElementDataType type = tensor_info.GetElementType();
+    std::cout << "Input " << i << " : type = " << type << std::endl;
+    input_node_dims = tensor_info.GetShape();
+    std::cout << "Input " << i << " : num_dims = " << input_node_dims.size() << '\n';
+    for (size_t j = 0; j < input_node_dims.size(); j++)
+        std::cout << "Input " << i << " : dim[" << j << "] = " << input_node_dims[j] << '\n';
+  }   // input_tensor_size = input_node_dims[0] * input_node_dims[1] * ....
+
+  //asume just 1 output node
+
+  const size_t num_output_nodes = session[0]->GetOutputCount();
+  cout << "Number output nodes: " << num_output_nodes << endl;
+  output_node_names.reserve(num_output_nodes);
+  auto output_name = session[0]->GetOutputNameAllocated(0, allocator);
+  std::cout << "Output " << "0" << " : name = " << output_name.get() << std::endl;
+  output_node_names.push_back(output_name.get());
+  auto type_info = session[0]->GetOutputTypeInfo(0);
+  auto tensor_info = type_info.GetTensorTypeAndShapeInfo();
+  std::vector<int64_t> output_node_dims = tensor_info.GetShape();
+  std::cout << "Output " << 0 << " : num_dims = " << output_node_dims.size() << '\n';
+  for (size_t j = 0; j < input_node_dims.size(); j++)
+    std::cout << "Output " << 0 << " : dim[" << j << "] = " << output_node_dims[j] << '\n';
+#endif
+
+  int ifile = bookFile("atlas_2411_02040.root", true);
+  const char *rootFileName = fNames[ifile].c_str() ;
+  hfile = new TFile(rootFileName, "RECREATE", "Saving Histograms");
+
+  hist_mhradius = new TH1F("mHradius", "mHradius", 25, 0., 250.);
+  hist_rmsdeltarjj = new TH1F("RMSdeltaRjj", "RMSdeltaRjj", 20, 0., 2.);
+
 }
 
 void Atlas_2411_02040::analyze() {
@@ -95,7 +164,8 @@ void Atlas_2411_02040::analyze() {
     for (int i = 0; i < 6; i++) sigjets.push_back(bjets[i]);
   }
   
-  std::vector<int> patrs = {-1, -1, -1, -1, -1, -1,};
+  double pair_score = -1.;
+  std::vector<int> pairs = {-1, -1, -1, -1, -1, -1,};
   double pTH1, pTH2, pTH3, mH1, mH2, mH3;
   for (int i = 0; i < 15; i++) {
     std::vector<int> tmp_p = {-1, -1, -1, -1, -1, -1,};
@@ -141,7 +211,11 @@ void Atlas_2411_02040::analyze() {
       tmp_p[2] = pairings[i][1][0]; tmp_p[3] = pairings[i][1][1]; 
       tmp_p[4] = pairings[i][0][0]; tmp_p[5] = pairings[i][0][1];
     } 
-    
+    double tmp_score = 1./(std::abs(mH1 - 120.) + std::abs(mH2 - 115.) + std::abs(mH3 - 110.));
+    if (tmp_score > pair_score) {
+        pair_score = tmp_score;
+        pairs = tmp_p;
+    }
   }
 
 
