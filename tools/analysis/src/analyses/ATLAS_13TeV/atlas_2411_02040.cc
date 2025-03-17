@@ -83,7 +83,30 @@ void Atlas_2411_02040::initialize() {
 
   hist_mhradius = new TH1F("mHradius", "mHradius", 25, 0., 250.);
   hist_rmsdeltarjj = new TH1F("RMSdeltaRjj", "RMSdeltaRjj", 20, 0., 2.);
+  hist_rmsdeltarjjrivet = new TH1F("RMSdeltaRjj_rivet", "RMSdeltaRjj", 20, 0., 2.);
+  hist_rmsmjj = new TH1F("RMSmjj", "RMSmjj", 20, 0., 400.);
+  hist_rmsetah = new TH1F("RMSetaH", "RMSetaH", 20, 0., 2.);
+  hist_rmsdeltaajj = new TH1F("RMSdeltaAjj", "RMSdeltaAjj", 20, -2., 4.);
+  hist_rmsdeltaajjrivet = new TH1F("RMSdeltaAjj_rivetBin", "RMSdeltaAjj_rivetBin", 22, -1., 3.5);
+  hist_deltarh1 = new TH1F("deltaRH1", "deltaRH1", 25, 0., 5.);
+  hist_deltarh2 = new TH1F("deltaRH2", "deltaRH2", 25, 0., 5.);
+  hist_deltarh3 = new TH1F("deltaRH3", "deltaRH3", 25, 0., 5.);
+  hist_massh1 = new TH1F("massH1", "massH1", 17, 0., 350.);
+  hist_massh1rivet = new TH1F("massH1_rivetBin", "massH1_rivetBin", 20, 0., 400.);
+  hist_ht6j = new TH1F("HT6j", "HT6j", 20, 0., 1500.);
+  hist_ht6jrivet = new TH1F("HT6j_rivetBin", "HT6j_rivetBin", 28, 0., 1600.);
+  hist_etamhhhfrac = new TH1F("eta_mHHH_frac", "eta_mHHH_frac", 20, 0., 1.);
+  hist_costheta = new TH1F("cosTheta", "cosTheta", 20, -1., 1.);
+  hist_aplanarity6j = new TH1F("Aplanarity_6j", "Aplanarity_6j", 20, 0., 0.4);
+  hist_sphericityallj = new TH1F("Sphericity_allj", "Sphericity_allj", 20, 0., 1.);
+  hist_sphericity6j = new TH1F("Sphericity_6j", "Sphericity_6j", 20, 0., 1.);
+  hist_transvsphericty6j = new TH1F("Transverse_Sphericity_6j", "Transverse_Sphericity_6j", 20, 0., 1.);
 
+  hist_resdnnscore = new TH1F("resDNN_Score", "resDNN_Score", 20., 0., 1.);
+  hist_nonresdnnscore = new TH1F("nonresDNN_Score", "nonresDNN_Score", 20., 0., 1.);
+  hist_heavyresdnnscore = new TH1F("heavyresDNN_Score", "heavyresDNN_Score", 20., 0., 1.);
+
+  eventNumber = 0;
 }
 
 void Atlas_2411_02040::analyze() {
@@ -95,7 +118,7 @@ void Atlas_2411_02040::analyze() {
   electronsLoose = filterIsolation(electronsLoose);
   muonsCombined = filterPhaseSpace(muonsCombined, 20, -2.5, 2.5);
   muonsCombined = filterIsolation(muonsCombined);
-  jets = filterPhaseSpace(jets, 17., -2.5, 2.5);
+  jets = filterPhaseSpace(jets, 20., -2.5, 2.5);
   
   std::vector<Jet*> nonbjets={};
   std::vector<Jet*> bjets={};
@@ -156,7 +179,9 @@ void Atlas_2411_02040::analyze() {
   else if (bjets.size() == 5) {
     bjets5 = true; countCutflowEvent("05_5b");
     sigjets = bjets;
-    sigjets.push_back(nonbjets[0]);
+    countSignalEvent("CR_5b");
+    //sigjets.push_back(nonbjets[0]);
+    return;
   }
   else {
     bjets6 = true; 
@@ -218,11 +243,97 @@ void Atlas_2411_02040::analyze() {
     }
   }
 
+  float HT6j = 0.;
+  TLorentzVector Hmom = {0.,0.,0.,0.};
+  for (int i = 0; i < 6; i++ ) {
+    HT6j += sigjets[i]->PT;
+    Hmom += sigjets[i]->P4();
+  }
+  float massHHH = Hmom.M();
+  float deltaRH1 = sigjets[pairs[0]]->P4().DeltaR(sigjets[pairs[1]]->P4());
+  float deltaRH2 = sigjets[pairs[2]]->P4().DeltaR(sigjets[pairs[3]]->P4());
+  float deltaRH3 = sigjets[pairs[4]]->P4().DeltaR(sigjets[pairs[5]]->P4());
+
+  float ptH1 = (sigjets[pairs[0]]->P4() + sigjets[pairs[1]]->P4()).Pt();
+  float ptH2 = (sigjets[pairs[2]]->P4() + sigjets[pairs[3]]->P4()).Pt();
+  float ptH3 = (sigjets[pairs[4]]->P4() + sigjets[pairs[5]]->P4()).Pt();
+
+  float etaH1 = (sigjets[pairs[0]]->P4() + sigjets[pairs[1]]->P4()).Eta();
+  float etaH2 = (sigjets[pairs[2]]->P4() + sigjets[pairs[3]]->P4()).Eta();
+  float etaH3 = (sigjets[pairs[4]]->P4() + sigjets[pairs[5]]->P4()).Eta();
+  float RMSetaH = getRMS({etaH1, etaH2, etaH3});
+
+  float massH1 = (sigjets[pairs[0]]->P4() + sigjets[pairs[1]]->P4()).M();
+  float massH2 = (sigjets[pairs[2]]->P4() + sigjets[pairs[3]]->P4()).M();
+  float massH3 = (sigjets[pairs[4]]->P4() + sigjets[pairs[5]]->P4()).M();
+  float mHradius = sqrt(pow(massH1 - 120., 2) + pow(massH2 - 115., 2) + pow(massH1 - 110., 2) );
+
+  std::vector<float> distance_pair_center = {massH1 - 120., massH2 - 115., massH3 - 110.};
+  std::vector<float> unit = {1./sqrt(3), 1./sqrt(3), 1./sqrt(3)};
+  float cosTheta = std::inner_product(std::begin(distance_pair_center), std::end(distance_pair_center), std::begin(unit), 0.)/mHradius;
+
+
+  std::vector<float> deltaAjjs, mjjs, deltaRjjs;
+  float sumpTcosh = 0.;
+  for (int i = 0; i < 6; i++)
+    for (int j = i + 1; j < 6; j++){
+      mjjs.push_back((sigjets[i]->P4() + sigjets[j]->P4()).M());
+      deltaRjjs.push_back(sigjets[i]->P4().DeltaR(sigjets[j]->P4()));
+      deltaAjjs.push_back(cosh(std::abs(sigjets[i]->P4().Eta() - sigjets[j]->P4().Eta())) - cos(sigjets[i]->P4().DeltaPhi(sigjets[j]->P4())));
+      sumpTcosh += 2 * jets[i]->PT * jets[j]->PT * (cosh(std::abs(jets[i]->Eta - jets[j]->Eta)) - 1.);
+  }
+
+  float RMSmjj = getRMS(mjjs);
+  float RMSdeltaRjj = getRMS(deltaRjjs);
+  float RMSdeltaAjj = getSkewness(deltaAjjs);
+  float eta_mHHH_frac = sumpTcosh/std::pow(massHHH, 2);
+
+  std::vector<float> spheraplan_6j = Aplan_spher(sigjets, 1);
+  std::vector<float> spheraplan_allj = Aplan_spher(jets, 1);
+  std::vector<float> transpher_6j = Aplan_spher(sigjets, 2);
+
+  float Aplanarity_6j = spheraplan_6j[0];
+  float Sphericity_6j = spheraplan_6j[1];
+  float Sphericity_allj = spheraplan_allj[1];
+  float Transverse_Sphericity_6j = transpher_6j[2];
+
+  float resDNN_Score = getNN({HT6j, RMSdeltaRjj, deltaRH2, eta_mHHH_frac, Sphericity_6j, Aplanarity_6j, deltaRH1, deltaRH3, RMSdeltaAjj, cosTheta},"res");
+  float nonresDNN_Score = getNN({mHradius, RMSmjj, RMSdeltaRjj, deltaRH1, RMSetaH, massH1, deltaRH2, deltaRH3, Aplanarity_6j, Transverse_Sphericity_6j},"nonres");
+  float heavyresDNN_Score = getNN({mHradius, RMSdeltaRjj, RMSmjj, deltaRH1, deltaRH2, deltaRH3, massH1, RMSetaH, Aplanarity_6j, Sphericity_allj},"heavyres");
+
+  hist_mhradius->Fill(mHradius, weight);
+  hist_rmsdeltarjj->Fill(RMSdeltaRjj, weight);
+  hist_rmsdeltarjjrivet->Fill(RMSdeltaRjj, weight);
+  hist_rmsmjj->Fill(RMSmjj, weight);
+  hist_rmsetah->Fill(RMSetaH, weight);
+  hist_rmsdeltaajj->Fill(RMSdeltaAjj, weight);
+  hist_rmsdeltaajjrivet->Fill(RMSdeltaAjj, weight);
+  hist_deltarh1->Fill(deltaRH1, weight);
+  hist_deltarh2->Fill(deltaRH2, weight);
+  hist_deltarh3->Fill(deltaRH3, weight);
+  hist_massh1->Fill(massH1, weight);
+  hist_massh1rivet->Fill(massH1, weight);
+  hist_ht6j->Fill(HT6j, weight);
+  hist_ht6jrivet->Fill(HT6j, weight);
+  hist_etamhhhfrac->Fill(eta_mHHH_frac, weight);
+  hist_costheta->Fill(cosTheta, weight);
+  hist_aplanarity6j->Fill(Aplanarity_6j, weight);
+  hist_sphericityallj->Fill(Sphericity_allj, weight);
+  hist_sphericity6j->Fill(Sphericity_6j, weight);
+  hist_transvsphericty6j->Fill(Transverse_Sphericity_6j);
+  hist_resdnnscore->Fill(resDNN_Score, weight);
+  hist_nonresdnnscore->Fill(nonresDNN_Score, weight);
+  hist_heavyresdnnscore->Fill(heavyresDNN_Score, weight);
+
+  return;
 
 }
 
 void Atlas_2411_02040::finalize() {
   // Whatever should be done after the run goes here
+  hfile->Write();
+  hfile->Close();
+  eventNumber++;
 }       
 
 
@@ -261,4 +372,90 @@ bool Atlas_2411_02040::check_nTrack_jet(Jet* jet, std::vector<Track*> tracks, in
       if (jet->Particles.At(part) == (*it)->Particle && (*it)->PT > 0.5) nTracks++;
 
     return nTracks > nTracksMin;
+}
+
+std::vector<float> Atlas_2411_02040::Aplan_spher(std::vector<Jet*> input_jets, int r) {
+
+  float mag = 0.;
+  for (int k = 0; k < input_jets.size(); k++)
+    mag += pow(input_jets[k]->P4().Rho(), r);
+
+  TMatrixD st(TMatrixD::kZero, TMatrixD(3,3) );
+  for (int k = 0; k < input_jets.size(); k++) {
+    float weight = std::pow(input_jets[k]->P4().Mag(), r - 2);
+    st(0,0) += input_jets[k]->P4().X()*input_jets[k]->P4().X()*weight;
+    st(0,1) += input_jets[k]->P4().X()*input_jets[k]->P4().Y()*weight;
+    st(0,2) += input_jets[k]->P4().X()*input_jets[k]->P4().Z()*weight;
+    st(1,1) += input_jets[k]->P4().Y()*input_jets[k]->P4().Y()*weight;
+    st(1,2) += input_jets[k]->P4().Y()*input_jets[k]->P4().Z()*weight;
+    st(2,2) += input_jets[k]->P4().Z()*input_jets[k]->P4().Z()*weight;
+  }
+  st(1,0) = st(0,1);
+  st(2,0) = st(0,2);
+  st(2,1) = st(1,2);
+
+  st *= 1./mag;
+  TMatrixDEigen eigen(st);
+  TMatrixD diag = eigen.GetEigenValues();
+
+  std::vector<float> lambdas;
+  lambdas.push_back( diag(0,0) );
+  lambdas.push_back( diag(1,1) );
+  lambdas.push_back( diag(2,2) );
+  std::sort (lambdas.begin(), lambdas.end());
+
+  return {1.5*lambdas[0], 1.5*(lambdas[0] + lambdas[1]), 2.*lambdas[1]/(lambdas[1] + lambdas[2])};
+}
+
+float Atlas_2411_02040::getRMS(std::vector<float> input) {
+
+  if (input.size() == 0) return 0.;
+  float sumsq = 0.;
+  float sum = 0.;
+  for (auto val: input) {
+    sumsq += pow(val,2);
+    sum += val;
+  }
+  float Expx2 = sumsq/input.size();
+  float Expx = sum/input.size();
+  float rms = 0.;
+  if (Expx2 > pow(Expx,2)) rms = sqrt(Expx2 - pow(Expx,2));
+  return rms;
+
+}
+
+float Atlas_2411_02040::getSkewness(std::vector<float> input) {
+
+}
+
+float Atlas_2411_02040::getNN(std::vector<float> input, std::string name) {
+
+  #ifdef HAVE_ONNX
+
+  Ort::Session *session_run;
+  if ((eventNumber % 2) == 1) {
+    if (name == "res") session_run = session[3];
+    if (name == "nonres") session_run = session[1];
+    if (name == "heavyres") session_run = session[5];
+  }
+  else {
+    if (name == "res") session_run = session[2];
+    if (name == "nonres") session_run = session[0];
+    if (name == "heavyres") session_run = session[4];
+  }
+
+  assert(input.size() == 10);
+
+  auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
+  auto input_tensor = Ort::Value::CreateTensor(memory_info, input.data(), input_tensor_size, input_dims.data(), 2);
+  auto output_tensors = session_run->Run(Ort::RunOptions{nullptr}, input_names.data(), &input_tensor, 1, output_names.data(), 1);
+  float* output = output_tensors.front().GetTensorMutableData<float>();
+  return *output;
+
+
+  #endif
+
+  return 0;
+
+
 }

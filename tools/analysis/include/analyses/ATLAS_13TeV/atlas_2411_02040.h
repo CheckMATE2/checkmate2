@@ -18,7 +18,7 @@ class Atlas_2411_02040 : public AnalysisBase {
 
   private:
 
-    TFile *hfile;  TH1F *hist_mhradius; TH1F *hist_rmsdeltarjj;
+    TFile *hfile;  TH1F *hist_mhradius; TH1F *hist_rmsdeltarjj; TH1F  *hist_rmsdeltarjjrivet, *hist_rmsmjj, *hist_rmsetah, *hist_rmsdeltaajj, *hist_rmsdeltaajjrivet, *hist_deltarh1, *hist_deltarh2, *hist_deltarh3, *hist_massh1, *hist_massh1rivet, *hist_ht6j, *hist_ht6jrivet, *hist_etamhhhfrac, *hist_costheta, *hist_aplanarity6j, *hist_sphericityallj, *hist_sphericity6j, *hist_transvsphericty6j, *hist_resdnnscore, *hist_nonresdnnscore, *hist_heavyresdnnscore;
 
 #ifdef HAVE_ONNX
     Ort::Session *session[6];
@@ -29,9 +29,14 @@ class Atlas_2411_02040 : public AnalysisBase {
     std::vector<int64_t> input_dims = {1, 10};
 #endif
 
+    int eventNumber;
     static bool sortByPT(Jet *i, Jet *j);
     bool check_nTrack_jet(Jet* jet, std::vector<Track*> tracks, int nTracksMin);
     std::vector<Jet*> overlapRemoval_muon_jet_tracks(std::vector<Jet*> cand_jets, std::vector<Muon*> cand_muons, double deltaR, int nTracks);
+    std::vector<float> Aplan_spher(std::vector<Jet*> input_jets, int r);
+    float getRMS(std::vector<float> input);
+    float getSkewness(std::vector<float> input);
+    float getNN(std::vector<float> input, std::string name);
 };
 
 #endif
