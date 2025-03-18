@@ -5,6 +5,8 @@
 #include "AnalysisBase.h"
 #ifdef HAVE_ONNX
 #include "onnxruntime_cxx_api.h"
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #endif
 
 class Atlas_2411_02040 : public AnalysisBase {
@@ -24,9 +26,13 @@ class Atlas_2411_02040 : public AnalysisBase {
     Ort::Session *session[6];
     std::vector<int64_t> input_node_dims;
     const int input_tensor_size = 10;
-    std::vector<const char*> input_names = {"input"};
-    std::vector<const char*> output_names = {"dense_3"};
+    std::vector<const char*> input_names ;
+    std::vector<const char*> output_names = {"dense_3", "dense_3", "dense_3", "dense_3", "dense_4", "dense_4"};
     std::vector<int64_t> input_dims = {1, 10};
+    std::vector<std::vector<double>> scales;
+    std::vector<std::vector<double>> offsets;
+    template <typename T> std::vector<T> read_tree(boost::property_tree::ptree const& pt, boost::property_tree::ptree::key_type const& key);
+
 #endif
 
     int eventNumber;

@@ -3,6 +3,8 @@
 //  EMAIL: krolb@fuw.edu.pl
 #ifdef HAVE_ONNX
 #include "onnxruntime_cxx_api.h"
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #endif
 
 std::vector<std::vector<std::vector<size_t>>> pairings = {{{1, 2},{3, 4},{5, 6}},{{1, 2},{3, 5},{4, 6}},{{1, 2},{3, 6},{5, 4}},{{1, 3},{2, 4},{5, 6}},{{1, 3},{2, 5},{4, 6}},{{1, 3},{2, 6},{5, 4}},{{1, 4},{3, 2},{5, 6}},{{1, 4},{3, 5},{2, 6}},{{1, 4},{3, 6},{5, 2}},{{1, 5},{3, 4},{2, 6}},{{1, 5},{3, 2},{4, 6}},{{1, 5},{3, 6},{2, 4}},{{1, 6},{3, 4},{5, 2}},{{1, 6},{3, 5},{4, 2}},{{1, 6},{3, 2},{5, 4}}}; 
@@ -32,24 +34,33 @@ void Atlas_2411_02040::initialize() {
     env[i] = Ort::Env(ORT_LOGGING_LEVEL_WARNING, "TRIH");
 
   std::vector<std::string> onnx_files = {
-    maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_nonresDNN_model_even.onnx",
-    maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_nonresDNN_model_odd.onnx",
-    maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_resDNN_model_even.onnx",
-    maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_resDNN_model_odd.onnx",
-    maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_heavyresDNN_model_even.onnx",
-    maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_heavyresDNN_model_odd.onnx"};
+    maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_nonresDNN_model_even",
+    maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_nonresDNN_model_odd",
+    maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_resDNN_model_even",
+    maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_resDNN_model_odd",
+    maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_heavyresDNN_model_even",
+    maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_heavyresDNN_model_odd"};
   Ort::SessionOptions session_options[6];
-  for (int i = 0; i < 6; i++)
-    session[i] = new Ort::Session(env[i], onnx_files[i].c_str(), session_options[i]);
+  for (int i = 0; i < 6; i++) {
+    std::ifstream input_file((onnx_files[i] + "_variables.json").c_str());
+    boost::property_tree::ptree pt;
+    boost::property_tree::read_json(input_file, pt);
+    std::vector<double> offset = read_tree<double>(pt, "offset");
+    std::vector<double> scale = read_tree<double>(pt, "scale");
+    scales.push_back(scale);
+    offsets.push_back(offset);
+    session[i] = new Ort::Session(env[i], (onnx_files[i] + ".onnx").c_str(), session_options[i]);
+  }
 
   const size_t num_input_nodes = session[0]->GetInputCount();
   cout << "Number input nodes: " << num_input_nodes << endl;
   input_node_names.reserve(num_input_nodes);
 
+  for (size_t k = 0; k < 6; k++) {
   for (size_t i = 0; i < num_input_nodes; i++) {
-    auto type_info = session[0]->GetInputTypeInfo(i);
+    auto type_info = session[k]->GetInputTypeInfo(i);
     auto tensor_info = type_info.GetTensorTypeAndShapeInfo();
-    auto input_name = session[0]->GetInputNameAllocated(i, allocator);
+    auto input_name = session[k]->GetInputNameAllocated(i, allocator);
     std::cout << "Input " << i << " : name = " << input_name.get() << std::endl;
     input_node_names.push_back(input_name.get());
     input_names.push_back(input_name.get());
@@ -60,21 +71,23 @@ void Atlas_2411_02040::initialize() {
     for (size_t j = 0; j < input_node_dims.size(); j++)
         std::cout << "Input " << i << " : dim[" << j << "] = " << input_node_dims[j] << '\n';
   }   // input_tensor_size = input_node_dims[0] * input_node_dims[1] * ....
-
+  }
   //asume just 1 output node
 
-  const size_t num_output_nodes = session[0]->GetOutputCount();
-  cout << "Number output nodes: " << num_output_nodes << endl;
-  output_node_names.reserve(num_output_nodes);
-  auto output_name = session[0]->GetOutputNameAllocated(0, allocator);
-  std::cout << "Output " << "0" << " : name = " << output_name.get() << std::endl;
-  output_node_names.push_back(output_name.get());
-  auto type_info = session[0]->GetOutputTypeInfo(0);
-  auto tensor_info = type_info.GetTensorTypeAndShapeInfo();
-  std::vector<int64_t> output_node_dims = tensor_info.GetShape();
-  std::cout << "Output " << 0 << " : num_dims = " << output_node_dims.size() << '\n';
-  for (size_t j = 0; j < input_node_dims.size(); j++)
-    std::cout << "Output " << 0 << " : dim[" << j << "] = " << output_node_dims[j] << '\n';
+  for (size_t i = 0; i < 6; i++) {
+    const size_t num_output_nodes = session[i]->GetOutputCount();
+    cout << "Number output nodes: " << num_output_nodes << endl;
+    output_node_names.reserve(num_output_nodes);
+    auto output_name = session[i]->GetOutputNameAllocated(0, allocator);
+    std::cout << "Output " << "0" << " : name = " << output_name.get() << std::endl;
+    output_node_names.push_back(output_name.get());
+    auto type_info = session[i]->GetOutputTypeInfo(0);
+    auto tensor_info = type_info.GetTensorTypeAndShapeInfo();
+    std::vector<int64_t> output_node_dims = tensor_info.GetShape();
+    std::cout << "Output " << 0 << " : num_dims = " << output_node_dims.size() << '\n';
+    for (size_t j = 0; j < input_node_dims.size(); j++)
+      std::cout << "Output " << 0 << " : dim[" << j << "] = " << output_node_dims[j] << '\n';
+  }
 #endif
 
   int ifile = bookFile("atlas_2411_02040.root", true);
@@ -106,12 +119,12 @@ void Atlas_2411_02040::initialize() {
   hist_nonresdnnscore = new TH1F("nonresDNN_Score", "nonresDNN_Score", 20., 0., 1.);
   hist_heavyresdnnscore = new TH1F("heavyresDNN_Score", "heavyresDNN_Score", 20., 0., 1.);
 
-  eventNumber = 0;
+  eventNumber = -1;
 }
 
 void Atlas_2411_02040::analyze() {
 
-
+  eventNumber++;
   missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out. Probably not since 3.4.2
   
   electronsLoose = filterPhaseSpace(electronsLoose, 20, -2.47, 2.47);
@@ -190,10 +203,10 @@ void Atlas_2411_02040::analyze() {
   }
   
   double pair_score = -1.;
-  std::vector<int> pairs = {-1, -1, -1, -1, -1, -1,};
+  std::vector<size_t> pairs = {10, 10, 10, 10, 10, 10};
   double pTH1, pTH2, pTH3, mH1, mH2, mH3;
   for (int i = 0; i < 15; i++) {
-    std::vector<int> tmp_p = {-1, -1, -1, -1, -1, -1,};
+    std::vector<size_t> tmp_p (6, 0);
     double pTHa = (sigjets[pairings[i][0][0]-1]->PT + sigjets[pairings[i][0][1]-1]->PT);
     double mHa = (sigjets[pairings[i][0][0]-1]->P4() + sigjets[pairings[i][0][1]-1]->P4()).M();
     double pTHb = (sigjets[pairings[i][1][0]-1]->PT + sigjets[pairings[i][1][1]-1]->PT);
@@ -202,39 +215,39 @@ void Atlas_2411_02040::analyze() {
     double mHc = (sigjets[pairings[i][2][0]-1]->P4() + sigjets[pairings[i][2][1]-1]->P4()).M();
     if ((pTHa >= pTHb) and (pTHb >= pTHc)) {
       pTH1 = pTHa; pTH2 = pTHb; pTH3 = pTHc; mH1 = mHa; mH2 = mHb; mH3 = mHc;
-      tmp_p[0] = pairings[i][0][0]; tmp_p[1] = pairings[i][0][1]; 
-      tmp_p[2] = pairings[i][1][0]; tmp_p[3] = pairings[i][1][1]; 
-      tmp_p[4] = pairings[i][2][0]; tmp_p[5] = pairings[i][2][1];
+      tmp_p[0] = pairings[i][0][0]-1; tmp_p[1] = pairings[i][0][1]-1;
+      tmp_p[2] = pairings[i][1][0]-1; tmp_p[3] = pairings[i][1][1]-1;
+      tmp_p[4] = pairings[i][2][0]-1; tmp_p[5] = pairings[i][2][1]-1;
     } 
-    else if ((pTHa >= pTHc) && (pTHc >= pTHb)) {
+    else if ((pTHa >= pTHc) and (pTHc >= pTHb)) {
       pTH1 = pTHa; pTH2 = pTHc; pTH3 = pTHb; mH1 = mHa; mH2 = mHc; mH3 = mHb;
-      tmp_p[0] = pairings[i][0][0]; tmp_p[1] = pairings[i][0][1]; 
-      tmp_p[2] = pairings[i][2][0]; tmp_p[3] = pairings[i][2][1]; 
-      tmp_p[4] = pairings[i][1][0]; tmp_p[5] = pairings[i][1][1];      
+      tmp_p[0] = pairings[i][0][0]-1; tmp_p[1] = pairings[i][0][1]-1;
+      tmp_p[2] = pairings[i][2][0]-1; tmp_p[3] = pairings[i][2][1]-1;
+      tmp_p[4] = pairings[i][1][0]-1; tmp_p[5] = pairings[i][1][1]-1;
     } 
     else if ((pTHb >= pTHa) && (pTHa >= pTHc)) {
       pTH1 = pTHb; pTH2 = pTHa; pTH3 = pTHc; mH1 = mHb; mH2 = mHa; mH3 = mHc;
-      tmp_p[0] = pairings[i][1][0]; tmp_p[1] = pairings[i][1][1]; 
-      tmp_p[2] = pairings[i][0][0]; tmp_p[3] = pairings[i][0][1]; 
-      tmp_p[4] = pairings[i][2][0]; tmp_p[5] = pairings[i][2][1];      
+      tmp_p[0] = pairings[i][1][0]-1; tmp_p[1] = pairings[i][1][1]-1;
+      tmp_p[2] = pairings[i][0][0]-1; tmp_p[3] = pairings[i][0][1]-1;
+      tmp_p[4] = pairings[i][2][0]-1; tmp_p[5] = pairings[i][2][1]-1;
     } 
     else if ((pTHb >= pTHc) && (pTHc >= pTHa)) {
       pTH1 = pTHb; pTH2 = pTHc; pTH3 = pTHa; mH1 = mHb; mH2 = mHc; mH3 = mHa;
-      tmp_p[0] = pairings[i][1][0]; tmp_p[1] = pairings[i][1][1]; 
-      tmp_p[2] = pairings[i][2][0]; tmp_p[3] = pairings[i][2][1]; 
-      tmp_p[4] = pairings[i][0][0]; tmp_p[5] = pairings[i][0][1];
+      tmp_p[0] = pairings[i][1][0]-1; tmp_p[1] = pairings[i][1][1]-1;
+      tmp_p[2] = pairings[i][2][0]-1; tmp_p[3] = pairings[i][2][1]-1;
+      tmp_p[4] = pairings[i][0][0]-1; tmp_p[5] = pairings[i][0][1]-1;
     } 
     else if ((pTHc >= pTHa) && (pTHa >= pTHb)) {
       pTH1 = pTHc; pTH2 = pTHa; pTH3 = pTHb; mH1 = mHc; mH2 = mHa; mH3 = mHb;
-      tmp_p[0] = pairings[i][2][0]; tmp_p[1] = pairings[i][2][1]; 
-      tmp_p[2] = pairings[i][0][0]; tmp_p[3] = pairings[i][0][1]; 
-      tmp_p[4] = pairings[i][1][0]; tmp_p[5] = pairings[i][1][1];      
+      tmp_p[0] = pairings[i][2][0]-1; tmp_p[1] = pairings[i][2][1]-1;
+      tmp_p[2] = pairings[i][0][0]-1; tmp_p[3] = pairings[i][0][1]-1;
+      tmp_p[4] = pairings[i][1][0]-1; tmp_p[5] = pairings[i][1][1]-1;
     } 
     else {
       pTH1 = pTHc; pTH2 = pTHb; pTH3 = pTHa; mH1 = mHc; mH2 = mHb; mH3 = mHa;
-      tmp_p[0] = pairings[i][2][0]; tmp_p[1] = pairings[i][2][1]; 
-      tmp_p[2] = pairings[i][1][0]; tmp_p[3] = pairings[i][1][1]; 
-      tmp_p[4] = pairings[i][0][0]; tmp_p[5] = pairings[i][0][1];
+      tmp_p[0] = pairings[i][2][0]-1; tmp_p[1] = pairings[i][2][1]-1;
+      tmp_p[2] = pairings[i][1][0]-1; tmp_p[3] = pairings[i][1][1]-1;
+      tmp_p[4] = pairings[i][0][0]-1; tmp_p[5] = pairings[i][0][1]-1;
     } 
     double tmp_score = 1./(std::abs(mH1 - 120.) + std::abs(mH2 - 115.) + std::abs(mH3 - 110.));
     if (tmp_score > pair_score) {
@@ -243,12 +256,18 @@ void Atlas_2411_02040::analyze() {
     }
   }
 
+  //cout << eventNumber << ": " << sigjets.size() << "  ";
+  //for (auto i: pairs)
+  //  std::cout << i << "  " << sigjets[i]->PT << "  " ;
+  //cout << endl;
   float HT6j = 0.;
   TLorentzVector Hmom = {0.,0.,0.,0.};
   for (int i = 0; i < 6; i++ ) {
     HT6j += sigjets[i]->PT;
     Hmom += sigjets[i]->P4();
+    //cout << sigjets[i]->PT << "  ";
   }
+  //cout << endl;
   float massHHH = Hmom.M();
   float deltaRH1 = sigjets[pairs[0]]->P4().DeltaR(sigjets[pairs[1]]->P4());
   float deltaRH2 = sigjets[pairs[2]]->P4().DeltaR(sigjets[pairs[3]]->P4());
@@ -268,10 +287,10 @@ void Atlas_2411_02040::analyze() {
   float massH3 = (sigjets[pairs[4]]->P4() + sigjets[pairs[5]]->P4()).M();
   float mHradius = sqrt(pow(massH1 - 120., 2) + pow(massH2 - 115., 2) + pow(massH1 - 110., 2) );
 
-  std::vector<float> distance_pair_center = {massH1 - 120., massH2 - 115., massH3 - 110.};
-  std::vector<float> unit = {1./sqrt(3), 1./sqrt(3), 1./sqrt(3)};
-  float cosTheta = std::inner_product(std::begin(distance_pair_center), std::end(distance_pair_center), std::begin(unit), 0.)/mHradius;
-
+  //std::vector<float> distance_pair_center = {massH1 - 120., massH2 - 115., massH3 - 110.};
+  //std::vector<float> unit = {1./sqrt(3), 1./sqrt(3), 1./sqrt(3)};
+  //float cosTheta = std::inner_product(std::begin(distance_pair_center), std::end(distance_pair_center), std::begin(unit), 0.)/mHradius;
+  float cosTheta = (massH1 - 120. + massH2 - 115. + massH3 - 110.)/mHradius/sqrt(3);
 
   std::vector<float> deltaAjjs, mjjs, deltaRjjs;
   float sumpTcosh = 0.;
@@ -333,7 +352,6 @@ void Atlas_2411_02040::finalize() {
   // Whatever should be done after the run goes here
   hfile->Write();
   hfile->Close();
-  eventNumber++;
 }       
 
 
@@ -426,29 +444,95 @@ float Atlas_2411_02040::getRMS(std::vector<float> input) {
 
 float Atlas_2411_02040::getSkewness(std::vector<float> input) {
 
+    float offset = 0.;
+    float rms = 0.;
+    float skewness = 0.;
+    int entries = 0.;
+    for (size_t i = 0; i < input.size(); i++) {
+        offset += input[i];
+        rms += pow(input[i],2);
+    }
+    offset /= input.size();
+    rms /= input.size();
+    rms = (rms-pow(offset,2)>=0?sqrt(rms-pow(offset,2)):0);
+    for (size_t i = 0; i < input.size(); i++) {
+        skewness += pow((input[i]-offset)/rms,3);
+    }
+    skewness /= input.size();
+    return skewness;
+
+
 }
 
 float Atlas_2411_02040::getNN(std::vector<float> input, std::string name) {
 
   #ifdef HAVE_ONNX
 
+  size_t nn;
+  std::vector<const char*> input_name;
+  std::vector<const char*> output_name;
+  std::vector<double> offset;
+  std::vector<double> scale;
   Ort::Session *session_run;
   if ((eventNumber % 2) == 1) {
-    if (name == "res") session_run = session[3];
-    if (name == "nonres") session_run = session[1];
-    if (name == "heavyres") session_run = session[5];
+    input_name = {"input_1"};
+    if (name == "res") {
+      session_run = session[3];
+      offset = offsets[3];
+      scale = scales[3];
+      nn = 3;
+      output_name = {"dense_3"};
+    }
+    if (name == "nonres") {
+      session_run = session[1];
+      offset = offsets[1];
+      scale = scales[1];
+      nn = 1;
+      output_name = {"dense_3"};
+    }
+    if (name == "heavyres") {
+      session_run = session[5];
+      offset = offsets[5];
+      scale = scales[5];
+      nn = 5;
+      output_name = {"dense_4"};
+    }
   }
   else {
-    if (name == "res") session_run = session[2];
-    if (name == "nonres") session_run = session[0];
-    if (name == "heavyres") session_run = session[4];
+    input_name = {"input"};
+    if (name == "res") {
+      session_run = session[2];
+      offset = offsets[2];
+      scale = scales[2];
+      nn = 2;
+      output_name = {"dense_3"};
+    }
+    if (name == "nonres") {
+      session_run = session[0];
+      offset = offsets[0];
+      scale = scales[0];
+      nn = 0;
+      output_name = {"dense_3"};
+    }
+    if (name == "heavyres") {
+      session_run = session[4];
+      offset = offsets[4];
+      scale = scales[4];
+      nn = 4;
+      output_name = {"dense_4"};
+    }
   }
 
   assert(input.size() == 10);
 
+  std::vector<float> input_data = input;
+  for (int i = 0; i < 10; i++)
+    input_data[i] = (input[i] - offset[i])/scale[i];
+
+
   auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
-  auto input_tensor = Ort::Value::CreateTensor(memory_info, input.data(), input_tensor_size, input_dims.data(), 2);
-  auto output_tensors = session_run->Run(Ort::RunOptions{nullptr}, input_names.data(), &input_tensor, 1, output_names.data(), 1);
+  auto input_tensor = Ort::Value::CreateTensor(memory_info, input_data.data(), input_tensor_size, input_dims.data(), 2);
+  auto output_tensors = session_run->Run(Ort::RunOptions{nullptr}, input_name.data(), &input_tensor, 1, output_name.data(), 1);
   float* output = output_tensors.front().GetTensorMutableData<float>();
   return *output;
 
@@ -459,3 +543,15 @@ float Atlas_2411_02040::getNN(std::vector<float> input, std::string name) {
 
 
 }
+
+#ifdef HAVE_ONNX
+
+template <typename T>
+std::vector<T> Atlas_2411_02040::read_tree(boost::property_tree::ptree const& pt, boost::property_tree::ptree::key_type const& key)
+{
+    std::vector<T> r;
+    for (auto& item : pt.get_child(key))
+        r.push_back(item.second.get_value<T>());
+    return r;
+}
+#endif
