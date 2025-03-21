@@ -400,7 +400,7 @@ std::vector<float> Atlas_2411_02040::Aplan_spher(std::vector<Jet*> input_jets, i
 
   TMatrixD st(TMatrixD::kZero, TMatrixD(3,3) );
   for (int k = 0; k < input_jets.size(); k++) {
-    float weight = std::pow(input_jets[k]->P4().Mag(), r - 2);
+    float weight = std::pow(input_jets[k]->P4().Rho(), r - 2);
     st(0,0) += input_jets[k]->P4().X()*input_jets[k]->P4().X()*weight;
     st(0,1) += input_jets[k]->P4().X()*input_jets[k]->P4().Y()*weight;
     st(0,2) += input_jets[k]->P4().X()*input_jets[k]->P4().Z()*weight;
@@ -413,6 +413,9 @@ std::vector<float> Atlas_2411_02040::Aplan_spher(std::vector<Jet*> input_jets, i
   st(2,1) = st(1,2);
 
   st *= 1./mag;
+  //cout << "st matrix for r: "<< r << endl;
+  //cout << "mag: " << mag << endl;
+  //cout << st(0,0) << "  " << st(0,1) << "  " << st(0,2) << "  " << st(1,1) << "  " << st(1,2) << "  " << st(2,2) << endl;
   TMatrixDEigen eigen(st);
   TMatrixD diag = eigen.GetEigenValues();
 
@@ -421,6 +424,7 @@ std::vector<float> Atlas_2411_02040::Aplan_spher(std::vector<Jet*> input_jets, i
   lambdas.push_back( diag(1,1) );
   lambdas.push_back( diag(2,2) );
   std::sort (lambdas.begin(), lambdas.end());
+  //cout << lambdas[0] << "  " << lambdas[1] << "  " << lambdas[2] << endl;
 
   return {1.5*lambdas[0], 1.5*(lambdas[0] + lambdas[1]), 2.*lambdas[1]/(lambdas[1] + lambdas[2])};
 }

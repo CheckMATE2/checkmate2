@@ -440,8 +440,8 @@ module TreeWriter TreeWriter {
   add Branch TrackMerger/tracks Track Track
   add Branch EFlowMerger/eflow Tower Tower
 
-  #add Branch JetEnergyScale/jets Jet Jet
-  add Branch GenJetFinder/jets Jet Jet
+  add Branch JetEnergyScale/jets Jet Jet
+  #add Branch GenJetFinder/jets Jet Jet
   add Branch FatJetFinder/jets FatJet Jet
   add Branch ElectronEnergySmearing/electrons Electron Electron
   add Branch Calorimeter/photons Photon Photon
