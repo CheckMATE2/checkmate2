@@ -374,8 +374,8 @@ module EnergyScale JetEnergyScale {
 
   # scale formula for jets
   # set ScaleFormula {  sqrt( (3.0 - 0.2*(abs(eta)))^2 / pt + 1.0 )  }
-  # set ScaleFormula { 1.08 }
-  set ScaleFormula { 1.0 + (pt <= 100.)*(-0.01864*log(pt) + 0.10084) + (pt > 100.)*0.015 }
+  set ScaleFormula { 1.08 }
+  #set ScaleFormula { 1.0 + (pt <= 100.)*(-0.01864*log(pt) + 0.10084) + (pt > 100.)*0.015 }
   # arXiv:1703.09665
 
 }

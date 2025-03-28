@@ -962,7 +962,8 @@ static double bBkg_c_eff(double pt, double eta, double wp) {
 	// Their product therefore obviously is much to low, because each function
 	// is (sort of) normalized to the correct efficiency, so the product is
 	// (again sort of) proportional to the square of the correct normalization.
-	return (bBkg_c_eff_pt(pt, wp) * bBkg_c_eff_eta(eta, wp)
+	if (wp > 0.999) return 0.;
+    else return (bBkg_c_eff_pt(pt, wp) * bBkg_c_eff_eta(eta, wp)
 			* bBkg_c_scale_function(wp)/bBkg_c_scale_function(0.7)
 			* 7.5*(1+(100*wp-60)/130));
 }
@@ -984,6 +985,7 @@ static double bBkg_l_eff_eta(double eta, double wp) {
 	double eta_constant = 2.79421560e-05;
 	double wp_quadratic = -1.98927123e+02;
 	double wp_linear = 2.49660023e+02;
+    if (wp > 0.999) return 0.;
 	return (bBkg_l_scale_function(0.7) / bBkg_l_scale_function(wp)
 			* (wp_quadratic*pow(wp, 2) + wp_linear*wp + 1)
 			* (eta_quadratic*pow(eta, 2) + eta_linear*eta + eta_constant));

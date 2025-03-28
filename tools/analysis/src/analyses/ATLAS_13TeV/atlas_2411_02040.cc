@@ -137,7 +137,7 @@ void Atlas_2411_02040::analyze() {
   std::vector<Jet*> bjets={};
   std::vector<Jet*> bjets_truth={};
   for (int i = 0; i < jets.size(); i++) {
-    if ( fabs(jets[i]->Eta) < 2.5 and checkBTag(jets[i], 0) )
+    if ( fabs(jets[i]->Eta) < 2.5 and checkBTag(jets[i], 0) and jets[i]->PT > 25. )
       bjets_truth.push_back(jets[i]);
     if ( fabs(jets[i]->Eta) < 2.5 and checkBTag(jets[i], 1) )
       bjets.push_back(jets[i]);
@@ -298,8 +298,8 @@ void Atlas_2411_02040::analyze() {
     for (int j = i + 1; j < 6; j++){
       mjjs.push_back((sigjets[i]->P4() + sigjets[j]->P4()).M());
       deltaRjjs.push_back(sigjets[i]->P4().DeltaR(sigjets[j]->P4()));
-      deltaAjjs.push_back(cosh(std::abs(sigjets[i]->P4().Eta() - sigjets[j]->P4().Eta())) - cos(sigjets[i]->P4().DeltaPhi(sigjets[j]->P4())));
-      sumpTcosh += 2 * jets[i]->PT * jets[j]->PT * (cosh(std::abs(jets[i]->Eta - jets[j]->Eta)) - 1.);
+      deltaAjjs.push_back(cosh(sigjets[i]->Eta - sigjets[j]->Eta) - cos(sigjets[i]->P4().DeltaPhi(sigjets[j]->P4())));
+      sumpTcosh += 2 * sigjets[i]->PT * sigjets[j]->PT * (cosh(sigjets[i]->Eta - sigjets[j]->Eta) - 1.);
   }
 
   float RMSmjj = getRMS(mjjs);
