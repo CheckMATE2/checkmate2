@@ -285,7 +285,7 @@ void Atlas_2411_02040::analyze() {
   float massH1 = (sigjets[pairs[0]]->P4() + sigjets[pairs[1]]->P4()).M();
   float massH2 = (sigjets[pairs[2]]->P4() + sigjets[pairs[3]]->P4()).M();
   float massH3 = (sigjets[pairs[4]]->P4() + sigjets[pairs[5]]->P4()).M();
-  float mHradius = sqrt(pow(massH1 - 120., 2) + pow(massH2 - 115., 2) + pow(massH1 - 110., 2) );
+  float mHradius = sqrt(pow(massH1 - 120., 2) + pow(massH2 - 115., 2) + pow(massH3 - 110., 2) );
 
   //std::vector<float> distance_pair_center = {massH1 - 120., massH2 - 115., massH3 - 110.};
   //std::vector<float> unit = {1./sqrt(3), 1./sqrt(3), 1./sqrt(3)};
