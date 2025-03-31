@@ -119,12 +119,16 @@ void Atlas_2411_02040::initialize() {
   hist_nonresdnnscore = new TH1F("nonresDNN_Score", "nonresDNN_Score", 20., 0., 1.);
   hist_heavyresdnnscore = new TH1F("heavyresDNN_Score", "heavyresDNN_Score", 20., 0., 1.);
 
+  float binning[7] = {0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5};
+  hist_weight = new TH1F("TotalWeight", "TotalWeight", 6, binning);
+
   eventNumber = -1;
 }
 
 void Atlas_2411_02040::analyze() {
 
   eventNumber++;
+  int cutflow = 0;
   missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out. Probably not since 3.4.2
   
   electronsLoose = filterPhaseSpace(electronsLoose, 20, -2.47, 2.47);
@@ -160,6 +164,8 @@ void Atlas_2411_02040::analyze() {
   
   if (bjets_truth.size() < 4) return;
   countCutflowEvent("00_filter4b");
+  cutflow++;
+  hist_weight->Fill(cutflow, weight);
 
   if (bjets.size() + nonbjets.size() < 4) return;
   std::vector<Jet*> bjets35 = filterPhaseSpace(bjets, 35., -2.5, 2.5);
@@ -174,15 +180,23 @@ void Atlas_2411_02040::analyze() {
     
   if (!trigger) return;
   countCutflowEvent("01_trigger");
+  cutflow++;
+  hist_weight->Fill(cutflow, weight);
   
   if (bjets.size() + nonbjets.size() < 6) return;
   countCutflowEvent("02_6jets");
+  cutflow++;
+  hist_weight->Fill(cutflow, weight);
   
   if (bjets40.size() + nonbjets40.size() < 4) return;
   countCutflowEvent("03_4*pt>40");
+  cutflow++;
+  hist_weight->Fill(cutflow, weight);
   
   if (bjets40.size() < 4) return;
   countCutflowEvent("04_4b*pt>40");
+  cutflow++;
+  hist_weight->Fill(cutflow, weight);
   
   bool bjets4 = false;
   bool bjets5 = false;
@@ -200,6 +214,8 @@ void Atlas_2411_02040::analyze() {
     bjets6 = true; 
     countCutflowEvent("05_6b");
     for (int i = 0; i < 6; i++) sigjets.push_back(bjets[i]);
+    cutflow++;
+    hist_weight->Fill(cutflow, weight);
   }
   
   double pair_score = -1.;
