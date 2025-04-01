@@ -223,11 +223,11 @@ void Atlas_2411_02040::analyze() {
   double pTH1, pTH2, pTH3, mH1, mH2, mH3;
   for (int i = 0; i < 15; i++) {
     std::vector<size_t> tmp_p (6, 0);
-    double pTHa = (sigjets[pairings[i][0][0]-1]->PT + sigjets[pairings[i][0][1]-1]->PT);
+    double pTHa = (sigjets[pairings[i][0][0]-1]->P4() + sigjets[pairings[i][0][1]-1]->P4()).Pt();
     double mHa = (sigjets[pairings[i][0][0]-1]->P4() + sigjets[pairings[i][0][1]-1]->P4()).M();
-    double pTHb = (sigjets[pairings[i][1][0]-1]->PT + sigjets[pairings[i][1][1]-1]->PT);
+    double pTHb = (sigjets[pairings[i][1][0]-1]->P4() + sigjets[pairings[i][1][1]-1]->P4()).Pt();
     double mHb = (sigjets[pairings[i][1][0]-1]->P4() + sigjets[pairings[i][1][1]-1]->P4()).M();
-    double pTHc = (sigjets[pairings[i][2][0]-1]->PT + sigjets[pairings[i][2][1]-1]->PT);
+    double pTHc = (sigjets[pairings[i][2][0]-1]->P4() + sigjets[pairings[i][2][1]-1]->P4()).Pt();
     double mHc = (sigjets[pairings[i][2][0]-1]->P4() + sigjets[pairings[i][2][1]-1]->P4()).M();
     if ((pTHa >= pTHb) and (pTHb >= pTHc)) {
       pTH1 = pTHa; pTH2 = pTHb; pTH3 = pTHc; mH1 = mHa; mH2 = mHb; mH3 = mHc;
