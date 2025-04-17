@@ -83,6 +83,70 @@ void Atlas_2211_08028::initialize() {
 
 void Atlas_2211_08028::analyze() {
 
+  std::map<std::string, int > sr_map = {
+    {"SR-Gtt-0L-B", 0},
+    {"SR-Gtt-0L-M1", 0},
+    {"SR-Gtt-0L-M2", 0},
+    {"SR-Gtt-0L-C", 0},
+    {"SR-Gtt-1L-B", 0},
+    {"SR-Gtt-1L-M1", 0},
+    {"SR-Gtt-1L-M2", 0},
+    {"SR-Gtt-1L-C", 0},
+    {"SR-Gbb-B", 0},
+    {"SR-Gbb-M", 0},
+    {"SR-Gbb-C", 0},
+    {"SR-Gtb-B", 0},
+    {"SR-Gtb-M", 0},
+    {"SR-Gtb-C", 0}
+  };
+  std::map<std::string, int > cr_map = {
+    {"CR_Gtt_1L_B_cuts", 0},
+    {"CR_Gtt_1L_M1_cuts", 0},
+    {"CR_Gtt_1L_M2_cuts", 0},
+    {"CR_Gtt_1L_C_cuts", 0},
+    {"CR_Gtt_0L_B_cuts", 0},
+    {"CR_Gtt_0L_M1_cuts", 0},
+    {"CR_Gtt_0L_M2_cuts", 0},
+    {"CR_Gtt_0L_C_cuts", 0},
+    {"CR_Gbb_B_cuts", 0},
+    {"CR_Gbb_M_cuts", 0},
+    {"CR_Gbb_C_cuts", 0},
+    {"CR_Gtb_B_cuts", 0},
+    {"CR_Gtb_M_cuts", 0},
+    {"CR_Gtb_C_cuts", 0}
+  };
+  std::map<std::string, int > sr_map_cutflow = {
+    {"SR-Gtt-0L-B", 0},
+    {"SR-Gtt-0L-M1", 0},
+    {"SR-Gtt-0L-M2", 0},
+    {"SR-Gtt-0L-C", 0},
+    {"SR-Gtt-1L-B", 0},
+    {"SR-Gtt-1L-M1", 0},
+    {"SR-Gtt-1L-M2", 0},
+    {"SR-Gtt-1L-C", 0},
+    {"SR-Gbb-B", 0},
+    {"SR-Gbb-M", 0},
+    {"SR-Gbb-C", 0},
+    {"SR-Gtb-B", 0},
+    {"SR-Gtb-M", 0},
+    {"SR-Gtb-C", 0}
+  };
+  std::map<std::string, int > cr_map_cutflow = {
+    {"CR_Gtt_1L_B_cuts", 0},
+    {"CR_Gtt_1L_M1_cuts", 0},
+    {"CR_Gtt_1L_M2_cuts", 0},
+    {"CR_Gtt_1L_C_cuts", 0},
+    {"CR_Gtt_0L_B_cuts", 0},
+    {"CR_Gtt_0L_M1_cuts", 0},
+    {"CR_Gtt_0L_M2_cuts", 0},
+    {"CR_Gtt_0L_C_cuts", 0},
+    {"CR_Gbb_B_cuts", 0},
+    {"CR_Gbb_M_cuts", 0},
+    {"CR_Gbb_C_cuts", 0},
+    {"CR_Gtb_B_cuts", 0},
+    {"CR_Gtb_M_cuts", 0},
+    {"CR_Gtb_C_cuts", 0}
+  };
   signal_jets.clear();
   bjets.clear();
   trimmedJets.clear();
