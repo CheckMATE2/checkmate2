@@ -55,7 +55,7 @@ class Atlas_2211_08028 : public AnalysisBase {
     bool PassesCuts_Gtb(int Njet, int Nbjet, double meff_cut, double met, double MJ_cut, bool cutflow, std::string sr);
     bool PassesCuts_Gbb(int Njet, int Nbjet, double met, double ptj1, double meff_cut, bool cutflow, std::string sr);
     bool PassesCutsCR_Gtt1L(int Njet, int Nbjet, double met, double meff_cut, double mT_cut, std::string sr);
-    bool PassesCuts_NN(int ttbb, double mg, double mneut, double cutoff, int srnum, std::string sr);
+    bool PassesCuts_NN(int ttbb, double mg, double mneut, double cutoff, int srnum, std::string sr, float *NNout);
     std::vector<double> jet_btag_category();
     std::string print_shape(const std::vector<int64_t>& v);
 
