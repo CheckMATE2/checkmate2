@@ -16,7 +16,7 @@ void Atlas_2211_08028::initialize() {
   bookSignalRegions("SR-Gtt-0L-B;SR-Gtt-0L-M1;SR-Gtt-0L-M2;SR-Gtt-0L-C;SR-Gtt-1L-B;SR-Gtt-1L-M1;SR-Gtt-1L-M2;SR-Gtt-1L-C;SR-Gbb-B;SR-Gbb-M;SR-Gbb-C;SR-Gtb-B;SR-Gtb-M;SR-Gtb-C;SR-Gtt-2100-1;SR-Gtt-1800-1;SR-Gtt-2300-1200;SR-Gtt-1900-1400;SR-Gbb-2800-1400;SR-Gbb-2300-1000;SR-Gbb-2100-1600;SR-Gbb-2000-1800");
   // You can also book cutflow regions with bookCutflowRegions("CR1;CR2;..."). Note that the regions are
   //  always ordered alphabetically in the cutflow output files.
-  bookControlRegions("CR_Gtt_1L_B_cuts;CR_Gtt_1L_M1_cuts;CR_Gtt_1L_M2_cuts;CR_Gtt_1L_C_cuts;CR_Gtt_0L_B_cuts;CR_Gtt_0L_M1_cuts;CR_Gtt_0L_M2_cuts;CR_Gtt_0L_C_cuts;CR_Gbb_B_cuts;CR_Gbb_M_cuts;CR_Gbb_C_cuts;CR_Gtb_B_cuts;CR_Gtb_M_cuts;CR_Gtb_C_cuts");
+  bookControlRegions("CR_Gtt_1L_B_cuts;CR_Gtt_1L_M1_cuts;CR_Gtt_1L_M2_cuts;CR_Gtt_1L_C_cuts;CR_Gtt_0L_B_cuts;CR_Gtt_0L_M1_cuts;CR_Gtt_0L_M2_cuts;CR_Gtt_0L_C_cuts;CR_Gbb_B_cuts;CR_Gbb_M_cuts;CR_Gbb_C_cuts;CR_Gtb_B_cuts;CR_Gtb_M_cuts;CR_Gtb_C_cuts;VR-NN-Gtt-2100-1;VR-NN-Gtt-1800-1;VR-NN-Gtt-2300-1200;VR_NN-Gtt-1900-1400;VR1-NN-Gbb-2800-1400;VR1-NN-Gbb-2300-1000;VR1-NN-Gbb-2100-1600;VR1-NN-Gbb-2000-1800;VR2-NN-Gbb-2800-1400;VR2-NN-Gbb-2300-1000;VR2-NN-Gbb-2100-1600;VR2-NN-Gbb-2000-1800;CR-NN-Gtt-2100-1;CR-NN-Gtt-1800-1;CR-NN-Gtt-2300-1200;CR_NN-Gtt-1900-1400;CRZ-NN-Gbb-2800-1400;CRZ-NN-Gbb-2300-1000;CRZ-NN-Gbb-2100-1600;CRZ-NN-Gbb-2000-1800");
 
   // You should initialize any declared variables here
 
@@ -83,7 +83,7 @@ void Atlas_2211_08028::initialize() {
 
 void Atlas_2211_08028::analyze() {
 
-  std::map<std::string, double > sr_map = {
+  sr_map = {
     {"SR-Gtt-0L-B", 0},
     {"SR-Gtt-0L-M1", 0},
     {"SR-Gtt-0L-M2", 0},
@@ -138,7 +138,7 @@ void Atlas_2211_08028::analyze() {
     {"SR-NN-Gbb-2300-1000", 0},
     {"SR-NN-Gbb-2100-1600", 0},
     {"SR-NN-Gbb-2000-1800", 0},
-    {"VR-NN-Gtt-2100-1", 0}, /* dummy VRs */
+    {"VR-NN-Gtt-2100-1", 0},
     {"VR-NN-Gtt-1800-1", 0},
     {"VR-NN-Gtt-2300-1200", 0},
     {"VR_NN-Gtt-1900-1400", 0},
@@ -149,7 +149,7 @@ void Atlas_2211_08028::analyze() {
     {"VR2-NN-Gbb-2800-1400", 0},
     {"VR2-NN-Gbb-2300-1000", 0},
     {"VR2-NN-Gbb-2100-1600", 0},
-    {"VR2-NN-Gbb-2000-1800", 0}, /*end dummy */
+    {"VR2-NN-Gbb-2000-1800", 0},
     {"CR-NN-Gtt-2100-1", 0},
     {"CR-NN-Gtt-1800-1", 0},
     {"CR-NN-Gtt-2300-1200", 0},
@@ -298,7 +298,6 @@ void Atlas_2211_08028::analyze() {
   if (signal_jets.size() < 4 or bjets.size() < 3 or pTmiss.Perp() < 200.) return;
   
   countCutflowEvent("00_preselection");
-  float output;
   
   if (signalLeps.size() >= 1) {
     countCutflowEvent("01_1signalLep");
@@ -329,10 +328,10 @@ void Atlas_2211_08028::analyze() {
       if (PassesCuts_Gtb(7, 4, 1300., 350.,  50., false, "CR-Gtb-C")) countControlEvent("CR_Gtb_C_cuts", sr_map);            
     }
     
-    if (PassesCuts_NN(1, 1900, 1400, 0.9987, 0, "SR-NN-Gtt-1900-1400", &output)) countSignalEvent("SR-Gtt-1900-1400", sr_map);
-    if (PassesCuts_NN(1, 1800, 1, 0.9997, 1, "SR-NN-Gtt-1800-1", &output)) countSignalEvent("SR-Gtt-1800-1", sr_map);    
-    if (PassesCuts_NN(1, 2100, 1, 0.9997, 2, "SR-NN-Gtt-2100-1", &output)) countSignalEvent("SR-Gtt-2100-1", sr_map);
-    if (PassesCuts_NN(1, 2300, 1200, 0.9993, 3, "SR-NN-Gtt-2300-1200", &output)) countSignalEvent("SR-Gtt-2300-1200", sr_map);   
+    if (PassesCuts_NN(1, 1900, 1400, 0.9987, 0, "SR-NN-Gtt-1900-1400")) countSignalEvent("SR-Gtt-1900-1400", sr_map);
+    if (PassesCuts_NN(1, 1800, 1, 0.9997, 1, "SR-NN-Gtt-1800-1")) countSignalEvent("SR-Gtt-1800-1", sr_map);    
+    if (PassesCuts_NN(1, 2100, 1, 0.9997, 2, "SR-NN-Gtt-2100-1")) countSignalEvent("SR-Gtt-2100-1", sr_map);
+    if (PassesCuts_NN(1, 2300, 1200, 0.9993, 3, "SR-NN-Gtt-2300-1200")) countSignalEvent("SR-Gtt-2300-1200", sr_map);   
     
   }
   
@@ -347,19 +346,18 @@ void Atlas_2211_08028::analyze() {
     if (PassesCuts_Gtt0L(10, 3, 500., 1100., 120., 200., true, "SR-Gtt-0L-M2")) countSignalEvent("SR-Gtt-0L-M2", sr_map);
     if (PassesCuts_Gtt0L(10, 4, 400.,  800., 180., 100., true, "SR-Gtt-0L-C")) countSignalEvent("SR-Gtt-0L-C", sr_map);
         
-    if (PassesCuts_NN(1, 1900, 1400, 0.9987, 0, "SR-NN-Gtt-1900-1400", &output)) countSignalEvent("SR-Gtt-1900-1400", sr_map);    
-    if (PassesCuts_NN(1, 1800, 1, 0.9997, 1, "SR-NN-Gtt-1800-1", &output)) countSignalEvent("SR-Gtt-1800-1", sr_map);    
-    if (PassesCuts_NN(1, 2100, 1, 0.9997, 2, "SR-NN-Gtt-2100-1", &output)) countSignalEvent("SR-Gtt-2100-1", sr_map);        
-    if (PassesCuts_NN(1, 2300, 1200, 0.9993, 3, "SR-NN-Gtt-2300-1200", &output)) countSignalEvent("SR-Gtt-2300-1200", sr_map);   
-    if (PassesCuts_NN(0, 2100, 1600, 0.9993, 0, "SR-NN-Gbb-2100-1600", &output)) countSignalEvent("SR-Gbb-2100-1600", sr_map);    
-    if (PassesCuts_NN(0, 2000, 1800, 0.997, 0, "SR-NN-Gbb-2000-1800", &output)) countSignalEvent("SR-Gbb-2000-1800", sr_map);    
+    if (PassesCuts_NN(1, 1900, 1400, 0.9987, 0, "SR-NN-Gtt-1900-1400")) countSignalEvent("SR-Gtt-1900-1400", sr_map);    
+    if (PassesCuts_NN(1, 1800, 1, 0.9997, 1, "SR-NN-Gtt-1800-1")) countSignalEvent("SR-Gtt-1800-1", sr_map);    
+    if (PassesCuts_NN(1, 2100, 1, 0.9997, 2, "SR-NN-Gtt-2100-1")) countSignalEvent("SR-Gtt-2100-1", sr_map);        
+    if (PassesCuts_NN(1, 2300, 1200, 0.9993, 3, "SR-NN-Gtt-2300-1200")) countSignalEvent("SR-Gtt-2300-1200", sr_map);   
+    if (PassesCuts_NN(0, 2100, 1600, 0.9993, 0, "SR-NN-Gbb-2100-1600")) countSignalEvent("SR-Gbb-2100-1600", sr_map);    
+    if (PassesCuts_NN(0, 2000, 1800, 0.997, 0, "SR-NN-Gbb-2000-1800")) countSignalEvent("SR-Gbb-2000-1800", sr_map);    
     
     if (dphimin > 0.6) {
-      if (PassesCuts_NN(0, 2800, 1400, 0.999, 0, "SR-NN-Gbb-2800-1400", &output)) countSignalEvent("SR-Gbb-2800-1400", sr_map); 
-      if (PassesCuts_NN(0, 2300, 1000, 0.9994, 0, "SR-NN-Gbb-2300-1000", &output)) countSignalEvent("SR-Gbb-2300-1000", sr_map);    
+      if (PassesCuts_NN(0, 2800, 1400, 0.999, 0, "SR-NN-Gbb-2800-1400")) countSignalEvent("SR-Gbb-2800-1400", sr_map); 
+      if (PassesCuts_NN(0, 2300, 1000, 0.9994, 0, "SR-NN-Gbb-2300-1000")) countSignalEvent("SR-Gbb-2300-1000", sr_map);    
     }
     
-    cout << "main: " << output << "  " << output+8 << "  " << output+16 << "  " << output+48 << "   " << output +1 <<  endl;
 
     if (mT_b < 130.) return;
     countCutflowEvent("03_mTb>130");
@@ -555,7 +553,7 @@ bool Atlas_2211_08028::PassesCutsCR_Gtt1L(int Njet, int Nbjet, double met, doubl
 }
 
 
-bool Atlas_2211_08028::PassesCuts_NN(int Gtt, double mgluino, double mneut, double cutoff, int srnum, std::string sr, float *NNout) {
+bool Atlas_2211_08028::PassesCuts_NN(int Gtt, double mgluino, double mneut, double cutoff, int srnum, std::string sr) {
 
 #ifdef HAVE_ONNX  
   std::vector<float> input_tensor_values;  
@@ -610,11 +608,10 @@ bool Atlas_2211_08028::PassesCuts_NN(int Gtt, double mgluino, double mneut, doub
   auto output_tensors = session->Run(Ort::RunOptions{nullptr}, input_names.data(), &input_tensor, 1, output_names.data(), 1);
     
   float* output = output_tensors.front().GetTensorMutableData<float>();
-  NNout = output;
-  //cout << *output << endl;
-  //std::vector<float> result{output, output + 8, output + 16, output + 24, output + 32, output + 40, output + 48};
+  
   std::vector<float> result{output,  output + 8};
-  cout << sr << ": " << *output << "  " << *(output+8) << "  " << *(output+16) << "  " << *(output+48) << "   " << *(output +1) <<  endl;
+  cout << sr << ": " << *output << "  " << *(output+1) << "  " << *(output+2) << "  " << *(output+6) <<  endl;
+  cout << sr << ": " << result[0] << "  " << result[1] << "  " << result[2] << "  " << result[6]  <<  endl;
   
   /*cout << "output_tensor_shape: " << print_shape(output_tensors[0].GetTensorTypeAndShapeInfo().GetShape()) << endl;
   
@@ -631,7 +628,14 @@ bool Atlas_2211_08028::PassesCuts_NN(int Gtt, double mgluino, double mneut, doub
   if (sr == "SR-NN-Gbb-2100-1600") nngbb->Fill(result[1], weight);
   if (sr == "SR-NN-Gtt-2300-1200") nngtt->Fill(result[0], weight);
   
-//NNout = {result[0], result[1], result[2], result[6]};
+  if (sr == "SR-NN-Gtt-2100-1" and *output > 0.68 and *output < 0.86 and log10(*(output+2)) > -1.8 and meff > 2000.) countControlEvent("CR-NN-Gtt-2100-1", sr_map);
+  if (sr == "SR-NN-Gtt-1800-1" and *output > 0.73 and *output < 0.89 and log10(*(output+2)) > -2.0 and meff > 2000.) countControlEvent("CR-NN-Gtt-1800-1", sr_map);
+  if (sr == "SR-NN-Gtt-2300-1200" and *output > 0.78 and *output < 0.83 and log10(*(output+2)) > -1.6 and meff > 1400.) countControlEvent("CR-NN-Gtt-2300-1200", sr_map);
+  if (sr == "SR-NN-Gtt-1900-1400" and *output > 0.78 and *output < 0.80 and log10(*(output+2)) > -1.4 and meff > 800. and MJ < 800.) countControlEvent("CR-NN-Gtt-1900-1400", sr_map);
+  if (sr == "SR-NN-Gtt-2100-1" and *output > 0.86 and *output < 0.9997 and meff > 2000.) countControlEvent("VR-NN-Gtt-2100-1", sr_map);
+  if (sr == "SR-NN-Gtt-1800-1" and *output > 0.89 and *output < 0.9997 and meff > 2000.) countControlEvent("VR-NN-Gtt-1800-1", sr_map);
+  if (sr == "SR-NN-Gtt-2300-1200" and *output > 0.83 and *output < 0.9993 and meff > 1800.) countControlEvent("VR-NN-Gtt-2300-1200", sr_map);
+  if (sr == "SR-NN-Gtt-1900-1400" and *output > 0.80 and *output < 0.9987 and meff > 800. and MJ < 800.) countControlEvent("VR-NN-Gtt-1900-1400", sr_map);
 
   if( Gtt and result[0] > cutoff) {
     countCutflowEvent(sr+"_03_score");
