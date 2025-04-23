@@ -637,6 +637,8 @@ bool Atlas_2211_08028::PassesCuts_NN(int Gtt, double mgluino, double mneut, doub
   if (sr == "SR-NN-Gtt-2300-1200" and *output > 0.83 and *output < 0.9993 and meff > 1800.) countControlEvent("VR-NN-Gtt-2300-1200", sr_map);
   if (sr == "SR-NN-Gtt-1900-1400" and *output > 0.80 and *output < 0.9987 and meff > 800. and MJ < 800.) countControlEvent("VR-NN-Gtt-1900-1400", sr_map);
 
+  if (sr == "SR-NN-Gbb-2800-1400" and *(output+1) > 0.68 and *(output+1) < 0.86 and log10(*(output+2)) > -0.7 and dphimin > 0.5 and meff > 1400. and MJ < 800.) countControlEvent("CR-NN-Gbb-2800-1400", sr_map);
+
   if( Gtt and result[0] > cutoff) {
     countCutflowEvent(sr+"_03_score");
     return true;
