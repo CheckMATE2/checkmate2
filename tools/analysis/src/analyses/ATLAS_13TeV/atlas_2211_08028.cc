@@ -352,11 +352,10 @@ void Atlas_2211_08028::analyze() {
     if (PassesCuts_NN(1, 2300, 1200, 0.9993, 3, "SR-NN-Gtt-2300-1200")) countSignalEvent("SR-Gtt-2300-1200", sr_map);   
     if (PassesCuts_NN(0, 2100, 1600, 0.9993, 0, "SR-NN-Gbb-2100-1600")) countSignalEvent("SR-Gbb-2100-1600", sr_map);    
     if (PassesCuts_NN(0, 2000, 1800, 0.997, 0, "SR-NN-Gbb-2000-1800")) countSignalEvent("SR-Gbb-2000-1800", sr_map);    
+
+    if (PassesCuts_NN(0, 2800, 1400, 0.999, 0, "SR-NN-Gbb-2800-1400") and (dphimin > 0.6)) countSignalEvent("SR-Gbb-2800-1400", sr_map); 
+    if (PassesCuts_NN(0, 2300, 1000, 0.9994, 0, "SR-NN-Gbb-2300-1000") and (dphimin > 0.6)) countSignalEvent("SR-Gbb-2300-1000", sr_map);    
     
-    if (dphimin > 0.6) {
-      if (PassesCuts_NN(0, 2800, 1400, 0.999, 0, "SR-NN-Gbb-2800-1400")) countSignalEvent("SR-Gbb-2800-1400", sr_map); 
-      if (PassesCuts_NN(0, 2300, 1000, 0.9994, 0, "SR-NN-Gbb-2300-1000")) countSignalEvent("SR-Gbb-2300-1000", sr_map);    
-    }
     
 
     if (mT_b < 130.) return;
@@ -638,6 +637,17 @@ bool Atlas_2211_08028::PassesCuts_NN(int Gtt, double mgluino, double mneut, doub
   if (sr == "SR-NN-Gtt-1900-1400" and *output > 0.80 and *output < 0.9987 and meff > 800. and MJ < 800.) countControlEvent("VR-NN-Gtt-1900-1400", sr_map);
 
   if (sr == "SR-NN-Gbb-2800-1400" and *(output+1) > 0.68 and *(output+1) < 0.86 and log10(*(output+2)) > -0.7 and dphimin > 0.5 and meff > 1400. and MJ < 800.) countControlEvent("CR-NN-Gbb-2800-1400", sr_map);
+  if (sr == "SR-NN-Gbb-2800-1400" and *(output+1) > 0.76 and *(output+1) < 0.999 and log10(*(output+6)) < -1.7 and dphimin > 0.5 and meff > 2500. and MJ < 800.) countControlEvent("VR1-NN-Gbb-2800-1400", sr_map);
+  if (sr == "SR-NN-Gbb-2800-1400" and *(output+1) > 0.76 and *(output+1) < 0.999 and log10(*(output+6)) > -1.7 and dphimin > 0.5 ) countControlEvent("VR2-NN-Gbb-2800-1400", sr_map);
+  if (sr == "SR-NN-Gbb-2300-1000" and *(output+1) > 0.52 and *(output+1) < 0.77 and log10(*(output+2)) > -0.8 and dphimin > 0.5 and meff > 1400. and MJ < 800.) countControlEvent("CR-NN-Gbb-2300-1000", sr_map);
+  if (sr == "SR-NN-Gbb-2300-1000" and *(output+1) > 0.77 and *(output+1) < 0.99994 and log10(*(output+6)) < -1.3 and dphimin > 0.5 and meff > 2400. and MJ < 800.) countControlEvent("VR1-NN-Gbb-2300-1000", sr_map);
+  if (sr == "SR-NN-Gbb-2300-1000" and *(output+1) > 0.77 and *(output+1) < 0.99994 and log10(*(output+6)) > -1.3 and dphimin > 0.5 ) countControlEvent("VR2-NN-Gbb-2300-1000", sr_map);
+  if (sr == "SR-NN-Gbb-2100-1600" and *(output+1) > 0.88 and *(output+1) < 0.91 and log10(*(output+2)) > -1.3 and meff > 800. and MJ < 500.) countControlEvent("CR-NN-Gbb-2100-1600", sr_map);
+  if (sr == "SR-NN-Gbb-2100-1600" and *(output+1) > 0.91 and *(output+1) < 0.99993 and log10(*(output+6)) < -1.4 and meff > 800. and MJ < 500.) countControlEvent("VR1-NN-Gbb-2100-1600", sr_map);
+  if (sr == "SR-NN-Gbb-2100-1600" and *(output+1) > 0.91 and *(output+1) < 0.99993 and log10(*(output+6)) > -1.4 ) countControlEvent("VR2-NN-Gbb-2100-1600", sr_map);
+  if (sr == "SR-NN-Gbb-2000-1800" and *(output+1) > 0.92 and *(output+1) < 0.93 and log10(*(output+2)) > -1.9 and meff > 400. and MJ < 400.) countControlEvent("CR-NN-Gbb-2000-1800", sr_map);
+  if (sr == "SR-NN-Gbb-2000-1800" and *(output+1) > 0.93 and *(output+1) < 0.997 and log10(*(output+6)) < -1.4 and meff > 400. and MJ < 400.) countControlEvent("VR1-NN-Gbb-2000-1800", sr_map);
+  if (sr == "SR-NN-Gbb-2000-1800" and *(output+1) > 0.93 and *(output+1) < 0.997 and log10(*(output+6)) > -1.4 ) countControlEvent("VR2-NN-Gbb-2000-1800", sr_map);
 
   if( Gtt and result[0] > cutoff) {
     countCutflowEvent(sr+"_03_score");
