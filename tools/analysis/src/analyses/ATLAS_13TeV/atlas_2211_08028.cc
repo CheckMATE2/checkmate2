@@ -16,8 +16,10 @@ void Atlas_2211_08028::initialize() {
   bookSignalRegions("SR-Gtt-0L-B;SR-Gtt-0L-M1;SR-Gtt-0L-M2;SR-Gtt-0L-C;SR-Gtt-1L-B;SR-Gtt-1L-M1;SR-Gtt-1L-M2;SR-Gtt-1L-C;SR-Gbb-B;SR-Gbb-M;SR-Gbb-C;SR-Gtb-B;SR-Gtb-M;SR-Gtb-C;SR-Gtt-2100-1;SR-Gtt-1800-1;SR-Gtt-2300-1200;SR-Gtt-1900-1400;SR-Gbb-2800-1400;SR-Gbb-2300-1000;SR-Gbb-2100-1600;SR-Gbb-2000-1800");
   // You can also book cutflow regions with bookCutflowRegions("CR1;CR2;..."). Note that the regions are
   //  always ordered alphabetically in the cutflow output files.
-  bookControlRegions("CR_Gtt_1L_B_cuts;CR_Gtt_1L_M1_cuts;CR_Gtt_1L_M2_cuts;CR_Gtt_1L_C_cuts;CR_Gtt_0L_B_cuts;CR_Gtt_0L_M1_cuts;CR_Gtt_0L_M2_cuts;CR_Gtt_0L_C_cuts;CR_Gbb_B_cuts;CR_Gbb_M_cuts;CR_Gbb_C_cuts;CR_Gtb_B_cuts;CR_Gtb_M_cuts;CR_Gtb_C_cuts;VR-NN-Gtt-2100-1;VR-NN-Gtt-1800-1;VR-NN-Gtt-2300-1200;VR_NN-Gtt-1900-1400;VR1-NN-Gbb-2800-1400;VR1-NN-Gbb-2300-1000;VR1-NN-Gbb-2100-1600;VR1-NN-Gbb-2000-1800;VR2-NN-Gbb-2800-1400;VR2-NN-Gbb-2300-1000;VR2-NN-Gbb-2100-1600;VR2-NN-Gbb-2000-1800;CR-NN-Gtt-2100-1;CR-NN-Gtt-1800-1;CR-NN-Gtt-2300-1200;CR_NN-Gtt-1900-1400;CRZ-NN-Gbb-2800-1400;CRZ-NN-Gbb-2300-1000;CRZ-NN-Gbb-2100-1600;CRZ-NN-Gbb-2000-1800");
+  bookControlRegions("VR-Gtt-0L-B;VR-Gtt-0L-M1;VR-Gtt-0L-M2;VR-Gtt-0L-C;VR-Gbb-B;VR-Gbb-M;VR-Gbb-C;VR-Gtb-B;VR-Gtb-M;VR-Gtb-C;VR1-Gtt-1L-B;VR1-Gtt-1L-M1;VR1-Gtt-1L-M2;VR1-Gtt-1L-C;VR2-Gtt-1L-B;VR2-Gtt-1L-M1;VR2-Gtt-1L-M2;VR2-Gtt-1L-C;CR_Gtt_1L_B_cuts;CR_Gtt_1L_M1_cuts;CR_Gtt_1L_M2_cuts;CR_Gtt_1L_C_cuts;CR_Gtt_0L_B_cuts;CR_Gtt_0L_M1_cuts;CR_Gtt_0L_M2_cuts;CR_Gtt_0L_C_cuts;CR_Gbb_B_cuts;CR_Gbb_M_cuts;CR_Gbb_C_cuts;CR_Gtb_B_cuts;CR_Gtb_M_cuts;CR_Gtb_C_cuts;VR-NN-Gtt-2100-1;VR-NN-Gtt-1800-1;VR-NN-Gtt-2300-1200;VR_NN-Gtt-1900-1400;VR1-NN-Gbb-2800-1400;VR1-NN-Gbb-2300-1000;VR1-NN-Gbb-2100-1600;VR1-NN-Gbb-2000-1800;VR2-NN-Gbb-2800-1400;VR2-NN-Gbb-2300-1000;VR2-NN-Gbb-2100-1600;VR2-NN-Gbb-2000-1800;CR-NN-Gtt-2100-1;CR-NN-Gtt-1800-1;CR-NN-Gtt-2300-1200;CR_NN-Gtt-1900-1400;CRZ-NN-Gbb-2800-1400;CRZ-NN-Gbb-2300-1000;CRZ-NN-Gbb-2100-1600;CRZ-NN-Gbb-2000-1800");
 
+  sr_map = {{"SR-Gtt-0L-B", 0},{"SR-Gtt-0L-M1", 0},{"SR-Gtt-0L-M2", 0},{"SR-Gtt-0L-C", 0},{"SR-Gbb-B", 0},{"SR-Gbb-M", 0},{"SR-Gbb-C", 0},    {"SR-Gtb-B", 0},{"SR-Gtb-M", 0},{"SR-Gtb-C", 0},{"SR-Gtt-1L-B", 0},{"SR-Gtt-1L-M1", 0},{"SR-Gtt-1L-M2", 0},{"SR-Gtt-1L-C", 0},{"VR-Gtt-0L-B", 0}, {"VR-Gtt-0L-M1", 0},{"VR-Gtt-0L-M2", 0},{"VR-Gtt-0L-C", 0},{"VR-Gbb-B", 0},{"VR-Gbb-M", 0},{"VR-Gbb-C", 0},{"VR-Gtb-B", 0},{"VR-Gtb-M", 0},{"VR-Gtb-C", 0},{"VR1-Gtt-1L-B", 0},{"VR1-Gtt-1L-M1", 0},{"VR1-Gtt-1L-M2", 0},{"VR1-Gtt-1L-C", 0},{"VR2-Gtt-1L-B", 0},{"VR2-Gtt-1L-M1", 0},{"VR2-Gtt-1L-M2", 0},{"VR2-Gtt-1L-C", 0}, {"CR_Gtt_0L_B_cuts", 0},{"CR_Gtt_0L_M1_cuts", 0},{"CR_Gtt_0L_M2_cuts", 0},{"CR_Gtt_0L_C_cuts", 0},{"CR_Gbb_B_cuts", 0},{"CR_Gbb_M_cuts", 0},{"CR_Gbb_C_cuts", 0},{"CR_Gtb_B_cuts", 0},{"CR_Gtb_M_cuts", 0},{"CR_Gtb_C_cuts", 0},{"CR_Gtt_1L_B_cuts", 0},{"CR_Gtt_1L_M1_cuts", 0},{"CR_Gtt_1L_M2_cuts", 0},{"CR_Gtt_1L_C_cuts", 0},{"SR-NN-Gtt-2100-1", 0},{"SR-NN-Gtt-1800-1", 0},{"SR-NN-Gtt-2300-1200", 0},{"SR_NN-Gtt-1900-1400", 0},{"SR-NN-Gbb-2800-1400", 0},{"SR-NN-Gbb-2300-1000", 0},{"SR-NN-Gbb-2100-1600", 0},{"SR-NN-Gbb-2000-1800", 0},{"VR-NN-Gtt-2100-1", 0},{"VR-NN-Gtt-1800-1", 0},{"VR-NN-Gtt-2300-1200", 0},{"VR_NN-Gtt-1900-1400", 0},{"VR1-NN-Gbb-2800-1400", 0},{"VR1-NN-Gbb-2300-1000", 0},{"VR1-NN-Gbb-2100-1600", 0},{"VR1-NN-Gbb-2000-1800", 0},{"VR2-NN-Gbb-2800-1400", 0},{"VR2-NN-Gbb-2300-1000", 0},{"VR2-NN-Gbb-2100-1600", 0},{"VR2-NN-Gbb-2000-1800", 0},{"CR-NN-Gtt-2100-1", 0},{"CR-NN-Gtt-1800-1", 0},{"CR-NN-Gtt-2300-1200", 0},{"CR_NN-Gtt-1900-1400", 0},{"CRZ-NN-Gbb-2800-1400", 0},{"CRZ-NN-Gbb-2300-1000", 0},{"CRZ-NN-Gbb-2100-1600", 0},{"CRZ-NN-Gbb-2000-1800", 0}};
+  print_map(sr_map, 0);
   // You should initialize any declared variables here
 
 #ifdef HAVE_ONNX  
@@ -98,7 +100,7 @@ void Atlas_2211_08028::analyze() {
     {"SR-Gtt-1L-M1", 0},
     {"SR-Gtt-1L-M2", 0},
     {"SR-Gtt-1L-C", 0},
-    {"VR-Gtt-0L-B", 0}, /* dummy VRs */
+    {"VR-Gtt-0L-B", 0}, 
     {"VR-Gtt-0L-M1", 0},
     {"VR-Gtt-0L-M2", 0},
     {"VR-Gtt-0L-C", 0},
@@ -115,7 +117,7 @@ void Atlas_2211_08028::analyze() {
     {"VR2-Gtt-1L-B", 0},
     {"VR2-Gtt-1L-M1", 0},
     {"VR2-Gtt-1L-M2", 0},
-    {"VR2-Gtt-1L-C", 0}, /* end dummy */
+    {"VR2-Gtt-1L-C", 0}, 
     {"CR_Gtt_0L_B_cuts", 0},
     {"CR_Gtt_0L_M1_cuts", 0},
     {"CR_Gtt_0L_M2_cuts", 0},
@@ -294,8 +296,26 @@ void Atlas_2211_08028::analyze() {
   }
   
   countCutflowEvent("00_all");
+
+  TLorentzVector pTmiss_hat;
+  bool pass_CRZ = false;
+  if (signalLeps.size() == 2 and signalLeps[0]->Charge*signalLeps[1]->Charge < 0. and signalLeps[1]->PT > 30. and signalLeps[0]->Type == signalLeps[1]->Type and (signalLeps[0]->P4() + signalLeps[1]->P4()).Perp() > 70. and abs((signalLeps[0]->P4() + signalLeps[1]->P4()).M() - 90.) < 30. and signal_jets.size() >= 4 and bjets.size() >= 3) {
+    pTmiss_hat = pTmiss + signalLeps[0]->P4() + signalLeps[1]->P4();
+    if (pTmiss_hat.Perp() < 200.) {print_map(sr_map, 1); return;}
+    if (pTmiss_hat.Perp() > 200. and pTmiss.Perp() < 200.) {
+      signalLeps.clear();
+      pTmiss = pTmiss_hat;
+      PassesCuts_NN(2, 2100, 1600, 0.9993, 0, "CRZ-NN-Gbb-2100-1600");    
+      PassesCuts_NN(2, 2000, 1800, 0.997, 0, "CRZ-NN-Gbb-2000-1800");    
+      PassesCuts_NN(2, 2800, 1400, 0.999, 0, "CRZ-NN-Gbb-2800-1400"); 
+      PassesCuts_NN(2, 2300, 1000, 0.9994, 0, "CRZ-NN-Gbb-2300-1000");    
+      print_map(sr_map, 1);
+      return;
+    }
+    else if (pTmiss.Perp() < 200.) pass_CRZ = true;
+  }
   
-  if (signal_jets.size() < 4 or bjets.size() < 3 or pTmiss.Perp() < 200.) return;
+  if (signal_jets.size() < 4 or bjets.size() < 3 or pTmiss.Perp() < 200.) {print_map(sr_map, 1); return;}
   
   countCutflowEvent("00_preselection");
   
@@ -313,6 +333,16 @@ void Atlas_2211_08028::analyze() {
     if (PassesCutsCR_Gtt1L(8, 3, 200.,  800., 200., "CR-Gtt-1L-M2")) countControlEvent("CR_Gtt_1L_M2_cuts", sr_map);
     if (PassesCutsCR_Gtt1L(9, 3, 200.,  800., 150., "CR-Gtt-1L-C")) countControlEvent("CR_Gtt_1L_C_cuts", sr_map);    
     
+    if (PassesCuts_Gtt1L(4, 3, 200., 1500., 150., 0., -200., false, "VR1-Gtt-1L-B")) countControlEvent("VR1-Gtt-1L-B", sr_map);
+    if (PassesCuts_Gtt1L(5, 3, 200., 1200., 200., 0., -200., false, "VR1-Gtt-1L-M1")) countControlEvent("VR1-Gtt-1L-M1", sr_map);
+    if (PassesCuts_Gtt1L(8, 3, 200.,  800., 200., 0., -100., false, "VR1-Gtt-1L-M2")) countControlEvent("VR1-Gtt-1L-M2", sr_map);
+    if (PassesCuts_Gtt1L(9, 3, 200.,  800., 150., -120.,   0., false, "VR1-Gtt-1L-C")) countControlEvent("VR1-Gtt-1L-C", sr_map);
+
+    if (PassesCuts_Gtt1L(4, 3, 200., 1200., -150., 120., 200., false, "VR2-Gtt-1L-B")) countControlEvent("VR2-Gtt-1L-B", sr_map);
+    if (PassesCuts_Gtt1L(5, 3, 200., 1000., -200., 120., 100., false, "VR2-Gtt-1L-M1")) countControlEvent("VR2-Gtt-1L-M1", sr_map);
+    if (PassesCuts_Gtt1L(8, 3, 200.,  800., -200., 120., 100., false, "VR2-Gtt-1L-M2")) countControlEvent("VR2-Gtt-1L-M2", sr_map);
+    if (PassesCuts_Gtt1L(9, 3, 200.,  800., -150., 120.,   0., false, "VR2-Gtt-1L-C")) countControlEvent("VR2-Gtt-1L-C", sr_map);
+
     if (signalLeps.size() == 1 and mT_lep < 150.) {
       if (PassesCuts_Gtt0L(4, 3, 200., 2000., -1., 150., false, "CR-Gtt-0L-B")) countControlEvent("CR_Gtt_0L_B_cuts", sr_map);
       if (PassesCuts_Gtt0L(8, 3, 200., 1100., -1., 150., false, "CR-Gtt-0L-M1")) countControlEvent("CR_Gtt_0L_M1_cuts", sr_map);
@@ -331,20 +361,25 @@ void Atlas_2211_08028::analyze() {
     if (PassesCuts_NN(1, 1900, 1400, 0.9987, 0, "SR-NN-Gtt-1900-1400")) countSignalEvent("SR-Gtt-1900-1400", sr_map);
     if (PassesCuts_NN(1, 1800, 1, 0.9997, 1, "SR-NN-Gtt-1800-1")) countSignalEvent("SR-Gtt-1800-1", sr_map);    
     if (PassesCuts_NN(1, 2100, 1, 0.9997, 2, "SR-NN-Gtt-2100-1")) countSignalEvent("SR-Gtt-2100-1", sr_map);
-    if (PassesCuts_NN(1, 2300, 1200, 0.9993, 3, "SR-NN-Gtt-2300-1200")) countSignalEvent("SR-Gtt-2300-1200", sr_map);   
+    if (PassesCuts_NN(1, 2300, 1200, 0.9993, 3, "SR-NN-Gtt-2300-1200")) countSignalEvent("SR-Gtt-2300-1200", sr_map);  
     
   }
   
   if (electronsLoose.size() + muonsCombined.size() == 0) {
     countCutflowEvent("01_ObaseLep");
     
-    if (dphimin < 0.4) return;
+    if (dphimin < 0.4) {print_map(sr_map, 1); return;}
     countCutflowEvent("02_phimin");
     
     if (PassesCuts_Gtt0L(5, 3, 600., 2900., 120., 300., true, "SR-Gtt-0L-B")) countSignalEvent("SR-Gtt-0L-B", sr_map);
     if (PassesCuts_Gtt0L(9, 3, 600., 1700., 120., 300., true, "SR-Gtt-0L-M1")) countSignalEvent("SR-Gtt-0L-M1", sr_map);
     if (PassesCuts_Gtt0L(10, 3, 500., 1100., 120., 200., true, "SR-Gtt-0L-M2")) countSignalEvent("SR-Gtt-0L-M2", sr_map);
     if (PassesCuts_Gtt0L(10, 4, 400.,  800., 180., 100., true, "SR-Gtt-0L-C")) countSignalEvent("SR-Gtt-0L-C", sr_map);
+
+    if (PassesCuts_Gtt0L(5, 3, 250., 2000., 0., -300., false, "SR-Gtt-0L-B")) countControlEvent("VR-Gtt-0L-B", sr_map);
+    if (PassesCuts_Gtt0L(9, 3, 300., 1400., 0., -300., false, "SR-Gtt-0L-M1")) countControlEvent("VR-Gtt-0L-M1", sr_map);
+    if (PassesCuts_Gtt0L(10, 3, 300., 800., 0., -200., false, "SR-Gtt-0L-M2")) countControlEvent("VR-Gtt-0L-M2", sr_map);
+    if (PassesCuts_Gtt0L(10, 4, 200.,  800., 0., -100., false, "SR-Gtt-0L-C")) countControlEvent("VR-Gtt-0L-C", sr_map);
         
     if (PassesCuts_NN(1, 1900, 1400, 0.9987, 0, "SR-NN-Gtt-1900-1400")) countSignalEvent("SR-Gtt-1900-1400", sr_map);    
     if (PassesCuts_NN(1, 1800, 1, 0.9997, 1, "SR-NN-Gtt-1800-1")) countSignalEvent("SR-Gtt-1800-1", sr_map);    
@@ -357,8 +392,10 @@ void Atlas_2211_08028::analyze() {
     if (PassesCuts_NN(0, 2300, 1000, 0.9994, 0, "SR-NN-Gbb-2300-1000") and (dphimin > 0.6)) countSignalEvent("SR-Gbb-2300-1000", sr_map);    
     
     
-
-    if (mT_b < 130.) return;
+    if (mT_b > 80. and PassesCuts_Gbb(4, 3, -500., 30., 1600., false, "VR-Gbb-M")) countControlEvent("VR-Gbb-M", sr_map);
+    if (mT_b > 110. and PassesCuts_Gtb(6, 4, 1500., -550., 200., false, "VR-Gtb-M")) countControlEvent("VR-Gtb-M", sr_map);
+    if (mT_b > 80. and PassesCuts_Gtb(7, 4, 1300., -500.,  50., false, "VR-Gtb-C")) countControlEvent("VR-Gtb-C", sr_map);
+    if (mT_b < 130.) {print_map(sr_map, 1); return;}
     countCutflowEvent("03_mTb>130");
     
     if (PassesCuts_Gtb(4, 3, 2500., 550., 200., true, "SR-Gtb-B")) countSignalEvent("SR-Gtb-B", sr_map);
@@ -368,9 +405,25 @@ void Atlas_2211_08028::analyze() {
     if (PassesCuts_Gbb(4, 3, 550., 65., 2600., true, "SR-Gbb-B")) countSignalEvent("SR-Gbb-B", sr_map);
     if (PassesCuts_Gbb(4, 3, 550., 30., 2000., true, "SR-Gbb-M")) countSignalEvent("SR-Gbb-M", sr_map);
     if (PassesCuts_Gbb(4, 3, 550., 30., 1600., true, "SR-Gbb-C")) countSignalEvent("SR-Gbb-C", sr_map);    
+
+    if (PassesCuts_Gtb(4, 3, -2500., 450., 200., false, "VR-Gtb-B")) countControlEvent("VR-Gtb-B", sr_map);
+
+    if (PassesCuts_Gbb(4, 3, 550., 65., -2400., false, "VR-Gbb-B")) countControlEvent("VR-Gbb-B", sr_map);
+    if (PassesCuts_Gbb(4, 3, -450., 30., 1500., false, "VR-Gbb-C")) countControlEvent("VR-Gbb-C", sr_map);    
     
   }  
+
+
+  if (pass_CRZ ) {
+    signalLeps.clear();
+    pTmiss = pTmiss_hat;
+    PassesCuts_NN(2, 2100, 1600, 0.9993, 0, "CRZ-NN-Gbb-2100-1600");   
+    PassesCuts_NN(2, 2000, 1800, 0.997, 0, "CRZ-NN-Gbb-2000-1800");
+    PassesCuts_NN(2, 2800, 1400, 0.999, 0, "CRZ-NN-Gbb-2800-1400");
+    PassesCuts_NN(2, 2300, 1000, 0.9994, 0, "CRZ-NN-Gbb-2300-1000");
+  }
   
+  print_map(sr_map, 1);
   return;
 }
 
@@ -461,13 +514,13 @@ bool Atlas_2211_08028::PassesCuts_Gtt1L(int Njet, int Nbjet, double met, double 
   if( meff < meff_cut) return false;
   if (cutflow) countCutflowEvent(sr+"_04_meff");
   
-  if( mT_lep < mT_cut) return false;
+  if( mT_lep*std::copysign(1.0, mT_cut) < mT_cut) return false;
   if (cutflow) countCutflowEvent(sr+"_05_mT");  
   
-  if( mT_b < mTb_cut) return false;
+  if( mT_b*std::copysign(1.0, mTb_cut) < mTb_cut) return false;
   if (cutflow) countCutflowEvent(sr+"_06_mTb");    
   
-  if( MJ < MJ_cut) return false;
+  if( MJ*std::copysign(1.0, MJ_cut) < MJ_cut) return false;
   if (cutflow) countCutflowEvent(sr+"_07_MJ");      
   
   return true;
@@ -489,7 +542,7 @@ bool Atlas_2211_08028::PassesCuts_Gtt0L(int Njet, int Nbjet, double met, double 
   if( mT_b < mTb_cut) return false;
   if (cutflow) countCutflowEvent(sr+"_06_mTb");    
   
-  if( MJ < MJ_cut) return false;
+  if( MJ*std::copysign(1.0, MJ_cut) < MJ_cut) return false;
   if (cutflow) countCutflowEvent(sr+"_07_MJ");      
   
   return true;
@@ -505,10 +558,10 @@ bool Atlas_2211_08028::PassesCuts_Gtb(int Njet, int Nbjet, double meff_cut, doub
   if (bjets.size() < Nbjet) return false;
   if (cutflow) countCutflowEvent(sr+"_05_bjets");  
   
-  if( meff < meff_cut) return false;
+  if( meff*std::copysign(1.0, meff_cut) < meff_cut) return false;
   if (cutflow) countCutflowEvent(sr+"_06_meff");  
   
-  if( pTmiss.Pt() < met) return false;
+  if( pTmiss.Pt()*std::copysign(1.0, met) < met) return false;
   if (cutflow) countCutflowEvent(sr+"_07_met");
   
   if( MJ < MJ_cut) return false;
@@ -524,13 +577,13 @@ bool Atlas_2211_08028::PassesCuts_Gbb(int Njet, int Nbjet, double met, double pt
   if (signal_jets.size() < Njet or bjets.size() < Nbjet) return false;
   if (cutflow) countCutflowEvent(sr+"_04_jets");
   
-  if( pTmiss.Pt() < met) return false;
+  if( pTmiss.Pt()*std::copysign(1.0, met) < met) return false;
   if (cutflow) countCutflowEvent(sr+"_05_met");
   
   if( signal_jets[0]->PT < ptj1) return false;
   if (cutflow) countCutflowEvent(sr+"_06_pTj1");    
   
-  if( meff < meff_cut) return false;
+  if( meff*std::copysign(1.0, meff_cut) < meff_cut) return false;
   if (cutflow) countCutflowEvent(sr+"_07_meff");  
   
   return true;
@@ -609,8 +662,8 @@ bool Atlas_2211_08028::PassesCuts_NN(int Gtt, double mgluino, double mneut, doub
   float* output = output_tensors.front().GetTensorMutableData<float>();
   
   std::vector<float> result{output,  output + 8};
-  cout << sr << ": " << *output << "  " << *(output+1) << "  " << *(output+2) << "  " << *(output+6) <<  endl;
-  cout << sr << ": " << result[0] << "  " << result[1] << "  " << result[2] << "  " << result[6]  <<  endl;
+  //cout << sr << ": " << *output << "  " << *(output+1) << "  " << *(output+2) << "  " << *(output+6) <<  endl;
+  //cout << sr << ": " << result[0] << "  " << result[1] << "  " << result[2] << "  " << result[6]  <<  endl;
   
   /*cout << "output_tensor_shape: " << print_shape(output_tensors[0].GetTensorTypeAndShapeInfo().GetShape()) << endl;
   
@@ -622,6 +675,14 @@ bool Atlas_2211_08028::PassesCuts_NN(int Gtt, double mgluino, double mneut, doub
           std::cout << outputInfo.GetShape()[shapeI] << ", ";
   cout << endl;*/
   
+  if ( Gtt == 2) {
+    if ( sr == "CRZ-NN-Gbb-2800-1400" and *(output+1) > 0.6 and log10(*(output+2)) < -1.3 and log10(*(output+6)) > -3.0 ) countControlEvent("CRZ-NN-Gbb-2800-1400", sr_map);
+    if ( sr == "CRZ-NN-Gbb-2300-1000" and *(output+1) > 0.8 and log10(*(output+2)) < -1.3 and log10(*(output+6)) > -2.7 ) countControlEvent("CRZ-NN-Gbb-2300-1000", sr_map);
+    if ( sr == "CRZ-NN-Gbb-2100-1600" and *(output+1) > 0.9 and log10(*(output+2)) < -1.7 and log10(*(output+6)) > -4.9 ) countControlEvent("CRZ-NN-Gbb-2100-1600", sr_map);  
+    if ( sr == "CRZ-NN-Gbb-2000-1800" and *(output+1) > 0.9 and log10(*(output+2)) < -2.2 and log10(*(output+6)) > -3.7 ) countControlEvent("CRZ-NN-Gbb-2000-1800", sr_map);
+    return false;
+  }
+
   countCutflowEvent(sr+"_02_dphi_common");
   
   if (sr == "SR-NN-Gbb-2100-1600") nngbb->Fill(result[1], weight);
@@ -649,12 +710,12 @@ bool Atlas_2211_08028::PassesCuts_NN(int Gtt, double mgluino, double mneut, doub
   if (sr == "SR-NN-Gbb-2000-1800" and *(output+1) > 0.93 and *(output+1) < 0.997 and log10(*(output+6)) < -1.4 and meff > 400. and MJ < 400.) countControlEvent("VR1-NN-Gbb-2000-1800", sr_map);
   if (sr == "SR-NN-Gbb-2000-1800" and *(output+1) > 0.93 and *(output+1) < 0.997 and log10(*(output+6)) > -1.4 ) countControlEvent("VR2-NN-Gbb-2000-1800", sr_map);
 
-  if( Gtt and result[0] > cutoff) {
+  if( Gtt == 1 and result[0] > cutoff) {
     countCutflowEvent(sr+"_03_score");
     return true;
   }
   
-  if( !Gtt and result[1] > cutoff) {
+  if( Gtt == 0 and result[1] > cutoff) {
     countCutflowEvent(sr+"_03_score");
     return true;
   }  
@@ -691,3 +752,19 @@ std::string Atlas_2211_08028::print_shape(const std::vector<int64_t>& v) {
   return ss.str();
 }
 
+void Atlas_2211_08028::print_map(std::map<std::string, double> m, int n) {
+
+  if (n == 0) {
+    std::cout << "# ";
+    for (const auto& it : m)
+      std::cout << it.first << " ";
+    std::cout << std::endl;
+  }
+  if (n == 1) {
+    std::cout << "W " << weight << " " << std::endl;
+    std::cout << "O ";
+    for (const auto& it : m)
+      std::cout << it.second << " ";
+    std::cout << std::endl;
+  }
+}
