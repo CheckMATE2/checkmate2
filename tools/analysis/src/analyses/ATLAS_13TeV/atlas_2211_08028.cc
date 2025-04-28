@@ -16,10 +16,10 @@ void Atlas_2211_08028::initialize() {
   bookSignalRegions("SR-Gtt-0L-B;SR-Gtt-0L-M1;SR-Gtt-0L-M2;SR-Gtt-0L-C;SR-Gtt-1L-B;SR-Gtt-1L-M1;SR-Gtt-1L-M2;SR-Gtt-1L-C;SR-Gbb-B;SR-Gbb-M;SR-Gbb-C;SR-Gtb-B;SR-Gtb-M;SR-Gtb-C;SR-Gtt-2100-1;SR-Gtt-1800-1;SR-Gtt-2300-1200;SR-Gtt-1900-1400;SR-Gbb-2800-1400;SR-Gbb-2300-1000;SR-Gbb-2100-1600;SR-Gbb-2000-1800");
   // You can also book cutflow regions with bookCutflowRegions("CR1;CR2;..."). Note that the regions are
   //  always ordered alphabetically in the cutflow output files.
-  bookControlRegions("VR-Gtt-0L-B;VR-Gtt-0L-M1;VR-Gtt-0L-M2;VR-Gtt-0L-C;VR-Gbb-B;VR-Gbb-M;VR-Gbb-C;VR-Gtb-B;VR-Gtb-M;VR-Gtb-C;VR1-Gtt-1L-B;VR1-Gtt-1L-M1;VR1-Gtt-1L-M2;VR1-Gtt-1L-C;VR2-Gtt-1L-B;VR2-Gtt-1L-M1;VR2-Gtt-1L-M2;VR2-Gtt-1L-C;CR_Gtt_1L_B_cuts;CR_Gtt_1L_M1_cuts;CR_Gtt_1L_M2_cuts;CR_Gtt_1L_C_cuts;CR_Gtt_0L_B_cuts;CR_Gtt_0L_M1_cuts;CR_Gtt_0L_M2_cuts;CR_Gtt_0L_C_cuts;CR_Gbb_B_cuts;CR_Gbb_M_cuts;CR_Gbb_C_cuts;CR_Gtb_B_cuts;CR_Gtb_M_cuts;CR_Gtb_C_cuts;VR-NN-Gtt-2100-1;VR-NN-Gtt-1800-1;VR-NN-Gtt-2300-1200;VR_NN-Gtt-1900-1400;VR1-NN-Gbb-2800-1400;VR1-NN-Gbb-2300-1000;VR1-NN-Gbb-2100-1600;VR1-NN-Gbb-2000-1800;VR2-NN-Gbb-2800-1400;VR2-NN-Gbb-2300-1000;VR2-NN-Gbb-2100-1600;VR2-NN-Gbb-2000-1800;CR-NN-Gtt-2100-1;CR-NN-Gtt-1800-1;CR-NN-Gtt-2300-1200;CR_NN-Gtt-1900-1400;CRZ-NN-Gbb-2800-1400;CRZ-NN-Gbb-2300-1000;CRZ-NN-Gbb-2100-1600;CRZ-NN-Gbb-2000-1800");
+  bookControlRegions("VR-Gtt-0L-B;VR-Gtt-0L-M1;VR-Gtt-0L-M2;VR-Gtt-0L-C;VR-Gbb-B;VR-Gbb-M;VR-Gbb-C;VR-Gtb-B;VR-Gtb-M;VR-Gtb-C;VR1-Gtt-1L-B;VR1-Gtt-1L-M1;VR1-Gtt-1L-M2;VR1-Gtt-1L-C;VR2-Gtt-1L-B;VR2-Gtt-1L-M1;VR2-Gtt-1L-M2;VR2-Gtt-1L-C;CR_Gtt_1L_B_cuts;CR_Gtt_1L_M1_cuts;CR_Gtt_1L_M2_cuts;CR_Gtt_1L_C_cuts;CR_Gtt_0L_B_cuts;CR_Gtt_0L_M1_cuts;CR_Gtt_0L_M2_cuts;CR_Gtt_0L_C_cuts;CR_Gbb_B_cuts;CR_Gbb_M_cuts;CR_Gbb_C_cuts;CR_Gtb_B_cuts;CR_Gtb_M_cuts;CR_Gtb_C_cuts;VR-NN-Gtt-2100-1;VR-NN-Gtt-1800-1;VR-NN-Gtt-2300-1200;VR-NN-Gtt-1900-1400;VR1-NN-Gbb-2800-1400;VR1-NN-Gbb-2300-1000;VR1-NN-Gbb-2100-1600;VR1-NN-Gbb-2000-1800;VR2-NN-Gbb-2800-1400;VR2-NN-Gbb-2300-1000;VR2-NN-Gbb-2100-1600;VR2-NN-Gbb-2000-1800;CR-NN-Gtt-2100-1;CR-NN-Gtt-1800-1;CR-NN-Gtt-2300-1200;CR-NN-Gtt-1900-1400;CR-NN-Gbb-2800-1400;CR-NN-Gbb-2300-1000;CR-NN-Gbb-2100-1600;CR-NN-Gbb-2000-1800;CRZ-NN-Gbb-2800-1400;CRZ-NN-Gbb-2300-1000;CRZ-NN-Gbb-2100-1600;CRZ-NN-Gbb-2000-1800");
 
-  sr_map = {{"SR-Gtt-0L-B", 0},{"SR-Gtt-0L-M1", 0},{"SR-Gtt-0L-M2", 0},{"SR-Gtt-0L-C", 0},{"SR-Gbb-B", 0},{"SR-Gbb-M", 0},{"SR-Gbb-C", 0},    {"SR-Gtb-B", 0},{"SR-Gtb-M", 0},{"SR-Gtb-C", 0},{"SR-Gtt-1L-B", 0},{"SR-Gtt-1L-M1", 0},{"SR-Gtt-1L-M2", 0},{"SR-Gtt-1L-C", 0},{"VR-Gtt-0L-B", 0}, {"VR-Gtt-0L-M1", 0},{"VR-Gtt-0L-M2", 0},{"VR-Gtt-0L-C", 0},{"VR-Gbb-B", 0},{"VR-Gbb-M", 0},{"VR-Gbb-C", 0},{"VR-Gtb-B", 0},{"VR-Gtb-M", 0},{"VR-Gtb-C", 0},{"VR1-Gtt-1L-B", 0},{"VR1-Gtt-1L-M1", 0},{"VR1-Gtt-1L-M2", 0},{"VR1-Gtt-1L-C", 0},{"VR2-Gtt-1L-B", 0},{"VR2-Gtt-1L-M1", 0},{"VR2-Gtt-1L-M2", 0},{"VR2-Gtt-1L-C", 0}, {"CR_Gtt_0L_B_cuts", 0},{"CR_Gtt_0L_M1_cuts", 0},{"CR_Gtt_0L_M2_cuts", 0},{"CR_Gtt_0L_C_cuts", 0},{"CR_Gbb_B_cuts", 0},{"CR_Gbb_M_cuts", 0},{"CR_Gbb_C_cuts", 0},{"CR_Gtb_B_cuts", 0},{"CR_Gtb_M_cuts", 0},{"CR_Gtb_C_cuts", 0},{"CR_Gtt_1L_B_cuts", 0},{"CR_Gtt_1L_M1_cuts", 0},{"CR_Gtt_1L_M2_cuts", 0},{"CR_Gtt_1L_C_cuts", 0},{"SR-NN-Gtt-2100-1", 0},{"SR-NN-Gtt-1800-1", 0},{"SR-NN-Gtt-2300-1200", 0},{"SR_NN-Gtt-1900-1400", 0},{"SR-NN-Gbb-2800-1400", 0},{"SR-NN-Gbb-2300-1000", 0},{"SR-NN-Gbb-2100-1600", 0},{"SR-NN-Gbb-2000-1800", 0},{"VR-NN-Gtt-2100-1", 0},{"VR-NN-Gtt-1800-1", 0},{"VR-NN-Gtt-2300-1200", 0},{"VR_NN-Gtt-1900-1400", 0},{"VR1-NN-Gbb-2800-1400", 0},{"VR1-NN-Gbb-2300-1000", 0},{"VR1-NN-Gbb-2100-1600", 0},{"VR1-NN-Gbb-2000-1800", 0},{"VR2-NN-Gbb-2800-1400", 0},{"VR2-NN-Gbb-2300-1000", 0},{"VR2-NN-Gbb-2100-1600", 0},{"VR2-NN-Gbb-2000-1800", 0},{"CR-NN-Gtt-2100-1", 0},{"CR-NN-Gtt-1800-1", 0},{"CR-NN-Gtt-2300-1200", 0},{"CR_NN-Gtt-1900-1400", 0},{"CRZ-NN-Gbb-2800-1400", 0},{"CRZ-NN-Gbb-2300-1000", 0},{"CRZ-NN-Gbb-2100-1600", 0},{"CRZ-NN-Gbb-2000-1800", 0}};
-  print_map(sr_map, 0);
+  sr_map = {{"SR-Gtt-0L-B", 0},{"SR-Gtt-0L-M1", 0},{"SR-Gtt-0L-M2", 0},{"SR-Gtt-0L-C", 0},{"SR-Gbb-B", 0},{"SR-Gbb-M", 0},{"SR-Gbb-C", 0},    {"SR-Gtb-B", 0},{"SR-Gtb-M", 0},{"SR-Gtb-C", 0},{"SR-Gtt-1L-B", 0},{"SR-Gtt-1L-M1", 0},{"SR-Gtt-1L-M2", 0},{"SR-Gtt-1L-C", 0},{"VR-Gtt-0L-B", 0}, {"VR-Gtt-0L-M1", 0},{"VR-Gtt-0L-M2", 0},{"VR-Gtt-0L-C", 0},{"VR-Gbb-B", 0},{"VR-Gbb-M", 0},{"VR-Gbb-C", 0},{"VR-Gtb-B", 0},{"VR-Gtb-M", 0},{"VR-Gtb-C", 0},{"VR1-Gtt-1L-B", 0},{"VR1-Gtt-1L-M1", 0},{"VR1-Gtt-1L-M2", 0},{"VR1-Gtt-1L-C", 0},{"VR2-Gtt-1L-B", 0},{"VR2-Gtt-1L-M1", 0},{"VR2-Gtt-1L-M2", 0},{"VR2-Gtt-1L-C", 0}, {"CR_Gtt_0L_B_cuts", 0},{"CR_Gtt_0L_M1_cuts", 0},{"CR_Gtt_0L_M2_cuts", 0},{"CR_Gtt_0L_C_cuts", 0},{"CR_Gbb_B_cuts", 0},{"CR_Gbb_M_cuts", 0},{"CR_Gbb_C_cuts", 0},{"CR_Gtb_B_cuts", 0},{"CR_Gtb_M_cuts", 0},{"CR_Gtb_C_cuts", 0},{"CR_Gtt_1L_B_cuts", 0},{"CR_Gtt_1L_M1_cuts", 0},{"CR_Gtt_1L_M2_cuts", 0},{"CR_Gtt_1L_C_cuts", 0},{"SR-Gtt-2100-1", 0},{"SR-Gtt-1800-1", 0},{"SR-Gtt-2300-1200", 0},{"SR-Gtt-1900-1400", 0},{"SR-Gbb-2800-1400", 0},{"SR-Gbb-2300-1000", 0},{"SR-Gbb-2100-1600", 0},{"SR-Gbb-2000-1800", 0},{"VR-NN-Gtt-2100-1", 0},{"VR-NN-Gtt-1800-1", 0},{"VR-NN-Gtt-2300-1200", 0},{"VR-NN-Gtt-1900-1400", 0},{"VR1-NN-Gbb-2800-1400", 0},{"VR1-NN-Gbb-2300-1000", 0},{"VR1-NN-Gbb-2100-1600", 0},{"VR1-NN-Gbb-2000-1800", 0},{"VR2-NN-Gbb-2800-1400", 0},{"VR2-NN-Gbb-2300-1000", 0},{"VR2-NN-Gbb-2100-1600", 0},{"VR2-NN-Gbb-2000-1800", 0},{"CR-NN-Gtt-2100-1", 0},{"CR-NN-Gtt-1800-1", 0},{"CR-NN-Gtt-2300-1200", 0},{"CR-NN-Gtt-1900-1400", 0},{"CR-NN-Gbb-2800-1400", 0},{"CR-NN-Gbb-2300-1000", 0},{"CR-NN-Gbb-2100-1600", 0},{"CR-NN-Gbb-2000-1800", 0},{"CRZ-NN-Gbb-2800-1400", 0},{"CRZ-NN-Gbb-2300-1000", 0},{"CRZ-NN-Gbb-2100-1600", 0},{"CRZ-NN-Gbb-2000-1800", 0}};
+  //
   // You should initialize any declared variables here
 
 #ifdef HAVE_ONNX  
@@ -78,6 +78,10 @@ void Atlas_2211_08028::initialize() {
   const char *rootFileName = fNames[ifile].c_str() ;
   hfile = new TFile(rootFileName, "RECREATE", "Saving Histograms");
 
+  outputFileIndex = bookFile("correlation_2211_08028.txt", true);
+  print_map(sr_map, 0);
+  evNumber = 0;
+
   nngtt = new TH1F("gtt", "NN score", 20, 0., 1.);  
   nngbb = new TH1F("gbb", "NN score", 20, 0., 1.);  
 
@@ -132,18 +136,18 @@ void Atlas_2211_08028::analyze() {
     {"CR_Gtt_1L_M1_cuts", 0},
     {"CR_Gtt_1L_M2_cuts", 0},
     {"CR_Gtt_1L_C_cuts", 0},
-    {"SR-NN-Gtt-2100-1", 0},
-    {"SR-NN-Gtt-1800-1", 0},
-    {"SR-NN-Gtt-2300-1200", 0},
-    {"SR_NN-Gtt-1900-1400", 0},
-    {"SR-NN-Gbb-2800-1400", 0},
-    {"SR-NN-Gbb-2300-1000", 0},
-    {"SR-NN-Gbb-2100-1600", 0},
-    {"SR-NN-Gbb-2000-1800", 0},
+    {"SR-Gtt-2100-1", 0},
+    {"SR-Gtt-1800-1", 0},
+    {"SR-Gtt-2300-1200", 0},
+    {"SR-Gtt-1900-1400", 0},
+    {"SR-Gbb-2800-1400", 0},
+    {"SR-Gbb-2300-1000", 0},
+    {"SR-Gbb-2100-1600", 0},
+    {"SR-Gbb-2000-1800", 0},
     {"VR-NN-Gtt-2100-1", 0},
     {"VR-NN-Gtt-1800-1", 0},
     {"VR-NN-Gtt-2300-1200", 0},
-    {"VR_NN-Gtt-1900-1400", 0},
+    {"VR-NN-Gtt-1900-1400", 0},
     {"VR1-NN-Gbb-2800-1400", 0},
     {"VR1-NN-Gbb-2300-1000", 0},
     {"VR1-NN-Gbb-2100-1600", 0},
@@ -155,12 +159,18 @@ void Atlas_2211_08028::analyze() {
     {"CR-NN-Gtt-2100-1", 0},
     {"CR-NN-Gtt-1800-1", 0},
     {"CR-NN-Gtt-2300-1200", 0},
-    {"CR_NN-Gtt-1900-1400", 0},
+    {"CR-NN-Gtt-1900-1400", 0},
+    {"CR-NN-Gbb-2800-1400", 0},
+    {"CR-NN-Gbb-2300-1000", 0},
+    {"CR-NN-Gbb-2100-1600", 0},
+    {"CR-NN-Gbb-2000-1800", 0},
     {"CRZ-NN-Gbb-2800-1400", 0},
     {"CRZ-NN-Gbb-2300-1000", 0},
     {"CRZ-NN-Gbb-2100-1600", 0},
     {"CRZ-NN-Gbb-2000-1800", 0}
   };
+  //if (evNumber == 0) print_map(sr_map, 0);
+  evNumber++;
   
   signal_jets.clear();
   bjets.clear();
@@ -755,16 +765,16 @@ std::string Atlas_2211_08028::print_shape(const std::vector<int64_t>& v) {
 void Atlas_2211_08028::print_map(std::map<std::string, double> m, int n) {
 
   if (n == 0) {
-    std::cout << "# ";
+    *fStreams[outputFileIndex] << "# ";
     for (const auto& it : m)
-      std::cout << it.first << " ";
-    std::cout << std::endl;
+      *fStreams[outputFileIndex] << it.first << " ";
+    *fStreams[outputFileIndex] << std::endl;
   }
   if (n == 1) {
-    std::cout << "W " << weight << " " << std::endl;
-    std::cout << "O ";
+    *fStreams[outputFileIndex] << "W " << weight << " " << std::endl;
+    *fStreams[outputFileIndex] << "O ";
     for (const auto& it : m)
-      std::cout << it.second << " ";
-    std::cout << std::endl;
+      *fStreams[outputFileIndex] << it.second << " ";
+    *fStreams[outputFileIndex] << std::endl;
   }
 }

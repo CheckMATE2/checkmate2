@@ -34,6 +34,7 @@ class Atlas_2211_08028 : public AnalysisBase {
 #endif    
         
     std::map<std::string, double > sr_map; 
+    int outputFileIndex, evNumber;
     std::vector<Jet*> signal_jets = {};
     std::vector<Jet*> bjets = {};
     std::vector<fastjet::PseudoJet> trimmedJets = {};

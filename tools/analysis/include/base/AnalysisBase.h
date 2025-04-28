@@ -722,21 +722,36 @@ class AnalysisBase {
      *  internally and consider it for the final output.
      *  \param region The name of the region the event shoud be counted for. This region should be booked using bookSignalRegions().
      */
-    inline void countSignalEvent(std::string region, std::map<std::string, double > map = {}) {      
+    inline void countSignalEvent(std::string region) {      
+      signalRegions[region] += weight;
+      signalRegions2[region] += weight*weight;
+
+    }
+    inline void countSignalEvent(std::string region, std::map<std::string, double >& map ) {      
       signalRegions[region] += weight;
       signalRegions2[region] += weight*weight;
       if (!map.empty()) {
-        map[region] = weight;
+        if (map.find(region) == map.end()) {
+          cout << "Warning: Region " << region << " not found in map. Adding it now." << endl;
+        }
+        map[region] = 1;
       }
     }
     //! Function to count a given event for a control region. \sa countSignalEvent
-    inline void countControlEvent(std::string region, std::map<std::string, double > map = {}) {      
+    inline void countControlEvent(std::string region) {      
+      controlRegions[region] += weight;
+      controlRegions2[region] += weight*weight;
+    }
+    inline void countControlEvent(std::string region, std::map<std::string, double >& map ) {      
       controlRegions[region] += weight;
       controlRegions2[region] += weight*weight;
       if (!map.empty()) {
-        map[region] = weight;
+        if (map.find(region) == map.end()) {
+          cout << "Warning: Region " << region << " not found in map. Adding it now." << endl;
+        }
+        map[region] = 1;
       }
-    }
+    }    
     //! Function to count a given event for a cutflow region. \sa countSignalEvent
     inline void countCutflowEvent(std::string region) {
       cutflowRegions[region] += weight;
