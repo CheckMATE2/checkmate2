@@ -296,7 +296,8 @@ void Atlas_2411_02040::analyze() {
   float etaH1 = (sigjets[pairs[0]]->P4() + sigjets[pairs[1]]->P4()).Eta();
   float etaH2 = (sigjets[pairs[2]]->P4() + sigjets[pairs[3]]->P4()).Eta();
   float etaH3 = (sigjets[pairs[4]]->P4() + sigjets[pairs[5]]->P4()).Eta();
-  float RMSetaH = getRMS({etaH1, etaH2, etaH3});
+  //float RMSetaH = getRMS({etaH1, etaH2, etaH3});
+  float RMSetaH = getRMS({sigjets[pairs[0]]->Eta, sigjets[pairs[1]]->Eta, sigjets[pairs[2]]->Eta, sigjets[pairs[3]]->Eta, sigjets[pairs[4]]->Eta, sigjets[pairs[5]]->Eta});
 
   float massH1 = (sigjets[pairs[0]]->P4() + sigjets[pairs[1]]->P4()).M();
   float massH2 = (sigjets[pairs[2]]->P4() + sigjets[pairs[3]]->P4()).M();
@@ -323,9 +324,22 @@ void Atlas_2411_02040::analyze() {
   float RMSdeltaAjj = getSkewness(deltaAjjs);
   float eta_mHHH_frac = sumpTcosh/std::pow(massHHH, 2);
 
-  std::vector<float> spheraplan_6j = Aplan_spher(sigjets, 1);
+  TLorentzVector hhh = {0., 0., 0., 0.};
+  for (int i = 0; i < 6; i++) 
+    hhh += sigjets[i]->P4();
+
+  std::vector<TLorentzVector> signal_boosted;
+  for (int i = 0; i < 6; i++) {
+    TLorentzVector temp = sigjets[i]->P4();
+    temp.Boost(-hhh.BoostVector());
+    signal_boosted.push_back(temp);
+  }
+
+  //std::vector<float> spheraplan_6j = Aplan_spher(sigjets, 1);
+  std::vector<float> spheraplan_6j = Aplan_spher_P4(signal_boosted, 1);
   std::vector<float> spheraplan_allj = Aplan_spher(jets, 1);
-  std::vector<float> transpher_6j = Aplan_spher(sigjets, 2);
+  //std::vector<float> transpher_6j = Aplan_spher(sigjets, 2);
+  std::vector<float> transpher_6j = Aplan_spher_P4(signal_boosted, 2);
 
   float Aplanarity_6j = spheraplan_6j[0];
   float Sphericity_6j = spheraplan_6j[1];
@@ -406,6 +420,43 @@ bool Atlas_2411_02040::check_nTrack_jet(Jet* jet, std::vector<Track*> tracks, in
       if (jet->Particles.At(part) == (*it)->Particle && (*it)->PT > 0.5) nTracks++;
 
     return nTracks > nTracksMin;
+}
+
+std::vector<float> Atlas_2411_02040::Aplan_spher_P4(std::vector<TLorentzVector> input_jets, int r) {
+
+  float mag = 0.;
+  for (int k = 0; k < input_jets.size(); k++)
+    mag += pow(input_jets[k].Rho(), r);
+
+  TMatrixD st(TMatrixD::kZero, TMatrixD(3,3) );
+  for (int k = 0; k < input_jets.size(); k++) {
+    float weight = std::pow(input_jets[k].Rho(), r - 2);
+    st(0,0) += input_jets[k].X()*input_jets[k].X()*weight;
+    st(0,1) += input_jets[k].X()*input_jets[k].Y()*weight;
+    st(0,2) += input_jets[k].X()*input_jets[k].Z()*weight;
+    st(1,1) += input_jets[k].Y()*input_jets[k].Y()*weight;
+    st(1,2) += input_jets[k].Y()*input_jets[k].Z()*weight;
+    st(2,2) += input_jets[k].Z()*input_jets[k].Z()*weight;
+  }
+  st(1,0) = st(0,1);
+  st(2,0) = st(0,2);
+  st(2,1) = st(1,2);
+
+  st *= 1./mag;
+  //cout << "st matrix for r: "<< r << endl;
+  //cout << "mag: " << mag << endl;
+  //cout << st(0,0) << "  " << st(0,1) << "  " << st(0,2) << "  " << st(1,1) << "  " << st(1,2) << "  " << st(2,2) << endl;
+  TMatrixDEigen eigen(st);
+  TMatrixD diag = eigen.GetEigenValues();
+
+  std::vector<float> lambdas;
+  lambdas.push_back( diag(0,0) );
+  lambdas.push_back( diag(1,1) );
+  lambdas.push_back( diag(2,2) );
+  std::sort (lambdas.begin(), lambdas.end());
+  //cout << lambdas[0] << "  " << lambdas[1] << "  " << lambdas[2] << endl;
+
+  return {1.5*lambdas[0], 1.5*(lambdas[0] + lambdas[1]), 2.*lambdas[1]/(lambdas[1] + lambdas[2])};
 }
 
 std::vector<float> Atlas_2411_02040::Aplan_spher(std::vector<Jet*> input_jets, int r) {

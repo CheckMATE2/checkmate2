@@ -40,6 +40,7 @@ class Atlas_2411_02040 : public AnalysisBase {
     bool check_nTrack_jet(Jet* jet, std::vector<Track*> tracks, int nTracksMin);
     std::vector<Jet*> overlapRemoval_muon_jet_tracks(std::vector<Jet*> cand_jets, std::vector<Muon*> cand_muons, double deltaR, int nTracks);
     std::vector<float> Aplan_spher(std::vector<Jet*> input_jets, int r);
+    std::vector<float> Aplan_spher_P4(std::vector<TLorentzVector> input_jets, int r);
     float getRMS(std::vector<float> input);
     float getSkewness(std::vector<float> input);
     float getNN(std::vector<float> input, std::string name);
