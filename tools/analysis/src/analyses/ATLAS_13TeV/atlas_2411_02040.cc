@@ -99,7 +99,7 @@ void Atlas_2411_02040::initialize() {
   hist_rmsdeltarjjrivet = new TH1F("RMSdeltaRjj_rivet", "RMSdeltaRjj", 20, 0., 2.);
   hist_rmsmjj = new TH1F("RMSmjj", "RMSmjj", 20, 0., 400.);
   hist_rmsetah = new TH1F("RMSetaH", "RMSetaH", 20, 0., 2.);
-  hist_rmsdeltaajj = new TH1F("RMSdeltaAjj", "RMSdeltaAjj", 20, -2., 4.);
+  hist_rmsdeltaajj = new TH1F("RMSdeltaAjj", "RMSdeltaAjj", 15, -1.2, 3.3);
   hist_rmsdeltaajjrivet = new TH1F("RMSdeltaAjj_rivetBin", "RMSdeltaAjj_rivetBin", 22, -1., 3.5);
   hist_deltarh1 = new TH1F("deltaRH1", "deltaRH1", 25, 0., 5.);
   hist_deltarh2 = new TH1F("deltaRH2", "deltaRH2", 25, 0., 5.);
