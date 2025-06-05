@@ -93,8 +93,8 @@ AC_DEFUN([DOWNLOADS],
       then
       mkdir "$srcdir/data/atlas_1911_06660/Likelihoods"
     fi    
-    `tar -xvzf "$srcdir/data/atlas_1911_06660/likelihoods_1911_06660.tar.gz" "$srcdir/data/atlas_1911_06660/Region-combined"`
-    `mv "$srcdir/data/atlas_1911_06660/Region-combined/" "$srcdir/data/atlas_1911_06660/Likelihoods/"`
+    `tar -xvzf "$srcdir/data/atlas_1911_06660/likelihoods_1911_06660.tar.gz" -C "$srcdir/data/atlas_1911_06660/Likelihoods"`
+    #`mv "$srcdir/data/atlas_1911_06660/Region-combined/" "$srcdir/data/atlas_1911_06660/Likelihoods/"`
   fi  
   # BDT weights for atlas_2209_13935
   if ! test -f "$srcdir/data/atlas_2209_13935/SimpleAnalysisFiles.tar.gz"

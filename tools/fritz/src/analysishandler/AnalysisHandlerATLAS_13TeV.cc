@@ -813,13 +813,27 @@ double AnalysisHandlerATLAS_13TeV::tauBkgEffMultiTight(double pt,
 double AnalysisHandlerATLAS_13TeV::bSigEff(double pt,
                                      double eta,
                                      double eff) {
+    //bypass
+    //arXiv:2211.16345, fig 19a
+    if (eff > 0.999) return 1.;
+    else return eff/0.77 * ((pt > 20.) * (pt < 30.) * 0.67 +
+           (pt > 30.) * (pt < 40.) * 0.735 +
+           (pt > 40.) * (pt < 60.) * 0.776 +
+           (pt > 60.) * (pt < 85.) * 0.797 +
+           (pt > 85.) * (pt < 110.) * 0.808 +
+            (pt > 110.) * (pt < 140.) * 0.813 +
+           (pt > 140.) * (pt < 170.) * 0.813 +
+           (pt > 170.) * (pt < 210.) * 0.809 +
+           (pt > 210.)  * 0.8 );    
+    
+    /* old
     const double y0 = 0.5523;
     const double x0 = 47.6071;
     const double A = 0.2102;
     const double k = 0.1258;
     const double r = 308.197;
     return 1.1*eff/0.82*(y0+A*1./(1.+exp(-k*(pt-x0))))*(0.7+0.05*exp(-pt/r))/0.75*
-           ((pt>100)*(1.+(pt-100.)*(-0.0007))+(pt<=100)*1);
+           ((pt>100)*(1.+(pt-100.)*(-0.0007))+(pt<=100)*1);*/
 }
 
 //! Scaling behavior of the efficiency to tag a c-jet as a b-jet with

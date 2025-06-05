@@ -1,7 +1,10 @@
+import os
+#os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+import jax
+#jax.config.update('jax_default_device',jax.devices('cpu')[0])
 import spey, spey_pyhf
 import json, pyhf
 import numpy as np
-import os
 from info import Info
 from advprint import AdvPrint
 import multibin_limit as mb
@@ -51,14 +54,18 @@ def calc_point( path, analysis, mbsr ):
     #print(Info.parameters["backend"])
     if Info.parameters["backend"] == "":
         try:
-            pyhf.set_backend("pytorch") # if backend unspecified try pytorch
+            pyhf.set_backend("jax") # if backend unspecified try jax
         except ImportBackendError:
             pass
-    if Info.parameters["backend"] == "pytorch" and pyhf.tensorlib.name != "pytorch":
+    elif Info.parameters["backend"] == "pytorch" and pyhf.tensorlib.name != "pytorch":
         pyhf.set_backend("pytorch")
-    if Info.parameters["backend"] == "tensorflow" and "tensorflow" in spey_pyhf.manager.available_backends and pyhf.tensorlib.name != "tensorflow":
+    elif Info.parameters["backend"] == "jax" and pyhf.tensorlib.name != "jax":
+        pyhf.set_backend("jax")    
+    elif Info.parameters["backend"] == "tensorflow" and "tensorflow" in spey_pyhf.manager.available_backends and pyhf.tensorlib.name != "tensorflow":
         pyhf.set_backend("tensorflow")
         pyhf.set_backend("tensorflow")
+    elif Info.parameters["backend"] == "numpy":
+        pyhf.set_backend("numpy")
     print("Pyhf backend: "+pyhf.tensorlib.name)
 
     stat_wrapper = spey.get_backend ("pyhf")
