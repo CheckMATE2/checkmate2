@@ -26,7 +26,8 @@ def calc_point( path, analysis, mbsr ):
             names = mbfull.SR_dict.keys()
             SRs = mbfull.data_from_CMresults(path)
             o, b, db, s, ds = mbfull.select_MBsr(names, SRs)
-            if max(s) > 0.:
+            r = [x - 1.64*y for x, y in zip(s,ds)] #s - 1.64 ds
+            if max(s) > 0. and max(r) > 0.:
                 zeroev = False
             if mbhist == "2J_bveto":
                 patchset = mbfull.create_patchset(path, names, s, ds, systematics = 0)
@@ -41,8 +42,12 @@ def calc_point( path, analysis, mbsr ):
         names = mbfull.SR_dict.keys()
         SRs = mbfull.data_from_CMresults(path)
         o, b, db, s, ds = mbfull.select_MBsr(names, SRs)
-        if max(s) == 0.:
+        r = [x - 1.64*y for x, y in zip(s,ds)] #s - 1.64 ds
+        if max(s) == 0. or max(r) <= 0.:
             AdvPrint.cout("No signal events in the selected SRs! Skipping")
+            return 10., 10., 1., 1.
+        if max(r) <= 0.:
+            AdvPrint.cout("Signal events below MC uncertainty in the selected SRs! Skipping")
             return 10., 10., 1., 1.
         patchset = mbfull.create_patchset(path, names, s, ds, systematics = 0)
     
@@ -124,6 +129,13 @@ def calc_cov(path, analysis, mbsr):
     mb_signal_regions = Info.get_analysis_parameters(analysis)["mb_signal_regions"]
     sr_list = mb_signal_regions[mbsr]
     o, b, db, s, ds = mb.select_MBsr(sr_list, mb.data_from_CMresults(Info.paths['output'])) #prepare data
+    r = [x - 1.64*y for x, y in zip(s,ds)] #s - 1.64 ds
+    if max(s) == 0. or max(r) <= 0.:
+        AdvPrint.cout("No signal events in the selected SRs! Skipping")
+        return inv_r, inv_r_exp, 1-cls_obs, cls_exp, None    
+    if max(r) <= 0.:
+        AdvPrint.cout("Signal events below MC uncertainty in the selected SRs! Skipping")
+        return inv_r, inv_r_exp, 1-cls_obs, cls_exp, None    
     stat_wrapper = spey.get_backend ("default_pdf.correlated_background")
     
     cov_mat = mb.get_cov(analysis, db, Info.flags["corr"], mbsr)

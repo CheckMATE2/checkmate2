@@ -416,7 +416,7 @@ class Info(dict):
                 elif optional_parameter == "expected":
                     args.expected = Config.getboolean("Parameters", "expected")         
                 elif optional_parameter == "cls":
-                    args.mbcls = Config.getboolean("Parameters", "mbcls")                   
+                    args.mbcls = Config.getboolean("Parameters", "cls")                   
                 elif optional_parameter == "uplim":
                     args.uplim = Config.getboolean("Parameters", "uplim")
                 elif optional_parameter == "srcombination":

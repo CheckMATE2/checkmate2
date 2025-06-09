@@ -319,6 +319,21 @@ def calc_point(path, names, analysis, mbsr, systematics = 0, lumi = 0.017, ntoys
     exp_limits = [10.,10.,10.,10.,10.]
     cls_obs = 1.
     cls_exp = [1.,1.,1.,1.,1.]
+    if Info.parameters["backend"] == "":
+        try:
+            pyhf.set_backend("numpy") # if backend unspecified set numpy as default
+        except ImportBackendError:
+            pass
+    elif Info.parameters["backend"] == "pytorch" and pyhf.tensorlib.name != "pytorch":
+        pyhf.set_backend("pytorch")
+    elif Info.parameters["backend"] == "jax" and pyhf.tensorlib.name != "jax":
+        pyhf.set_backend("jax")    
+    elif Info.parameters["backend"] == "tensorflow" and "tensorflow" in spey_pyhf.manager.available_backends and pyhf.tensorlib.name != "tensorflow":
+        pyhf.set_backend("tensorflow")
+        pyhf.set_backend("tensorflow")
+    elif Info.parameters["backend"] == "numpy":
+        pyhf.set_backend("numpy")
+    print("Pyhf backend: "+pyhf.tensorlib.name)
     string = "================================\n Analysis: "+analysis+" , SR: "+mbsr+"\n"
     string += f"Limits with simplified likelihood (pyhf):\n"
     SRs = data_from_CMresults(path)
