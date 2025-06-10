@@ -319,19 +319,9 @@ def calc_point(path, names, analysis, mbsr, systematics = 0, lumi = 0.017, ntoys
     exp_limits = [10.,10.,10.,10.,10.]
     cls_obs = 1.
     cls_exp = [1.,1.,1.,1.,1.]
-    if Info.parameters["backend"] == "":
-        try:
-            pyhf.set_backend("numpy") # if backend unspecified set numpy as default
-        except ImportBackendError:
-            pass
-    elif Info.parameters["backend"] == "pytorch" and pyhf.tensorlib.name != "pytorch":
-        pyhf.set_backend("pytorch")
-    elif Info.parameters["backend"] == "jax" and pyhf.tensorlib.name != "jax":
+    if Info.parameters["backend"] == "jax" and pyhf.tensorlib.name != "jax":
         pyhf.set_backend("jax")    
-    elif Info.parameters["backend"] == "tensorflow" and "tensorflow" in spey_pyhf.manager.available_backends and pyhf.tensorlib.name != "tensorflow":
-        pyhf.set_backend("tensorflow")
-        pyhf.set_backend("tensorflow")
-    elif Info.parameters["backend"] == "numpy":
+    else:
         pyhf.set_backend("numpy")
     print("Pyhf backend: "+pyhf.tensorlib.name)
     string = "================================\n Analysis: "+analysis+" , SR: "+mbsr+"\n"
@@ -342,8 +332,8 @@ def calc_point(path, names, analysis, mbsr, systematics = 0, lumi = 0.017, ntoys
     if Info.flags["mbcls"]:
         AdvPrint.cout("Observed:")
         cls_obs, cls_exp = hypotest(workspace, ntoys)
-        AdvPrint.cout("CL95: "+str(cls_obs) )
-        string += f"Observed CLs for mu = 1: {cls_obs}"+'\n'
+        AdvPrint.cout("CL95: "+str(float(cls_obs)) )
+        string += f"Observed CLs for mu = 1: {float(cls_obs)}"+'\n'
         if Info.flags["expected"]:
             string = string+f"Expected CLs band for mu = 1: {[exp.tolist() for exp in cls_exp]}"+'\n'
     if Info.flags["uplim"]:
@@ -361,7 +351,7 @@ def calc_point(path, names, analysis, mbsr, systematics = 0, lumi = 0.017, ntoys
     with open(path+'/multibin_limits/'+"results.dat", "a") as write_file:
         write_file.write(string)
         #print(string,file=write_file)
-    return obs_limit, exp_limits[2], cls_obs, cls_exp
+    return float(obs_limit), float(exp_limits[2]), float(cls_obs), cls_exp
 
 
 
