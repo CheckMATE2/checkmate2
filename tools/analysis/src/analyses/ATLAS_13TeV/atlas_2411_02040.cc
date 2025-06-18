@@ -15,7 +15,9 @@ void Atlas_2411_02040::initialize() {
     "# triple Higgs search in the 6b final state with NN\n"
   "");
   setLuminosity(126.0*units::INVFB);      
-  bookSignalRegions("Inc_6b;Nonres;Res;Heavy;CR_5b");
+  //bookSignalRegions("Inc_6b;Nonres;Res;Heavy;CR_5b");
+  bookSignalRegions("nonresDNN-SR-bin00;nonresDNN-SR-bin01;nonresDNN-SR-bin02;nonresDNN-SR-bin03;nonresDNN-SR-bin04;nonresDNN-SR-bin05;nonresDNN-SR-bin06;nonresDNN-SR-bin07;nonresDNN-SR-bin08;nonresDNN-SR-bin09;nonresDNN-SR-bin10;nonresDNN-SR-bin11;nonresDNN-SR-bin12;nonresDNN-SR-bin13;nonresDNN-SR-bin14;nonresDNN-SR-bin15;nonresDNN-SR-bin16;nonresDNN-SR-bin17;nonresDNN-SR-bin18;resDNN-SR-bin00;resDNN-SR-bin01;resDNN-SR-bin02;resDNN-SR-bin03;resDNN-SR-bin04;resDNN-SR-bin05;resDNN-SR-bin06;resDNN-SR-bin07;resDNN-SR-bin08;resDNN-SR-bin09;resDNN-SR-bin10;resDNN-SR-bin11;resDNN-SR-bin12;resDNN-SR-bin13;resDNN-SR-bin14;resDNN-SR-bin15;resDNN-SR-bin16;resDNN-SR-bin17;resDNN-SR-bin18;heavyresDNN-SR-bin00;heavyresDNN-SR-bin01;heavyresDNN-SR-bin02;heavyresDNN-SR-bin03;heavyresDNN-SR-bin04;heavyresDNN-SR-bin05;heavyresDNN-SR-bin06;heavyresDNN-SR-bin07;heavyresDNN-SR-bin08;heavyresDNN-SR-bin09;heavyresDNN-SR-bin10;heavyresDNN-SR-bin11;heavyresDNN-SR-bin12;heavyresDNN-SR-bin13;heavyresDNN-SR-bin14;heavyresDNN-SR-bin15;heavyresDNN-SR-bin16;heavyresDNN-SR-bin17");
+  bookControlRegions("nonresDNN-CR-bin00;nonresDNN-CR-bin01;nonresDNN-CR-bin02;nonresDNN-CR-bin03;nonresDNN-CR-bin04;nonresDNN-CR-bin05;nonresDNN-CR-bin06;nonresDNN-CR-bin07;nonresDNN-CR-bin08;nonresDNN-CR-bin09;nonresDNN-CR-bin10;nonresDNN-CR-bin11;nonresDNN-CR-bin12;nonresDNN-CR-bin13;nonresDNN-CR-bin14;nonresDNN-CR-bin15;nonresDNN-CR-bin16;nonresDNN-CR-bin17;nonresDNN-CR-bin18;resDNN-CR-bin00;resDNN-CR-bin01;resDNN-CR-bin02;resDNN-CR-bin03;resDNN-CR-bin04;resDNN-CR-bin05;resDNN-CR-bin06;resDNN-CR-bin07;resDNN-CR-bin08;resDNN-CR-bin09;resDNN-CR-bin10;resDNN-CR-bin11;resDNN-CR-bin12;resDNN-CR-bin13;resDNN-CR-bin14;resDNN-CR-bin15;resDNN-CR-bin16;resDNN-CR-bin17;resDNN-CR-bin18;heavyresDNN-CR-bin00;heavyresDNN-CR-bin01;heavyresDNN-CR-bin02;heavyresDNN-CR-bin03;heavyresDNN-CR-bin04;heavyresDNN-CR-bin05;heavyresDNN-CR-bin06;heavyresDNN-CR-bin07;heavyresDNN-CR-bin08;heavyresDNN-CR-bin09;heavyresDNN-CR-bin10;heavyresDNN-CR-bin11;heavyresDNN-CR-bin12;heavyresDNN-CR-bin13;heavyresDNN-CR-bin14;heavyresDNN-CR-bin15;heavyresDNN-CR-bin16;heavyresDNN-CR-bin17");  
   // You can also book cutflow regions with bookCutflowRegions("CR1;CR2;..."). Note that the regions are
   //  always ordered alphabetically in the cutflow output files.
 
@@ -206,9 +208,9 @@ void Atlas_2411_02040::analyze() {
   else if (bjets.size() == 5) {
     bjets5 = true; countCutflowEvent("05_5b");
     sigjets = bjets;
-    countSignalEvent("CR_5b");
-    //sigjets.push_back(nonbjets[0]);
-    return;
+    //countSignalEvent("CR_5b");
+    sigjets.push_back(nonbjets[0]);
+    std::sort(sigjets.begin(), sigjets.end(), sortByPT ); 
   }
   else {
     bjets6 = true; 
@@ -350,29 +352,151 @@ void Atlas_2411_02040::analyze() {
   float nonresDNN_Score = getNN({mHradius, RMSmjj, RMSdeltaRjj, deltaRH1, RMSetaH, massH1, deltaRH2, deltaRH3, Aplanarity_6j, Transverse_Sphericity_6j},"nonres");
   float heavyresDNN_Score = getNN({mHradius, RMSdeltaRjj, RMSmjj, deltaRH1, deltaRH2, deltaRH3, massH1, RMSetaH, Aplanarity_6j, Sphericity_allj},"heavyres");
 
-  hist_mhradius->Fill(mHradius, weight);
-  hist_rmsdeltarjj->Fill(RMSdeltaRjj, weight);
-  hist_rmsdeltarjjrivet->Fill(RMSdeltaRjj, weight);
-  hist_rmsmjj->Fill(RMSmjj, weight);
-  hist_rmsetah->Fill(RMSetaH, weight);
-  hist_rmsdeltaajj->Fill(RMSdeltaAjj, weight);
-  hist_rmsdeltaajjrivet->Fill(RMSdeltaAjj, weight);
-  hist_deltarh1->Fill(deltaRH1, weight);
-  hist_deltarh2->Fill(deltaRH2, weight);
-  hist_deltarh3->Fill(deltaRH3, weight);
-  hist_massh1->Fill(massH1, weight);
-  hist_massh1rivet->Fill(massH1, weight);
-  hist_ht6j->Fill(HT6j, weight);
-  hist_ht6jrivet->Fill(HT6j, weight);
-  hist_etamhhhfrac->Fill(eta_mHHH_frac, weight);
-  hist_costheta->Fill(cosTheta, weight);
-  hist_aplanarity6j->Fill(Aplanarity_6j, weight);
-  hist_sphericityallj->Fill(Sphericity_allj, weight);
-  hist_sphericity6j->Fill(Sphericity_6j, weight);
-  hist_transvsphericty6j->Fill(Transverse_Sphericity_6j);
-  hist_resdnnscore->Fill(resDNN_Score, weight);
-  hist_nonresdnnscore->Fill(nonresDNN_Score, weight);
-  hist_heavyresdnnscore->Fill(heavyresDNN_Score, weight);
+  if (bjets6) {
+    hist_mhradius->Fill(mHradius, weight);
+    hist_rmsdeltarjj->Fill(RMSdeltaRjj, weight);
+    hist_rmsdeltarjjrivet->Fill(RMSdeltaRjj, weight);
+    hist_rmsmjj->Fill(RMSmjj, weight);
+    hist_rmsetah->Fill(RMSetaH, weight);
+    hist_rmsdeltaajj->Fill(RMSdeltaAjj, weight);
+    hist_rmsdeltaajjrivet->Fill(RMSdeltaAjj, weight);
+    hist_deltarh1->Fill(deltaRH1, weight);
+    hist_deltarh2->Fill(deltaRH2, weight);
+    hist_deltarh3->Fill(deltaRH3, weight);
+    hist_massh1->Fill(massH1, weight);
+    hist_massh1rivet->Fill(massH1, weight);
+    hist_ht6j->Fill(HT6j, weight);
+    hist_ht6jrivet->Fill(HT6j, weight);
+    hist_etamhhhfrac->Fill(eta_mHHH_frac, weight);
+    hist_costheta->Fill(cosTheta, weight);
+    hist_aplanarity6j->Fill(Aplanarity_6j, weight);
+    hist_sphericityallj->Fill(Sphericity_allj, weight);
+    hist_sphericity6j->Fill(Sphericity_6j, weight);
+    hist_transvsphericty6j->Fill(Transverse_Sphericity_6j);
+    hist_resdnnscore->Fill(resDNN_Score, weight);
+    hist_nonresdnnscore->Fill(nonresDNN_Score, weight);
+    hist_heavyresdnnscore->Fill(heavyresDNN_Score, weight);
+
+    if (nonresDNN_Score > 0.1 and nonresDNN_Score < 0.15) countSignalEvent("nonresDNN-SR-bin00"); 
+    else if (nonresDNN_Score > 0.15 and nonresDNN_Score < 0.2) countSignalEvent("nonresDNN-SR-bin01"); 
+    else if (nonresDNN_Score > 0.2 and nonresDNN_Score < 0.25) countSignalEvent("nonresDNN-SR-bin02"); 
+    else if (nonresDNN_Score > 0.25 and nonresDNN_Score < 0.3) countSignalEvent("nonresDNN-SR-bin03"); 
+    else if (nonresDNN_Score > 0.3 and nonresDNN_Score < 0.35) countSignalEvent("nonresDNN-SR-bin04"); 
+    else if (nonresDNN_Score > 0.35 and nonresDNN_Score < 0.4) countSignalEvent("nonresDNN-SR-bin05"); 
+    else if (nonresDNN_Score > 0.4 and nonresDNN_Score < 0.45) countSignalEvent("nonresDNN-SR-bin06"); 
+    else if (nonresDNN_Score > 0.45 and nonresDNN_Score < 0.5) countSignalEvent("nonresDNN-SR-bin07"); 
+    else if (nonresDNN_Score > 0.5 and nonresDNN_Score < 0.55) countSignalEvent("nonresDNN-SR-bin08"); 
+    else if (nonresDNN_Score > 0.55 and nonresDNN_Score < 0.6) countSignalEvent("nonresDNN-SR-bin09");
+    else if (nonresDNN_Score > 0.6 and nonresDNN_Score < 0.65) countSignalEvent("nonresDNN-SR-bin10");
+    else if (nonresDNN_Score > 0.65 and nonresDNN_Score < 0.7) countSignalEvent("nonresDNN-SR-bin11");
+    else if (nonresDNN_Score > 0.7 and nonresDNN_Score < 0.75) countSignalEvent("nonresDNN-SR-bin12");
+    else if (nonresDNN_Score > 0.75 and nonresDNN_Score < 0.8) countSignalEvent("nonresDNN-SR-bin13");
+    else if (nonresDNN_Score > 0.8 and nonresDNN_Score < 0.85) countSignalEvent("nonresDNN-SR-bin14");
+    else if (nonresDNN_Score > 0.85 and nonresDNN_Score < 0.9) countSignalEvent("nonresDNN-SR-bin15");
+    else if (nonresDNN_Score > 0.9 and nonresDNN_Score < 0.95) countSignalEvent("nonresDNN-SR-bin16");
+    else if (nonresDNN_Score > 0.95 and nonresDNN_Score < 0.975) countSignalEvent("nonresDNN-SR-bin17");
+    else if (nonresDNN_Score > 0.975 and nonresDNN_Score < 1.) countSignalEvent("nonresDNN-SR-bin18");
+
+    if (resDNN_Score > 0.05 and nonresDNN_Score < 0.1) countSignalEvent("resDNN-SR-bin00");
+    else if (resDNN_Score > 0.1 and nonresDNN_Score < 0.15) countSignalEvent("resDNN-SR-bin01");
+    else if (resDNN_Score > 0.15 and nonresDNN_Score < 0.2) countSignalEvent("resDNN-SR-bin02");
+    else if (resDNN_Score > 0.2 and nonresDNN_Score < 0.25) countSignalEvent("resDNN-SR-bin03");
+    else if (resDNN_Score > 0.25 and nonresDNN_Score < 0.3) countSignalEvent("resDNN-SR-bin04");
+    else if (resDNN_Score > 0.3 and nonresDNN_Score < 0.35) countSignalEvent("resDNN-SR-bin05");
+    else if (resDNN_Score > 0.35 and nonresDNN_Score < 0.4) countSignalEvent("resDNN-SR-bin06");
+    else if (resDNN_Score > 0.4 and nonresDNN_Score < 0.45) countSignalEvent("resDNN-SR-bin07");
+    else if (resDNN_Score > 0.45 and nonresDNN_Score < 0.5) countSignalEvent("resDNN-SR-bin08");
+    else if (resDNN_Score > 0.5 and nonresDNN_Score < 0.55) countSignalEvent("resDNN-SR-bin09");
+    else if (resDNN_Score > 0.55 and nonresDNN_Score < 0.6) countSignalEvent("resDNN-SR-bin10");
+    else if (resDNN_Score > 0.6 and nonresDNN_Score < 0.65) countSignalEvent("resDNN-SR-bin11");
+    else if (resDNN_Score > 0.65 and nonresDNN_Score < 0.7) countSignalEvent("resDNN-SR-bin12");
+    else if (resDNN_Score > 0.7 and nonresDNN_Score < 0.75) countSignalEvent("resDNN-SR-bin13");
+    else if (resDNN_Score > 0.75 and nonresDNN_Score < 0.8) countSignalEvent("resDNN-SR-bin14");
+    else if (resDNN_Score > 0.8 and nonresDNN_Score < 0.85) countSignalEvent("resDNN-SR-bin15");
+    else if (resDNN_Score > 0.85 and nonresDNN_Score < 0.9) countSignalEvent("resDNN-SR-bin16");
+    else if (resDNN_Score > 0.9 and nonresDNN_Score < 0.95) countSignalEvent("resDNN-SR-bin17");
+    else if (resDNN_Score > 0.95 ) countSignalEvent("resDNN-SR-bin18");
+    
+    if (heavyresDNN_Score > 0.1 and nonresDNN_Score < 0.15) countSignalEvent("heavyresDNN-SR-bin00");
+    else if (heavyresDNN_Score > 0.15 and nonresDNN_Score < 0.2) countSignalEvent("heavyresDNN-SR-bin01");
+    else if (heavyresDNN_Score > 0.2 and nonresDNN_Score < 0.25) countSignalEvent("heavyresDNN-SR-bin02");
+    else if (heavyresDNN_Score > 0.25 and nonresDNN_Score < 0.3) countSignalEvent("heavyresDNN-SR-bin03");
+    else if (heavyresDNN_Score > 0.3 and nonresDNN_Score < 0.35) countSignalEvent("heavyresDNN-SR-bin04");
+    else if (heavyresDNN_Score > 0.35 and nonresDNN_Score < 0.4) countSignalEvent("heavyresDNN-SR-bin05");
+    else if (heavyresDNN_Score > 0.4 and nonresDNN_Score < 0.45) countSignalEvent("heavyresDNN-SR-bin06");
+    else if (heavyresDNN_Score > 0.45 and nonresDNN_Score < 0.5) countSignalEvent("heavyresDNN-SR-bin07");
+    else if (heavyresDNN_Score > 0.5 and nonresDNN_Score < 0.55) countSignalEvent("heavyresDNN-SR-bin08");
+    else if (heavyresDNN_Score > 0.55 and nonresDNN_Score < 0.6) countSignalEvent("heavyresDNN-SR-bin09");
+    else if (heavyresDNN_Score > 0.6 and nonresDNN_Score < 0.65) countSignalEvent("heavyresDNN-SR-bin10");
+    else if (heavyresDNN_Score > 0.65 and nonresDNN_Score < 0.7) countSignalEvent("heavyresDNN-SR-bin11");
+    else if (heavyresDNN_Score > 0.7 and nonresDNN_Score < 0.75) countSignalEvent("heavyresDNN-SR-bin12");
+    else if (heavyresDNN_Score > 0.75 and nonresDNN_Score < 0.8) countSignalEvent("heavyresDNN-SR-bin13");
+    else if (heavyresDNN_Score > 0.8 and nonresDNN_Score < 0.85) countSignalEvent("heavyresDNN-SR-bin14");
+    else if (heavyresDNN_Score > 0.85 and nonresDNN_Score < 0.9) countSignalEvent("heavyresDNN-SR-bin15");
+    else if (heavyresDNN_Score > 0.9 and nonresDNN_Score < 0.95) countSignalEvent("heavyresDNN-SR-bin16");
+    else if (heavyresDNN_Score > 0.95 ) countSignalEvent("heavyresDNN-SR-bin17");
+  }
+
+  if (bjets5) {
+    if (nonresDNN_Score > 0.1 and nonresDNN_Score < 0.15) countSignalEvent("nonresDNN-CR-bin00"); 
+    else if (nonresDNN_Score > 0.15 and nonresDNN_Score < 0.2) countSignalEvent("nonresDNN-CR-bin01"); 
+    else if (nonresDNN_Score > 0.2 and nonresDNN_Score < 0.25) countSignalEvent("nonresDNN-CR-bin02"); 
+    else if (nonresDNN_Score > 0.25 and nonresDNN_Score < 0.3) countSignalEvent("nonresDNN-CR-bin03"); 
+    else if (nonresDNN_Score > 0.3 and nonresDNN_Score < 0.35) countSignalEvent("nonresDNN-CR-bin04"); 
+    else if (nonresDNN_Score > 0.35 and nonresDNN_Score < 0.4) countSignalEvent("nonresDNN-CR-bin05"); 
+    else if (nonresDNN_Score > 0.4 and nonresDNN_Score < 0.45) countSignalEvent("nonresDNN-CR-bin06"); 
+    else if (nonresDNN_Score > 0.45 and nonresDNN_Score < 0.5) countSignalEvent("nonresDNN-CR-bin07"); 
+    else if (nonresDNN_Score > 0.5 and nonresDNN_Score < 0.55) countSignalEvent("nonresDNN-CR-bin08"); 
+    else if (nonresDNN_Score > 0.55 and nonresDNN_Score < 0.6) countSignalEvent("nonresDNN-CR-bin09");
+    else if (nonresDNN_Score > 0.6 and nonresDNN_Score < 0.65) countSignalEvent("nonresDNN-CR-bin10");
+    else if (nonresDNN_Score > 0.65 and nonresDNN_Score < 0.7) countSignalEvent("nonresDNN-CR-bin11");
+    else if (nonresDNN_Score > 0.7 and nonresDNN_Score < 0.75) countSignalEvent("nonresDNN-CR-bin12");
+    else if (nonresDNN_Score > 0.75 and nonresDNN_Score < 0.8) countSignalEvent("nonresDNN-CR-bin13");
+    else if (nonresDNN_Score > 0.8 and nonresDNN_Score < 0.85) countSignalEvent("nonresDNN-CR-bin14");
+    else if (nonresDNN_Score > 0.85 and nonresDNN_Score < 0.9) countSignalEvent("nonresDNN-CR-bin15");
+    else if (nonresDNN_Score > 0.9 and nonresDNN_Score < 0.95) countSignalEvent("nonresDNN-CR-bin16");
+    else if (nonresDNN_Score > 0.95 and nonresDNN_Score < 0.975) countSignalEvent("nonresDNN-CR-bin17");
+    else if (nonresDNN_Score > 0.975 and nonresDNN_Score < 1.) countSignalEvent("nonresDNN-CR-bin18");
+
+    if (resDNN_Score > 0.05 and nonresDNN_Score < 0.1) countSignalEvent("resDNN-CR-bin00");
+    else if (resDNN_Score > 0.1 and nonresDNN_Score < 0.15) countSignalEvent("resDNN-CR-bin01");
+    else if (resDNN_Score > 0.15 and nonresDNN_Score < 0.2) countSignalEvent("resDNN-CR-bin02");
+    else if (resDNN_Score > 0.2 and nonresDNN_Score < 0.25) countSignalEvent("resDNN-CR-bin03");
+    else if (resDNN_Score > 0.25 and nonresDNN_Score < 0.3) countSignalEvent("resDNN-CR-bin04");
+    else if (resDNN_Score > 0.3 and nonresDNN_Score < 0.35) countSignalEvent("resDNN-CR-bin05");
+    else if (resDNN_Score > 0.35 and nonresDNN_Score < 0.4) countSignalEvent("resDNN-CR-bin06");
+    else if (resDNN_Score > 0.4 and nonresDNN_Score < 0.45) countSignalEvent("resDNN-CR-bin07");
+    else if (resDNN_Score > 0.45 and nonresDNN_Score < 0.5) countSignalEvent("resDNN-CR-bin08");
+    else if (resDNN_Score > 0.5 and nonresDNN_Score < 0.55) countSignalEvent("resDNN-CR-bin09");
+    else if (resDNN_Score > 0.55 and nonresDNN_Score < 0.6) countSignalEvent("resDNN-CR-bin10");
+    else if (resDNN_Score > 0.6 and nonresDNN_Score < 0.65) countSignalEvent("resDNN-CR-bin11");
+    else if (resDNN_Score > 0.65 and nonresDNN_Score < 0.7) countSignalEvent("resDNN-CR-bin12");
+    else if (resDNN_Score > 0.7 and nonresDNN_Score < 0.75) countSignalEvent("resDNN-CR-bin13");
+    else if (resDNN_Score > 0.75 and nonresDNN_Score < 0.8) countSignalEvent("resDNN-CR-bin14");
+    else if (resDNN_Score > 0.8 and nonresDNN_Score < 0.85) countSignalEvent("resDNN-CR-bin15");
+    else if (resDNN_Score > 0.85 and nonresDNN_Score < 0.9) countSignalEvent("resDNN-CR-bin16");
+    else if (resDNN_Score > 0.9 and nonresDNN_Score < 0.95) countSignalEvent("resDNN-CR-bin17");
+    else if (resDNN_Score > 0.95 ) countSignalEvent("resDNN-CR-bin18");
+    
+    if (heavyresDNN_Score > 0.1 and nonresDNN_Score < 0.15) countSignalEvent("heavyresDNN-CR-bin00");
+    else if (heavyresDNN_Score > 0.15 and nonresDNN_Score < 0.2) countSignalEvent("heavyresDNN-CR-bin01");
+    else if (heavyresDNN_Score > 0.2 and nonresDNN_Score < 0.25) countSignalEvent("heavyresDNN-CR-bin02");
+    else if (heavyresDNN_Score > 0.25 and nonresDNN_Score < 0.3) countSignalEvent("heavyresDNN-CR-bin03");
+    else if (heavyresDNN_Score > 0.3 and nonresDNN_Score < 0.35) countSignalEvent("heavyresDNN-CR-bin04");
+    else if (heavyresDNN_Score > 0.35 and nonresDNN_Score < 0.4) countSignalEvent("heavyresDNN-CR-bin05");
+    else if (heavyresDNN_Score > 0.4 and nonresDNN_Score < 0.45) countSignalEvent("heavyresDNN-CR-bin06");
+    else if (heavyresDNN_Score > 0.45 and nonresDNN_Score < 0.5) countSignalEvent("heavyresDNN-CR-bin07");
+    else if (heavyresDNN_Score > 0.5 and nonresDNN_Score < 0.55) countSignalEvent("heavyresDNN-CR-bin08");
+    else if (heavyresDNN_Score > 0.55 and nonresDNN_Score < 0.6) countSignalEvent("heavyresDNN-CR-bin09");
+    else if (heavyresDNN_Score > 0.6 and nonresDNN_Score < 0.65) countSignalEvent("heavyresDNN-CR-bin10");
+    else if (heavyresDNN_Score > 0.65 and nonresDNN_Score < 0.7) countSignalEvent("heavyresDNN-CR-bin11");
+    else if (heavyresDNN_Score > 0.7 and nonresDNN_Score < 0.75) countSignalEvent("heavyresDNN-CR-bin12");
+    else if (heavyresDNN_Score > 0.75 and nonresDNN_Score < 0.8) countSignalEvent("heavyresDNN-CR-bin13");
+    else if (heavyresDNN_Score > 0.8 and nonresDNN_Score < 0.85) countSignalEvent("heavyresDNN-CR-bin14");
+    else if (heavyresDNN_Score > 0.85 and nonresDNN_Score < 0.9) countSignalEvent("heavyresDNN-CR-bin15");
+    else if (heavyresDNN_Score > 0.9 and nonresDNN_Score < 0.95) countSignalEvent("heavyresDNN-CR-bin16");
+    else if (heavyresDNN_Score > 0.95 ) countSignalEvent("heavyresDNN-CR-bin17");
+  }
 
   return;
 
