@@ -122,12 +122,12 @@ void Atlas_2411_02040::initialize() {
   hist_heavyresdnnscore = new TH1F("heavyresDNN_Score", "heavyresDNN_Score", 20., 0., 1.);
 
   float_t binning_SR[20] = {0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 0.975, 1.}; 
-  hist_resdnnscore_SR = new TH1F("resDNN_Score", "resDNN_Score", 19., 0.05, 1.);
-  hist_nonresdnnscore_SR = new TH1F("nonresDNN_Score", "nonresDNN_Score", 19., binning_SR);
-  hist_heavyresdnnscore_SR = new TH1F("heavyresDNN_Score", "heavyresDNN_Score", 18., 0.1, 1.);
-  hist_resdnnscore_CR = new TH1F("resDNN_Score", "resDNN_Score", 19., 0.05, 1.);
-  hist_nonresdnnscore_CR = new TH1F("nonresDNN_Score", "nonresDNN_Score", 19., binning_SR);
-  hist_heavyresdnnscore_CR = new TH1F("heavyresDNN_Score", "heavyresDNN_Score", 18., 0.1, 1.);  
+  hist_resdnnscore_SR = new TH1F("resDNN_Score_SR", "resDNN_Score", 19., 0.05, 1.);
+  hist_nonresdnnscore_SR = new TH1F("nonresDNN_Score_SR", "nonresDNN_Score", 19., binning_SR);
+  hist_heavyresdnnscore_SR = new TH1F("heavyresDNN_Score_SR", "heavyresDNN_Score", 18., 0.1, 1.);
+  hist_resdnnscore_CR = new TH1F("resDNN_Score_CR", "resDNN_Score", 19., 0.05, 1.);
+  hist_nonresdnnscore_CR = new TH1F("nonresDNN_Score_CR", "nonresDNN_Score", 19., binning_SR);
+  hist_heavyresdnnscore_CR = new TH1F("heavyresDNN_Score_CR", "heavyresDNN_Score", 18., 0.1, 1.);  
 
   float binning[7] = {0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5};
   hist_weight = new TH1F("TotalWeight", "TotalWeight", 6, binning);
