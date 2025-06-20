@@ -20,7 +20,7 @@ class Atlas_2411_02040 : public AnalysisBase {
 
   private:
 
-    TFile *hfile;  TH1F *hist_mhradius; TH1F *hist_rmsdeltarjj; TH1F  *hist_rmsdeltarjjrivet, *hist_rmsmjj, *hist_rmsetah, *hist_rmsdeltaajj, *hist_rmsdeltaajjrivet, *hist_deltarh1, *hist_deltarh2, *hist_deltarh3, *hist_massh1, *hist_massh1rivet, *hist_ht6j, *hist_ht6jrivet, *hist_etamhhhfrac, *hist_costheta, *hist_aplanarity6j, *hist_sphericityallj, *hist_sphericity6j, *hist_transvsphericty6j, *hist_resdnnscore, *hist_nonresdnnscore, *hist_heavyresdnnscore, *hist_weight;
+    TFile *hfile;  TH1F *hist_mhradius; TH1F *hist_rmsdeltarjj; TH1F  *hist_rmsdeltarjjrivet, *hist_rmsmjj, *hist_rmsetah, *hist_rmsdeltaajj, *hist_rmsdeltaajjrivet, *hist_deltarh1, *hist_deltarh2, *hist_deltarh3, *hist_massh1, *hist_massh1rivet, *hist_ht6j, *hist_ht6jrivet, *hist_etamhhhfrac, *hist_costheta, *hist_aplanarity6j, *hist_sphericityallj, *hist_sphericity6j, *hist_transvsphericty6j, *hist_resdnnscore, *hist_nonresdnnscore, *hist_heavyresdnnscore, *hist_weight, *hist_resdnnscore_SR, *hist_nonresdnnscore_SR, *hist_heavyresdnnscore_SR, *hist_resdnnscore_CR, *hist_nonresdnnscore_CR, *hist_heavyresdnnscore_CR;
 
 #ifdef HAVE_ONNX
     Ort::Session *session[6];

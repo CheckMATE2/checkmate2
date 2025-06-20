@@ -121,6 +121,14 @@ void Atlas_2411_02040::initialize() {
   hist_nonresdnnscore = new TH1F("nonresDNN_Score", "nonresDNN_Score", 20., 0., 1.);
   hist_heavyresdnnscore = new TH1F("heavyresDNN_Score", "heavyresDNN_Score", 20., 0., 1.);
 
+  float_t binning_SR[20] = {0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 0.975, 1.}; 
+  hist_resdnnscore_SR = new TH1F("resDNN_Score", "resDNN_Score", 19., 0.05, 1.);
+  hist_nonresdnnscore_SR = new TH1F("nonresDNN_Score", "nonresDNN_Score", 19., binning_SR);
+  hist_heavyresdnnscore_SR = new TH1F("heavyresDNN_Score", "heavyresDNN_Score", 18., 0.1, 1.);
+  hist_resdnnscore_CR = new TH1F("resDNN_Score", "resDNN_Score", 19., 0.05, 1.);
+  hist_nonresdnnscore_CR = new TH1F("nonresDNN_Score", "nonresDNN_Score", 19., binning_SR);
+  hist_heavyresdnnscore_CR = new TH1F("heavyresDNN_Score", "heavyresDNN_Score", 18., 0.1, 1.);  
+
   float binning[7] = {0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5};
   hist_weight = new TH1F("TotalWeight", "TotalWeight", 6, binning);
 
@@ -376,6 +384,9 @@ void Atlas_2411_02040::analyze() {
     hist_resdnnscore->Fill(resDNN_Score, weight);
     hist_nonresdnnscore->Fill(nonresDNN_Score, weight);
     hist_heavyresdnnscore->Fill(heavyresDNN_Score, weight);
+    hist_resdnnscore_SR->Fill(resDNN_Score, weight);
+    hist_nonresdnnscore_SR->Fill(nonresDNN_Score, weight);
+    hist_heavyresdnnscore_SR->Fill(heavyresDNN_Score, weight);  
 
     if (nonresDNN_Score > 0.1 and nonresDNN_Score < 0.15) countSignalEvent("nonresDNN-SR-bin00"); 
     else if (nonresDNN_Score > 0.15 and nonresDNN_Score < 0.2) countSignalEvent("nonresDNN-SR-bin01"); 
@@ -438,6 +449,10 @@ void Atlas_2411_02040::analyze() {
   }
 
   if (bjets5) {
+    hist_resdnnscore_CR->Fill(resDNN_Score, weight);
+    hist_nonresdnnscore_CR->Fill(nonresDNN_Score, weight);
+    hist_heavyresdnnscore_CR->Fill(heavyresDNN_Score, weight);  
+
     if (nonresDNN_Score > 0.1 and nonresDNN_Score < 0.15) countControlEvent("nonresDNN-CR-bin00"); 
     else if (nonresDNN_Score > 0.15 and nonresDNN_Score < 0.2) countControlEvent("nonresDNN-CR-bin01"); 
     else if (nonresDNN_Score > 0.2 and nonresDNN_Score < 0.25) countControlEvent("nonresDNN-CR-bin02"); 
