@@ -1,13 +1,13 @@
 {"analysis" :[
 	{"name":"2J_bveto",
 	"bkgonly":"BkgOnly.json",
-        "patchset":"SS_gridx_patchset.json",
+        "patchset":"GG_x12_patchset.json",
         "histosize":"3",
 	"SR_dict": {"SR2JBVEM_meffInc30[0]":"2J_bveto_700","SR2JBVEM_meffInc30[1]":"2J_bveto_1300","SR2JBVEM_meffInc30[2]":"2J_bveto_1900"
 	}},
 	{"name":"2J_btag",
 	"bkgonly":"BkgOnly.json",
-	"patchset":"SS_x12_patchset.json",
+	"patchset":"GG_x12_patchset.json",
 	"histosize":"3",
 	"SR_dict": {"SR2JBTEM_meffInc30[0]":"2J_btag_700","SR2JBTEM_meffInc30[1]":"2J_btag_1300","SR2JBTEM_meffInc30[2]":"2J_btag_1900"
 	}},
@@ -46,6 +46,10 @@
 	"patchset":"GG_x12_patchset.json",
 	"histosize":"4",
 	"SR_dict": {"SR6JBTEM_meffInc30[0]":"6J_btag_700","SR6JBTEM_meffInc30[1]":"6J_btag_1400","SR6JBTEM_meffInc30[2]":"6J_btag_2100","SR6JBTEM_meffInc30[3]":"6J_btag_2800"
-	}}			
+	}},
+	{"name":"combined",
+	"bkgonly":"BkgOnly.json",
+	"patchset":"GG_x12_patchset.json"
+	}	
 	]
 }

@@ -20,6 +20,7 @@ set ExecutionPath {
   MissingET
 
   FastJetFinder
+  FatJetFinder
   
   JetEnergyScale
 
@@ -233,12 +234,16 @@ module Calorimeter Calorimeter {
 
   add EnergyFraction {1000012} {0.0 0.0}
   add EnergyFraction {5000012} {0.0 0.0}
+  add EnergyFraction {5000022} {0.0 0.0}
   add EnergyFraction {1000022} {0.0 0.0}
   add EnergyFraction {1000023} {0.0 0.0}
   add EnergyFraction {1000025} {0.0 0.0}
   add EnergyFraction {1000035} {0.0 0.0}
   add EnergyFraction {1000039} {0.0 0.0}
   add EnergyFraction {1000045} {0.0 0.0}
+  add EnergyFraction {52} {0.0 0.0}
+  #add EnergyFraction {35} {0.0 0.0}  
+  add EnergyFraction {-52} {0.0 0.0}
   add EnergyFraction {310} {0.3 0.7}
   add EnergyFraction {3122} {0.3 0.7}
   set ECalResolutionFormula {                  (abs(eta) <= 3.2) * sqrt(energy^2*0.0017^2 + energy*0.101^2) +
@@ -305,6 +310,36 @@ module FastJetFinder FastJetFinder {
 }
 
 
+module FastJetFinder FatJetFinder {
+  set InputArray EFlowMerger/eflow
+
+  set OutputArray jets
+
+  # algorithm: 1 CDFJetClu, 2 MidPoint, 3 SIScone, 4 kt, 5 Cambridge/Aachen, 6 antikt
+  set JetAlgorithm 6
+  set ParameterR 0.8
+
+  set ComputeNsubjettiness 1
+  set Beta 1.0
+  set AxisMode 4
+
+  set ComputeTrimming 1
+  set RTrim 0.2
+  set PtFracTrim 0.05
+
+  set ComputePruning 1
+  set ZcutPrun 0.1
+  set RcutPrun 0.5
+  set RPrun 0.8
+
+  set ComputeSoftDrop 1
+  set BetaSoftDrop 0.0
+  set SymmetryCutSoftDrop 0.1
+  set R0SoftDrop 0.8
+
+  set JetPTMin 100.0
+}
+
 module TaggingParticlesSkimmer TagSkimmer {
 
   set ParticleInputArray Delphes/allParticles
@@ -356,6 +391,7 @@ module TreeWriter TreeWriter {
   add Branch EFlowMerger/eflow Tower Tower
 
   add Branch JetEnergyScale/jets Jet Jet
+  add Branch FatJetFinder/jets FatJet Jet
   add Branch ElectronEnergySmearing/electrons Electron Electron
   add Branch Calorimeter/photons Photon Photon
   add Branch MuonMomentumSmearing/muons Muon Muon

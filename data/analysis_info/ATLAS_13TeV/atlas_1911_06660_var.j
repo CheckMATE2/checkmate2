@@ -107,5 +107,12 @@
     "stau", 
     "hadronic tau", 
     "MET"
-  ]
+  ],
+  "likelihoods": "y",
+  "mb_signal_regions": {
+    "Combined": [
+      "SRlowMass", 
+      "SRhighMass"    
+    ]
+  }  
 }

@@ -1,0 +1,9 @@
+{"analysis" :[
+	{"name":"Combined",
+	"bkgonly":"Region-combined/BkgOnly.json",
+        "patchset":"Region-combined/patchset.json",
+        "histosize":"1",
+	"SR_dict": {"SR1cut_cuts":"SRlowMass","SR2cut_cuts":"SRhighMass","QCR1cut_cuts":"QCR1cut_cuts","QCR2cut_cuts":"QCR2cut_cuts"
+	}}
+	]
+}

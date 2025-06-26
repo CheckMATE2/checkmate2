@@ -1050,29 +1050,23 @@
   ],
   "likelihoods": "y",
   "mb_signal_regions": {
-    "SR-E-high-ee": [
+    "SR-EWK": [
       "E-high-ee-05", 
       "E-high-ee-10", 
       "E-high-ee-20", 
       "E-high-ee-30", 
       "E-high-ee-40", 
-      "E-high-ee-60"
-    ],
-    "SR-E-med-ee": [
+      "E-high-ee-60",
       "E-med-ee-05", 
       "E-med-ee-10", 
       "E-med-ee-20", 
-      "E-med-ee-30"
-    ],
-    "SR-E-low-ee": [
+      "E-med-ee-30",
       "E-low-ee-05", 
       "E-low-ee-10", 
       "E-low-ee-20", 
       "E-low-ee-30", 
       "E-low-ee-40", 
-      "E-low-ee-60"
-    ],
-    "SR-E-high-mm": [
+      "E-low-ee-60",
       "E-high-mm-02", 
       "E-high-mm-03", 
       "E-high-mm-05", 
@@ -1080,17 +1074,13 @@
       "E-high-mm-20", 
       "E-high-mm-30", 
       "E-high-mm-40", 
-      "E-high-mm-60"
-    ],
-    "SR-E-med-mm": [
+      "E-high-mm-60",
       "E-med-mm-02", 
       "E-med-mm-03", 
       "E-med-mm-05", 
       "E-med-mm-10", 
       "E-med-mm-20", 
-      "E-med-mm-30"
-    ],
-    "SR-E-low-mm": [
+      "E-med-mm-30",
       "E-low-mm-02", 
       "E-low-mm-03", 
       "E-low-mm-05", 
@@ -1098,17 +1088,15 @@
       "E-low-mm-20", 
       "E-low-mm-30", 
       "E-low-mm-40", 
-      "E-low-mm-60"
-    ],
-    "SR-1L1T": [
+      "E-low-mm-60",
       "SR-1L1T-1.0", 
       "SR-1L1T-1.5", 
       "SR-1L1T-2.0", 
       "SR-1L1T-3.0", 
       "SR-1L1T-4.0", 
-      "SR-1L1T-5.0"
+      "SR-1L1T-5.0"                                        
     ],
-    "SR-S-high-ee": [
+    "SR-S": [
       "S-high-ee-00", 
       "S-high-ee-01", 
       "S-high-ee-02", 
@@ -1116,9 +1104,7 @@
       "S-high-ee-10", 
       "S-high-ee-20", 
       "S-high-ee-30", 
-      "S-high-ee-40"
-    ],
-    "SR-S-low-ee": [
+      "S-high-ee-40",
       "S-low-ee-00", 
       "S-low-ee-01", 
       "S-low-ee-02", 
@@ -1126,9 +1112,7 @@
       "S-low-ee-10", 
       "S-low-ee-20", 
       "S-low-ee-30", 
-      "S-low-ee-40"
-    ],
-    "SR-S-high-mm": [
+      "S-low-ee-40",
       "S-high-mm-00", 
       "S-high-mm-01", 
       "S-high-mm-02", 
@@ -1136,9 +1120,7 @@
       "S-high-mm-10", 
       "S-high-mm-20", 
       "S-high-mm-30", 
-      "S-high-mm-40"
-    ],
-    "SR-S-low-mm": [
+      "S-high-mm-40",
       "S-low-mm-00", 
       "S-low-mm-01", 
       "S-low-mm-02", 
@@ -1146,7 +1128,7 @@
       "S-low-mm-10", 
       "S-low-mm-20", 
       "S-low-mm-30", 
-      "S-low-mm-40"
+      "S-low-mm-40"                      
     ]
   }
 }

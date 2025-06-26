@@ -45,6 +45,16 @@ void AnalysisHandlerCMS_13TeV::bookAnalysis(std::string analysisName,
         a = new Cms_sus_16_025();
     else if(analysisName == "cms_sus_16_048")
         a = new Cms_sus_16_048();
+    else if(analysisName == "cms_sus_19_005")
+        a = new Cms_sus_19_005();
+    else if(analysisName == "cms_sus_19_006")
+        a = new Cms_sus_19_006();
+    else if(analysisName == "cms_1908_04722")
+        a = new Cms_1908_04722();
+    else if(analysisName == "cms_2107_13201")
+        a = new Cms_2107_13201();
+    else if(analysisName == "cms_2205_09597")
+        a = new Cms_2205_09597();
     else //@@extracode@@
         Global::abort(name,
                       "Cannot load analysis "+analysisName+
@@ -330,8 +340,8 @@ double AnalysisHandlerCMS_13TeV::electronRecEff(double pt,
     const double r5 = -0.000449114;
     // Reconstruction: ATL-COM-PHYS-2013-1287
     double rec_eff = r1+r2*pow(eta, 2)+r3*pow(eta, 4)+
-                        r4*pow(eta, 6)+r5*pow(eta, 8);
-    return (fabs(eta) < 2.5)*(pt>7.0)*rec_eff;
+                        r4*pow(eta, 6)+r5*pow(eta, 8); //range = [0.965,0.99]
+    return (fabs(eta) < 2.5)*(pt>5.0)*rec_eff;
 }
 
 double AnalysisHandlerCMS_13TeV::electronIDEffMedium(double pt,

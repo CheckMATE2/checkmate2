@@ -163,7 +163,7 @@ void Atlas_2010_14293::initialize() {
   const char *rootFileName = fNames[ifile].c_str() ;
   hfile = new TFile(rootFileName, "RECREATE", "Saving Histograms");
   ggd1 = new TH1F("ggd1", "BDT GGd1 output", 20, -1., 1.);
-  ggd2 = new TH1F("ggd3", "BDT GGd2 output", 20, -1., 1.);
+  ggd2 = new TH1F("ggd2", "BDT GGd2 output", 20, -1., 1.);
   ggd3 = new TH1F("ggd3", "BDT GGd3 output", 20, -1., 1.);
   ggd4 = new TH1F("ggd4", "BDT GGd4 output", 20, -1., 1.);
   ggo1 = new TH1F("ggo1", "BDT GGo1 output", 20, -1., 1.);
@@ -355,7 +355,7 @@ void Atlas_2010_14293::finalize() {
   for (int j = 0; j < 8; j++)
     for (int i = 0; i < 2; i++) 
       delete reader[j][i];  
-  
+/*  
   TCanvas can1;
   //ggd1->SetMinimum(0.1);
   can1.SetLogy();
@@ -403,7 +403,9 @@ void Atlas_2010_14293::finalize() {
   can8.SetLogy();
   ggo4->Draw("hist");
   can8.Close();        
-  
+
+*/  
+
   hfile->Write();
   hfile->Close();
 }  

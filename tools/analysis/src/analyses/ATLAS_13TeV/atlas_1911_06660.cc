@@ -8,6 +8,7 @@ void Atlas_1911_06660::initialize() {
   "");
   setLuminosity(139.0*units::INVFB);      
   bookSignalRegions("SRlowMass;SRhighMass");
+  bookControlRegions("QCR1cut_cuts;QCR2cut_cuts");
   // You can also book cutflow regions with bookCutflowRegions("CR1;CR2;..."). Note that the regions are
   //  always ordered alphabetically in the cutflow output files.
 
@@ -62,8 +63,11 @@ void Atlas_1911_06660::analyze() {
   muonsCombined = filterPhaseSpace(muonsCombined, 10., -2.7, 2.7);
   jets = filterPhaseSpace(jets, 20., -2.8, 2.8);
 
-  std::vector<Jet*> mediumTauJets, tightTauJets;
+  std::vector<Jet*> looseTauJets, mediumTauJets, tightTauJets;
   for(int i=0; i<jets.size(); i++) {
+    if(fabs(jets[i]->Eta) < 2.5 and checkTauTag(jets[i], "loose") and fabs(jets[i]->Charge)==1) {
+      looseTauJets.push_back(jets[i]);
+    }    
     if(fabs(jets[i]->Eta) < 2.5 and checkTauTag(jets[i], "medium") and fabs(jets[i]->Charge)==1) {
       mediumTauJets.push_back(jets[i]);
     }
@@ -91,14 +95,29 @@ void Atlas_1911_06660::analyze() {
   electronsTight = overlapRemoval(electronsTight, jets, 0.4);
   jets = overlapRemoval(jets, muonsCombined, 0.2);
   muonsCombined = overlapRemoval(muonsCombined, jets, 0.4);
+  jets = overlapRemoval(jets, looseTauJets, 0.2);
   jets = overlapRemoval(jets, mediumTauJets, 0.2);
   jets = overlapRemoval(jets, tightTauJets, 0.2);
 
   countCutflowEvent("01_overlap removal");
   
+  //KR: I made a mess here :o
   std::vector<Jet*> bjets;
   for (int i = 0; i < jets.size(); i++) 
     if ( fabs(jets[i]->Eta) < 2.5 && checkBTag(jets[i]) ) bjets.push_back(jets[i]);
+    
+  double met=missingET->P4().Et();     
+    
+  if (looseTauJets.size() > 1 and mediumTauJets.size() < 2 and looseTauJets[0]->Charge * looseTauJets[1]->Charge < 0 and electronsTight.size() + muonsCombined.size() == 0 and bjets.size() == 0 and (looseTauJets[0]->P4() + looseTauJets[1]->P4()).M() > 120.) {
+    double dphi_CR = fabs(looseTauJets[0]->P4().DeltaPhi(looseTauJets[1]->P4()));
+    double dR_CR   = looseTauJets[0]->P4().DeltaR(looseTauJets[1]->P4());
+    double trig1_CR = (looseTauJets[0]->PT >50 && looseTauJets[1]->PT >40 && met>150);
+    double trig2_CR = (looseTauJets[0]->PT >95 && looseTauJets[1]->PT >60);
+    double mt2_CR = mT2(looseTauJets[0]->P4(), looseTauJets[1]->P4(), 0);
+    
+    if ( trig1_CR and met > 150. and dphi_CR > 0.8 and dR_CR < 3.2 and mt2_CR > 70. ) countControlEvent("QCR1cut_cuts");
+    if ( trig2_CR and met < 150. and met > 75. and dphi_CR > 0.8 and dR_CR < 3.2 and mt2_CR > 70. ) countControlEvent("QCR2cut_cuts");    
+  }
 
   
   if(mediumTauJets.size() != 2)
@@ -131,8 +150,8 @@ void Atlas_1911_06660::analyze() {
 
   countCutflowEvent("07_tau pair invariant mass cut");
 
-  double met=missingET->P4().Et();
-  
+  float dphi = fabs(mediumTauJets[0]->P4().DeltaPhi(mediumTauJets[1]->P4()));
+  float dR   = mediumTauJets[0]->P4().DeltaR(mediumTauJets[1]->P4());
   bool trig1 = (mediumTauJets[0]->PT >50 && mediumTauJets[1]->PT >40 && met>150);
   bool trig2 = (mediumTauJets[0]->PT >95 && mediumTauJets[1]->PT >60);
 
@@ -154,17 +173,15 @@ void Atlas_1911_06660::analyze() {
     {
       //  float mt2 = mT2(mediumTauJets[0]->P4(), mediumTauJets[1]->P4(), 0, missingET->P4());
       mt2 = mT2(mediumTauJets[0]->P4(), mediumTauJets[1]->P4(), 0);
-    }
+    }   
   
-  float dphi = fabs(mediumTauJets[0]->P4().DeltaPhi(mediumTauJets[1]->P4()));
-  float dR   = mediumTauJets[0]->P4().DeltaR(mediumTauJets[1]->P4());
 
   const bool switchCutflow1 = false;
   const bool switchCutflow2 = false;
   
   if(switchCutflow1)
     {
-      if(!trig1)
+      if(! (trig1))
 	return;
 
       countCutflowEvent("08a_trig1");
@@ -199,7 +216,7 @@ void Atlas_1911_06660::analyze() {
 
   if(switchCutflow2)
     {    
-      if(!trig2)
+      if(!(trig2))
 	return;
 
       countCutflowEvent("08b_trig2");

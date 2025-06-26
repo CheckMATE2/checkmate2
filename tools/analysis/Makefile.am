@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = subdir-objects
 
-AM_CXXFLAGS = @ROOTCFLAGS@ @DELPHESCFLAGS@ -Iinclude/base -Iinclude/kinematics -Iinclude/kinematics/mctlib \
+AM_CXXFLAGS = @ROOTCFLAGS@ @DELPHESCFLAGS@ -Iinclude/base -Iinclude/base/MVAUtils -Iinclude/kinematics -Iinclude/kinematics/mctlib \
              -Iinclude/kinematics/mt2family -Iinclude/kinematics/topness -Iinclude/global \
              -Iinclude/analyses/ATLAS_7TeV -Iinclude/analyses/ATLAS_8TeV -Iinclude/analyses/ATLAS_13TeV -Iinclude/analyses/ATLAS_14TeV_HighLumi \
              -Iinclude/analyses/CMS_7TeV -Iinclude/analyses/CMS_8TeV -Iinclude/analyses/CMS_13TeV -Iinclude/analyses/CMS_14TeV_HighLumi
@@ -15,6 +15,11 @@ mylib_LTLIBRARIES = libanalyses.la
 libanalyses_la_SOURCES =	\
              src/global/Global.cc src/include/Global.h \
              src/base/AnalysisBase.cc include/base/AnalysisBase.h \
+             src/base/MVAUtils/BDT.cc include/base/MVAUtils/BDT.h \
+             src/base/MVAUtils/ForestLGBM.cc include/base/MVAUtils/ForestLGBM.h \
+             src/base/MVAUtils/ForestTMVA.cc include/base/MVAUtils/ForestTMVA.h \
+             src/base/MVAUtils/ForestXGBoost.cc include/base/MVAUtils/ForestXGBoost.h \
+             src/base/MVAUtils/NodeImpl.cc include/base/NodeImpl.h \
              src/base/ETMiss.cc include/base/ETMiss.h \
              src/base/FinalStateObject.cc include/base/FinalStateObject.h \
              src/base/Units.cc include/base/Units.h \
@@ -149,6 +154,17 @@ libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_1807_07447.h src/an
 libanalyses_la_SOURCES += include/analyses/ATLAS_14TeV_HighLumi/atlas_phys_2014_007.h src/analyses/ATLAS_14TeV_HighLumi/atlas_phys_2014_007.cc
 libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2010_14293.h src/analyses/ATLAS_13TeV/atlas_2010_14293.cc
 libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2211_08028.h src/analyses/ATLAS_13TeV/atlas_2211_08028.cc
+libanalyses_la_SOURCES += include/analyses/CMS_13TeV/cms_sus_19_005.h src/analyses/CMS_13TeV/cms_sus_19_005.cc
+libanalyses_la_SOURCES += include/analyses/CMS_13TeV/cms_sus_19_006.h src/analyses/CMS_13TeV/cms_sus_19_006.cc
+libanalyses_la_SOURCES += include/analyses/CMS_13TeV/cms_1908_04722.h src/analyses/CMS_13TeV/cms_1908_04722.cc
+libanalyses_la_SOURCES += include/analyses/CMS_13TeV/cms_2107_13201.h src/analyses/CMS_13TeV/cms_2107_13201.cc
+libanalyses_la_SOURCES += include/analyses/CMS_13TeV/cms_2205_09597.h src/analyses/CMS_13TeV/cms_2205_09597.cc
+libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2106_01676.h src/analyses/ATLAS_13TeV/atlas_2106_01676.cc
+libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2006_05880.h src/analyses/ATLAS_13TeV/atlas_2006_05880.cc
+libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2111_08372.h src/analyses/ATLAS_13TeV/atlas_2111_08372.cc
+libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2202_07953.h src/analyses/ATLAS_13TeV/atlas_2202_07953.cc
+libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2209_13935.h src/analyses/ATLAS_13TeV/atlas_2209_13935.cc
+libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2102_10874.h src/analyses/ATLAS_13TeV/atlas_2102_10874.cc
 #@@extraanalysis@@
 
 libanalyses_la_LDFLAGS = -avoid-version -shared

@@ -48,7 +48,7 @@ class Atlas_2106_09609 : public AnalysisBase {
     double HT(const std::vector<Jet*> jets);
     double min_dr(const std::vector<Jet*> sigjets, TLorentzVector lepton);
     double calc_minmax_mass(const std::vector<Jet*> sigjets);
-    std::vector<double> jet_btag_category(const std::vector<Jet*> sigjets, const std::vector<Jet*> bjets);
+    std::vector<float> jet_btag_category(const std::vector<Jet*> sigjets, const std::vector<Jet*> bjets);
     unsigned int countSetBits(unsigned int n);
 };
 

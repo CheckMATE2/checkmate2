@@ -1,0 +1,132 @@
+/*
+  Copyright (C) 2002-2020 CERN for the benefit of the ATLAS collaboration
+*/
+namespace MVAUtils {
+
+inline float
+BDT::GetResponse() const
+{
+  return (!m_pointers.empty() ? GetResponse(m_pointers) : -9999.);
+}
+
+inline float
+BDT::GetClassification() const
+{
+  return (!m_pointers.empty() ? GetClassification(m_pointers) : -9999.);
+}
+
+inline std::vector<float>
+BDT::GetMultiResponse(unsigned int numClasses) const
+{
+  return (!m_pointers.empty() ? GetMultiResponse(m_pointers, numClasses)
+                              : std::vector<float>());
+}
+
+inline std::vector<float>
+BDT::GetValues() const
+{
+  std::vector<float> result;
+  for (float* ptr : m_pointers) {
+    assert(ptr);
+    result.push_back(*ptr);
+  }
+  return result;
+}
+
+inline const std::vector<float*>&
+BDT::GetPointers() const
+{
+  return m_pointers;
+}
+inline void
+BDT::SetPointers(const std::vector<float*>& pointers)
+{
+  m_pointers = pointers;
+}
+inline unsigned int
+BDT::GetNTrees() const
+{
+  return m_forest->GetNTrees();
+}
+inline int
+BDT::GetNVars() const
+{
+  return m_forest->GetNVars();
+}
+inline float
+BDT::GetOffset() const
+{
+  return m_forest->GetOffset();
+}
+
+/** Return offset + the sum of the response of each tree  **/
+inline float
+BDT::GetResponse(const std::vector<float>& values) const
+{
+  return m_forest->GetResponse(values);
+}
+
+/** Return offset + the sum of the response of each tree  **/
+inline float
+BDT::GetResponse(const std::vector<float*>& pointers) const
+{
+  return m_forest->GetResponse(pointers);
+}
+
+inline float
+BDT::GetClassification(const std::vector<float>& values) const
+{
+  return m_forest->GetClassification(values);
+}
+
+inline float
+BDT::GetClassification(const std::vector<float*>& pointers) const
+{
+  return m_forest->GetClassification(pointers);
+}
+
+inline float
+BDT::GetGradBoostMVA(const std::vector<float>& values) const
+{
+  const float sum = m_forest->GetRawResponse(values); // ignores the offset
+  return 2. / (1 + std::exp(-2 * sum)) -
+         1; // output shaping for gradient boosted decision tree (-1,1)
+}
+
+inline float
+BDT::GetGradBoostMVA(const std::vector<float*>& pointers) const
+{
+  const float sum = m_forest->GetRawResponse(pointers); // ignores the offset
+  // output shaping for gradient boosted decision tree (-1,1)
+  return 2. / (1 + std::exp(-2 * sum)) - 1;
+}
+
+inline std::vector<float>
+BDT::GetMultiResponse(const std::vector<float>& values,
+                      unsigned int numClasses) const
+{
+  return m_forest->GetMultiResponse(values, numClasses);
+}
+
+inline std::vector<float>
+BDT::GetMultiResponse(const std::vector<float*>& pointers,
+                      unsigned int numClasses) const
+{
+  return m_forest->GetMultiResponse(pointers, numClasses);
+}
+
+inline float
+BDT::GetTreeResponse(const std::vector<float>& values,
+                     MVAUtils::index_t index) const
+{
+  return m_forest->GetTreeResponse(values, index);
+}
+
+inline float
+BDT::GetTreeResponse(const std::vector<float*>& pointers,
+                     MVAUtils::index_t index) const
+{
+  return m_forest->GetTreeResponse(pointers, index);
+}
+
+}

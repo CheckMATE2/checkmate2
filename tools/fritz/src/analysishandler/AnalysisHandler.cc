@@ -8,6 +8,7 @@ AnalysisHandler::AnalysisHandler() {
     branchElectron = NULL;
     branchMuon = NULL;
     branchJet = NULL;
+    branchFatJet = NULL;
     branchPhoton = NULL;
     branchMissingET = NULL;
     branchTrack = NULL;
@@ -455,6 +456,7 @@ void AnalysisHandler::setup(EventFile file) {
     branchEvent = treeReader->UseBranch("Event");
     branchGenParticle = treeReader->UseBranch("GenParticle");
     branchJet = treeReader->UseBranch("Jet");
+    branchFatJet = treeReader->UseBranch("FatJet");
     branchTrack = treeReader->UseBranch("Track");
     branchTower = treeReader->UseBranch("Tower");
     branchElectron = treeReader->UseBranch("Electron");
@@ -490,6 +492,8 @@ void AnalysisHandler::setup( DelphesHandler* dHandlerIn) {
                 branchEvent= (*it)->GetData();
         else if ((std::string)(*it)->GetData()->GetName() == "Jet")
                 branchJet = (*it)->GetData();
+        else if ((std::string)(*it)->GetData()->GetName() == "FatJet")
+                branchFatJet = (*it)->GetData();        
         else if ((std::string)(*it)->GetData()->GetName() == "Track")
                 branchTrack = (*it)->GetData();
         else if ((std::string)(*it)->GetData()->GetName() == "Tower")
@@ -503,7 +507,7 @@ void AnalysisHandler::setup( DelphesHandler* dHandlerIn) {
         else if ((std::string)(*it)->GetData()->GetName() == "MissingET")
                 branchMissingET = (*it)->GetData();
     }
-    if(!branchGenParticle || !branchEvent || !branchJet || !branchTrack ||
+    if(!branchGenParticle || !branchEvent || !branchJet || !branchFatJet || !branchTrack ||
        !branchTower || !branchElectron || !branchMuon || !branchPhoton ||
        !branchMissingET) {
         Global::abort(name,
@@ -817,6 +821,13 @@ bool AnalysisHandler::readParticles(int iEvent) {
         jets.push_back((Jet*)branchJet->At(i));
     branchJet->Clear();
     
+    fatjets.clear();
+    if (!branchFatJet)
+        Global::abort(name, "branchFatJet not properly assigned!");
+    for(int i = 0; i < branchFatJet->GetEntries(); i++)
+        fatjets.push_back((Jet*)branchFatJet->At(i));
+    branchFatJet->Clear();    
+    
     true_particles.clear();
     if (!branchGenParticle);
         //Global::print(name, "Warning!!! branchGenParticle not properly assigned!");
@@ -1115,6 +1126,8 @@ void AnalysisHandler::linkObjects() {
         listOfAnalyses[a]->towers = tempTowers;
         std::vector<Jet*> tempJets = jets;
         listOfAnalyses[a]->jets = tempJets;
+        std::vector<Jet*> tempFatJets = fatjets;
+        listOfAnalyses[a]->fatjets = tempFatJets;        
         std::vector<Electron*> tempElectrons = electrons;
         listOfAnalyses[a]->electrons = tempElectrons;
         std::vector<Muon*> tempMuons = muons;

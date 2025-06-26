@@ -509,7 +509,7 @@
   ],
   "likelihoods": "y",
   "mb_signal_regions": {
-    "SR-SF-0J": [  
+    "combined": [  
         "SR-SF-0Ja",
     	"SR-SF-0Jb",
     	"SR-SF-0Jc",
@@ -518,9 +518,7 @@
     	"SR-SF-0Jf",
     	"SR-SF-0Jg",
     	"SR-SF-0Jh",
-    	"SR-SF-0Ji"
-    ],
-    "SR-SF-1J": [
+    	"SR-SF-0Ji",
         "SR-SF-1Ja",
     	"SR-SF-1Jb",
     	"SR-SF-1Jc",
@@ -529,9 +527,7 @@
     	"SR-SF-1Jf",
     	"SR-SF-1Jg",
     	"SR-SF-1Jh",
-    	"SR-SF-1Ji"
-    ],
-    "SR-DF-0J": [
+    	"SR-SF-1Ji",
         "SR-DF-0Ja",
     	"SR-DF-0Jb",
     	"SR-DF-0Jc",
@@ -540,9 +536,7 @@
     	"SR-DF-0Jf",
     	"SR-DF-0Jg",
     	"SR-DF-0Jh",
-    	"SR-DF-0Ji"
-    ],
-    "SR-DF-1J": [
+    	"SR-DF-0Ji",
         "SR-DF-1Ja",
     	"SR-DF-1Jb",
     	"SR-DF-1Jc",

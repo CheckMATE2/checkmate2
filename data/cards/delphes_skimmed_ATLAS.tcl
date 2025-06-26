@@ -20,6 +20,7 @@ set ExecutionPath {
   MissingET
 
   FastJetFinder
+  FatJetFinder
   
   JetEnergyScale
 
@@ -337,6 +338,36 @@ module TaggingParticlesSkimmer TagSkimmer {
   set EtaMax 5.0
 }
 
+module FastJetFinder FatJetFinder {
+  set InputArray EFlowMerger/eflow
+
+  set OutputArray jets
+
+  # algorithm: 1 CDFJetClu, 2 MidPoint, 3 SIScone, 4 kt, 5 Cambridge/Aachen, 6 antikt
+  set JetAlgorithm 6
+  set ParameterR 0.8
+
+  set ComputeNsubjettiness 1
+  set Beta 1.0
+  set AxisMode 4
+
+  set ComputeTrimming 1
+  set RTrim 0.2
+  set PtFracTrim 0.05
+
+  set ComputePruning 1
+  set ZcutPrun 0.1
+  set RcutPrun 0.5
+  set RPrun 0.8
+
+  set ComputeSoftDrop 1
+  set BetaSoftDrop 0.0
+  set SymmetryCutSoftDrop 0.1
+  set R0SoftDrop 0.8
+
+  set JetPTMin 100.0
+}
+
 ##################
 # Jet Energy Scale
 ##################
@@ -375,6 +406,7 @@ module TreeWriter TreeWriter {
   add Branch EFlowMerger/eflow Tower Tower
 
   add Branch JetEnergyScale/jets Jet Jet
+  add Branch FatJetFinder/jets FatJet Jet
   add Branch ElectronEnergySmearing/electrons Electron Electron
   add Branch Calorimeter/photons Photon Photon
   add Branch MuonMomentumSmearing/muons Muon Muon

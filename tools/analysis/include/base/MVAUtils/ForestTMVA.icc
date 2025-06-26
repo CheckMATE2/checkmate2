@@ -1,0 +1,81 @@
+/*
+  Copyright (C) 2002-2019 CERN for the benefit of the ATLAS collaboration
+*/
+namespace MVAUtils {
+
+template<typename Node_t>
+float
+ForestWeighted<Node_t>::GetTreeResponseWeighted(
+  const std::vector<float>& values,
+  unsigned int itree) const
+{
+  return Forest<Node_t>::GetTreeResponse(values, itree) * m_weights[itree];
+}
+template<typename Node_t>
+float
+ForestWeighted<Node_t>::GetTreeResponseWeighted(
+  const std::vector<float*>& pointers,
+  unsigned int itree) const
+{
+  return Forest<Node_t>::GetTreeResponse(pointers, itree) * m_weights[itree];
+}
+
+template<typename Node_t>
+float
+ForestWeighted<Node_t>::GetWeightedResponse(
+  const std::vector<float>& values) const
+{
+  float result = 0.;
+  for (unsigned int itree = 0; itree != GetNTrees(); ++itree) {
+    result += GetTreeResponseWeighted(values, itree);
+  }
+  return result;
+}
+
+template<typename Node_t>
+float
+ForestWeighted<Node_t>::GetWeightedResponse(
+  const std::vector<float*>& pointers) const
+{
+  float result = 0.;
+  for (unsigned int itree = 0; itree != GetNTrees(); ++itree) {
+    result += GetTreeResponseWeighted(pointers, itree);
+  }
+  return result;
+}
+
+template<typename Node_t>
+void
+ForestWeighted<Node_t>::newTree(const std::vector<Node_t>& nodes, float weight)
+{
+  newTree(nodes);
+  m_weights.push_back(weight);
+  m_sumWeights += weight;
+}
+
+inline float
+ForestTMVA::GetResponse(const std::vector<float>& values) const
+{
+  return GetRawResponse(values) + GetOffset();
+}
+
+inline float
+ForestTMVA::GetResponse(const std::vector<float*>& pointers) const
+{
+  return GetRawResponse(pointers) + GetOffset();
+}
+
+inline float
+ForestTMVA::GetClassification(const std::vector<float>& values) const
+{
+  float result = GetWeightedResponse(values);
+  return result / GetSumWeights();
+}
+
+inline float
+ForestTMVA::GetClassification(const std::vector<float*>& pointers) const
+{
+  float result = GetWeightedResponse(pointers);
+  return result / GetSumWeights();
+}
+}

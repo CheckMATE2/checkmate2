@@ -53,6 +53,12 @@
 #include "atlas_1807_07447.h"
 #include "atlas_2010_14293.h"
 #include "atlas_2211_08028.h"
+#include "atlas_2106_01676.h"
+#include "atlas_2006_05880.h"
+#include "atlas_2111_08372.h"
+#include "atlas_2202_07953.h"
+#include "atlas_2209_13935.h"
+#include "atlas_2102_10874.h"
 //@extraheader@
 #include "AnalysisBase.h"
 

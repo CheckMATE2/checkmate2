@@ -270,7 +270,7 @@ double AnalysisBase::mT(const TLorentzVector & vis, const TLorentzVector & invis
     return sqrt(m_invis*m_invis +  2.*vis.Pt()*invis.Et()*(1.-cos(fabs(vis.DeltaPhi(invis)))));
 }
 
-double AnalysisBase::mT2(const TLorentzVector & vis1, const TLorentzVector & vis2, double m_inv, const TLorentzVector & invis) {
+double AnalysisBase::mT2(const TLorentzVector & vis1, const TLorentzVector & vis2, double m_inv, const TLorentzVector & invis, bool massive) {
     // Setup mt2 evaluation object.
     mt2_bisect::mt2 mt2_event;
     TLorentzVector zeroVector = TLorentzVector(0. ,0. ,0. ,0.);
@@ -283,8 +283,8 @@ double AnalysisBase::mT2(const TLorentzVector & vis1, const TLorentzVector & vis
     }
  
     // Construct arrays that mt2_bisect needs as input and start evaluation
-    double p1[3] = {vis1.M(), vis1.Px(), vis1.Py()};
-    double p2[3] = {vis2.M(), vis2.Px(), vis2.Py()};
+    double p1[3] = {massive ? vis1.M() : 0., vis1.Px(), vis1.Py()};
+    double p2[3] = {massive ? vis2.M() : 0., vis2.Px(), vis2.Py()};
     mt2_event.set_momenta( p1, p2, pmiss );
     mt2_event.set_mn( m_inv );
     return mt2_event.get_mt2();  

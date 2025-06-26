@@ -390,7 +390,7 @@ bool Atlas_1911_12606::Pass_Preselection() {
     if ( signal_jets.size() > 0  and fabs(signal_jets[0]->P4().DeltaPhi(pTmiss)) < 2. ) return false;
     countCutflowEvent("2L_05_dphi_jet1>2");
     
-    if (mll < 1 or (flavour == 1 and mll < 3) ) return false;
+    if (mll < 1 or (flavour == 1 and mll < 3) or mll > 60.) return false;
     countCutflowEvent("2L_06_mll");
     
     double deltar = leptons[0]->P4().DeltaR(leptons[1]->P4());
