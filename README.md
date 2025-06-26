@@ -26,7 +26,7 @@ This is a brief note on how to install CheckMATE from the master branch on https
      
   f) ONNX Runtime; see: https://onnxruntime.ai/; tested with versions 1.12.1 and 1.13.1 (linux-x64)  
   
-  g) Spey for multibin fits; see https://speysidehep.github.io/spey/quick_start.html#; 
+  g) Spey, pyhf and spey-pyhf plugin for multibin fits; see https://speysidehep.github.io/spey/quick_start.html#; jax or pytorch or tensorflow are recommended;
      pip install spey   
      
      
@@ -50,7 +50,7 @@ This is a brief note on how to install CheckMATE from the master branch on https
      
 3) New features:
 
-  a) Multibin fits available in atlas_2010_14293, atlas_1908_03122, atlas_1911_12606, atlas_2101_01629, atlas_1908_08215, atlas_2004_14060, 1911_06660, atlas_2106_01676, cms_1908_04722, cms_1909_03460, cms_2107_13021, cms_2205_09597:
+  a) Multibin fits available in atlas_2010_14293, atlas_1908_03122, atlas_1911_12606, atlas_2101_01629, atlas_1908_08215, atlas_2004_14060, atlas_1911_06660, atlas_2106_01676, cms_1908_04722, cms_1909_03460, cms_2107_13021, cms_2205_09597:
      For command line use "-mb select/scan/detailed"; in input file "Multibin: select/scan/detailed"; for chosing the calculation method: "-mod simple/full"; -exp, -mbcls, -uplim  
      scan: just observed CLs for fast evalutaion;  
      detailed: observed, expected, CLs and upperlimits;  
@@ -66,7 +66,7 @@ This is a brief note on how to install CheckMATE from the master branch on https
   b) Neural nets implemented with ONNX Runtime, available in atlas_2106_09609 and atlas_2211_08028:
      During configure use "--with-onnx=/path/to/onnxruntime"; see: https://onnxruntime.ai/; tested with versions 1.12.1 and 1.13.1 (linux-x64)
      
-  c) Boosted decision trees in atlas_2010_14293 brought by ROOT TMVA.
+  c) Boosted decision trees in atlas_2010_14293 with ROOT TMVA.
      
 
 # current
