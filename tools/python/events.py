@@ -552,7 +552,7 @@ class MG5Events(Pythia8Events):
             AdvPrint.cout("\t\t\t - param_card: "+self.mg5_cards["param"])
         
         if self.maxEvents > 0:
-            AdvPrint.cout("\t\t\t - at most "+str(self.maxEvents)+" events are generated/analsed")
+            AdvPrint.cout("\t\t\t - at most "+str(self.maxEvents)+" events are generated/analysed")
             
         if self.py8_infile != "":
             AdvPrint.cout("\t\t\t - Pythia8 settings file used for showering: "+self.py8_infile)

@@ -319,7 +319,7 @@ def calc_point(path, names, analysis, mbsr, systematics = 0, lumi = 0.017, ntoys
     exp_limits = [10.,10.,10.,10.,10.]
     cls_obs = 1.
     cls_exp = [1.,1.,1.,1.,1.]
-    if Info.parameters["backend"] == "jax" and pyhf.tensorlib.name != "jax":
+    if Info.parameters["backend"] == "jax":
         pyhf.set_backend("jax")    
     else:
         pyhf.set_backend("numpy")

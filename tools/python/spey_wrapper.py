@@ -91,9 +91,9 @@ def calc_point( path, analysis, mbsr ):
         AdvPrint.cout("Observed:")
         cls_obs_all = stat_model.exclusion_confidence_level(expected = spey.ExpectationType.observed)
         cls_obs = cls_obs_all[0]
-        if 1. - cls_obs < 0.00000001:
-            cls_obs = 0.
-            AdvPrint.cout("CLs calculation unreliable.")
+        #if 1. - cls_obs < 10e-16:
+        #    cls_obs = 0.
+        #    AdvPrint.cout("CLs calculation unreliable.")
         AdvPrint.cout("CL95: "+str(1. - cls_obs) )
         string += f"Observed CLs for mu = 1: {1. - cls_obs}"+'\n'
         if Info.flags["expected"]:

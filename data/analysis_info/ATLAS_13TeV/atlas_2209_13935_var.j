@@ -565,7 +565,7 @@
     "MET",
     "near the W-boson mass splitting"
   ],
-"likelihoods": "y",
+"likelihoods": "n",
   "mb_signal_regions": {
     "SR-0J": [
     "SR-0J-bin-100",
