@@ -1,0 +1,15 @@
+[Parameters]
+Name: 14TeV-test-mg5
+Analyses: atlas14TeV_projected
+SLHAFile: ./example_run_cards/auxiliary/testspectrum.slha
+
+#[13TeV-test]
+#Pythia8Process: p p > go go
+#MaxEvents: 10000
+
+[13TeV-mg5]
+MGCommand: import model MSSM_SLHA2;
+           define  sq = ul ur sl sr dl dr cl cr ul~ ur~ sl~ sr~ dl~ dr~ cl~ cr~;
+           generate p p > sq sq;
+KFactor: 1.96
+MaxEvents: 10000

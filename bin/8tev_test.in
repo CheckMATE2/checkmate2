@@ -1,0 +1,15 @@
+[Parameters]
+Name: 8TeV-test-mg5
+Analyses: atlas8TeV,cms8TeV
+SLHAFile: ./example_run_cards/auxiliary/testspectrum2.slha
+
+#[13TeV-test]
+#Pythia8Process: p p > go go
+#MaxEvents: 10000
+
+[13TeV-mg5]
+MGCommand: import model MSSM_SLHA2;
+           define susy = go ul cl t1 ur cr t2 dl sl b1 dr sr b2 ul~ cl~ t1~ ur~ cr~ t2~ dl~ sl~ b1~ dr~ sr~ b2~ h01 h2 h3 h+ h- sve svm svt el- mul- ta1- er- mur- ta2- sve~ svm~ svt~ el+ mul+ ta1+ er+ mur+ ta2+ n1 n2 n3 n4 x1+ x2+ x1- x2-;
+           generate p p > susy susy;
+KFactor: 1.96
+MaxEvents: 10000
