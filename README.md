@@ -45,8 +45,15 @@ This is a brief note on how to install CheckMATE from the master branch on https
   d) to test the installation (if you linked Pythia):
 
      cd bin
-
      ./CheckMATE 13tev_test.in
+     
+     or
+     
+     ./CheckMATE 13tev_testfull.in
+     
+     or
+     
+     ./CheckMATE 13tev_testfull2.in     
      
 3) New features:
 
