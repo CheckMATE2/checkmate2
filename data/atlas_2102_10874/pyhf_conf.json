@@ -1,0 +1,8 @@
+{"analysis" :[
+	{"name":"combined",
+	"bkgonly":"workspace.json",
+        "patchset":"workspace.json",
+        "histosize":"1",
+	"SR_dict": {"SR_200_cuts":"EM00","SR_250_cuts":"EM01","SR_300_cuts":"EM02","SR_350_cuts":"EM03","SR_400_cuts":"EM04","SR_500_cuts":"EM05","SR_600_cuts":"EM06","SR_700_cuts":"EM07","SR_800_cuts":"EM08","SR_900_cuts":"EM09","SR_1000_cuts":"EM10","SR_1100_cuts":"EM11","SR_1200_cuts":"EM12"
+	}}]
+}
