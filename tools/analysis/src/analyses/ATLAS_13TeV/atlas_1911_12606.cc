@@ -233,8 +233,8 @@ void Atlas_1911_12606::analyze() {
 
   countCutflowEvent("00_0all");
   
-  //if ( !signal_jets.size() or signal_jets[0]->PT < 50.) return;
-  //countCutflowEvent("00_1jet50");
+  if ( !signal_jets.size() or signal_jets[0]->PT < 50.) return;
+  countCutflowEvent("00_1jet50");
   
   //if (nel_true + nmu_true < 2 or missing_true.Perp() < 75. ) return; // generator filter 2l
   //if (nel_true + nmu_true < 1 or missing_true.Perp() < 50. ) return; // generator filter 1l1t
