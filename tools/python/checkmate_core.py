@@ -22,6 +22,7 @@ if sys.version_info[0] == 3:
     import multibin_limit as mb
     import multibin_limit_full as mbfull
     import spey_wrapper
+    import hs3_wrapper as hs3
 
 class CheckMATE2(object):
     """ This is the main object whose instance corresponds to a full CheckMATE run """
@@ -387,6 +388,10 @@ class CheckMATE2(object):
                         AdvPrint.cout("Calculating full likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
                         inv_r_obs, inv_r_exp, cls_obs, cls_exp = spey_wrapper.calc_point(Info.paths['output'] , analysis, mbsr)
                         AdvPrint.cout("Done!")
+                    if analysis == "atlas_2411_02040":
+                        AdvPrint.cout("Calculating full likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
+                        inv_r_obs, inv_r_exp, cls_obs, cls_exp = hs3.calc_workspace(Info.paths['output'] , analysis, mbsr)
+                        AdvPrint.cout("Done!")        
                     if Info.parameters["statmod"] == "fullpyhf" and Info.get_analysis_parameters(analysis)["likelihoods"] == "y":
                         AdvPrint.cout("Calculating full likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
                         inv_r_obs, inv_r_exp, cls_obs, cls_exp = mbfull.calc_point(Info.paths['output'] , analysis, mbsr)

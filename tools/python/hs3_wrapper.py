@@ -55,11 +55,11 @@ def calc_workspace( path, analysis, mbsr ):
         json.dump(conf, outffile)
     outfile.close()
     AdvPrint.cout("Created workspace for analysis: "+analysis+" , SR: "+mbsr)
-    AdvPrint.cout("Signal events: "+str(s))
+    #AdvPrint.cout("Signal events: "+str(s))
 
     #https://xroofit.readthedocs.io/en/latest/hypothesisTesting.html#xroofit-demo-computing-discovery-significance
     fileName  = Info.paths['data']+ "/" + analysis + "/workspace.json"           # path to the workspace
-    pdfName   = "simPdf"                           # name of the top-level pdf in the workspace
+    pdfName   = "pdfs/simPdf"                           # name of the top-level pdf in the workspace
     channels  = "*"                                # comma-separated list of channels to include (n.b. you should not include VRs)
     dsName    = "obsData"                          # name of the observed dataset, use "" to use an asimov dataset for the obsData
     poiName   = ""                                 # name of the parameter of interest - leave blank to auto-infer if possible
@@ -67,18 +67,29 @@ def calc_workspace( path, analysis, mbsr ):
     scanMin   = 0                                  # lower boundary poi value for limit scan (can be more restricted than fitting range)
     scanMax   = 10                                 # upper boundary poi value for limit scan (can be more restricted than fitting range)
     scanN     = 0                                  # number of points to scan, leave as 0 for an auto-scan
-    scanType  = "cls visualize"                    # leave out the 'visualize' if you don't want to see progress during scan
+    scanType  = "cls"                              # leave out the 'visualize' if you don't want to see progress during scan
     constPars = ""                                 # comma-separated list of nuisance parameters to hold const, e.g. do "*" for a stat-only limit
     tsType    = XRF.xRooFit.TestStatistic.qmutilde # choices: tmu, qmu, qmutilde, q0, u0
     nSigmas   = [0,1,2,-1,-2,float('nan')]         # list of nSigmas to compute limits at ... "NaN" is used by xRooFit to indicate you want obs limit
     outFile   = ""                                 # specify a path to save the post-scan workspace (with result) to
 
     ws = XRF.xRooNode(fileName)
-    hs = w[pdfName].reduced(channels).nll(dsName).hypoSpace(poiName,tsType)
+    nllOpts = XRF.xRooFit.createNLLOptions()
+    hs = ws[pdfName].reduced(channels).nll(dsName,nllOpts).hypoSpace(poiName,tsType)
     #hs.scan(scanType,scanN,scanMin,scanMax,nSigmas)
     limits = hs.limits()
-    obs_limit = limits['obs'].value()
-    exp_limits = [limits['-2'].value(), limits['-1'].value(), limits['0'].value(), limits['1'].value(), limits['2'].value()]
+    obs_limit = limits['obs'][0]
+    exp_limits = [limits['-2'][0], limits['-1'][0], limits['0'][0], limits['1'][0], limits['2'][0]]
+
+    canMin = 0 # we want to test just the mu=0 hypothesis
+    scanMax = 0 # so set min and max both to 0
+    scanN = 1
+    scanType = "pnull"
+    tsType = XRF.xRooFit.TestStatistic.u0 # use the uncapped discovery test statistic
+    hs2 = ws[pdfName].nll(dsName, nllOpts).hypoSpace(poiName,tsType)
+    hs2.scan(scanType, scanN, scanMin, scanMax, nSigmas)
+    cls_obs = hs2[0].pNull_asymp()
+    cls_exp = [hs2[0].pNull_asymp(i) for i in range(-2,3)]
 
     string = "================================\n Analysis: "+analysis+" , SR: "+mbsr+"\n"
     string += f"Limits with full likelihood (xRooFit):\n"
