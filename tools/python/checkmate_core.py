@@ -379,7 +379,7 @@ class CheckMATE2(object):
             if "mb_signal_regions" in Info.get_analysis_parameters(analysis):
                 mb_signal_regions = Info.get_analysis_parameters(analysis)["mb_signal_regions"]
                 for mbsr in mb_signal_regions:
-                    if (Info.parameters["statmod"] == "simple" and Info.get_analysis_parameters(analysis)["likelihoods"] != "cov") or (Info.parameters["statmod"] == "full" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n") or (Info.parameters["statcomb"] == "fullpyhf" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n"):
+                    if (Info.parameters["statmod"] == "simple" and Info.get_analysis_parameters(analysis)["likelihoods"] != "cov") or (Info.parameters["statmod"] == "full" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n") or (Info.parameters["statcomb"] == "fullpyhf" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n") or analysis == "atlas_2411_02040":
                         sr_list = mb_signal_regions[mbsr]
                         AdvPrint.cout("Calculating simplified likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
                         inv_r_obs, inv_r_exp, cls_obs, cls_exp = mb.calc_point(Info.paths['output'] , sr_list, analysis, mbsr)

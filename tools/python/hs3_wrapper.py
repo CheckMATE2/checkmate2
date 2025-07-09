@@ -2,7 +2,7 @@ import os
 #os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 #import jax
 #jax.config.update('jax_default_device',jax.devices('cpu')[0])
-import json, ROOT
+import json, ROOT  # you really need 6.32.14
 from ROOT.Experimental import XRooFit as XRF
 import numpy as np
 from info import Info
@@ -33,32 +33,37 @@ def calc_workspace( path, analysis, mbsr ):
     with open(Info.paths['data']+ "/" + analysis + "/pyhf_conf.json") as f:
         hs3in = json.load(f)
 
-    for i in len(h3in["analysis"]):
-        if h3in["analysis"][i]["name"] == mbsr:
-            bkg_only = h3in["analysis"][i]["bkgonly"]
+    for i in range(len(hs3in["analysis"])):
+        if hs3in["analysis"][i]["name"] == mbsr:
+            bkg_only = hs3in["analysis"][i]["bkgonly"]
+            isr = i
 
-    with open(Info.paths['data']+ "/" + analysis + "/"+ bkg_only) as serialized:
+    histosize = hs3in["analysis"][isr]["histosize"]
+    ws_name = path + "/analysis/" + mbsr + ".json"
+
+    with open(Info.paths['data']+ "/" + analysis + "/Likelihoods/"+ bkg_only) as serialized:
         conf = json.load(serialized)
 
     #print(s)
-    for i in range(len(s)/2):  # signal regions
-        conf['distrbutions'][2]['samples'][3]['data']['contents'][i] = s[i]
-        conf['distrbutions'][2]['samples'][3]['data']['errors'][i] = ds[i]
+    for i in range(histosize):  # signal regions
+        conf['distributions'][2]['samples'][3]['data']['contents'][i] = s[i]
+        conf['distributions'][2]['samples'][3]['data']['errors'][i] = ds[i]
 
-    for i in range(len(s)/2,len(s)): # control regions
-        conf['distrbutions'][0]['samples'][1]['data']['contents'][i] = s[i]
-        conf['distrbutions'][0]['samples'][1]['data']['errors'][i] = ds[i]
+    for i in range(histosize,2*histosize): # control regions
+        conf['distributions'][0]['samples'][1]['data']['contents'][i-histosize] = s[i]
+        conf['distributions'][0]['samples'][1]['data']['errors'][i-histosize] = ds[i]
 
     serialized.close()
 
-    with open(Info.paths['data']+ "/" + analysis + "/workspace.json", 'w') as outfile:
-        json.dump(conf, outffile)
+    with open(ws_name, 'w') as outfile:
+        json.dump(conf, outfile)
     outfile.close()
     AdvPrint.cout("Created workspace for analysis: "+analysis+" , SR: "+mbsr)
     #AdvPrint.cout("Signal events: "+str(s))
 
+    #ROOT.gErrorIgnoreLevel = ROOT.kFatal #shut up
     #https://xroofit.readthedocs.io/en/latest/hypothesisTesting.html#xroofit-demo-computing-discovery-significance
-    fileName  = Info.paths['data']+ "/" + analysis + "/workspace.json"           # path to the workspace
+    fileName  = ws_name                            # path to the workspace
     pdfName   = "pdfs/simPdf"                           # name of the top-level pdf in the workspace
     channels  = "*"                                # comma-separated list of channels to include (n.b. you should not include VRs)
     dsName    = "obsData"                          # name of the observed dataset, use "" to use an asimov dataset for the obsData
@@ -88,8 +93,10 @@ def calc_workspace( path, analysis, mbsr ):
     tsType = XRF.xRooFit.TestStatistic.u0 # use the uncapped discovery test statistic
     hs2 = ws[pdfName].nll(dsName, nllOpts).hypoSpace(poiName,tsType)
     hs2.scan(scanType, scanN, scanMin, scanMax, nSigmas)
-    cls_obs = hs2[0].pNull_asymp()
-    cls_exp = [hs2[0].pNull_asymp(i) for i in range(-2,3)]
+    cls_obs = hs2[0].pNull_asymp()[0]
+    cls_exp = [hs2[0].pNull_asymp(i)[0] for i in range(-2,3)]
+    cls_obs = hs2[0].pCLs_asymp(0)[0]
+    cls_exp = [hs2[0].pCLs_asymp(i)[0] for i in range(-2,3)]
 
     string = "================================\n Analysis: "+analysis+" , SR: "+mbsr+"\n"
     string += f"Limits with full likelihood (xRooFit):\n"
@@ -114,5 +121,5 @@ def calc_workspace( path, analysis, mbsr ):
         write_file.write(string)
         #print(string,file=write_file)
 
-    os.remove(Info.paths['data']+ "/" + analysis + "/workspace.json")    
+    #os.remove(ws_name)
     return float(obs_limit), float(exp_limits[2]), float(cls_obs), cls_exp        

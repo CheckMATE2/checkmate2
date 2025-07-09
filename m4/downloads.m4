@@ -105,6 +105,16 @@ AC_DEFUN([DOWNLOADS],
     fi  
     `curl -JLH "Accept: application/x-tar" -o "$srcdir/data/atlas_2209_13935/SimpleAnalysisFiles.tar.gz" "https://doi.org/10.17182/hepdata.134068.v1/r3"`
     `tar -xvzf "$srcdir/data/atlas_2209_13935/SimpleAnalysisFiles.tar.gz" -C "$srcdir/data/atlas_2209_13935"`
-  fi  
+  fi
+  # Likelihoods for atlas_2411_02040
+  if ! test -f "$srcdir/data/atlas_2411_02040/ANA-HIGP-2024-32_HHH_SplusBfit_Likelihoods.tar.gz"
+    then
+    if ! test -d "$srcdir/data/atlas_2411_02040/Likelihoods"
+    then
+      mkdir "$srcdir/data/atlas_2411_02040/Likelihoods"
+    fi
+    `curl -OJLH "Accept: application/x-tar" -o "$srcdir/data/atlas_2411_02040/ANA-HIGP-2024-32_HHH_SplusBfit_Likelihoods.tar.gz" "https://doi.org/10.17182/hepdata.157024.v1/r1"`
+    `tar -xvzf "$srcdir/data/atlas_2411_02040/ANA-HIGP-2024-32_HHH_SplusBfit_Likelihoods.tar.gz" -C "$srcdir/data/atlas_2411_02040/Likelihoods/"`
+  fi
   AC_MSG_RESULT([])
 ])
