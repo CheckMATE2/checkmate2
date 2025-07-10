@@ -113,8 +113,8 @@ AC_DEFUN([DOWNLOADS],
     then
       mkdir "$srcdir/data/atlas_2411_02040/Likelihoods"
     fi
-    `curl -OJLH "Accept: application/x-tar" -o "$srcdir/data/atlas_2411_02040/ANA-HIGP-2024-32_HHH_SplusBfit_Likelihoods.tar.gz" "https://doi.org/10.17182/hepdata.157024.v1/r1"`
-    `tar -xvzf "$srcdir/data/atlas_2411_02040/ANA-HIGP-2024-32_HHH_SplusBfit_Likelihoods.tar.gz" -C "$srcdir/data/atlas_2411_02040/Likelihoods/"`
+    `curl -JLH "Accept: application/x-tar" -o "$srcdir/data/atlas_2411_02040/ANA-HIGP-2024-32_HHH_SplusBfit_Likelihoods.tar.gz" "https://doi.org/10.17182/hepdata.157024.v1/r1"`
+    `tar -xvzf "$srcdir/data/atlas_2411_02040/ANA-HIGP-2024-32_HHH_SplusBfit_Likelihoods.tar.gz" --strip-components=1 -C "$srcdir/data/atlas_2411_02040/Likelihoods/"`
   fi
   AC_MSG_RESULT([])
 ])
