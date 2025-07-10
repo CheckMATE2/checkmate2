@@ -53,6 +53,10 @@ def calc_workspace( path, analysis, mbsr ):
         conf['distributions'][0]['samples'][1]['data']['contents'][i-histosize] = s[i]
         conf['distributions'][0]['samples'][1]['data']['errors'][i-histosize] = ds[i]
 
+    for i in range(2,159):
+        del conf['distributions'][2]['samples'][3]['modifiers'][2]
+        del conf['distributions'][0]['samples'][1]['modifiers'][2]
+
     serialized.close()
 
     with open(ws_name, 'w') as outfile:
@@ -61,7 +65,7 @@ def calc_workspace( path, analysis, mbsr ):
     AdvPrint.cout("Created workspace for analysis: "+analysis+" , SR: "+mbsr)
     #AdvPrint.cout("Signal events: "+str(s))
 
-    #ROOT.gErrorIgnoreLevel = ROOT.kFatal #shut up
+    ROOT.gErrorIgnoreLevel = ROOT.kFatal #shut up
     #https://xroofit.readthedocs.io/en/latest/hypothesisTesting.html#xroofit-demo-computing-discovery-significance
     fileName  = ws_name                            # path to the workspace
     pdfName   = "pdfs/simPdf"                           # name of the top-level pdf in the workspace
@@ -121,5 +125,5 @@ def calc_workspace( path, analysis, mbsr ):
         write_file.write(string)
         #print(string,file=write_file)
 
-    #os.remove(ws_name)
+    #os.remove(ws_name) # leave files for inspection
     return float(obs_limit), float(exp_limits[2]), float(cls_obs), cls_exp        
