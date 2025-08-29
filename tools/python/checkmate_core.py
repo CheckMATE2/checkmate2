@@ -379,7 +379,7 @@ class CheckMATE2(object):
             if "mb_signal_regions" in Info.get_analysis_parameters(analysis):
                 mb_signal_regions = Info.get_analysis_parameters(analysis)["mb_signal_regions"]
                 for mbsr in mb_signal_regions:
-                    if (Info.parameters["statmod"] == "simple" and (Info.get_analysis_parameters(analysis)["likelihoods"] == "y" or Info.get_analysis_parameters(analysis)["likelihoods"] == "n") ) or (Info.parameters["statmod"] == "full" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n") or (Info.parameters["statcomb"] == "fullpyhf" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n"):                        
+                    if (Info.parameters["statmod"] == "simple" and (Info.get_analysis_parameters(analysis)["likelihoods"] == "y" or Info.get_analysis_parameters(analysis)["likelihoods"] == "n") ) or (Info.parameters["statmod"] == "full" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n") or (Info.parameters["statcomb"] == "fullpyhf" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n") or (Info.parameters["statmod"] == "full" and analysis == "atlas_2102_10874"):                        
                         sr_list = mb_signal_regions[mbsr]
                         AdvPrint.cout("Calculating simplified likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
                         inv_r_obs, inv_r_exp, cls_obs, cls_exp = mb.calc_point(Info.paths['output'] , sr_list, analysis, mbsr)
@@ -388,10 +388,10 @@ class CheckMATE2(object):
                         AdvPrint.cout("Calculating full likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
                         inv_r_obs, inv_r_exp, cls_obs, cls_exp = spey_wrapper.calc_point(Info.paths['output'] , analysis, mbsr)
                         AdvPrint.cout("Done!")
-                    if Info.parameters["statmod"] == "full" and analysis == "atlas_2102_10874":
-                        AdvPrint.cout("Calculating full likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
-                        inv_r_obs, inv_r_exp, cls_obs, cls_exp = wscalc.calc_workspace(Info.paths['output'] , analysis, mbsr)
-                        AdvPrint.cout("Done!")    
+                    #if Info.parameters["statmod"] == "full" and analysis == "atlas_2102_10874":
+                    #    AdvPrint.cout("Calculating full likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
+                    #    inv_r_obs, inv_r_exp, cls_obs, cls_exp = wscalc.calc_workspace(Info.paths['output'] , analysis, mbsr)
+                    #    AdvPrint.cout("Done!")    
                     if Info.parameters["statmod"] == "fullpyhf" and Info.get_analysis_parameters(analysis)["likelihoods"] == "y":
                         AdvPrint.cout("Calculating full likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
                         inv_r_obs, inv_r_exp, cls_obs, cls_exp = mbfull.calc_point(Info.paths['output'] , analysis, mbsr)

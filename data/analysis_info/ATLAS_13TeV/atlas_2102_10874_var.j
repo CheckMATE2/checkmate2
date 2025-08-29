@@ -287,7 +287,7 @@
   "tags": [
     "monojet"
   ],
-  "likelihoods": "special",
+  "likelihoods": "y",
   "mb_signal_regions": {
     "combined": [
       "EM00",

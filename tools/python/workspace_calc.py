@@ -14,6 +14,8 @@ def calc_workspace( path, analysis, mbsr ):
     inv_r_exp = 10. 
     cls_obs = 1. 
     cls_exp = [1.,1.,1.,1.,1.]
+    obs_limit = 0.1
+    exp_limits = [0.1,0.1,0.1,0.1,0.1]
     
     os.system("mkdir -p " + path + '/multibin_limits')
 
@@ -49,6 +51,9 @@ def calc_workspace( path, analysis, mbsr ):
     with open(Info.paths['data']+ "/" + analysis + "/workspace.json") as serialized:
         conf = json.load(serialized)
 
+    s=[871.4627967216736,647.5826000167042,450.4180683275746,314.7818432413046,360.89046390338405,183.92661346902094,94.93645954725184,51.78629890410974,28.866454408256846,17.242178931452774,9.50262857611974,6.096019582065808,8.337211662314193]
+    print(s)
+    print(ds)
     conf['measurements'][0]['config']['parameters'][4]['bounds'][0] = [0.0, 10.0] #signal strength
     for i in range(len(s)):
         sample = 0
@@ -68,7 +73,8 @@ def calc_workspace( path, analysis, mbsr ):
         AdvPrint.cout("CL95: "+str(float(cls_obs)) )
         string += f"Observed CLs for mu = 1: {float(cls_obs)}"+'\n'
         if Info.flags["expected"]:
-            string = string+f"Expected CLs band for mu = 1: {float(cls_exp[2])}"+'\n'
+            #string = string+f"Expected CLs band for mu = 1: {float(cls_exp[2])}"+'\n'
+            string = string+f"Expected CLs band for mu = 1: {[float(exp) for exp in cls_exp]}"+'\n'
     if Info.flags["uplim"]:
         AdvPrint.cout("Observed:")
         poi_values, obs_limit, exp_limits, (scan, results) = upperlim(workspace)	
@@ -118,8 +124,8 @@ def upperlim(workspace, ntoys = -1):
     init_pars = model.config.suggested_init()
     par_bounds = model.config.suggested_bounds()
     fixed_pars = [False] * model.config.npars
-    obs_limit, exp_limits, (scan, results) = pyhf.infer.intervals.upper_limits.upper_limit(data, model, init_pars=init_pars, par_bounds=par_bounds, fixed_params=fixed_pars, scan = poi_values, level=0.05, return_results=True, test_stat="qtilde")
-    print(results)
+    obs_limit, exp_limits, (scan, results) = pyhf.infer.intervals.upper_limits.upper_limit(data, model, init_pars=init_pars, par_bounds=par_bounds, fixed_params=fixed_pars, scan = None, level=0.05, return_results=True, test_stat="qtilde")
+    #print(results)
 
     return poi_values, obs_limit, exp_limits, (scan, results) 
 ##---------------------------------------------------------------------------------    
