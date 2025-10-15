@@ -528,7 +528,7 @@
   "tags": [
     "Higgs"
   ],
-  "likelihoods": "n",
+  "likelihoods": "hs3",
   "mb_signal_regions": {
     "nonresDNN": [
     	"nonresDNN-SR-bin00", 

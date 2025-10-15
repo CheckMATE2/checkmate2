@@ -363,7 +363,7 @@ class CheckMATE2(object):
             _print_likelihood(evaluators)  
             
     def stateval(self):        
-        best_param=10.
+        best_param=50.
         best_analysis = ""
         best_sr = ""
         cls_limit = False
@@ -379,7 +379,7 @@ class CheckMATE2(object):
             if "mb_signal_regions" in Info.get_analysis_parameters(analysis):
                 mb_signal_regions = Info.get_analysis_parameters(analysis)["mb_signal_regions"]
                 for mbsr in mb_signal_regions:
-                    if (Info.parameters["statmod"] == "simple" and Info.get_analysis_parameters(analysis)["likelihoods"] != "cov") or (Info.parameters["statmod"] == "full" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n") or (Info.parameters["statcomb"] == "fullpyhf" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n") or analysis == "atlas_2411_02040":
+                    if (Info.parameters["statmod"] == "simple" and Info.get_analysis_parameters(analysis)["likelihoods"] != "cov" and Info.get_analysis_parameters(analysis)["likelihoods"] != "hs3") or (Info.parameters["statmod"] == "full" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n") or (Info.parameters["statcomb"] == "fullpyhf" and Info.get_analysis_parameters(analysis)["likelihoods"] == "n"): # or analysis == "atlas_2411_02040":
                         sr_list = mb_signal_regions[mbsr]
                         AdvPrint.cout("Calculating simplified likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
                         inv_r_obs, inv_r_exp, cls_obs, cls_exp = mb.calc_point(Info.paths['output'] , sr_list, analysis, mbsr)
@@ -388,7 +388,7 @@ class CheckMATE2(object):
                         AdvPrint.cout("Calculating full likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
                         inv_r_obs, inv_r_exp, cls_obs, cls_exp = spey_wrapper.calc_point(Info.paths['output'] , analysis, mbsr)
                         AdvPrint.cout("Done!")
-                    if analysis == "atlas_2411_02040":
+                    if Info.get_analysis_parameters(analysis)["likelihoods"] == "hs3":   # analysis == "atlas_2411_02040":
                         AdvPrint.cout("Calculating full likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
                         inv_r_obs, inv_r_exp, cls_obs, cls_exp = hs3.calc_workspace(Info.paths['output'] , analysis, mbsr)
                         AdvPrint.cout("Done!")        
@@ -414,7 +414,7 @@ class CheckMATE2(object):
                         best_analysis = analysis
                         best_sr = mbsr
                             
-        if best_param < 10. and cls_limit == False:
+        if best_param < 50. and cls_limit == False:
             AdvPrint.set_cout_file(Info.files["output_result"], False)
             AdvPrint.cout("\nTest: Calculation of upper limit from multibin signal regions")                 
             if best_param < 1.:

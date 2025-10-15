@@ -10,26 +10,7 @@ from advprint import AdvPrint
 import multibin_limit as mb
 import multibin_limit_full as mbfull
 
-def calc_workspace( path, analysis, mbsr ):
-    inv_r = 10. 
-    inv_r_exp = 10. 
-    cls_obs = 1. 
-    cls_exp = [1.,1.,1.,1.,1.]
-    
-    os.system("mkdir -p " + path + '/multibin_limits')
-
-    mbfull.init(path, analysis, mbsr)
-    names = mbfull.SR_dict.keys()
-    SRs = mbfull.data_from_CMresults(path)
-    o, b, db, s, ds = mbfull.select_MBsr(names, SRs)
-    r = [x - 1.64*y for x, y in zip(s,ds)] #s - 1.64 ds
-    if max(s) == 0. or max(r) <= 0.:
-        AdvPrint.cout("No signal events in the selected SRs! Skipping")
-        return 10., 10., 1., 1.
-    if max(r) <= 0.:
-        AdvPrint.cout("Signal events below MC uncertainty in the selected SRs! Skipping")
-        return 10., 10., 1., 1.   
-
+def workspace_2411_02040( path, analysis, mbsr, s , ds ):
     with open(Info.paths['data']+ "/" + analysis + "/pyhf_conf.json") as f:
         hs3in = json.load(f)
 
@@ -63,6 +44,67 @@ def calc_workspace( path, analysis, mbsr ):
         json.dump(conf, outfile)
     outfile.close()
     AdvPrint.cout("Created workspace for analysis: "+analysis+" , SR: "+mbsr)
+    return ws_name
+
+def workspace_2102_10874( path, analysis, mbsr, s , ds ):
+    with open(Info.paths['data']+ "/" + analysis + "/pyhf_conf.json") as f:
+        hs3in = json.load(f)
+
+    
+    bkg_only = Info.paths['data']+ "/" + analysis + "/Likelihoods/" + hs3in["analysis"][0]["bkgonly"]
+    ws = ROOT.RooWorkspace(ROOT.TFile(bkg_only).Get("w"))
+    ROOT.RooJSONFactoryWSTool(ws).exportJSON(Info.paths['data']+ "/" + analysis + "/Likelihoods/" + hs3in["analysis"][0]["patchset"])
+
+    with open(Info.paths['data']+ "/" + analysis + "/Likelihoods/" + hs3in["analysis"][0]["patchset"]) as serialized:
+        conf = json.load(serialized)
+        serialized.close()
+
+    k = 0
+    for i in range(len(conf["distributions"])):
+
+        if "samples" in conf["distributions"][i]:
+            #SR_dict[conf["distributions"][i]["name"]] = conf["distributions"][i]["name"].replace("model_","")
+            conf["distributions"][i]["samples"].append({"data":{"contents": [s[k]],"errors":[ds[k]]},"modifiers":[{"constraint_name":"lumiConstraint","name":"Lumi","parameter":"Lumi","type":"normfactor"},{"name":"mu_sig","parameter":"mu_sig","type":"normfactor"}],"name":"BSM_signal"})
+            k += 1
+
+    conf["domains"][0]["axes"].append({"max":100.0,"min":0.0,"name":"mu_sig"})
+
+    conf["parameter_points"][0]["parameters"].append({"value":1.0,"name":"mu_sig"})
+    conf["parameter_points"][1]["parameters"].append({"value":1.0,"name":"mu_sig"})
+
+    with open(Info.paths['data']+ "/" + analysis + "/Likelihoods/" + hs3in["analysis"][0]["patchset"], 'w') as serialized:
+        json.dump(conf, serialized)
+        serialized.close()
+        
+    return Info.paths['data']+ "/" + analysis + "/Likelihoods/" + hs3in["analysis"][0]["patchset"]
+    
+
+def calc_workspace( path, analysis, mbsr ):
+    inv_r = 10. 
+    inv_r_exp = 10. 
+    cls_obs = 1. 
+    cls_exp = [1.,1.,1.,1.,1.]
+    
+    os.system("mkdir -p " + path + '/multibin_limits')
+
+    mbfull.init(path, analysis, mbsr)
+    names = mbfull.SR_dict.keys()
+    SRs = mbfull.data_from_CMresults(path)
+    o, b, db, s, ds = mbfull.select_MBsr(names, SRs)
+    r = [x - 1.64*y for x, y in zip(s,ds)] #s - 1.64 ds
+    if max(s) == 0. or max(r) <= 0.:
+        AdvPrint.cout("No signal events in the selected SRs! Skipping")
+        return 10., 10., 1., 1.
+    if max(r) <= 0.:
+        AdvPrint.cout("Signal events below MC uncertainty in the selected SRs! Skipping")
+        return 10., 10., 1., 1.   
+
+    if analysis == "atlas_2411_02040":
+        ws_name = workspace_2411_02040( path, analysis, mbsr, s, ds )
+
+    if analysis == "atlas_2102_10874":
+        ws_name = workspace_2102_10874( path, analysis, mbsr, s, ds )
+
     #AdvPrint.cout("Signal events: "+str(s))
 
     ROOT.gErrorIgnoreLevel = ROOT.kFatal #shut up
@@ -83,6 +125,16 @@ def calc_workspace( path, analysis, mbsr ):
     outFile   = ""                                 # specify a path to save the post-scan workspace (with result) to
 
     ws = XRF.xRooNode(fileName)
+    if analysis == "atlas_2102_10874":
+        ws.poi().Add("mu_sig")
+
+    if poiName == "":
+        if ws.poi().getSize() == 1:
+            poiName = ws.poi()[0].GetName()
+        else:
+            AdvPrint.cout("Multiple POIs in workspace, please specify one")
+            return 10., 10., 1., 1.
+            
     nllOpts = XRF.xRooFit.createNLLOptions()
     hs = ws[pdfName].reduced(channels).nll(dsName,nllOpts).hypoSpace(poiName,tsType)
     #hs.scan(scanType,scanN,scanMin,scanMax,nSigmas)
@@ -126,4 +178,5 @@ def calc_workspace( path, analysis, mbsr ):
         #print(string,file=write_file)
 
     #os.remove(ws_name) # leave files for inspection
-    return float(obs_limit), float(exp_limits[2]), float(cls_obs), cls_exp        
+    return float(obs_limit), float(exp_limits[2]), float(cls_obs), cls_exp
+
