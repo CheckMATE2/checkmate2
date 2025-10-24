@@ -72,11 +72,11 @@ def workspace_2102_10874( path, analysis, mbsr, s , ds ):
     conf["parameter_points"][0]["parameters"].append({"value":1.0,"name":"mu_sig"})
     conf["parameter_points"][1]["parameters"].append({"value":1.0,"name":"mu_sig"})
 
-    with open(Info.paths['data']+ "/" + analysis + "/Likelihoods/" + hs3in["analysis"][0]["patchset"], 'w') as serialized:
+    with open( path + "/analysis/" + mbsr + ".json", 'w') as serialized:
         json.dump(conf, serialized)
         serialized.close()
         
-    return Info.paths['data']+ "/" + analysis + "/Likelihoods/" + hs3in["analysis"][0]["patchset"]
+    return  path + "/analysis/" + mbsr + ".json"
     
 
 def calc_workspace( path, analysis, mbsr ):
