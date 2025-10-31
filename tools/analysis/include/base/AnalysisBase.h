@@ -85,6 +85,7 @@ class AnalysisBase {
      *  are finalised and printed.
      */
     void setup(std::map<std::string, std::vector<int> > whichTagsIn, std::map<std::string, std::string> eventParameters);
+    void resetCorrelationMap();
     void processEvent(int iEvent);
     void finish();
     
@@ -93,6 +94,8 @@ class AnalysisBase {
     
     int getLLP(){return Global::LLPid != 0 ? Global::LLPid : 1000024;};
     int getLSP(){return Global::LSPid != 0 ? Global::LSPid : 1000022;};    
+
+    std::map<std::string, double> correlationMap;
     
 //TODO Texts
 
@@ -725,11 +728,13 @@ class AnalysisBase {
     inline void countSignalEvent(std::string region) {      
       signalRegions[region] += weight;
       signalRegions2[region] += weight*weight;
+      correlationMap[region] += 1;
 
     }
     inline void countSignalEvent(std::string region, std::map<std::string, double >& map ) {      
       signalRegions[region] += weight;
       signalRegions2[region] += weight*weight;
+      correlationMap[region] += 1;
       if (!map.empty()) {
         if (map.find(region) == map.end()) {
           cout << "Warning: Region " << region << " not found in map. Adding it now." << endl;
@@ -752,6 +757,23 @@ class AnalysisBase {
         map[region] = 1;
       }
     }    
+   inline void print_map(std::map<std::string, double> m, int n, int outputFileIndex) {
+
+    if (n == 0) {
+      *fStreams[outputFileIndex] << "# ";
+      for (const auto& it : m)
+        *fStreams[outputFileIndex] << it.first << " ";
+      *fStreams[outputFileIndex] << std::endl;
+    }
+    if (n == 1) {
+      *fStreams[outputFileIndex] << "W " << weight << " " << std::endl;
+      *fStreams[outputFileIndex] << "O ";
+      for (const auto& it : m)
+        *fStreams[outputFileIndex] << it.second << " ";
+      *fStreams[outputFileIndex] << std::endl;
+    }
+  }    
+    
     //! Function to count a given event for a cutflow region. \sa countSignalEvent
     inline void countCutflowEvent(std::string region) {
       cutflowRegions[region] += weight;
@@ -869,6 +891,7 @@ class AnalysisBase {
     double xsect;
     double xsecterr;
     double luminosity;
+    int correlationFile;
         
     // Sums up weights (and weights^2) that fall into control, signal or cutflow regions 
     std::map<std::string, double> controlRegions;

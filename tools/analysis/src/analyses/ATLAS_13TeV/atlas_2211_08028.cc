@@ -79,7 +79,7 @@ void Atlas_2211_08028::initialize() {
   hfile = new TFile(rootFileName, "RECREATE", "Saving Histograms");
 
   outputFileIndex = bookFile("correlation_2211_08028.txt", true);
-  print_map(sr_map, 0);
+  print_map(sr_map, 0, outputFileIndex);
   evNumber = 0;
 
   nngtt = new TH1F("gtt", "NN score", 20, 0., 1.);  
@@ -311,7 +311,7 @@ void Atlas_2211_08028::analyze() {
   bool pass_CRZ = false;
   if (signalLeps.size() == 2 and signalLeps[0]->Charge*signalLeps[1]->Charge < 0. and signalLeps[1]->PT > 30. and signalLeps[0]->Type == signalLeps[1]->Type and (signalLeps[0]->P4() + signalLeps[1]->P4()).Perp() > 70. and abs((signalLeps[0]->P4() + signalLeps[1]->P4()).M() - 90.) < 30. and signal_jets.size() >= 4 and bjets.size() >= 3) {
     pTmiss_hat = pTmiss + signalLeps[0]->P4() + signalLeps[1]->P4();
-    if (pTmiss_hat.Perp() < 200.) {print_map(sr_map, 1); return;}
+    if (pTmiss_hat.Perp() < 200.) {print_map(sr_map, 1, outputFileIndex); return;}
     if (pTmiss_hat.Perp() > 200. and pTmiss.Perp() < 200.) {
       signalLeps.clear();
       pTmiss = pTmiss_hat;
@@ -319,13 +319,13 @@ void Atlas_2211_08028::analyze() {
       PassesCuts_NN(2, 2000, 1800, 0.997, 0, "CRZ-NN-Gbb-2000-1800");    
       PassesCuts_NN(2, 2800, 1400, 0.999, 0, "CRZ-NN-Gbb-2800-1400"); 
       PassesCuts_NN(2, 2300, 1000, 0.9994, 0, "CRZ-NN-Gbb-2300-1000");    
-      print_map(sr_map, 1);
+      print_map(sr_map, 1, outputFileIndex);
       return;
     }
     else if (pTmiss.Perp() < 200.) pass_CRZ = true;
   }
   
-  if (signal_jets.size() < 4 or bjets.size() < 3 or pTmiss.Perp() < 200.) {print_map(sr_map, 1); return;}
+  if (signal_jets.size() < 4 or bjets.size() < 3 or pTmiss.Perp() < 200.) {print_map(sr_map, 1, outputFileIndex); return;}
   
   countCutflowEvent("00_preselection");
   
@@ -378,7 +378,7 @@ void Atlas_2211_08028::analyze() {
   if (electronsLoose.size() + muonsCombined.size() == 0) {
     countCutflowEvent("01_ObaseLep");
     
-    if (dphimin < 0.4) {print_map(sr_map, 1); return;}
+    if (dphimin < 0.4) {print_map(sr_map, 1, outputFileIndex); return;}
     countCutflowEvent("02_phimin");
     
     if (PassesCuts_Gtt0L(5, 3, 600., 2900., 120., 300., true, "SR-Gtt-0L-B")) countSignalEvent("SR-Gtt-0L-B", sr_map);
@@ -405,7 +405,7 @@ void Atlas_2211_08028::analyze() {
     if (mT_b > 80. and PassesCuts_Gbb(4, 3, -500., 30., 1600., false, "VR-Gbb-M")) countControlEvent("VR-Gbb-M", sr_map);
     if (mT_b > 110. and PassesCuts_Gtb(6, 4, 1500., -550., 200., false, "VR-Gtb-M")) countControlEvent("VR-Gtb-M", sr_map);
     if (mT_b > 80. and PassesCuts_Gtb(7, 4, 1300., -500.,  50., false, "VR-Gtb-C")) countControlEvent("VR-Gtb-C", sr_map);
-    if (mT_b < 130.) {print_map(sr_map, 1); return;}
+    if (mT_b < 130.) {print_map(sr_map, 1, outputFileIndex); return;}
     countCutflowEvent("03_mTb>130");
     
     if (PassesCuts_Gtb(4, 3, 2500., 550., 200., true, "SR-Gtb-B")) countSignalEvent("SR-Gtb-B", sr_map);
@@ -433,7 +433,7 @@ void Atlas_2211_08028::analyze() {
     PassesCuts_NN(2, 2300, 1000, 0.9994, 0, "CRZ-NN-Gbb-2300-1000");
   }
   
-  print_map(sr_map, 1);
+  print_map(sr_map, 1, outputFileIndex);
   return;
 }
 
@@ -762,7 +762,7 @@ std::string Atlas_2211_08028::print_shape(const std::vector<int64_t>& v) {
   return ss.str();
 }
 
-void Atlas_2211_08028::print_map(std::map<std::string, double> m, int n) {
+/*void Atlas_2211_08028::print_map(std::map<std::string, double> m, int n) {
 
   if (n == 0) {
     *fStreams[outputFileIndex] << "# ";
@@ -777,4 +777,4 @@ void Atlas_2211_08028::print_map(std::map<std::string, double> m, int n) {
       *fStreams[outputFileIndex] << it.second << " ";
     *fStreams[outputFileIndex] << std::endl;
   }
-}
+}*/
