@@ -84,6 +84,7 @@ def calc_workspace( path, analysis, mbsr ):
     inv_r_exp = 10. 
     cls_obs = 1. 
     cls_exp = [1.,1.,1.,1.,1.]
+    #cls_exp = 1.
     
     os.system("mkdir -p " + path + '/multibin_limits')
 
@@ -145,24 +146,30 @@ def calc_workspace( path, analysis, mbsr ):
     canMin = 0 # we want to test just the mu=0 hypothesis
     scanMax = 0 # so set min and max both to 0
     scanN = 1
-    scanType = "pnull"
+    scanType = "cls"
     tsType = XRF.xRooFit.TestStatistic.u0 # use the uncapped discovery test statistic
+    tsType = XRF.xRooFit.TestStatistic.qmu # use the uncapped discovery test statistic
     hs2 = ws[pdfName].nll(dsName, nllOpts).hypoSpace(poiName,tsType)
     hs2.scan(scanType, scanN, scanMin, scanMax, nSigmas)
-    cls_obs = hs2[0].pNull_asymp()[0]
-    cls_exp = [hs2[0].pNull_asymp(i)[0] for i in range(-2,3)]
-    cls_obs = hs2[0].pCLs_asymp(0)[0]
-    cls_exp = [hs2[0].pCLs_asymp(i)[0] for i in range(-2,3)]
+    #cls_obs = hs2[0].pNull_asymp()[0]
+    #cls_exp = [hs2[0].pNull_asymp(i)[0] for i in range(-2,3)]
+    #cls_obs = hs2[0].pCLs_asymp(0)[0]
+    #cls_exp = [hs2[0].pCLs_asymp(i)[0] for i in range(-2,3)]
 
     string = "================================\n Analysis: "+analysis+" , SR: "+mbsr+"\n"
     string += f"Limits with full likelihood (xRooFit):\n"
-    if Info.flags["mbcls"]:
+    #if Info.flags["mbcls"]:
+    if False
         AdvPrint.cout("Observed:")
         AdvPrint.cout("CL95: "+str(float(cls_obs)) )
         string += f"Observed CLs for mu = 1: {float(cls_obs)}"+'\n'
         if Info.flags["expected"]:
-            string = string+f"Expected CLs band for mu = 1: {float(cls_exp[2])}"+'\n'
-    if Info.flags["uplim"]:
+            #string = string+f"Expected CLs band for mu = 1: {float(cls_exp[2])}"+'\n'
+            for i in range(4):
+                string += f"{cls_exp[i]:.4f}, "
+            string += f"{cls_exp[4]:.4f}]"    
+    #if Info.flags["uplim"]:
+    if True:
         AdvPrint.cout("Observed:")	
         AdvPrint.cout("Upper limit: "+str(obs_limit) )
         string = string+f"Observed upper limit: mu = {obs_limit:.4f}"+'\n'

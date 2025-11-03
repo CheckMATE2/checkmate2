@@ -153,15 +153,15 @@ def calc_cov(path, analysis, mbsr):
         string = string+f"Observed upper limit: mu = {inv_r:.4f}"+'\n'
         AdvPrint.cout("Upper limit: "+str(inv_r) )
         if Info.flags["expected"]:
-            inv_r_exp =  stat_model.poi_upper_limit(expected = spey.ExpectationType.apriori) 
+            inv_r_exp =  stat_model.poi_upper_limit(expected = spey.ExpectationType.apriori, expected_pvalue="2sigma") 
             #inv_r_exp_1sigma =  stat_model.poi_upper_limit(expected = spey.ExpectationType.apriori, expected_pvalue="1sigma")  # for the band 1 (2) sigma band
-            string = string+f"Expected upper limit: mu = {inv_r_exp:.4f}"
+            string = string+f"Expected (+/-2sigma) upper limit: mu = {inv_r_exp[0]:.4f}   {inv_r_exp[1]:.4f}   {inv_r_exp[2]:.4f}   {inv_r_exp[3]:.4f}   {inv_r_exp[4]:.4f}"
     string += "\n================================\n"
     
     with open(path+'/multibin_limits/'+"results.dat", "a") as write_file:
         write_file.write(string)
 
-    return inv_r, inv_r_exp, 1-cls_obs, cls_exp, stat_model    
+    return inv_r, inv_r_exp[0], 1-cls_obs, cls_exp, stat_model    
 
 
 def get_limits():
