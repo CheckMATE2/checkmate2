@@ -159,7 +159,7 @@ def calc_workspace( path, analysis, mbsr ):
     string = "================================\n Analysis: "+analysis+" , SR: "+mbsr+"\n"
     string += f"Limits with full likelihood (xRooFit):\n"
     #if Info.flags["mbcls"]:
-    if False
+    if False:
         AdvPrint.cout("Observed:")
         AdvPrint.cout("CL95: "+str(float(cls_obs)) )
         string += f"Observed CLs for mu = 1: {float(cls_obs)}"+'\n'
