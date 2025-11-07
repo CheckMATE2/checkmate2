@@ -199,7 +199,7 @@ void Atlas_1911_12606::analyze() {
   std::vector<Muon*> muons_base = muonsCombined;
     
   std::vector<Electron*> electrons_signal = Isolate_leptons_with_inverse_track_isolation_cone(electronsMedium, tracks, towers, 0.3, 10., 0.2, 0.15, 0.2, true);
-  std::vector<Muon*> muons_signal = Isolate_leptons_with_inverse_track_isolation_cone(muonsCombined,  tracks, towers, 0.3, 10., 0.2, 0.06, 0.06, false);
+  std::vector<Muon*> muons_signal = Isolate_leptons_with_inverse_track_isolation_cone(muonsCombined,  tracks, towers, 0.3, 10., 0.2, 0.15, 0.15, false);
 //  signal_tracks = Isolate_tracks(signal_tracks, 0.3, 0.5);
   leptons_tracks = Isolate_tracks(leptons_tracks, 0.3, 0.5);
   //cout << "leptons_tracks: " << leptons_tracks.size() << "\n";    
@@ -265,8 +265,8 @@ void Atlas_1911_12606::analyze() {
   mll = (leptons[0]->P4() +  leptons[1]->P4()).M();
   mt2 = 0.;
   flavour = -1;
-  if (electrons_signal.size() == 2) flavour = 1;
-  else if (muons_signal.size() == 2) flavour = 2;
+  if (electrons_signal.size() == 2) {flavour = 1; cout << "electrons" << endl;}
+  else if (muons_signal.size() == 2) {flavour = 2; cout << "muons" << endl;}
   else flavour = 0;
   
   if (Pass_Preselection()) {

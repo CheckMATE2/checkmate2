@@ -49,9 +49,11 @@ def calc_point( path, analysis, mbsr ):
     
     #pyhf.set_backend("pytorch")
     #print(Info.parameters["backend"])
+    if Info.parameters["backend"] == "jax":
+        pyhf.set_backend("jax")
     if Info.parameters["backend"] == "":
         try:
-            pyhf.set_backend("pytorch") # if backend unspecified try pytorch
+            pyhf.set_backend("jax") # if backend unspecified try pytorch
         except ImportBackendError:
             pass
     if Info.parameters["backend"] == "pytorch" and pyhf.tensorlib.name != "pytorch":

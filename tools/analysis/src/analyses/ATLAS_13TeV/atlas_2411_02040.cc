@@ -108,7 +108,7 @@ void Atlas_2411_02040::initialize() {
   hist_deltarh3 = new TH1F("deltaRH3", "deltaRH3", 25, 0., 5.);
   hist_massh1 = new TH1F("massH1", "massH1", 17, 0., 350.);
   hist_massh1rivet = new TH1F("massH1_rivetBin", "massH1_rivetBin", 20, 0., 400.);
-  hist_ht6j = new TH1F("HT6j", "HT6j", 20, 0., 1500.);
+  hist_ht6j = new TH1F("HT6j", "HT6j", 24, 200., 1400.);
   hist_ht6jrivet = new TH1F("HT6j_rivetBin", "HT6j_rivetBin", 28, 0., 1600.);
   hist_etamhhhfrac = new TH1F("eta_mHHH_frac", "eta_mHHH_frac", 20, 0., 1.);
   hist_costheta = new TH1F("cosTheta", "cosTheta", 20, -1., 1.);
