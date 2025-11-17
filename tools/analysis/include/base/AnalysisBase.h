@@ -728,6 +728,8 @@ class AnalysisBase {
     inline void countSignalEvent(std::string region) {      
       signalRegions[region] += weight;
       signalRegions2[region] += weight*weight;
+      if (correlationMap.find(region) == correlationMap.end())
+          cout << "Warning: Region " << region << " not found in map. Adding it now." << endl;
       correlationMap[region] += 1;
 
     }
