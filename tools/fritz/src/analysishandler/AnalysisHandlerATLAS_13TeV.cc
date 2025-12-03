@@ -817,6 +817,7 @@ double AnalysisHandlerATLAS_13TeV::bSigEff(double pt,
                                      double eff) {
     //bypass
     //arXiv:2211.16345, fig 19a
+    //https://chatgpt.com/share/692edf69-f690-8012-8ba5-941633388c6d
     if (eff > 0.999) return 1.;
     else return eff/0.77 * ((pt > 20.) * (pt < 30.) * 0.67 +
            (pt > 30.) * (pt < 40.) * 0.735 +
