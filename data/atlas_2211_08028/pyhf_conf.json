@@ -1,0 +1,93 @@
+{"analysis" :[
+	{"name":"CC_Gbb_B",
+	"bkgonly":"Likelihood/CC_Gbb_B_bkgonly.json",
+        "patchset":"Likelihood/CC_Gbb_B_patchset.json",
+        "histosize":"1",
+	"SR_dict": {"SR_Gbb_B_cuts":"SR-Gbb-B","CR_Gbb_B_cuts":"CR_Gbb_B_cuts"
+	}}
+	],
+	{"name":"CC_Gbb_C",
+	"bkgonly":"Likelihood/CC_Gbb_C_bkgonly.json",
+		"patchset":"Likelihood/CC_Gbb_C_patchset.json",
+		"histosize":"1",
+	"SR_dict": {"SR_Gbb_C_cuts":"SR-Gbb-C","CR_Gbb_C_cuts":"CR_Gbb_C_cuts"
+	}},
+	{"name":"CC_Gbb_M",
+	"bkgonly":"Likelihood/CC_Gbb_M_bkgonly.json",
+		"patchset":"Likelihood/CC_Gbb_M_patchset.json",
+		"histosize":"1",
+	"SR_dict": {"SR_Gbb_M_cuts":"SR-Gbb-M","CR_Gbb_M_cuts":"CR_Gbb_M_cuts"
+	}},
+	{"name":"CC_Gtt_0L_B",
+	"bkgonly":"Likelihood/CC_Gtt_0L_B_bkgonly.json",
+		"patchset":"Likelihood/CC_Gtt_0L_B_patchset.json",
+		"histosize":"1",
+	"SR_dict": {"SR_Gtt_0L_B_cuts":"SR-Gtt-0L-B","CR_Gtt_0L_B_cuts":"CR_Gtt_0L_B_cuts"
+	}},
+	{"name":"CC_Gtt_0L_C",
+	"bkgonly":"Likelihood/CC_Gtt_0L_C_bkgonly.json",
+		"patchset":"Likelihood/CC_Gtt_0L_C_patchset.json",
+		"histosize":"1",
+	"SR_dict": {"SR_Gtt_0L_C_cuts":"SR-Gtt-0L-C","CR_Gtt_0L_C_cuts":"CR_Gtt_0L_C_cuts"
+	}},
+	{"name":"CC_Gtt_0L_M1",
+	"bkgonly":"Likelihood/CC_Gtt_0L_M1_bkgonly.json",
+		"patchset":"Likelihood/CC_Gtt_0L_M1_patchset.json",
+		"histosize":"1",
+	"SR_dict": {"SR_Gtt_0L_M1_cuts":"SR-Gtt-0L-M1","CR_Gtt_0L_M1_cuts":"CR_Gtt_0L_M1_cuts"
+	}},
+	{"name":"CC_Gtt_0L_M2",
+	"bkgonly":"Likelihood/CC_Gtt_0L_M2_bkgonly.json",
+		"patchset":"Likelihood/CC_Gtt_0L_M2_patchset.json",
+		"histosize":"1",
+	"SR_dict": {"SR_Gtt_0L_M2_cuts":"SR-Gtt-0L-M2","CR_Gtt_0L_M2_cuts":"CR_Gtt_0L_M2_cuts"
+	}},
+	{"name":"CC_Gtt_1L_B",
+	"bkgonly":"Likelihood/CC_Gtt_1L_B_bkgonly.json",
+		"patchset":"Likelihood/CC_Gtt_1L_B_patchset.json",
+		"histosize":"1",
+	"SR_dict": {"SR_Gtt_1L_B_cuts":"SR-Gtt-1L-B","CR_Gtt_1L_B_cuts":"CR_Gtt_1L_B_cuts"
+	}},
+	{"name":"CC_Gtt_1L_C",
+	"bkgonly":"Likelihood/CC_Gtt_1L_C_bkgonly.json",
+		"patchset":"Likelihood/CC_Gtt_1L_C_patchset.json",
+		"histosize":"1",
+	"SR_dict": {"SR_Gtt_1L_C_cuts":"SR-Gtt-1L-C","CR_Gtt_1L_C_cuts":"CR_Gtt_1L_C_cuts"
+	}},
+	{"name":"CC_Gtt_1L_M1",
+	"bkgonly":"Likelihood/CC_Gtt_1L_M1_bkgonly.json",
+		"patchset":"Likelihood/CC_Gtt_1L_M1_patchset.json",
+		"histosize":"1",
+	"SR_dict": {"SR_Gtt_1L_M1_cuts":"SR-Gtt-1L-M1","CR_Gtt_1L_M1_cuts":"CR_Gtt-1L-M1_cuts"
+	}},
+	{"name":"CC_Gtt_1L_M2",
+	"bkgonly":"Likelihood/CC_Gtt_1L_M2_bkgonly.json",
+		"patchset":"Likelihood/CC_Gtt_1L_M2_patchset.json",
+		"histosize":"1",
+	"SR_dict": {"SR_Gtt_1L_M2_cuts":"SR-Gtt-1L-M2","CR_Gtt_1L_M2_cuts":"CR_Gtt-1L-M2_cuts"
+	}},
+	{"name":"NN_Gbb_2000_1800",
+	"bkgonly":"Likelihood/NN_Gbb_2000_1800_bkgonly.json",
+		"patchset":"Likelihood/NN_Gbb_2000_1800_patchset.json",
+		"histosize":"1",
+	"SR_dict": {"SR_Gbb_2000_1800_cuts":"SR-Gbb-2000-1800","CR_Gbb_2000_1800_cuts":"CR_Gbb_2000_1800","CRZ_Gbb_2000_1800_cuts":"CRZ_Gbb_2000_1800"
+	}},
+	{"name":"NN_Gbb_2100_1600",
+	"bkgonly":"Likelihood/NN_Gbb_2100_1600_bkgonly.json",
+		"patchset":"Likelihood/NN_Gbb_2100_1600_patchset.json",
+		"histosize":"1",
+	"SR_dict": {"SR_Gbb_2100_1600_cuts":"SR-Gbb-2100-1600","CR_Gbb_2100_1600_cuts":"CR_Gbb_2100_1600","CRZ_Gbb_2100_1600_cuts":"CRZ_Gbb_2100_1600"
+	}},
+	{"name":"NN_Gbb_2300_1000",
+	"bkgonly":"Likelihood/NN_Gbb_2300_1000_bkgonly.json",
+		"patchset":"Likelihood/NN_Gbb_2300_1000_patchset.json",
+		"histosize":"1",
+	"SR_dict": {"SR_Gbb_2300_1000_cuts":"SR-Gbb-2300-1000","CR_Gbb_2300_1000_cuts":"CR_Gbb_2300_1000","CRZ_Gbb_2300_1000_cuts":"CRZ_Gbb_2300_1000"
+	}},
+	{"name":"NN_Gbb_2800_1400",
+	"bkgonly":"Likelihood/NN_Gbb_2800_1400_bkgonly.json",
+		"patchset":"Likelihood/NN_Gbb_2800_1400_patchset.json",
+		"histosize":"1",
+	"SR_dict": {"SR_Gbb_2800_1400_cuts":"SR-Gbb-2800-1400","CR_Gbb_2800_1400_cuts":"CR_Gbb_2800_1400","CRZ_Gbb_2800_1400_cuts":"CRZ_Gbb_2800_1400"
+	}}
+}
