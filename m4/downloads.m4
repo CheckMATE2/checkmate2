@@ -116,5 +116,15 @@ AC_DEFUN([DOWNLOADS],
     `curl -JLH "Accept: application/x-tar" -o "$srcdir/data/atlas_2411_02040/ANA-HIGP-2024-32_HHH_SplusBfit_Likelihoods.tar.gz" "https://doi.org/10.17182/hepdata.157024.v1/r1"`
     `tar -xvzf "$srcdir/data/atlas_2411_02040/ANA-HIGP-2024-32_HHH_SplusBfit_Likelihoods.tar.gz" --strip-components=1 -C "$srcdir/data/atlas_2411_02040/Likelihoods/"`
   fi
+  # Likelihoods for atlas_2211_08028
+  if ! test -f "$srcdir/data/atlas_2211_08028/LH_jsons.tar.gz"
+    then
+    `curl -JLH "Accept: application/x-tar" -o "$srcdir/data/atlas_2211_08028/LH_jsons.tar.gz" "https://doi.org/10.17182/hepdata.95928.v2/r5"`
+    if ! test -d "$srcdir/data/atlas_2211_08028/Likelihoods/"
+      then
+      mkdir "$srcdir/data/atlas_2211_08028/Likelihoods"
+    fi    
+    `tar -xvzf "$srcdir/data/atlas_2211_08028/LH_jsons.tar.gz" -C "$srcdir/data/atlas_2211_08028/Likelihoods"`
+  fi    
   AC_MSG_RESULT([])
 ])

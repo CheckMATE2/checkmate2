@@ -269,5 +269,11 @@
     "leptons", 
     "NN", 
     "multibin"
-  ]
+  ],
+  "likelihoods": "y",
+  "mb_signal_regions": {
+    "CC_Gbb_B": [
+      "SR-Gbb-B"    
+    ]
+  }  
 }
