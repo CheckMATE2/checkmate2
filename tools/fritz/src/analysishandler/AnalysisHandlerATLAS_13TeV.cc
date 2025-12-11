@@ -819,7 +819,7 @@ double AnalysisHandlerATLAS_13TeV::bSigEff(double pt,
     //arXiv:2211.16345, fig 19a
     //https://chatgpt.com/share/692edf69-f690-8012-8ba5-941633388c6d
     if (eff > 0.999) return 1.;
-    else return eff/0.77 * ((pt > 20.) * (pt < 30.) * 0.67 +
+    else return eff/0.9 * ((pt > 20.) * (pt < 30.) * 0.60 + // was 0.67
            (pt > 30.) * (pt < 40.) * 0.735 +
            (pt > 40.) * (pt < 60.) * 0.776 +
            (pt > 60.) * (pt < 85.) * 0.797 +
