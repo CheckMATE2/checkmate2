@@ -125,6 +125,15 @@ AC_DEFUN([DOWNLOADS],
       mkdir "$srcdir/data/atlas_2211_08028/Likelihoods"
     fi    
     `tar -xvzf "$srcdir/data/atlas_2211_08028/LH_jsons.tar.gz" -C "$srcdir/data/atlas_2211_08028/Likelihoods"`
-  fi    
+  fi
+  # Likelihoods for atlas_2102_10874
+  if ! test -f "$srcdir/data/atlas_2102_10874/Likelihoods/bOnlyFit_postFit.root"
+    then
+    if ! test -d "$srcdir/data/atlas_2102_10874/Likelihoods/"
+      then
+      mkdir "$srcdir/data/atlas_2102_10874/Likelihoods"
+    fi
+    `curl -OJLH "Accept: text/plain" -o "$srcdir/data/atlas_2102_10874/Likelihoods/bOnlyFit_postFit.root" "https://doi.org/10.17182/hepdata.102093.v4/r3"`
+  fi  
   AC_MSG_RESULT([])
 ])

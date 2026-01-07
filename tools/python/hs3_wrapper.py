@@ -139,6 +139,7 @@ def calc_workspace( path, analysis, mbsr ):
     nllOpts = XRF.xRooFit.createNLLOptions()
     hs = ws[pdfName].reduced(channels).nll(dsName,nllOpts).hypoSpace(poiName,tsType)
     #hs.scan(scanType,scanN,scanMin,scanMax,nSigmas)
+    hs.poi()[0].setRange(0.0,2000.0)
     limits = hs.limits()
     obs_limit = limits['obs'][0]
     exp_limits = [limits['-2'][0], limits['-1'][0], limits['0'][0], limits['1'][0], limits['2'][0]]
