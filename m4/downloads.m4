@@ -133,7 +133,7 @@ AC_DEFUN([DOWNLOADS],
       then
       mkdir "$srcdir/data/atlas_2102_10874/Likelihoods"
     fi
-    `curl -OJLH "Accept: text/plain" -o "$srcdir/data/atlas_2102_10874/Likelihoods/bOnlyFit_postFit.root" "https://doi.org/10.17182/hepdata.102093.v4/r3"`
+    `curl -JLH "Accept: text/plain" -o "$srcdir/data/atlas_2102_10874/Likelihoods/bOnlyFit_postFit.root" "https://doi.org/10.17182/hepdata.102093.v4/r3"`
   fi  
   AC_MSG_RESULT([])
 ])
