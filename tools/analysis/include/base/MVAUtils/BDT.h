@@ -12,6 +12,7 @@
 #include <cassert>
 #include <memory>
 #include "ForestBase.h"
+#include <cmath>
 
 class TTree;
 namespace MVAUtils

@@ -14,9 +14,9 @@ const double AnalysisHandlerATLAS_13TeV::DR_TAU_TRUTH = 0.2;
 const double AnalysisHandlerATLAS_13TeV::ETAMAX_TAU_TRUTH = 2.5;
 const double AnalysisHandlerATLAS_13TeV::PTMIN_TAU_TRUTH = 10.0;
 
-const double AnalysisHandlerATLAS_13TeV::DR_B_TRUTH = 0.4;
+const double AnalysisHandlerATLAS_13TeV::DR_B_TRUTH = 0.3;
 const double AnalysisHandlerATLAS_13TeV::ETAMAX_B_TRUTH = 2.5;
-const double AnalysisHandlerATLAS_13TeV::PTMIN_B_TRUTH = 1.0;
+const double AnalysisHandlerATLAS_13TeV::PTMIN_B_TRUTH = 5.0;
 
 AnalysisHandlerATLAS_13TeV::AnalysisHandlerATLAS_13TeV() : AnalysisHandler() {
 }
@@ -134,6 +134,8 @@ void AnalysisHandlerATLAS_13TeV::bookAnalysis(std::string analysisName,
         a = new Atlas_2209_13935();
     else if(analysisName == "atlas_2102_10874")
         a = new Atlas_2102_10874();
+    else if(analysisName == "atlas_2411_02040")
+        a = new Atlas_2411_02040();
     else //@@extracode@@
         Global::abort(name,
                       "Cannot load analysis "+analysisName+
@@ -813,10 +815,12 @@ double AnalysisHandlerATLAS_13TeV::tauBkgEffMultiTight(double pt,
 double AnalysisHandlerATLAS_13TeV::bSigEff(double pt,
                                      double eta,
                                      double eff) {
+
     //bypass
     //arXiv:2211.16345, fig 19a
     if (eff > 0.999) return 1.;
-    else return eff/0.77 * ((pt > 20.) * (pt < 30.) * 0.67 +
+    //the following is only validated for HHH search
+    if (false) {return (eff)/0.77 * ((pt > 20.) * (pt < 30.) * 0.67 + // was 0.67
            (pt > 30.) * (pt < 40.) * 0.735 +
            (pt > 40.) * (pt < 60.) * 0.776 +
            (pt > 60.) * (pt < 85.) * 0.797 +
@@ -824,16 +828,15 @@ double AnalysisHandlerATLAS_13TeV::bSigEff(double pt,
             (pt > 110.) * (pt < 140.) * 0.813 +
            (pt > 140.) * (pt < 170.) * 0.813 +
            (pt > 170.) * (pt < 210.) * 0.809 +
-           (pt > 210.)  * 0.8 );    
+           (pt > 210.)  * 0.8 );}
     
-    /* old
     const double y0 = 0.5523;
     const double x0 = 47.6071;
     const double A = 0.2102;
     const double k = 0.1258;
     const double r = 308.197;
     return 1.1*eff/0.82*(y0+A*1./(1.+exp(-k*(pt-x0))))*(0.7+0.05*exp(-pt/r))/0.75*
-           ((pt>100)*(1.+(pt-100.)*(-0.0007))+(pt<=100)*1);*/
+           ((pt>100)*(1.+(pt-100.)*(-0.0007))+(pt<=100)*1);
 }
 
 //! Scaling behavior of the efficiency to tag a c-jet as a b-jet with
@@ -961,7 +964,8 @@ static double bBkg_c_eff(double pt, double eta, double wp) {
 	// Their product therefore obviously is much to low, because each function
 	// is (sort of) normalized to the correct efficiency, so the product is
 	// (again sort of) proportional to the square of the correct normalization.
-	return (bBkg_c_eff_pt(pt, wp) * bBkg_c_eff_eta(eta, wp)
+	if (wp > 0.999) return 0.;
+    else return (bBkg_c_eff_pt(pt, wp) * bBkg_c_eff_eta(eta, wp)
 			* bBkg_c_scale_function(wp)/bBkg_c_scale_function(0.7)
 			* 7.5*(1+(100*wp-60)/130));
 }
@@ -983,6 +987,7 @@ static double bBkg_l_eff_eta(double eta, double wp) {
 	double eta_constant = 2.79421560e-05;
 	double wp_quadratic = -1.98927123e+02;
 	double wp_linear = 2.49660023e+02;
+    if (wp > 0.999) return 0.;
 	return (bBkg_l_scale_function(0.7) / bBkg_l_scale_function(wp)
 			* (wp_quadratic*pow(wp, 2) + wp_linear*wp + 1)
 			* (eta_quadratic*pow(eta, 2) + eta_linear*eta + eta_constant));

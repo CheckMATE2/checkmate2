@@ -40,6 +40,7 @@ atlas_2111_08372     23   dark matter and invisible Higgs with Z boson          
 atlas_2202_07953     17   invisible Higgs decays in VBF                                                               139   no 
 atlas_2209_13935     59   search for charginos and sleptons in 2-lepton final states                                  139   no  
 atlas_2102_10874     26   monojet                                                                                     139   no
+atlas_2411_02040     5    triple Higgs search                                                                         126   no  
 
 #Superseded:          
 #atlas_1602_09058     4    2 ss leptons or 3 leptons                                                                   3.2   no   

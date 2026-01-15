@@ -33,6 +33,8 @@ class Atlas_2211_08028 : public AnalysisBase {
     std::vector<int64_t> input_dims = {1, 87};
 #endif    
         
+    std::map<std::string, double > sr_map; 
+    int outputFileIndex, evNumber;
     std::vector<Jet*> signal_jets = {};
     std::vector<Jet*> bjets = {};
     std::vector<fastjet::PseudoJet> trimmedJets = {};
@@ -58,6 +60,7 @@ class Atlas_2211_08028 : public AnalysisBase {
     bool PassesCuts_NN(int ttbb, double mg, double mneut, double cutoff, int srnum, std::string sr);
     std::vector<double> jet_btag_category();
     std::string print_shape(const std::vector<int64_t>& v);
+    //void print_map(std::map<std::string, double> m, int n);
 
 };
 

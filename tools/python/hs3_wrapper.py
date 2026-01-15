@@ -1,0 +1,190 @@
+import os
+#os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+#import jax
+#jax.config.update('jax_default_device',jax.devices('cpu')[0])
+import json, ROOT  # you really need 6.32.14
+from ROOT.Experimental import XRooFit as XRF
+import numpy as np
+from info import Info
+from advprint import AdvPrint
+import multibin_limit as mb
+import multibin_limit_full as mbfull
+
+def workspace_2411_02040( path, analysis, mbsr, s , ds ):
+    with open(Info.paths['data']+ "/" + analysis + "/pyhf_conf.json") as f:
+        hs3in = json.load(f)
+
+    for i in range(len(hs3in["analysis"])):
+        if hs3in["analysis"][i]["name"] == mbsr:
+            bkg_only = hs3in["analysis"][i]["bkgonly"]
+            isr = i
+
+    histosize = hs3in["analysis"][isr]["histosize"]
+    ws_name = path + "/analysis/" + mbsr + ".json"
+
+    with open(Info.paths['data']+ "/" + analysis + "/Likelihoods/"+ bkg_only) as serialized:
+        conf = json.load(serialized)
+
+    #print(s)
+    for i in range(histosize):  # signal regions
+        conf['distributions'][2]['samples'][3]['data']['contents'][i] = s[i]
+        conf['distributions'][2]['samples'][3]['data']['errors'][i] = ds[i]
+
+    for i in range(histosize,2*histosize): # control regions
+        conf['distributions'][0]['samples'][1]['data']['contents'][i-histosize] = s[i]
+        conf['distributions'][0]['samples'][1]['data']['errors'][i-histosize] = ds[i]
+
+    for i in range(2,159):
+        del conf['distributions'][2]['samples'][3]['modifiers'][2]
+        del conf['distributions'][0]['samples'][1]['modifiers'][2]
+
+    serialized.close()
+
+    with open(ws_name, 'w') as outfile:
+        json.dump(conf, outfile)
+    outfile.close()
+    AdvPrint.cout("Created workspace for analysis: "+analysis+" , SR: "+mbsr)
+    return ws_name
+
+def workspace_2102_10874( path, analysis, mbsr, s , ds ):
+    with open(Info.paths['data']+ "/" + analysis + "/pyhf_conf.json") as f:
+        hs3in = json.load(f)
+
+    
+    bkg_only = Info.paths['data']+ "/" + analysis + "/Likelihoods/" + hs3in["analysis"][0]["bkgonly"]
+    ws = ROOT.RooWorkspace(ROOT.TFile(bkg_only).Get("w"))
+    ROOT.RooJSONFactoryWSTool(ws).exportJSON(Info.paths['data']+ "/" + analysis + "/Likelihoods/" + hs3in["analysis"][0]["patchset"])
+
+    with open(Info.paths['data']+ "/" + analysis + "/Likelihoods/" + hs3in["analysis"][0]["patchset"]) as serialized:
+        conf = json.load(serialized)
+        serialized.close()
+
+    k = 0
+    for i in range(len(conf["distributions"])):
+
+        if "samples" in conf["distributions"][i]:
+            #SR_dict[conf["distributions"][i]["name"]] = conf["distributions"][i]["name"].replace("model_","")
+            conf["distributions"][i]["samples"].append({"data":{"contents": [s[k]],"errors":[ds[k]]},"modifiers":[{"constraint_name":"lumiConstraint","name":"Lumi","parameter":"Lumi","type":"normfactor"},{"name":"mu_sig","parameter":"mu_sig","type":"normfactor"}],"name":"BSM_signal"})
+            k += 1
+
+    conf["domains"][0]["axes"].append({"max":100.0,"min":0.0,"name":"mu_sig"})
+
+    conf["parameter_points"][0]["parameters"].append({"value":1.0,"name":"mu_sig"})
+    conf["parameter_points"][1]["parameters"].append({"value":1.0,"name":"mu_sig"})
+
+    with open( path + "/analysis/" + mbsr + ".json", 'w') as serialized:
+        json.dump(conf, serialized)
+        serialized.close()
+        
+    return  path + "/analysis/" + mbsr + ".json"
+    
+
+def calc_workspace( path, analysis, mbsr ):
+    inv_r = 10. 
+    inv_r_exp = 10. 
+    cls_obs = 1. 
+    cls_exp = [1.,1.,1.,1.,1.]
+    #cls_exp = 1.
+    
+    os.system("mkdir -p " + path + '/multibin_limits')
+
+    mbfull.init(path, analysis, mbsr)
+    names = mbfull.SR_dict.keys()
+    SRs = mbfull.data_from_CMresults(path)
+    o, b, db, s, ds = mbfull.select_MBsr(names, SRs)
+    r = [x - 1.64*y for x, y in zip(s,ds)] #s - 1.64 ds
+    if max(s) == 0. or max(r) <= 0.:
+        AdvPrint.cout("No signal events in the selected SRs! Skipping")
+        return 10., 10., 1., 1.
+    if max(r) <= 0.:
+        AdvPrint.cout("Signal events below MC uncertainty in the selected SRs! Skipping")
+        return 10., 10., 1., 1.   
+
+    if analysis == "atlas_2411_02040":
+        ws_name = workspace_2411_02040( path, analysis, mbsr, s, ds )
+
+    if analysis == "atlas_2102_10874":
+        ws_name = workspace_2102_10874( path, analysis, mbsr, s, ds )
+
+    #AdvPrint.cout("Signal events: "+str(s))
+
+    ROOT.gErrorIgnoreLevel = ROOT.kFatal #shut up
+    #https://xroofit.readthedocs.io/en/latest/hypothesisTesting.html#xroofit-demo-computing-discovery-significance
+    fileName  = ws_name                            # path to the workspace
+    pdfName   = "pdfs/simPdf"                           # name of the top-level pdf in the workspace
+    channels  = "*"                                # comma-separated list of channels to include (n.b. you should not include VRs)
+    dsName    = "obsData"                          # name of the observed dataset, use "" to use an asimov dataset for the obsData
+    poiName   = ""                                 # name of the parameter of interest - leave blank to auto-infer if possible
+    asimovVal = 0                                  # POI-value to assume for asimov dataset (if dsName="")
+    scanMin   = 0                                  # lower boundary poi value for limit scan (can be more restricted than fitting range)
+    scanMax   = 10                                 # upper boundary poi value for limit scan (can be more restricted than fitting range)
+    scanN     = 0                                  # number of points to scan, leave as 0 for an auto-scan
+    scanType  = "cls"                              # leave out the 'visualize' if you don't want to see progress during scan
+    constPars = ""                                 # comma-separated list of nuisance parameters to hold const, e.g. do "*" for a stat-only limit
+    tsType    = XRF.xRooFit.TestStatistic.qmutilde # choices: tmu, qmu, qmutilde, q0, u0
+    nSigmas   = [0,1,2,-1,-2,float('nan')]         # list of nSigmas to compute limits at ... "NaN" is used by xRooFit to indicate you want obs limit
+    outFile   = ""                                 # specify a path to save the post-scan workspace (with result) to
+
+    ws = XRF.xRooNode(fileName)
+    if analysis == "atlas_2102_10874":
+        ws.poi().Add("mu_sig")
+
+    if poiName == "":
+        if ws.poi().getSize() == 1:
+            poiName = ws.poi()[0].GetName()
+        else:
+            AdvPrint.cout("Multiple POIs in workspace, please specify one")
+            return 10., 10., 1., 1.
+            
+    nllOpts = XRF.xRooFit.createNLLOptions()
+    hs = ws[pdfName].reduced(channels).nll(dsName,nllOpts).hypoSpace(poiName,tsType)
+    #hs.scan(scanType,scanN,scanMin,scanMax,nSigmas)
+    hs.poi()[0].setRange(0.0,2000.0)
+    limits = hs.limits()
+    obs_limit = limits['obs'][0]
+    exp_limits = [limits['-2'][0], limits['-1'][0], limits['0'][0], limits['1'][0], limits['2'][0]]
+
+    canMin = 0 # we want to test just the mu=0 hypothesis
+    scanMax = 0 # so set min and max both to 0
+    scanN = 1
+    scanType = "cls"
+    tsType = XRF.xRooFit.TestStatistic.u0 # use the uncapped discovery test statistic
+    tsType = XRF.xRooFit.TestStatistic.qmu # use the uncapped discovery test statistic
+    hs2 = ws[pdfName].nll(dsName, nllOpts).hypoSpace(poiName,tsType)
+    hs2.scan(scanType, scanN, scanMin, scanMax, nSigmas)
+    #cls_obs = hs2[0].pNull_asymp()[0]
+    #cls_exp = [hs2[0].pNull_asymp(i)[0] for i in range(-2,3)]
+    #cls_obs = hs2[0].pCLs_asymp(0)[0]
+    #cls_exp = [hs2[0].pCLs_asymp(i)[0] for i in range(-2,3)]
+
+    string = "================================\n Analysis: "+analysis+" , SR: "+mbsr+"\n"
+    string += f"Limits with full likelihood (xRooFit):\n"
+    #if Info.flags["mbcls"]:
+    if False:
+        AdvPrint.cout("Observed:")
+        AdvPrint.cout("CL95: "+str(float(cls_obs)) )
+        string += f"Observed CLs for mu = 1: {float(cls_obs)}"+'\n'
+        if Info.flags["expected"]:
+            #string = string+f"Expected CLs band for mu = 1: {float(cls_exp[2])}"+'\n'
+            for i in range(4):
+                string += f"{cls_exp[i]:.4f}, "
+            string += f"{cls_exp[4]:.4f}]"    
+    #if Info.flags["uplim"]:
+    if True:
+        AdvPrint.cout("Observed:")	
+        AdvPrint.cout("Upper limit: "+str(obs_limit) )
+        string = string+f"Observed upper limit: mu = {obs_limit:.4f}"+'\n'
+        #for i in range(5):
+        #    string=string+f"Upper limit ({-2+i:2d} sigma) (exp): mu = {exp_limits[i]:.4f}"+'\n'
+        string += f"Expected upper limit (+/-2 sigma): mu = ["
+        for i in range(4):
+            string += f"{exp_limits[i]:.4f}, "
+        string += f"{exp_limits[4]:.4f}]"    
+    string += "\n================================\n"
+    with open(path+'/multibin_limits/'+"results.dat", "a") as write_file:
+        write_file.write(string)
+        #print(string,file=write_file)
+
+    #os.remove(ws_name) # leave files for inspection
+    return float(obs_limit), float(exp_limits[2]), float(cls_obs), cls_exp
+
