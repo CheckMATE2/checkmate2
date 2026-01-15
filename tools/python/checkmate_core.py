@@ -229,9 +229,9 @@ class CheckMATE2(object):
         if Info.parameters["ProcessResultFileColumns"] != ['analysis', 'sr', 'signal_normevents', 'signal_err_tot']:            
             AdvPrint.cout("\t - print columns "+str(Info.parameters['ProcessResultFileColumns']).translate(None, "[]'")+" in process result files!")
         if Info.parameters["TotalEvaluationFileColumns"] != ['analysis', 'sr', 'o', 'b', 'db', 's', 'ds', 's95obs', 's95exp', 'robscons', 'rexpcons']:
-            AdvPrint.cout("\t - print columns "+str(Info.parameters['TotalEvaluationFileColumns']).translate(None, "[]'")+" in total evaluation files!")
+            AdvPrint.cout("\t - print columns "+str(Info.parameters['TotalEvaluationFileColumns']).translate({"[":None,"]":None,"'":None})+" in total evaluation files!")
         if Info.parameters["BestPerAnalysisEvaluationFileColumns"] != ['analysis', 'sr', 'o', 'b', 'db', 's', 'ds', 's95obs', 's95exp', 'robscons', 'rexpcons']:
-            AdvPrint.cout("\t - print columns "+str(Info.parameters['BestPerAnalysisEvaluationFileColumns']).translate(None, "[]'")+" in best-per-analysis evaluation files!")
+            AdvPrint.cout("\t - print columns "+str(Info.parameters['BestPerAnalysisEvaluationFileColumns']).translate({"[":None,"]":None,"'":None})+" in best-per-analysis evaluation files!")
         if Info.parameters["srcombination"]:
             AdvPrint.cout("\t - Multibin signal regions for statistical combination: " + str(Info.parameters["srcombination"]) )
             
