@@ -158,6 +158,18 @@ void Atlas_2411_02040::analyze() {
     else nonbjets.push_back(jets[i]);
   }
   
+  //enable only for background tests; assume here 4 tagged b-jest like in hhjj
+  bool fake_signal = false;
+  if (fake_signal and jets.size() > 5 and nonbjets.size() > 1) {
+      bjets.push_back(nonbjets[0]);
+      bjets.push_back(nonbjets[1]);
+      /*if (rand() % 2) {
+          bjets.push_back(nonbjets[0]);
+          bjets.push_back(nonbjets[1]);
+      }
+      else bjets.push_back(nonbjets[0]);*/
+  }
+
   countCutflowEvent("00_all");
   
   if (bjets.size() > 3) countCutflowEvent("00_control4j");
@@ -224,6 +236,7 @@ void Atlas_2411_02040::analyze() {
     bjets6 = true; 
     countCutflowEvent("05_6b");
     for (int i = 0; i < 6; i++) sigjets.push_back(bjets[i]);
+    std::sort(sigjets.begin(), sigjets.end(), sortByPT );
     cutflow++;
     hist_weight->Fill(cutflow, weight);
   }

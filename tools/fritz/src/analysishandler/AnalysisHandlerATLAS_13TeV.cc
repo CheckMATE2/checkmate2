@@ -815,11 +815,12 @@ double AnalysisHandlerATLAS_13TeV::tauBkgEffMultiTight(double pt,
 double AnalysisHandlerATLAS_13TeV::bSigEff(double pt,
                                      double eta,
                                      double eff) {
+    if (analysisName == "atlas_2411_02040") {
     //bypass
     //arXiv:2211.16345, fig 19a
     //https://chatgpt.com/share/692edf69-f690-8012-8ba5-941633388c6d
-    if (eff > 0.999) return 1.;
-    else return eff/0.9 * ((pt > 20.) * (pt < 30.) * 0.67 + // was 0.67
+    if (eff > 0.999 and eff < 1.0001) return 1.;
+    if (eff > 1.1) {return (eff-1.)/0.77 * ((pt > 20.) * (pt < 30.) * 0.67 + // was 0.67
            (pt > 30.) * (pt < 40.) * 0.735 +
            (pt > 40.) * (pt < 60.) * 0.776 +
            (pt > 60.) * (pt < 85.) * 0.797 +
@@ -827,7 +828,7 @@ double AnalysisHandlerATLAS_13TeV::bSigEff(double pt,
             (pt > 110.) * (pt < 140.) * 0.813 +
            (pt > 140.) * (pt < 170.) * 0.813 +
            (pt > 170.) * (pt < 210.) * 0.809 +
-           (pt > 210.)  * 0.8 );
+           (pt > 210.)  * 0.8 );}
 
     const double y0 = 0.5523;
     const double x0 = 47.6071;
