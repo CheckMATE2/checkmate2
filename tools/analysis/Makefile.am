@@ -166,6 +166,7 @@ libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2202_07953.h src/an
 libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2209_13935.h src/analyses/ATLAS_13TeV/atlas_2209_13935.cc
 libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2102_10874.h src/analyses/ATLAS_13TeV/atlas_2102_10874.cc
 libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2411_02040.h src/analyses/ATLAS_13TeV/atlas_2411_02040.cc
+libanalyses_la_SOURCES += include/analyses/CMS_13TeV/cms_2111_06295.h src/analyses/CMS_13TeV/cms_2111_06295.cc
 #@@extraanalysis@@
 
 libanalyses_la_LDFLAGS = -avoid-version -shared

@@ -8,3 +8,4 @@ cms_sus_19_005       303  hadronic final states with MT2                        
 cms_1908_04722       186  hadronic final states with HT, post-fit and simple fitting                                  137.0 no  
 cms_2107_13201       88   monojet with multibin                                                                       137.0 no  
 cms_2205_09597       40   search for electroweakinos in hadronic final states                                         137.0 no  
+cms_2111_06295       59   soft leptons EWK and stops                                                                  137.0 no  
