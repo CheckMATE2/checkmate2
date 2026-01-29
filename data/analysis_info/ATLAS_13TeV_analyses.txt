@@ -51,3 +51,4 @@ atlas_2411_02040     5    triple Higgs search                                   
 #atlas_conf_2016_078  13   2-6 jets + etmiss (squarks and gluino)                                                      13.3  no        
 #atlas_conf_2019_040  70   search for squarks and gluinos in MET_jet final states                                      139   no
 #atlas_conf_2018_041  10   search for gluinos decaying via 3rd gen; multi b-jets and MET                               79.8  no
+atlas_2506_15515     3    search for vector like quarks                                                               140.0 no  

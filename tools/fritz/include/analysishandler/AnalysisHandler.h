@@ -20,6 +20,7 @@
 #include "TDatabasePDG.h"
 #include "TParticlePDG.h"
 #include "TLorentzVector.h"
+#include "Math/LorentzVector.h"
 
 #include "modules/Delphes.h"
 #include "classes/DelphesFactory.h"

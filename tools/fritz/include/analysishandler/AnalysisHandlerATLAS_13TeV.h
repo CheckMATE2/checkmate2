@@ -60,6 +60,7 @@
 #include "atlas_2209_13935.h"
 #include "atlas_2102_10874.h"
 #include "atlas_2411_02040.h"
+#include "atlas_2506_15515.h"
 //@extraheader@
 #include "AnalysisBase.h"
 

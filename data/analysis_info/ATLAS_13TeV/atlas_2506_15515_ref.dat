@@ -1,0 +1,4 @@
+SR       obs   bkg   bkg_err  S95_obs  S95_exp  
+SR_low   2217  2212  49       136      131      
+SR_mid   1696  1696  40       112      112      
+SR_high  412   412   19       54       54       
