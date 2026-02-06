@@ -1,0 +1,27 @@
+{
+    "metadata": {
+        "analysis_id": "ANA-EXOT-2018-06",
+        "description": "patchset for compatibility",
+        "digests": {
+            "sha256": ""
+        },
+        "labels": [
+            "m0",
+            "m1"
+        ],
+        "references": {
+            "hepdata": "ins1847779"
+        }
+    },
+    "patches": [
+        {
+            "metadata": {
+                "name": "Signal00",
+                "values": [
+                    "",
+                    ""
+                ]
+            }
+        }
+    ]
+}

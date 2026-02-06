@@ -1,0 +1,15 @@
+[Parameters]
+Name: TRSM_hhh_450_275_full3
+Analyses: atlas_2411_02040
+Multibin: detailed
+Expected: True
+Uplim: True
+Model: full
+Backend: jax
+SkipParamCheck: True
+
+[hhh]
+Events: /media/krolb/76f3b048-5ff3-40dd-9a6f-ace6b430d410/MG5_events/TRSM_hhh/450_275/tag_1_pythia8_events.hepmc
+XSect: 50 fb
+#MaxEvents: 10000
+

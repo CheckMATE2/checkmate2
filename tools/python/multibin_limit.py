@@ -61,7 +61,7 @@ def create_workspace(path, o, b, db, s, ds, systematics = 0, lumi = 0.017):
      'inits': [1],
      'name': 'lumi',
      'sigmas': [lumi]}]}}],"version": "1.0.0"}
-    #with open(path+'/multibin_limits/'+"workspace.json", "w") as write_file:
+    #with open(path+'/multibin_limits/'+"simplified_workspace" + analysis + "_" + mbsr +".json", "w") as write_file:
     #    json.dump(spec, write_file, indent=4)
     return pyhf.Workspace(spec)
 

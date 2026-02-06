@@ -51,19 +51,31 @@ void AnalysisBase::setup(std::map<std::string, std::vector<int> > whichTagsIn, s
         xsecterr = Global::strToDouble(searchIterator->second);
 
     whichTags = whichTagsIn;
-    initialize(); // specified by derived analysis classes
-}
 
+    initialize(); // specified by derived analysis classes
+
+    //uncomment to save correlation information
+    //correlationFile = bookFile(analysis+"_correlations.dat", true);
+    //print_map(correlationMap, 0, correlationFile);
+}
+void AnalysisBase::resetCorrelationMap() {
+    for (std::map<std::string,double>::iterator it = correlationMap.begin(); it != correlationMap.end(); ++it)
+        it->second = 0;
+}
 void AnalysisBase::processEvent(int iEvent) {
     sumOfWeights += weight;
     sumOfWeights2 += weight*weight;
     nEvents++;
+    resetCorrelationMap();
     analyze(); // specified by derived analysis classes
     
     // deletes pointers created by final state objects
     for (int i = 0; i < finalStateObjects.size(); i++)
       delete finalStateObjects[i];
     finalStateObjects.clear(); 
+
+    //uncomment to save correlation information
+    //print_map(correlationMap, 1, correlationFile);
 }
 
 void AnalysisBase::finish() {
@@ -98,14 +110,17 @@ void AnalysisBase::bookSignalRegions(std::string listOfRegions) {
     char c = listOfRegions[i];
     if (c == ';') {
       signalRegions[currKey] = signalRegions2[currKey] = 0.0;
+      correlationMap[ currKey ] = 0;
       currKey = "";
     }
     else
       currKey += c;
   }
   // The last key might not be separated by ;
-  if(currKey != "")
+  if(currKey != "") {
       signalRegions[currKey] = signalRegions2[currKey] = 0.0;
+      correlationMap[ currKey ] = 0;
+  }
 }
 
 void AnalysisBase::bookControlRegions(std::string listOfRegions) {

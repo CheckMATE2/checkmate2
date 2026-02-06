@@ -183,7 +183,7 @@ class ResultCollector(object):
         self.signal_sumofweights2 = self.signal_sumofweights2 + other.signal_sumofweights2
         
         # redetermine event numbers and stat error
-        if self.total_sumofweights != 0:
+        if self.signal_sumofweights != 0:
             self.signal_normevents = old_div(self.total_normevents * self.signal_sumofweights, self.total_sumofweights)
             
             if self.signal_sumofweights <= 0: # If there are no events in the signal region, ...

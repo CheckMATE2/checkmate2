@@ -18,6 +18,8 @@ class Atlas_2010_14293 : public AnalysisBase {
     
     TFile *hfile;  TH1F *ggd1, *ggd2, *ggd3, *ggd4, *ggo1, *ggo2, *ggo3, *ggo4;  
     
+    int outputFileIndex;
+
     double met;
     
     static bool sortByPT(Jet *i, Jet *j);

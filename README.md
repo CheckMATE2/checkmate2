@@ -80,6 +80,10 @@ This is a brief note on how to install CheckMATE from the master branch on https
 
 2024-08-19   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 
+    ~ added atlas_2411_02040
+
+2024-08-19   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
     ~ added atlas_2102_10874
     ~ Tensorflow backend for pyhf
 

@@ -120,6 +120,7 @@ class Fritz {
         bool haveNEvents; //!< Has nEvents been set
         int nEvents; //!< Total number of events to be processed
         bool haveRandomSeed; //!< Has randomSeed been set
+        bool skipDelphes;
         int randomSeed; //!< Random seed for this run
         static bool interupted; //!< set to true if interrupt signal is called
         std::string directory;

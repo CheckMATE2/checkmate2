@@ -98,7 +98,10 @@ def select_MBsr(names, SRs):
 #    for sr in SRs:
 #        if sr['SR'] in _names:
     for name in _names:
-        sr = np.array(SRs)[np.array([x['SR']==name for x in SRs])][0]
+        try:
+            sr = np.array(SRs)[np.array([x['SR']==name for x in SRs])][0]
+        except IndexError: #SR not found in results file
+            sr = {'SR':name,'o':0.,'b':0.,'db':0.,'s':0.,'ds':0.}
         b.append(sr['b'])
         db.append(sr['db'])
         o.append(sr['o'])

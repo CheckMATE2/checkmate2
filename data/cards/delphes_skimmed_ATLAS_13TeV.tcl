@@ -16,6 +16,7 @@ set ExecutionPath {
   TrackMerger
   Calorimeter
   EFlowMerger
+  EFlowFilter
   
   MissingET
 
@@ -25,6 +26,9 @@ set ExecutionPath {
   JetEnergyScale
 
   TagSkimmer
+
+  NeutrinoFilter
+  GenJetFinder
 
   TreeWriter
 }
@@ -175,7 +179,7 @@ module Merger TrackMerger {
 # add InputArray InputArray
   add InputArray ChargedHadronMomentumSmearing/chargedHadrons
   add InputArray ElectronEnergySmearing/electrons
-#  add InputArray MuonMomentumSmearing/muons
+  add InputArray MuonMomentumSmearing/muons
   set OutputArray tracks
 }
 
@@ -267,6 +271,15 @@ module Merger EFlowMerger {
 }
 
 
+module PdgCodeFilter EFlowFilter {
+  set InputArray EFlowMerger/eflow
+  set OutputArray eflow
+
+  add PdgCode {11}
+  add PdgCode {-11}
+  add PdgCode {13}
+  add PdgCode {-13}
+}
 
 ###################
 # Photon efficiency
@@ -361,8 +374,8 @@ module EnergyScale JetEnergyScale {
 
   # scale formula for jets
   # set ScaleFormula {  sqrt( (3.0 - 0.2*(abs(eta)))^2 / pt + 1.0 )  }
-  # set ScaleFormula { 1.08 }
-  set ScaleFormula { 1.0 + (pt <= 100.)*(-0.01864*log(pt) + 0.10084) + (pt > 100.)*0.015 }
+  set ScaleFormula { 1.08 }
+  #set ScaleFormula { 1.0 + (pt <= 100.)*(-0.01864*log(pt) + 0.10084) + (pt > 100.)*0.015 }
   # arXiv:1703.09665
 
 }
@@ -372,6 +385,43 @@ module Merger FinalTrackMerger {
   add InputArray TrackMerger/tracks
   add InputArray MuonMomentumSmearing/muons
   set OutputArray tracks
+}
+
+
+#####################
+# Neutrino Filter
+#####################
+
+module PdgCodeFilter NeutrinoFilter {
+
+  set InputArray Delphes/stableParticles
+  set OutputArray filteredParticles
+
+  set PTMin 0.0
+
+  add PdgCode {12}
+  add PdgCode {14}
+  add PdgCode {16}
+  add PdgCode {-12}
+  add PdgCode {-14}
+  add PdgCode {-16}
+
+}
+
+#####################
+# MC truth jet finder
+#####################
+
+module FastJetFinder GenJetFinder {
+  set InputArray NeutrinoFilter/filteredParticles
+
+  set OutputArray jets
+
+  # algorithm: 1 CDFJetClu, 2 MidPoint, 3 SIScone, 4 kt, 5 Cambridge/Aachen, 6 antikt
+  set JetAlgorithm 6
+  set ParameterR 0.4
+
+  set JetPTMin 20.0
 }
 
 ##################
@@ -391,6 +441,7 @@ module TreeWriter TreeWriter {
   add Branch EFlowMerger/eflow Tower Tower
 
   add Branch JetEnergyScale/jets Jet Jet
+  #add Branch GenJetFinder/jets Jet Jet
   add Branch FatJetFinder/jets FatJet Jet
   add Branch ElectronEnergySmearing/electrons Electron Electron
   add Branch Calorimeter/photons Photon Photon

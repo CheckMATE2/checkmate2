@@ -51,12 +51,14 @@ def calc_point( path, analysis, mbsr ):
             return 10., 10., 1., 1.
         patchset = mbfull.create_patchset(path, names, s, ds, systematics = 0)
     
-    #with open(path+'/multibin_limits/'+"workspace.json", "w") as write_file:
-    #    json.dump(patchset, write_file, indent=4)       
+    #with open(path+'/multibin_limits/'+"patchset" + analysis + "_" + mbsr +".json", "w") as write_file:
+    #    json.dump(patchset, write_file, indent=4)
     signal0 = pyhf.PatchSet(patchset)["Signal0"]
     
     #pyhf.set_backend("pytorch")
     #print(Info.parameters["backend"])
+    if Info.parameters["backend"] == "jax":
+        pyhf.set_backend("jax")
     if Info.parameters["backend"] == "":
         try:
             pyhf.set_backend("jax") # if backend unspecified try jax
@@ -109,6 +111,10 @@ def calc_point( path, analysis, mbsr ):
             inv_r_exp_down, inv_r_exp, inv_r_exp_up =  stat_model.poi_upper_limit(expected = spey.ExpectationType.apriori, expected_pvalue="1sigma")  # for the band 1 (2) sigma band
             #string = string+f"Expected upper limit: mu = {inv_r_exp:.4f}"+'\n'
             string = string+f"Expected (+/-1sigma) upper limit: mu = {inv_r_exp_down:.4f}   {inv_r_exp:.4f}   {inv_r_exp_up:.4f}"+'\n'
+        if inv_r/inv_r_exp < 0.1 or inv_r/inv_r_exp > 10.: # very different expected and observed suggest problem in the model; use results with caution
+            string += "Problems with convergence; check carefully/rerun\n"
+            AdvPrint.cout("Upper limits calculation unreliable.")
+            inv_r = inv_r_exp_down = inv_r_exp = inv_r_exp_up = 10.
     string += "\n================================\n"
     
     with open(path+'/multibin_limits/'+"results.dat", "a") as write_file:
@@ -172,15 +178,15 @@ def calc_cov(path, analysis, mbsr):
         string = string+f"Observed upper limit: mu = {inv_r:.4f}"+'\n'
         AdvPrint.cout("Upper limit: "+str(inv_r) )
         if Info.flags["expected"]:
-            inv_r_exp =  stat_model.poi_upper_limit(expected = spey.ExpectationType.apriori) 
+            inv_r_exp =  stat_model.poi_upper_limit(expected = spey.ExpectationType.apriori, expected_pvalue="2sigma") 
             #inv_r_exp_1sigma =  stat_model.poi_upper_limit(expected = spey.ExpectationType.apriori, expected_pvalue="1sigma")  # for the band 1 (2) sigma band
-            string = string+f"Expected upper limit: mu = {inv_r_exp:.4f}"
+            string = string+f"Expected (+/-2sigma) upper limit: mu = {inv_r_exp[0]:.4f}   {inv_r_exp[1]:.4f}   {inv_r_exp[2]:.4f}   {inv_r_exp[3]:.4f}   {inv_r_exp[4]:.4f}"
     string += "\n================================\n"
     
     with open(path+'/multibin_limits/'+"results.dat", "a") as write_file:
         write_file.write(string)
 
-    return inv_r, inv_r_exp, 1-cls_obs, cls_exp, stat_model    
+    return inv_r, inv_r_exp[0], 1-cls_obs, cls_exp, stat_model    
 
 
 def get_limits():

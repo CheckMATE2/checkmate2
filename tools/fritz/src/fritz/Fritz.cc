@@ -16,6 +16,7 @@ Fritz::Fritz() {
     haveNEvents = false;
     nEvents = 0;
     haveRandomSeed = false;
+    skipDelphes = false;
     directory = std::string();     
     signal(SIGINT, signalHandler);
 }
@@ -94,6 +95,7 @@ bool Fritz::processEvent(int iEvent) {
     for (itd=delphesHandler.begin(); itd!=delphesHandler.end(); itd++) {
         running |= itd->second->processEvent(iEvent);
     }
+
     std::map<std::string,AnalysisHandler*>::iterator ita;
     for (ita=analysisHandler.begin(); ita!=analysisHandler.end(); ita++) {
         running |= ita->second->processEvent(iEvent);
@@ -145,6 +147,9 @@ void Fritz::setupEventFiles(Config conf) {
     for (it=sections.begin(); it!=sections.end(); it++) {
         std::string label = it->first;
         Properties props = it->second;
+        std::string filepath = lookupRequired(props, "file", props["name"], "You need to give a path to the file.");
+        if(filepath.substr(filepath.find_last_of(".") + 1) == "root") {
+            Global::print("Fritz","Skipping Delphes " ); skipDelphes = true;}
         eventFiles[label] = setupEventFile(props);
     }
 }
@@ -307,7 +312,8 @@ void Fritz::readInputFile(std::string filepath) {
         Global::abort("Fritz", "To use pythia you need to compile fritz with pythia support.");
     }
 #endif
-    setupDelphesHandler(conf);
+    if (!skipDelphes)
+        setupDelphesHandler(conf);
     setupAnalysisHandler(conf);
 }
 

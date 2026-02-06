@@ -7,7 +7,8 @@ void Cms_2107_13201::initialize() {
     "# monojet with multibin\n"
   "");
   setLuminosity(137.0*units::INVFB);      
-  bookSignalRegions("A_00;A_01;A_02;A_03;A_04;A_05;A_06;A_07;A_08;A_09;A_10;A_11;A_12;A_13;A_14;A_15;A_16;A_17;A_18;A_19;A_20;A_21;B_2016_00;B_2016_01;B_2016_02;B_2016_03;B_2016_04;B_2016_05;B_2016_06;B_2016_07;B_2016_08;B_2016_09;B_2016_10;B_2016_11;B_2016_12;B_2016_13;B_2016_14;B_2016_15;B_2016_16;B_2016_17;B_2016_18;B_2016_19;B_2016_20;B_2016_21;B_2017_00;B_2017_01;B_2017_02;B_2017_03;B_2017_04;B_2017_05;B_2017_06;B_2017_07;B_2017_08;B_2017_09;B_2017_10;B_2017_11;B_2017_12;B_2017_13;B_2017_14;B_2017_15;B_2017_16;B_2017_17;B_2017_18;B_2017_19;B_2017_20;B_2017_21;B_2018_00;B_2018_01;B_2018_02;B_2018_03;B_2018_04;B_2018_05;B_2018_06;B_2018_07;B_2018_08;B_2018_09;B_2018_10;B_2018_11;B_2018_12;B_2018_13;B_2018_14;B_2018_15;B_2018_16;B_2018_17;B_2018_18;B_2018_19;B_2018_20;B_2018_21");
+  //bookSignalRegions("A_00;A_01;A_02;A_03;A_04;A_05;A_06;A_07;A_08;A_09;A_10;A_11;A_12;A_13;A_14;A_15;A_16;A_17;A_18;A_19;A_20;A_21;B_2016_00;B_2016_01;B_2016_02;B_2016_03;B_2016_04;B_2016_05;B_2016_06;B_2016_07;B_2016_08;B_2016_09;B_2016_10;B_2016_11;B_2016_12;B_2016_13;B_2016_14;B_2016_15;B_2016_16;B_2016_17;B_2016_18;B_2016_19;B_2016_20;B_2016_21;B_2017_00;B_2017_01;B_2017_02;B_2017_03;B_2017_04;B_2017_05;B_2017_06;B_2017_07;B_2017_08;B_2017_09;B_2017_10;B_2017_11;B_2017_12;B_2017_13;B_2017_14;B_2017_15;B_2017_16;B_2017_17;B_2017_18;B_2017_19;B_2017_20;B_2017_21;B_2018_00;B_2018_01;B_2018_02;B_2018_03;B_2018_04;B_2018_05;B_2018_06;B_2018_07;B_2018_08;B_2018_09;B_2018_10;B_2018_11;B_2018_12;B_2018_13;B_2018_14;B_2018_15;B_2018_16;B_2018_17;B_2018_18;B_2018_19;B_2018_20;B_2018_21");
+  bookSignalRegions("B_2016_00;B_2016_01;B_2016_02;B_2016_03;B_2016_04;B_2016_05;B_2016_06;B_2016_07;B_2016_08;B_2016_09;B_2016_10;B_2016_11;B_2016_12;B_2016_13;B_2016_14;B_2016_15;B_2016_16;B_2016_17;B_2016_18;B_2016_19;B_2016_20;B_2016_21;B_2017_00;B_2017_01;B_2017_02;B_2017_03;B_2017_04;B_2017_05;B_2017_06;B_2017_07;B_2017_08;B_2017_09;B_2017_10;B_2017_11;B_2017_12;B_2017_13;B_2017_14;B_2017_15;B_2017_16;B_2017_17;B_2017_18;B_2017_19;B_2017_20;B_2017_21;B_2018_00;B_2018_01;B_2018_02;B_2018_03;B_2018_04;B_2018_05;B_2018_06;B_2018_07;B_2018_08;B_2018_09;B_2018_10;B_2018_11;B_2018_12;B_2018_13;B_2018_14;B_2018_15;B_2018_16;B_2018_17;B_2018_18;B_2018_19;B_2018_20;B_2018_21");
   // You can also book cutflow regions with bookCutflowRegions("CR1;CR2;..."). Note that the regions are
   //  always ordered alphabetically in the cutflow output files.
 
@@ -73,91 +74,91 @@ void Cms_2107_13201::analyze() {
   else year = "2018";
     
   if (MET < 280.) {
-    countSignalEvent("A_00");
+    //countSignalEvent("A_00");
     countSignalEvent("B_"+year+"_00");    
   }
   else if (MET < 310.) {
-    countSignalEvent("A_01");
+    //countSignalEvent("A_01");
     countSignalEvent("B_"+year+"_01");    
   }
   else if (MET < 340.) {
-    countSignalEvent("A_02");
+    //countSignalEvent("A_02");
     countSignalEvent("B_"+year+"_02");    
   }
   else if (MET < 370.) {
-    countSignalEvent("A_03");
+    //countSignalEvent("A_03");
     countSignalEvent("B_"+year+"_03");    
   }  
   else if (MET < 400.) {
-    countSignalEvent("A_04");
+    //countSignalEvent("A_04");
     countSignalEvent("B_"+year+"_04");    
   }
   else if (MET < 430.) {
-    countSignalEvent("A_05");
+    //countSignalEvent("A_05");
     countSignalEvent("B_"+year+"_05");    
   }  
   else if (MET < 470.) {
-    countSignalEvent("A_06");
+    //countSignalEvent("A_06");
     countSignalEvent("B_"+year+"_06");    
   } 
   else if (MET < 510.) {
-    countSignalEvent("A_07");
+    //countSignalEvent("A_07");
     countSignalEvent("B_"+year+"_07");    
   } 
   else if (MET < 550.) {
-    countSignalEvent("A_08");
+    //countSignalEvent("A_08");
     countSignalEvent("B_"+year+"_08");    
   }  
   else if (MET < 590.) {
-    countSignalEvent("A_09");
+    //countSignalEvent("A_09");
     countSignalEvent("B_"+year+"_09");    
   }  
   else if (MET < 640.) {
-    countSignalEvent("A_10");
+    //countSignalEvent("A_10");
     countSignalEvent("B_"+year+"_10");    
   }  
   else if (MET < 690.) {
-    countSignalEvent("A_11");
+    //countSignalEvent("A_11");
     countSignalEvent("B_"+year+"_11");    
   }
   else if (MET < 740.) {
-    countSignalEvent("A_12");
+    //countSignalEvent("A_12");
     countSignalEvent("B_"+year+"_12");    
   }  
   else if (MET < 790.) {
-    countSignalEvent("A_13");
+    //countSignalEvent("A_13");
     countSignalEvent("B_"+year+"_13");    
   }  
   else if (MET < 840.) {
-    countSignalEvent("A_14");
+    //countSignalEvent("A_14");
     countSignalEvent("B_"+year+"_14");    
   }  
   else if (MET < 900.) {
-    countSignalEvent("A_15");
+    //countSignalEvent("A_15");
     countSignalEvent("B_"+year+"_15");    
   }  
   else if (MET < 960.) {
-    countSignalEvent("A_16");
+    //countSignalEvent("A_16");
     countSignalEvent("B_"+year+"_16");    
   }  
   else if (MET < 1020.) {
-    countSignalEvent("A_17");
+    //countSignalEvent("A_17");
     countSignalEvent("B_"+year+"_17");    
   }  
   else if (MET < 1090.) {
-    countSignalEvent("A_18");
+    //countSignalEvent("A_18");
     countSignalEvent("B_"+year+"_18");    
   }
   else if (MET < 1160.) {
-    countSignalEvent("A_19");
+    //countSignalEvent("A_19");
     countSignalEvent("B_"+year+"_19");    
   }  
   else if (MET < 1250.) {
-    countSignalEvent("A_20");
+    //countSignalEvent("A_20");
     countSignalEvent("B_"+year+"_20");    
   }  
   else  {
-    countSignalEvent("A_21");
+    //countSignalEvent("A_21");
     countSignalEvent("B_"+year+"_21");    
   }  
   

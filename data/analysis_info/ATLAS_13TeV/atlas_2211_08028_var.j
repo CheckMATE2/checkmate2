@@ -269,5 +269,65 @@
     "leptons", 
     "NN", 
     "multibin"
-  ]
+  ],
+  "likelihoods": "y",
+  "mb_signal_regions": {
+    "CC_Gbb_B": [
+      "SR-Gbb-B"    
+    ],
+    "CC_Gbb_M": [
+      "SR-Gbb-M"    
+    ],
+    "CC_Gbb_C": [
+      "SR-Gbb-C"    
+    ],
+    "CC_Gtt_0L_B": [
+      "SR-Gtt-0L-B"    
+    ],
+    "CC_Gtt_0L_M1": [
+      "SR-Gtt-0L-M1"    
+    ],
+    "CC_Gtt_0L_M2": [
+      "SR-Gtt-0L-M2"    
+    ],
+    "CC_Gtt_0L_C": [
+      "SR-Gtt-0L-C"    
+    ],
+    "CC_Gtt_1L_B": [
+      "SR-Gtt-1L-B"    
+    ],
+    "CC_Gtt_1L_M1": [
+      "SR-Gtt-1L-M1"    
+    ],
+    "CC_Gtt_1L_M2": [
+      "SR-Gtt-1L-M2"    
+    ],
+    "CC_Gtt_1L_C": [
+      "SR-Gtt-1L-C"    
+    ],
+    "NN_Gbb_2000_1800": [
+      "SR-Gbb-2000-1800"
+    ],
+    "NN_Gbb_2100_1600": [
+      "SR-Gbb-2100-1600"
+    ],
+    "NN_Gbb_2300_1000": [
+      "SR-Gbb-2300-1000"
+    ],
+    "NN_Gbb_2800_1400": [
+      "SR-Gbb-2800-1400"
+    ],
+    "NN_Gtt_2100_1": [
+      "SR-Gtt-2100-1"
+    ],
+    "NN_Gtt_1800_1": [
+      "SR-Gtt-1800-1"
+    ],
+    "NN_Gtt_2300_1200": [
+      "SR-Gtt-2300-1200"
+    ],
+    "NN_Gtt_1900_1400": [
+      "SR-Gtt-1900-1400"
+    ]
+  }  
 }

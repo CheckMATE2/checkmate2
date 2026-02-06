@@ -467,14 +467,14 @@ bool Cms_sus_19_005::fill_bins_2j(int Nj, int Nb, double HT, double MT2) {
         if (MT2 < 300.) labmt2 = "200"; 
         else if (MT2 < 500.) labmt2 = "300"; 
         else labmt2 = "500";  
-        countSignalEvent("7-9j_"+ std::to_string(Nb)+"b_575_" + labmt2);
+        countSignalEvent("10j_"+ std::to_string(Nb)+"b_575_" + labmt2);
       }    
      else if (Nj >= 10 and Nb == 3){
         if (MT2 < 300.) labmt2 = "200"; 
         else labmt2 = "300";  
-        countSignalEvent("7-9j_"+ std::to_string(Nb)+"b_575_" + labmt2);
+        countSignalEvent("10j_"+ std::to_string(Nb)+"b_575_" + labmt2);
       }
-      else if (Nj >= 10 and Nb > 3) countSignalEvent("7-9j_4b_575_200");
+      else if (Nj >= 10 and Nb > 3) countSignalEvent("10j_4b_575_200");
     }
     else if ( HT < 1500.) {
       if ( Nj < 4 and Nb < 2){
