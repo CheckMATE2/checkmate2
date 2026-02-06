@@ -60,7 +60,7 @@ class Info(dict):
         parameters['TotalEvaluationFileColumns'] = ['analysis', 'sr', 'o', 'b', 'db', 's', 'ds', 's95obs', 's95exp', 'robscons', 'rexpcons']
         parameters['BestPerAnalysisEvaluationFileColumns'] = ['analysis', 'sr', 'o', 'b', 'db', 's', 'ds', 's95obs', 's95exp', 'robscons', 'rexpcons']
         parameters['statcomb'] = "none"
-        parameters['statmod'] = "simple"
+        parameters['statmod'] = "full"
         parameters['srcombination'] = []
         parameters['backend'] = ""
         
