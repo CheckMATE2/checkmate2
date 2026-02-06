@@ -1,3 +1,12 @@
+# citations
+
+Please cite:
+
+https://arxiv.org/abs/2507.08565
+
+https://arxiv.org/abs/1611.09856
+
+
 # installation
 
 This is a brief note on how to install CheckMATE from the master branch on https://github.com/CheckMATE2/checkmate2
@@ -7,7 +16,7 @@ This is a brief note on how to install CheckMATE from the master branch on https
 
 1) Requirements
 
-  a) root; anything later than version 6.20 should work just fine; the precompiled root can be obtained from:
+  a) root; 6.38 recommended
      https://root.cern/install/
   
   b) Delphes 3.5 or later
@@ -24,7 +33,7 @@ This is a brief note on how to install CheckMATE from the master branch on https
   e) MadGraph5_aMC@NLO; versions >=2.7 should work just fine; 
      with 3 series there are some hiccups but you should get the result anyway; follow the messages on screen 
      
-  f) ONNX Runtime; see: https://onnxruntime.ai/; tested with versions 1.12.1, 1.13.1, 1.22.0 (linux-x64)  
+  f) ONNX Runtime; see: https://onnxruntime.ai/; tested with versions 1.12.1, 1.13.1, 1.23.0 (linux-x64)  
   
   g) Spey, pyhf and spey-pyhf plugin for multibin fits; see https://speysidehep.github.io/spey/quick_start.html#; jax or pytorch or tensorflow are recommended;
      pip install spey   

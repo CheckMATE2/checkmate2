@@ -3,7 +3,7 @@ This is a brief note on how to install CheckMATE from the master branch on https
 0) The current version is compatible with both Python2 (2.7.4 or later) and Python3 (possibly >= 3.4). 'future' library is required ('pip install future'). You can control which Python version is used at configuring with '--with-python=/path/to/python'. Other than that your default 'python' will be used. Note that the features like multi-bin signal region and likelihoods require Python3. 
 
 1) Requirements
-  a) root; anything later than version 6.20 should work just fine; the precompiled root can be obtained from:
+  a) root; 6.38 recommended
      https://root.cern/install/
   b) Delphes 3.5 or later
      https://cp3.irmp.ucl.ac.be/projects/delphes/wiki/Releases
@@ -33,7 +33,7 @@ This is a brief note on how to install CheckMATE from the master branch on https
      or
      ./CheckMATE 13tev_testfull2.in
 
-3) New features:
+3) New features (check paper for details):
   a) Multibin fits available in atlas_2010_14293, atlas_1908_03122, atlas_1911_12606, atlas_2101_01629, atlas_1908_08215, atlas_2004_14060, atlas_1911_06660, atlas_2106_01676, cms_1908_04722, cms_1909_03460, cms_2107_13021, cms_2205_09597:
      For command line use "-mb select/scan/detailed"; in the input file "Multibin: select/scan/detailed"; for chosing the calculation method: "-mod simple/full"; -exp, -mbcls, -uplim  
      scan: just observed CLs for fast evalutaion;  
