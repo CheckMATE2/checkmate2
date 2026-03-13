@@ -108,7 +108,7 @@ void Cms_sus_16_048::analyze() {
   for ( int i=0; i < electronsMedium.size(); i++ ) {
     if ( electronsMedium[i]->PT >= 10 ) {
       if ( fabs(electronsMedium[i]->Eta) < 2.5 ) {
-        electrons_g.push_back(electronsLoose[i]);
+        electrons_g.push_back(electronsMedium[i]);
       }
     } 
   }
