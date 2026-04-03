@@ -87,6 +87,11 @@ This is a brief note on how to install CheckMATE from the master branch on https
 
 # current
 
+2026-04-02  Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ cleaned obsolete worksapces
+    ~ typo fix in atlas_2010_14293 configuration for CRs
+
 2024-08-19   Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 
     ~ added atlas_2411_02040
