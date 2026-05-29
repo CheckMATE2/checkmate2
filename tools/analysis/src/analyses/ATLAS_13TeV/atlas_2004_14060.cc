@@ -20,7 +20,7 @@ void Atlas_2004_14060::initialize() {
 
 void Atlas_2004_14060::analyze() {
   n++   ; 
-  missingET->addMuons(muonsCombined); 
+  //missingET->addMuons(muonsCombined); 
   
   electronsLoose = filterPhaseSpace(electronsLoose, 4.5, -2.47, 2.47);
   muonsCombined = filterPhaseSpace(muonsCombined, 4., -2.7, 2.7);

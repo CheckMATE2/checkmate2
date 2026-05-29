@@ -74,7 +74,7 @@ void Atlas_conf_2016_054::analyze() {
     
     
     //CM internal calculation of etmiss
-    missingET->addMuons(muonsCombined);
+    //missingET->addMuons(muonsCombined);
     double etmiss_soft = missingET->P4().Et();
     double etmiss_hard = etmiss_soft;
     

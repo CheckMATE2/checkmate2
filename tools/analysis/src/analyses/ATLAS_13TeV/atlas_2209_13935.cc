@@ -32,7 +32,7 @@ void Atlas_2209_13935::analyze() {
 //f1.open("2016_050.txt",std::ofstream::app);
   signal_el.clear();
   signal_mu.clear();
-  missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out. Probably not since 3.4.2
+  //missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out. Probably not since 3.4.2
 //--------------------Lepton object definition--------------------
   electronsLoose=filterPhaseSpace( electronsLoose, 9., -2.47, 2.47);
   electronsTight=filterPhaseSpace( electronsTight, 9., -2.47, 2.47);

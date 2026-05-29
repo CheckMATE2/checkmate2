@@ -122,7 +122,7 @@ void Atlas_conf_2016_096::analyze() {
         std::cout << 0 << " ";
     std::cout << muonsCombined.size() << " " << electronsLoose.size() << " " << electronsMedium.size() << " " << electronsTight.size();
     
-    missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
+    //missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
 
     
     electronsLoose = filterPhaseSpace(electronsLoose, 10., -2.47, 2.47, false);

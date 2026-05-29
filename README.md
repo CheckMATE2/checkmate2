@@ -87,6 +87,10 @@ This is a brief note on how to install CheckMATE from the master branch on https
 
 # current
 
+2026-05-29  Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ muon isolatioon compatible with new Delphes
+
 2026-04-02  Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 
     ~ cleaned obsolete worksapces

@@ -26,7 +26,7 @@ void Atlas_1602_09058::analyze() {
   
   //string cf_index[7] = {"0","1","2","3","4","5","6"};
 
-  missingET->addMuons(muonsCombined); 
+  //missingET->addMuons(muonsCombined); 
   double etmiss=missingET->P4().Et();
   
   countCutflowEvent("SR0b3j"+cf_index[0]);

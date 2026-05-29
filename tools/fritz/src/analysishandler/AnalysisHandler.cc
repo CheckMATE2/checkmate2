@@ -995,8 +995,10 @@ void AnalysisHandler::isolateMuons() {
                     // check dR
                     if (neighbour->P4().DeltaR(cand->P4()) > maxDR)
                         continue;
-                    // FIXME To be compatible with CheckMATE 1, muons do not
-                    // appear in tracks, therefore no track=?=muon check needed
+                    // should be backward compatible
+                    // required with ne Delphes versions
+                    if(neighbour->Particle == cand->Particle)
+                         continue;                    
                     sumPT += neighbour->PT;
                 }
             }

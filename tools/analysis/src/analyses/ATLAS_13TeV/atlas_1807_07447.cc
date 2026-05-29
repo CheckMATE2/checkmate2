@@ -19,7 +19,7 @@ void Atlas_1807_07447::initialize() {
 }
 
 void Atlas_1807_07447::analyze() {
-  missingET->addMuons(muons); 
+  //missingET->addMuons(muons); 
   
   electronsLoose = filterPhaseSpace(electronsLoose, 10., -2.47, 2.47, true);
   electronsTight = filterPhaseSpace(electronsTight, 25., -2.47, 2.47, true);

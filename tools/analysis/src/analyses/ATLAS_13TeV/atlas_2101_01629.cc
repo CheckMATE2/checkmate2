@@ -16,7 +16,7 @@ void Atlas_2101_01629::initialize() {
 
 void Atlas_2101_01629::analyze() {
 
-  missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
+  //missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
   
   std::vector<Jet*> jets_baseline = filterPhaseSpace(jets, 20., -4.5, 4.5);  
   std::vector<Electron*> electrons_baseline = filterPhaseSpace(electronsLoose, 7., -2.47, 2.47, true);

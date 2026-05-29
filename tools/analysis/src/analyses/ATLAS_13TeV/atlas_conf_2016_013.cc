@@ -46,7 +46,7 @@ void Atlas_conf_2016_013::initialize() {
 
 void Atlas_conf_2016_013::analyze() {
 
-	missingET->addMuons(muonsCombined);  
+	//missingET->addMuons(muonsCombined);  
 	
 	// object reconstruction
 	

@@ -66,7 +66,7 @@ void Atlas_conf_2019_020::analyze() {
   electronsTight = filterPhaseSpace(electronsTight, 10.0, -2.47, 2.47);
   muonsCombined = filterPhaseSpace(muonsCombined, 10., -2.4, 2.4);
   jets = filterPhaseSpace(jets, 20., -4.5, 4.5);
-  missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
+  //missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
 
 
   jets = overlapRemoval(jets, electronsLoose, 0.2);

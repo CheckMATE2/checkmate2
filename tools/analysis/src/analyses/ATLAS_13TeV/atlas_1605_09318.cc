@@ -19,7 +19,7 @@ void Atlas_1605_09318::initialize() {
 
 void Atlas_1605_09318::analyze() {
 
-    missingET->addMuons(muonsCombined);
+    //missingET->addMuons(muonsCombined);
 
     //////////////////////////////////////////////
     //                                          //

@@ -64,7 +64,7 @@ void Atlas_conf_2017_060::analyze() {
 
   //  missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
 
-  missingET->addMuons(muonsCombined);  
+  //missingET->addMuons(muonsCombined);  
  
   electronsLoose = filterPhaseSpace(electronsLoose, 20., -2.47, 2.47);
   muonsCombined = filterPhaseSpace(muonsCombined, 10., -2.5, 2.5);

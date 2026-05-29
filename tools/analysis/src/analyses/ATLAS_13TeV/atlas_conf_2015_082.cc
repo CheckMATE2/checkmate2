@@ -114,7 +114,7 @@ CRmm18_HTGT600;CRmm19_missETGT225;Jet_hist_2;Jet_hist_3;Jet_hist_4;Jet_hist_5;Je
   
   
 void Atlas_conf_2015_082::analyze() {
-  missingET->addMuons(muonsCombined);
+  //missingET->addMuons(muonsCombined);
 
   countCutflowEvent("CR00_noCuts");
   

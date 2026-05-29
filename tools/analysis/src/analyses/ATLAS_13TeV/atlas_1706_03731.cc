@@ -18,7 +18,7 @@ void Atlas_1706_03731::initialize() {
 
 void Atlas_1706_03731::analyze() { 
   
-  missingET->addMuons(muonsCombined);  
+  //missingET->addMuons(muonsCombined);  
   
   jets = filterPhaseSpace(jets, 20., -2.8, 2.8);  
   electronsLoose = filterPhaseSpace(electronsLoose, 10., -2.47, 2.47, true);

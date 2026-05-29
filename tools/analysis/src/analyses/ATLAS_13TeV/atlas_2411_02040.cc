@@ -139,7 +139,7 @@ void Atlas_2411_02040::analyze() {
 
   eventNumber++;
   int cutflow = 0;
-  missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out. Probably not since 3.4.2
+  //missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out. Probably not since 3.4.2
   
   electronsLoose = filterPhaseSpace(electronsLoose, 20, -2.47, 2.47);
   electronsLoose = filterIsolation(electronsLoose);

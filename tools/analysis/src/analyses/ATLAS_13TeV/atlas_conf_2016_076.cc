@@ -73,7 +73,7 @@ void Atlas_conf_2016_076::analyze() {
   // - Many advanced kinematical functions like mT2 are implemented. Check the manual for more information.
   // - If you need output to be stored in other files than the cutflow/signal files we provide, check the manual for how to do this conveniently.  
 
-  missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
+  //missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
 
   std::vector<Electron*> baselineElectrons = filterPhaseSpace(electronsMedium, 7., -2.47, 2.47);
   std::vector<Muon*> baselineMuons = filterPhaseSpace(muonsCombined, 5., -2.5, 2.5);

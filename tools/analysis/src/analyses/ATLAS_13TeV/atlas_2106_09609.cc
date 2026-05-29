@@ -90,7 +90,7 @@ void Atlas_2106_09609::initialize() {
 
 void Atlas_2106_09609::analyze() {
 
-  missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
+  //missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
 
   electronsMedium = filterPhaseSpace(electronsMedium, 10., -2.47, 2.47);
   electronsTight = filterPhaseSpace(electronsTight, 15., -2.47, 2.47);
