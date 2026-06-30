@@ -138,11 +138,11 @@ def calc_cov(path, analysis, mbsr):
     r = [x - 1.64*y for x, y in zip(s,ds)] #s - 1.64 ds
     if max(s) == 0. or max(r) <= 0.:
         AdvPrint.cout("No signal events in the selected SRs! Skipping")
-        return inv_r, inv_r_exp, 1-cls_obs, cls_exp, None    
+        return inv_r, inv_r_exp, cls_obs, cls_exp, None    
     if max(r) <= 0.:
         AdvPrint.cout("Signal events below MC uncertainty in the selected SRs! Skipping")
-        return inv_r, inv_r_exp, 1-cls_obs, cls_exp, None    
-    stat_wrapper = spey.get_backend ("default_pdf.correlated_background")
+        return inv_r, inv_r_exp, cls_obs, cls_exp, None    
+    stat_wrapper = spey.get_backend ("default.correlated_background")
     
     cov_mat = mb.get_cov(analysis, db, Info.flags["corr"], mbsr)
     if  Info.flags["corr"] and analysis == "cms_1908_04722":
@@ -263,7 +263,7 @@ def get_limits():
                 AdvPrint.cout("Calculating approximate likelihood with covariance matrix: "+analysis+", SR: "+mbsr+"... ")
                 sr_list = mb_signal_regions[mbsr]
                 o, b, db, s, ds = mb.select_MBsr(sr_list, mb.data_from_CMresults(Info.paths['output'])) #prepare data
-                stat_wrapper = spey.get_backend ("default_pdf.correlated_background")
+                stat_wrapper = spey.get_backend ("default.correlated_background")
                 corrmat = False
                 cov_mat = mb.get_cov(analysis, corrmat)
 
@@ -332,7 +332,7 @@ def combination(analyses):
     AdvPrint.cout("Calculating approximate likelihood with covariance matrix: "+analysis+", SR: "+mbsr+"... ")
     sr_list = mb_signal_regions[mbsr]
     o, b, db, s, ds = mb.select_MBsr(sr_list, mb.data_from_CMresults(Info.paths['output'])) #prepare data
-    stat_wrapper = spey.get_backend ("default_pdf.correlated_background")
+    stat_wrapper = spey.get_backend ("default.correlated_background")
     corrmat = False
     cov_mat = mb.get_cov(analysis, corrmat)
     stat_model1 = stat_wrapper(analysis = analysis, signal_yields = np.array(s), background_yields = np.array(b), data = np.array(o), covariance_matrix = np.array(cov_mat))

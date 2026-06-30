@@ -22,7 +22,7 @@ void Cms_2205_09597::initialize() {
 
 void Cms_2205_09597::analyze() {
 
-  //missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
+  missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
   
   electronsLoose = filterPhaseSpace(electronsLoose, 5., -2.5, 2.5);
   std::vector<Electron*> electronsPF = filterPhaseSpace(electronsLoose, 10., -2.5, 2.5, false, true);   // =>   pT < 10

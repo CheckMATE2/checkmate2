@@ -268,6 +268,9 @@ void Atlas_2102_10874::pass_CR2el(std::vector<Jet*> sigjets, std::vector<Electro
 
   double met = (missingET->P4() + electrons[0]->P4() + electrons[1]->P4()).Et() ;
   
+  double mz = (electrons[0]->P4() + electrons[1]->P4()).M();
+  if (mz < 66. or mz > 116.) return;
+  
   if (electrons[0]->PT < 25.) return;
 
   if (electrons[1]->PT < 30.) return;
@@ -304,6 +307,9 @@ void Atlas_2102_10874::pass_CR2mu(std::vector<Jet*> sigjets)   {
   double met = (missingET->P4() + muonsCombined[0]->P4() + muonsCombined[1]->P4()).Et() ;
   if ( missingET->P4().Et() < 110.) return;
 
+  double mz = (muonsCombined[0]->P4() + muonsCombined[1]->P4()).M();
+  if (mz < 66. or mz > 116.) return;
+  
   if (muonsCombined[1]->PT < 10.) return;
 
   if( sigjets.size() < 1 ) return;

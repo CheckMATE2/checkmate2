@@ -1,5 +1,14 @@
 CheckMATE - Changelog
 
+Ver 2.5.3
+---------
+
+2026-06-30  Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ bug fix in CR2 in ATLAS monojet
+    ~ bug fix in handling null statistical results
+    ~ compatibility with new Spey 
+
 Ver 2.5.2
 ---------
 

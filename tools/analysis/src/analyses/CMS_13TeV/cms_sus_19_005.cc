@@ -26,7 +26,7 @@ void Cms_sus_19_005::initialize() {
 void Cms_sus_19_005::analyze() {
 
 
-  //missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
+  missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
   
   electronsLoose = filterPhaseSpace(electronsLoose, 5., -2.4, 2.4);
   std::vector<Electron*> electronsPF = filterPhaseSpace(electronsLoose, 10., -2.4, 2.4, false, true);   // =>   pT < 10

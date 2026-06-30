@@ -17,7 +17,7 @@ void Cms_2107_13201::initialize() {
 
 void Cms_2107_13201::analyze() {
  
-  //missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
+  missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
  
   electronsMedium = filterPhaseSpace(electronsMedium, 10., -2.5, 2.5);
   muonsCombined = filterPhaseSpace(muonsCombined, 10., -2.4, 2.4);  

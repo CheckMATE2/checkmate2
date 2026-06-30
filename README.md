@@ -87,6 +87,12 @@ This is a brief note on how to install CheckMATE from the master branch on https
 
 # current
 
+2026-06-30  Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ bug fix in CR2 in ATLAS monojet
+    ~ bug fix in handling null statistical results
+    ~ compatibility with new Spey 
+
 2026-05-29  Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 
     ~ muon isolatioon compatible with new Delphes
