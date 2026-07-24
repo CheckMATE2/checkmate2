@@ -11,6 +11,31 @@ export LD_RUN_PATH
 export LD_LIBRARY_PATH
 export DYLD_LIBRARY_PATH
 
+all-local: bin/CheckMATE
+
+CLEANFILES = bin/CheckMATE
+
+if USER_PREFIX
+# Define the destination directory (e.g., prefix/share/myapp)
+mydatadir = $(datadir)/CheckMATE
+
+# 'nobase_' preserves the directory structure of whatever follows it
+nobase_mydata_DATA = $(shell find data -type f)
+
+bin_SCRIPTS = bin/CheckMATE tools/python/advprint.py tools/python/checkmate_core.py tools/python/cls.py tools/python/detectorsettings.py tools/python/evaluator.py tools/python/events.py tools/python/example.py tools/python/get_s95.py tools/python/hs3_wrapper.py tools/python/info.py tools/python/initialize.py tools/python/multibin_limit_full.py tools/python/multibin_limit.py tools/python/process.py tools/python/resultcollector.py tools/python/spey_wrapper.py tools/python/workspace_calc.py
+endif
+
+bin/CheckMATE: tools/python/CheckMATE.raw
+	$(AM_V_GEN)$(MKDIR_P) bin
+	sed -e 's,\#!.*,\#!$(PYTHON),' \
+	    -e 's,RUN_PATH,$(runpath),g' \
+	    -e 's,ROOT_LIB_DIR,$(ROOTLIBDIR),g' \
+	    -e "s,'MADGRAPH_DIR','$(MADGRAPHDIR)',g" \
+	    -e "s,'PYTHIA_DIR','$(PYTHIALIBDIR)',g" \
+	    -e "s,'PREFIX','$(prefix)',g" \
+	    -e "s,'DATA_DIR','$(datadir)',g" $< > $@
+	chmod +x $@
+
 all:
 	@rm -f bin/CheckMATE;
 	@sed 's,sys\.path\.append.*,sys\.path\.append("@ROOTLIBDIR@"),g' tools/python/calculate_zsig.py.raw | \
@@ -30,16 +55,7 @@ all:
         sed 's,os\.path\.isfile(.*/libTree.so\"),os\.path\.isfile("@ROOTLIBDIR@/libTree.so\"),' > tools/python/calculate_zsig.py;
 	@$(MAKE) install;
         
-        
-# only create CheckMATE with make install to ensure that fritz was properly compiled  
-install-exec-local:
-	@sed 's,\#!.*,\#!@PYTHON@,;/sys.path.append/s,ROOT_LIB_DIR,@ROOTLIBDIR@,' tools/python/CheckMATE.raw | \
-	sed "s,config_paths\['mg5_source_path'\]='MADGRAPH_DIR',config_paths\['mg5_source_path'\]='@MADGRAPHDIR@'," | \
-	sed "s,config_paths\['pythia8_lib_path'\]='PYTHIA_DIR',config_paths\['pythia8_lib_path'\]='@PYTHIALIBDIR@',"  > bin/CheckMATE;
-	@sed "s,mg5_path = 'MADGRAPH_DIR',mg5_path = @MADGRAPHDIR@," data/cards/mg5_default_me5_configuration.txt.raw > data/cards/mg5_default_me5_configuration.txt;
-	@if [ "@MADGRAPHDIR@" != "" ]; then echo "- setup link to MG5_aMC@NLO "; fi;
-	@if [ "@PYTHIALIBDIR@" != "" ]; then echo "- setup link to Pythia "; fi;
-	@chmod +x bin/CheckMATE;
+
 	
 AnalysisManager:
 	@sed 's,\#!.*,\#!@PYTHON@,' tools/python/AnalysisManager.raw | \

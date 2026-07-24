@@ -2,7 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.63])
-AC_INIT(CheckMATE, 2.0.0, daschm@uni-bonn.de)
+AC_INIT(CheckMATE, 2.5, krolb@fuw.edu.pl)
+AC_PREFIX_DEFAULT([`pwd`])
 AM_INIT_AUTOMAKE
 # Checks for programs.
 AC_PROG_CXX
@@ -19,6 +20,18 @@ AC_CHECK_HEADERS([fstream])
 
 AX_CXX_COMPILE_STDCXX_11()
 
+AS_IF([test "x$prefix" = xNONE], [
+  prefix=$ac_default_prefix]
+  runpath="$prefix/tools/python/"
+  datadir="$prefix/data/"
+  user_defined_prefix=no
+] , [
+  runpath="$prefix/bin"
+  datadir="$prefix/share/CheckMATE/data/"
+  user_defined_prefix=yes
+])
+AM_CONDITIONAL([USER_PREFIX], [test "x$user_defined_prefix" = xyes])
+
 # Checks for libraries.
 THEPEG_CHECK_HEPMC([2], ,AC_MSG_ERROR("No HepMC... but why?") )
 CHECK_PYTHIA([6], ,AC_MSG_ERROR("No Pythia... but why?") )
@@ -34,6 +47,8 @@ AC_SUBST(ROOTSYS)
 AC_SUBST(LD_LIBRARY_PATH)
 AC_SUBST(DYLD_LIBRARY_PATH)
 AC_SUBST(LD_RUN_PATH)
+AC_SUBST([runpath])
+AC_SUBST([datadir])
 CHECK_DELPHES([6], ,AC_MSG_ERROR("No Delphes... but why?") )
 CHECK_MADGRAPH([6], ,AC_MSG_ERROR("No MadGraph... but why?") )
 CHECK_ONNX([6], ,AC_MSG_ERROR("No ONNX... but why?") )
