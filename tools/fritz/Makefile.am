@@ -1,7 +1,13 @@
 AUTOMAKE_OPTIONS = subdir-objects
 
+if USER_PREFIX
+bin_PROGRAMS = fritz
+
+else
 mybindir = $(abs_top_builddir)/tools/fritz/bin/
 mybin_PROGRAMS = fritz
+endif
+
 fritz_SOURCES = src/main.cc \
                     src/global/Global.cc include/global/Global.h \
                     src/global/FritzConfig.cc include/global/FritzConfig.h \

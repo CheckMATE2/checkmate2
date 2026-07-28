@@ -16,11 +16,13 @@ all-local: bin/CheckMATE
 CLEANFILES = bin/CheckMATE
 
 if USER_PREFIX
-# Define the destination directory (e.g., prefix/share/myapp)
-mydatadir = $(datadir)/CheckMATE
+# Define the destination directory
+mydatadir = $(datadir)
+cardsdir = $(datadir)
 
 # 'nobase_' preserves the directory structure of whatever follows it
 nobase_mydata_DATA = $(shell find data -type f)
+nobase_cards_DATA = $(shell find bin -type f)
 
 bin_SCRIPTS = bin/CheckMATE tools/python/advprint.py tools/python/checkmate_core.py tools/python/cls.py tools/python/detectorsettings.py tools/python/evaluator.py tools/python/events.py tools/python/example.py tools/python/get_s95.py tools/python/hs3_wrapper.py tools/python/info.py tools/python/initialize.py tools/python/multibin_limit_full.py tools/python/multibin_limit.py tools/python/process.py tools/python/resultcollector.py tools/python/spey_wrapper.py tools/python/workspace_calc.py
 endif

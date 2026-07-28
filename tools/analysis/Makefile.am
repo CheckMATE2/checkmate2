@@ -10,8 +10,12 @@ if HAVE_ONNX
 endif
              
 # the library names to build
+if USER_PREFIX
+lib_LTLIBRARIES = libanalyses.la
+else
 mylibdir = $(abs_top_builddir)/tools/analysis/lib
 mylib_LTLIBRARIES = libanalyses.la
+endif
 libanalyses_la_SOURCES =	\
              src/global/Global.cc src/include/Global.h \
              src/base/AnalysisBase.cc include/base/AnalysisBase.h \

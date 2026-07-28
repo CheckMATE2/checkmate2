@@ -27,7 +27,7 @@ AS_IF([test "x$prefix" = xNONE], [
   user_defined_prefix=no
 ] , [
   runpath="$prefix/bin"
-  datadir="$prefix/share/CheckMATE/data/"
+  datadir="$prefix/share/CheckMATE/"
   user_defined_prefix=yes
 ])
 AM_CONDITIONAL([USER_PREFIX], [test "x$user_defined_prefix" = xyes])
