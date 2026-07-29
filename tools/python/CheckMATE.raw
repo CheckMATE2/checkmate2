@@ -11,6 +11,9 @@ config_paths['mg5_source_path']='MADGRAPH_DIR'
 config_paths['pythia8_lib_path']='PYTHIA_DIR'
 config_paths['install_dir']='PREFIX' 
 config_paths['data_dir']='DATA_DIR'
+config_paths['source']='SOURCE_DIR'
+config_paths['results']='RESULTS_DIR'
+config_paths['remote']='REMOTE'
 
 global Info, AdvPrint
 Info.init(config_paths)

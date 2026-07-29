@@ -174,7 +174,8 @@ class Process(object):
             name = "Global"
             if not globalconfig.has_section(name):
                     globalconfig.add_section(name)
-            globalconfig.set(name, "main_dir", os.path.split(os.path.split(os.path.split(os.path.realpath(__file__))[0])[0])[0] )    
+#            globalconfig.set(name, "main_dir", os.path.split(os.path.split(os.path.split(os.path.realpath(__file__))[0])[0])[0] )    
+            globalconfig.set(name, "main_dir", Info.paths['data_dir'] )  
             if Info.parameters["invisiblePIDs"]:
                     globalconfig.set(name, "invisiblepids", Info.parameters["invisiblePIDs"][0] )
             if Info.parameters["longlivedPIDs"]:

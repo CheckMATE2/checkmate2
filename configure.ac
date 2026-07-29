@@ -4,6 +4,11 @@
 AC_PREREQ([2.63])
 AC_INIT(CheckMATE, 2.5, krolb@fuw.edu.pl)
 AC_PREFIX_DEFAULT([`pwd`])
+sourcedir=$ac_default_prefix
+AC_ARG_WITH([resultsdir],
+    [AS_HELP_STRING([--with-resultsdir=DIR], [directory for storing application results])],
+    [RESULTSDIR="$withval"],
+    [RESULTSDIR="NONE"])
 AM_INIT_AUTOMAKE
 # Checks for programs.
 AC_PROG_CXX
@@ -21,13 +26,14 @@ AC_CHECK_HEADERS([fstream])
 AX_CXX_COMPILE_STDCXX_11()
 
 AS_IF([test "x$prefix" = xNONE], [
-  prefix=$ac_default_prefix]
+  prefix=$ac_default_prefix
   runpath="$prefix/tools/python/"
-  datadir="$prefix/data/"
+  datadir="$prefix/"
   user_defined_prefix=no
 ] , [
-  runpath="$prefix/bin"
+  runpath="$prefix/bin/"
   datadir="$prefix/share/CheckMATE/"
+  AS_IF([test "x$RESULTSDIR" = xNONE], [RESULTSDIR="$datadir/results"])
   user_defined_prefix=yes
 ])
 AM_CONDITIONAL([USER_PREFIX], [test "x$user_defined_prefix" = xyes])
@@ -49,6 +55,8 @@ AC_SUBST(DYLD_LIBRARY_PATH)
 AC_SUBST(LD_RUN_PATH)
 AC_SUBST([runpath])
 AC_SUBST([datadir])
+AC_SUBST([sourcedir])
+AC_SUBST([RESULTSDIR])
 CHECK_DELPHES([6], ,AC_MSG_ERROR("No Delphes... but why?") )
 CHECK_MADGRAPH([6], ,AC_MSG_ERROR("No MadGraph... but why?") )
 CHECK_ONNX([6], ,AC_MSG_ERROR("No ONNX... but why?") )

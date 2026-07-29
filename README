@@ -16,4 +16,9 @@ If desired, event generation can be enabled by furthermore providing the followi
 --with-madgraph=(MG5MCNLODIR)
 --with-pythia=(PYTHIADIR)
 
+For installation in a remote directory (by default the installotion is in the source directory):
+--prefix=(DIR)  - defines the target directory
+--with-resultsdir=(RESULTSDIR)   - when using --prefix this defines the standard output directory (for each run one can override this later); if none defined CheckMATE will output to prefix/share/results
+
+
 If you are not an expert on this subject, we highly recommend to go to the 'Installation Tutorial' on our website, http://checkmate.hepforge.org . There we will go through the above configuration step in all detail and most importantly explain to you how to find and install missing libraries. 

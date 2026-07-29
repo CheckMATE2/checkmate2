@@ -777,17 +777,26 @@ class Info(dict):
         if config_paths != dict() and config_paths['pythia8_lib_path']:
             cls.paths['pythia8_lib_path'] = config_paths['pythia8_lib_path']
 
-        cls.paths['checkmate'] = os.path.split(os.path.split(os.path.split(os.path.realpath(__file__))[0])[0])[0]
+        #cls.paths['checkmate'] = os.path.split(os.path.split(os.path.split(os.path.realpath(__file__))[0])[0])[0]
+        cls.paths['checkmate'] = Info.paths['install_dir']
         
-        cls.paths['results'] = os.path.join(cls.paths['checkmate'], 'results')
-        cls.paths['tools'] = os.path.join(cls.paths['checkmate'], 'tools')
-        cls.paths['data'] = os.path.join(cls.paths['checkmate'], 'data')
-        
-        cls.paths['analysis'] = os.path.join(cls.paths['tools'], 'analysis')
-        cls.paths['fritz'] = os.path.join(cls.paths['tools'], 'fritz')
-        
-        cls.paths['analysis_info'] = os.path.join(cls.paths['data'], 'analysis_info')
-        cls.paths['cards'] = os.path.join(cls.paths['data'], 'cards')        
+       if Info.paths['remote']==True:
+            cls.paths['results'] = Info.paths['results']
+            cls.paths['tools'] = os.path.join(cls.paths['checkmate'], 'bin')
+            cls.paths['data'] = os.path.join(Info.paths['data_dir'], 'data')      
+            cls.paths['analysis'] = os.path.join(Info.paths['source'], 'tools', 'analysis')
+            cls.paths['fritz'] = os.path.join(cls.paths['checkmate'])
+            cls.paths['analysis_info'] = os.path.join(cls.paths['data'], 'analysis_info')
+            cls.paths['cards'] = os.path.join(cls.paths['data'], 'cards')        
+        else:
+            cls.paths['results'] = os.path.join(cls.paths['checkmate'], 'results')
+            cls.paths['tools'] = os.path.join(cls.paths['checkmate'], 'tools')
+            cls.paths['data'] = os.path.join(cls.paths['checkmate'], 'data')        
+            cls.paths['analysis'] = os.path.join(cls.paths['tools'], 'analysis')
+            cls.paths['fritz'] = os.path.join(cls.paths['tools'], 'fritz')
+            cls.paths['analysis_info'] = os.path.join(cls.paths['data'], 'analysis_info')
+            cls.paths['cards'] = os.path.join(cls.paths['data'], 'cards')
+            
         cls.files['list_of_analyses'] = dict()
         for group in cls.analysis_groups:
             cls.files["list_of_analyses"][group] = os.path.join(cls.paths['analysis_info'], '{}_analyses.txt'.format(group))

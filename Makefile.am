@@ -11,9 +11,9 @@ export LD_RUN_PATH
 export LD_LIBRARY_PATH
 export DYLD_LIBRARY_PATH
 
-all-local: bin/CheckMATE
+all-local: bin/CheckMATE data/cards/mg5_default_me5_configuration.txt bin/13tev_test.in bin/13tev_testfull2.in
 
-CLEANFILES = bin/CheckMATE
+CLEANFILES = bin/CheckMATE data/cards/mg5_default_me5_configuration.txt bin/13tev_test.in bin/13tev_testfull2.in
 
 if USER_PREFIX
 # Define the destination directory
@@ -25,6 +25,11 @@ nobase_mydata_DATA = $(shell find data -type f)
 nobase_cards_DATA = $(shell find bin -type f)
 
 bin_SCRIPTS = bin/CheckMATE tools/python/advprint.py tools/python/checkmate_core.py tools/python/cls.py tools/python/detectorsettings.py tools/python/evaluator.py tools/python/events.py tools/python/example.py tools/python/get_s95.py tools/python/hs3_wrapper.py tools/python/info.py tools/python/initialize.py tools/python/multibin_limit_full.py tools/python/multibin_limit.py tools/python/process.py tools/python/resultcollector.py tools/python/spey_wrapper.py tools/python/workspace_calc.py
+
+remote = True
+else
+cardsdir = $(prefix)
+remote = False
 endif
 
 bin/CheckMATE: tools/python/CheckMATE.raw
@@ -35,9 +40,18 @@ bin/CheckMATE: tools/python/CheckMATE.raw
 	    -e "s,'MADGRAPH_DIR','$(MADGRAPHDIR)',g" \
 	    -e "s,'PYTHIA_DIR','$(PYTHIALIBDIR)',g" \
 	    -e "s,'PREFIX','$(prefix)',g" \
-	    -e "s,'DATA_DIR','$(datadir)',g" $< > $@
+	    -e "s,'SOURCE_DIR','$(sourcedir)',g" \
+	    -e "s,'DATA_DIR','$(datadir)',g" \
+	    -e "s,'RESULTS_DIR','$(RESULTSDIR)',g" \
+	    -e "s,'REMOTE',$(remote),g" $< > $@
 	chmod +x $@
-
+data/cards/mg5_default_me5_configuration.txt: data/cards/mg5_default_me5_configuration.txt.raw
+	sed "s,'MADGRAPH_DIR','$(MADGRAPHDIR)',g" $< > $@
+bin/13tev_test.in: bin/13tev_test.in.raw
+	sed "s,'CARDSDIR',$(cardsdir),g" $< > $@
+bin/13tev_testfull2.in: bin/13tev_testfull2.in.raw
+	sed "s,'CARDSDIR',$(cardsdir),g" $< > $@
+	
 all:
 	@rm -f bin/CheckMATE;
 	@sed 's,sys\.path\.append.*,sys\.path\.append("@ROOTLIBDIR@"),g' tools/python/calculate_zsig.py.raw | \
