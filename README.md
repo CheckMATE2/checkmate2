@@ -87,6 +87,10 @@ This is a brief note on how to install CheckMATE from the master branch on https
 
 # current
 
+2026-07-31  Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ more installation options (--prefix)
+
 2026-06-30  Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 
     ~ bug fix in CR2 in ATLAS monojet
