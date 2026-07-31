@@ -28,7 +28,7 @@ bin_SCRIPTS = bin/CheckMATE tools/python/advprint.py tools/python/checkmate_core
 
 remote = True
 else
-cardsdir = $(prefix)
+cardsdir = $(prefix)/
 remote = False
 endif
 
