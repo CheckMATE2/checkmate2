@@ -1,8 +1,5 @@
 ''' Module contains advanced printing and formatting routines '''
 from __future__ import print_function
-from builtins import zip
-from builtins import range
-from builtins import object
 import os, re, sys
 
 class AdvPrint(object):

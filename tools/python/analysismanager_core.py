@@ -1,9 +1,5 @@
 from __future__ import print_function
 from __future__ import division
-from builtins import zip
-from builtins import input
-from builtins import str
-from past.utils import old_div
 import json
 from math import sqrt
 from multiprocessing import Pool
@@ -258,7 +254,7 @@ def normalize_error(reference_data):
         # Asymmetric error: as a rough approximation, use the mean of the squares
         upper = float(reference_data["bkg_errp"])
         lower = float(reference_data["bkg_errm"])
-        return sqrt(old_div((upper**2+lower**2),2))
+        return sqrt((upper**2+lower**2)/2)
     if "bkg_err_sys" in reference_data and "bkg_err_stat" in reference_data:
         # Total error = independent quadratic sum of statistical and systematical component
         sys = float(reference_data["bkg_err_sys"])
@@ -268,7 +264,7 @@ def normalize_error(reference_data):
         sys_upper = float(reference_data["bkg_errp_sys"])
         sys_lower = float(reference_data["bkg_errm_sys"])
         stat = float(reference_data["bkg_err_stat"])
-        return sqrt(stat**2 + old_div((sys_upper**2 + sys_lower**2),2))
+        return sqrt(stat**2 + (sys_upper**2 + sys_lower**2)/2)
     AdvPrint.cerr_exit("Invalid combination of errors given.")
 
 
@@ -353,7 +349,7 @@ def ask_for_signal_region_information(parameters):
     myprint("The set of information you entered is valid.")
     myprint("You now have to add the numbers for each of the given signal regions.")
     myprint("Note that while you enter more numbers, the corresponding model independent")
-    myprint(" 95\% confidence limits for the items you have already entered are calculated")
+    myprint(r" 95\% confidence limits for the items you have already entered are calculated")
     myprint(" in the background. ")
 
     try:
@@ -1255,7 +1251,7 @@ def replace_in_file(fun, parameters, in_file_name, out_file_name=None):
 ########################
 
 def main():
-    print("""
+    print(r"""
    ____ _               _    __  __    _  _____ _____ ____
   / ___| |__   ___  ___| | _|  \/  |  / \|_   _| ____|___ \ 
  | |   | '_ \ / _ \/ __| |/ / |\/| | / _ \ | | |  _|   __) |

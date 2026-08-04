@@ -1,9 +1,4 @@
 from __future__ import print_function
-from future import standard_library
-standard_library.install_aliases()
-from builtins import input
-from builtins import str
-from builtins import range
 import os, shutil,  sys
 import json, pickle
 import argparse
@@ -963,7 +958,7 @@ class Info(dict):
             name = "Global"
             if not cls.config.has_section(name):
                cls.config.add_section(name)
-            cls.config.set(name, 'randomseed', randomseed)
+            cls.config.set(name, 'randomseed', str(randomseed))
         
     @classmethod
     def make_flags_consistent(cls):

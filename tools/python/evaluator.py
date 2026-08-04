@@ -1,8 +1,5 @@
 from __future__ import print_function
 from __future__ import division
-from builtins import str
-from builtins import object
-from past.utils import old_div
 from math import sqrt
 import operator
 
@@ -226,7 +223,7 @@ class Evaluator(object):
             self.bkg_err = float(parameters["reference_data"][sr]["bkg_err"])
         elif "bkg_errp" in parameters["reference_data"][sr]:
             # Asymmetric error: as a rough approximation, use the mean of the squares
-            self.bkg_err = old_div(sqrt(float(parameters["reference_data"][sr]["bkg_errp"])**2 + float(parameters["reference_data"][sr]["bkg_errm"])**2),sqrt(2.))
+            self.bkg_err = sqrt(float(parameters["reference_data"][sr]["bkg_errp"])**2 + float(parameters["reference_data"][sr]["bkg_errm"])**2)/sqrt(2.)
         elif "bkg_err_sys" in parameters["reference_data"][sr]:
             # Total error = independent quadratic sum of statistical and systematical component
             self.bkg_err = sqrt(float(parameters["reference_data"][sr]["bkg_err_stat"])**2 + float(parameters["reference_data"][sr]["bkg_err_sys"])**2 )
@@ -243,30 +240,30 @@ class Evaluator(object):
             self.signal_eff_error_sys = 0
             self.signal_eff_error_tot = 0
         else:
-            self.signal_eff = old_div(self.resultCollector.signal_normevents,self.resultCollector.total_normevents)
-            self.signal_eff_error_stat =  old_div(self.resultCollector.signal_err_stat,self.resultCollector.total_normevents)
-            self.signal_eff_error_sys = old_div(self.resultCollector.signal_err_sys,self.resultCollector.total_normevents)
-            self.signal_eff_error_tot = old_div(self.resultCollector.signal_err_tot,self.resultCollector.total_normevents)
+            self.signal_eff = self.resultCollector.signal_normevents/self.resultCollector.total_normevents
+            self.signal_eff_error_stat =  self.resultCollector.signal_err_stat/self.resultCollector.total_normevents
+            self.signal_eff_error_sys = self.resultCollector.signal_err_sys/self.resultCollector.total_normevents
+            self.signal_eff_error_tot = self.resultCollector.signal_err_tot/self.resultCollector.total_normevents
     
     def calc_r_values(self):
         """ Compares event numbers to pre-calculated S95 results """        
-        self.r_obs = old_div(self.resultCollector.signal_normevents, self.s95_obs)
+        self.r_obs = self.resultCollector.signal_normevents/self.s95_obs
         if self.r_obs < 0: # 95% lower limit on S cannot be negative
             self.r_obs = 0            
-        self.r_obs_cons = old_div((self.resultCollector.signal_normevents - 1.64*self.resultCollector.signal_err_tot), self.s95_obs)
+        self.r_obs_cons = (self.resultCollector.signal_normevents - 1.64*self.resultCollector.signal_err_tot)/self.s95_obs
         if self.r_obs_cons < 0:
             self.r_obs_cons = 0
-        self.r_obs_cons_sysonly = old_div((self.resultCollector.signal_normevents - 1.64*self.resultCollector.signal_err_sys), self.s95_obs)
+        self.r_obs_cons_sysonly = (self.resultCollector.signal_normevents - 1.64*self.resultCollector.signal_err_sys)/self.s95_obs
         if self.r_obs_cons_sysonly < 0:
             self.r_obs_cons_sysonly = 0
         
-        self.r_exp = old_div(self.resultCollector.signal_normevents, self.s95_exp)
+        self.r_exp = self.resultCollector.signal_normevents/self.s95_exp
         if self.r_exp < 0: # 95% lower limit on S cannot be negative
             self.r_exp = 0            
-        self.r_exp_cons = old_div((self.resultCollector.signal_normevents - 1.64*self.resultCollector.signal_err_tot), self.s95_exp)
+        self.r_exp_cons = (self.resultCollector.signal_normevents - 1.64*self.resultCollector.signal_err_tot)/self.s95_exp
         if self.r_exp_cons < 0:
             self.r_exp_cons = 0
-        self.r_exp_cons_sysonly = old_div((self.resultCollector.signal_normevents - 1.64*self.resultCollector.signal_err_sys), self.s95_exp)
+        self.r_exp_cons_sysonly = (self.resultCollector.signal_normevents - 1.64*self.resultCollector.signal_err_sys)/self.s95_exp
         if self.r_exp_cons_sysonly < 0:
             self.r_exp_cons_sysonly = 0
         
@@ -313,7 +310,7 @@ class Evaluator(object):
             bkg_err = float(parameters["reference_data"][sr]["bkg_err"])
         elif "bkg_errp" in parameters["reference_data"][sr]:
             # Asymmetric error: as a rough approximation, use the mean of the squares
-            bkg_err = old_div(sqrt(float(parameters["reference_data"][sr]["bkg_errp"])**2 + float(parameters["reference_data"][sr]["bkg_errm"])**2),sqrt(2.))
+            bkg_err = sqrt(float(parameters["reference_data"][sr]["bkg_errp"])**2 + float(parameters["reference_data"][sr]["bkg_errm"])**2)/sqrt(2.)
         elif "bkg_err_sys" in parameters["reference_data"][sr]:
             # Total error = independent quadratic sum of statistical and systematical component
             bkg_err = sqrt(float(parameters["reference_data"][sr]["bkg_err_stat"])**2 + float(parameters["reference_data"][sr]["bkg_err_sys"])**2 )
@@ -345,7 +342,7 @@ class Evaluator(object):
             if stat_err_max2 > 0:
                 stat_err_max = sqrt(stat_err_max2)
                 # find NMC which lets stat_err drop below stat_err_max
-                r_nmc_min = (old_div(self.resultCollector.signal_err_stat,stat_err_max))**2
+                r_nmc_min = (self.resultCollector.signal_err_stat/stat_err_max)**2
                 self.warnings.append("There is a chance the signal could be excluded with about "+str(round(r_nmc_min, 1))+" times more MC events!")
         
 def find_strongest_evaluators(list_of_evaluators, n_best):

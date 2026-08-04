@@ -1,7 +1,3 @@
-from future import standard_library
-standard_library.install_aliases()
-from builtins import str
-from builtins import object
 import os, sys
 import subprocess
 import signal
@@ -177,13 +173,13 @@ class Process(object):
 #            globalconfig.set(name, "main_dir", os.path.split(os.path.split(os.path.split(os.path.realpath(__file__))[0])[0])[0] )    
             globalconfig.set(name, "main_dir", Info.paths['data_dir'] )  
             if Info.parameters["invisiblePIDs"]:
-                    globalconfig.set(name, "invisiblepids", Info.parameters["invisiblePIDs"][0] )
+                    globalconfig.set(name, "invisiblepids", str(Info.parameters["invisiblePIDs"][0]) )
             if Info.parameters["longlivedPIDs"]:
-                    globalconfig.set(name, "longlivedpids", Info.parameters["longlivedPIDs"][0] )    
+                    globalconfig.set(name, "longlivedpids", str(Info.parameters["longlivedPIDs"][0]) )
             if events.maxEvents > 0:
 #                if not globalconfig.has_section(name):
 #                    globalconfig.add_section(name)
-                globalconfig.set(name, "nevents", events.maxEvents)
+                globalconfig.set(name, "nevents", str(events.maxEvents))
             elif globalconfig.has_section("Global"):
                 globalconfig.remove_option(name, "nevents") # unfortunately this globalconfig construction is badly designed. Each event has its own maxevents but there can be only one globalconfig, so each one has to make sure that globalconfig is set correctly
             config = configparser.RawConfigParser()

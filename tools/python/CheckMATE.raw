@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 import sys,os
 sys.path.append('RUN_PATH')
 sys.path.append('ROOT_LIB_DIR')
