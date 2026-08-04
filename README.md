@@ -11,7 +11,7 @@ https://arxiv.org/abs/1611.09856
 
 This is a brief note on how to install CheckMATE from the master branch on https://github.com/CheckMATE2/checkmate2
 
-0) The current version is compatible with both Python2 (2.7.4 or later) and Python3 (possibly >= 3.4). 'future' library is required ('pip install future'). You can control which Python version is used at configuring with '--with-python=/path/to/python'. Other than that your default 'python' will be used. Note that the features like multi-bin signal region and likelihoods require Python3. 
+0) The current version requires Python3 (3.6 or later). You can control which Python version is used at configuring with '--with-python=/path/to/python'. Other than that your default 'python3' (or 'python') will be used. 
 
 
 1) Requirements
