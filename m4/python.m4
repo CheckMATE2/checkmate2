@@ -14,7 +14,7 @@ AC_DEFUN([PY_PROG_PYTHON],
     AC_MSG_RESULT($PYTHON)
     AC_SUBST(PYTHON)
   else    
-    AC_PATH_PROG(PYTHON, python, python)
+    AC_PATH_PROGS(PYTHON, [python3 python], python3)
     AC_MSG_RESULT($PYTHON)
   fi]
 )
@@ -25,11 +25,11 @@ AC_DEFUN([PY_PYTHON_VERSION],
   AC_MSG_CHECKING(python version)
 
   AC_CACHE_VAL(py_cv_major, [changequote((_,_))
-    py_cv_major=`$PYTHON -c 'import sys; print str(sys.version_info[0])'`
+    py_cv_major=`$PYTHON -c 'import sys; print(str(sys.version_info[0]))'`
     changequote([,])
   ])
   AC_CACHE_VAL(py_cv_minor, [changequote((_,_))
-    py_cv_minor=`$PYTHON -c 'import sys; print str(sys.version_info[1])'`
+    py_cv_minor=`$PYTHON -c 'import sys; print(str(sys.version_info[1]))'`
     changequote([,])
   ])
   if test "$py_cv_major" != "2"; then
@@ -61,7 +61,7 @@ fi
 AC_MSG_CHECKING(python installation prefix)
 if test -z "$PYTHON_PREFIX"; then
   AC_CACHE_VAL(py_cv_python_prefix,
-  [py_cv_python_prefix=`$PYTHON -c 'import sys; print sys.prefix'`])
+  [py_cv_python_prefix=`$PYTHON -c 'import sys; print(sys.prefix)'`])
 else
   py_cv_python_prefix="$PYTHON_PREFIX"
 fi
@@ -84,7 +84,7 @@ fi
 AC_MSG_CHECKING(python installation exec_prefix)
 if test -z "$PYTHON_EXEC_PREFIX"; then
   AC_CACHE_VAL(py_cv_python_exec_prefix,
-  [py_cv_python_exec_prefix=`$PYTHON -c 'import sys; print sys.exec_prefix'`])
+  [py_cv_python_exec_prefix=`$PYTHON -c 'import sys; print(sys.exec_prefix)'`])
 else
   py_cv_python_exec_prefix="$PYTHON_EXEC_PREFIX"
 fi
