@@ -34,7 +34,7 @@ class CheckMATE2(object):
         if len(sys.argv) == 1:
             self.printUsage()
         self.printLogo()
-        if len(sys.argv) == 2 and sys.argv[-1] != "-h":
+        if len(sys.argv) == 2 and sys.argv[-1] not in ("-h", "--help"):
             Info.fill_info_from_file(sys.argv[1])            
             self.procList = Info.fill_processes_from_file(sys.argv[1])
             print(self.procList)
