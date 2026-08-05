@@ -2,6 +2,7 @@
 import sys,os
 from math import sqrt
 from copy import deepcopy
+import importlib
 import json, pickle
 import os
 import shutil
@@ -13,12 +14,32 @@ from process import Process
 from detectorsettings import DetectorSettings
 from evaluator import Evaluator, find_strongest_evaluators, find_strongest_zsig
 from resultcollector import ResultCollector
-if sys.version_info[0] == 3:
-    import multibin_limit as mb
-    import multibin_limit_full as mbfull
-    import workspace_calc as wscalc
-    import spey_wrapper
-    import hs3_wrapper as hs3
+
+# Optional dependencies for multi-bin signal regions and likelihood combination
+# (-mb select|scan|detailed). Guarded so plain runs and `CheckMATE --help` work
+# without pyhf/spey/ROOT installed; stateval() aborts with an installation hint
+# if a requested feature needs a module that failed to import.
+_stats_import_errors = {}
+
+def _import_optional(name):
+    try:
+        return importlib.import_module(name)
+    except ImportError as exc:
+        _stats_import_errors[name] = str(exc)
+        return None
+
+mb = _import_optional("multibin_limit")
+mbfull = _import_optional("multibin_limit_full")
+wscalc = _import_optional("workspace_calc")
+spey_wrapper = _import_optional("spey_wrapper")
+hs3 = _import_optional("hs3_wrapper")
+
+def _require_stats(module, name, hint):
+    if module is None:
+        AdvPrint.cerr_exit(
+            "This run requires the statistics module '" + name + "', which could not be imported:\n"
+            "  " + _stats_import_errors.get(name, "unknown import error") + "\n"
+            "Please install the optional dependencies: " + hint)
 
 class CheckMATE2(object):
     """ This is the main object whose instance corresponds to a full CheckMATE run """
@@ -379,23 +400,28 @@ class CheckMATE2(object):
 
                         sr_list = mb_signal_regions[mbsr]
                         AdvPrint.cout("Calculating simplified likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
+                        _require_stats(mb, "multibin_limit", "pyhf")
                         inv_r_obs, inv_r_exp, cls_obs, cls_exp = mb.calc_point(Info.paths['output'] , sr_list, analysis, mbsr)
                         AdvPrint.cout("Done!")
                     if Info.parameters["statmod"] == "full" and Info.get_analysis_parameters(analysis)["likelihoods"] == "y":
                         AdvPrint.cout("Calculating full likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
+                        _require_stats(spey_wrapper, "spey_wrapper", "spey and spey-pyhf")
                         inv_r_obs, inv_r_exp, cls_obs, cls_exp = spey_wrapper.calc_point(Info.paths['output'] , analysis, mbsr)
                         AdvPrint.cout("Done!")
                     if Info.get_analysis_parameters(analysis)["likelihoods"] == "hs3":   # analysis == "atlas_2411_02040":
                         AdvPrint.cout("Calculating full likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
+                        _require_stats(hs3, "hs3_wrapper", "ROOT >= 6.32.14 with XRooFit Python bindings")
                         inv_r_obs, inv_r_exp, cls_obs, cls_exp = hs3.calc_workspace(Info.paths['output'] , analysis, mbsr)
                         AdvPrint.cout("Done!")        
                     if Info.parameters["statmod"] == "fullpyhf" and Info.get_analysis_parameters(analysis)["likelihoods"] == "y":
                         AdvPrint.cout("Calculating full likelihood model for analysis: "+analysis+", SR: "+mbsr+"... ")
+                        _require_stats(mbfull, "multibin_limit_full", "pyhf and jsonpatch")
                         inv_r_obs, inv_r_exp, cls_obs, cls_exp = mbfull.calc_point(Info.paths['output'] , analysis, mbsr)
                         AdvPrint.cout("Done!")
                     if (Info.parameters["statmod"] == "full" or Info.parameters["statmod"] == "fullpyhf" or Info.parameters["statmod"] == "simple") and Info.get_analysis_parameters(analysis)["likelihoods"] == "cov":
                         sr_list = mb_signal_regions[mbsr]
                         AdvPrint.cout("Calculating approximate likelihood with covariance matrix: "+analysis+", SR: "+mbsr+"... ")
+                        _require_stats(spey_wrapper, "spey_wrapper", "spey and spey-pyhf")
                         inv_r_obs, inv_r_exp, cls_obs, cls_exp, stat_model = spey_wrapper.calc_cov(Info.paths['output'] , analysis, mbsr)
                         if combine and [analysis, mbsr] in combination_in:
                             combination_models.append(stat_model)
@@ -439,6 +465,7 @@ class CheckMATE2(object):
             AdvPrint.cout("Results of approximate/fast likelihood to weak to exclude model or no multibin analysis available")       
             
         if combine and combination_list:
+            _require_stats(spey_wrapper, "spey_wrapper", "spey and spey-pyhf")
             spey_wrapper.combination_stat(combination_models, combination_list)
         elif combine:
             AdvPrint.cout("Something wrong with the signal region combination list. Skipping.")
