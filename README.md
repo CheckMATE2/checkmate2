@@ -26,17 +26,23 @@ This is a brief note on how to install CheckMATE from the master branch on https
   c) HEPMC2
      https://gitlab.cern.ch:8443/hepmc/HepMC/-/tags
   
+  d) Python packages numpy and scipy (used by the statistical evaluation)
+
   optional:
   
-  d) Pythia; we currently only support 8.2 series
+  e) Pythia; we currently only support 8.2 series
   
-  e) MadGraph5_aMC@NLO; versions >=2.7 should work just fine; 
+  f) MadGraph5_aMC@NLO; versions >=2.7 should work just fine;
      with 3 series there are some hiccups but you should get the result anyway; follow the messages on screen; check the cross section passing between Pythia and MadGraph! 
      
-  f) ONNX Runtime; see: https://onnxruntime.ai/; tested with versions 1.12.1, 1.13.1, 1.23.2 (linux-x64) Note: later versions might not work
+  g) ONNX Runtime; see: https://onnxruntime.ai/; tested with versions 1.12.1, 1.13.1, 1.23.2 (linux-x64) Note: later versions might not work
   
-  g) Spey, pyhf and spey-pyhf plugin for multibin fits; see https://speysidehep.github.io/spey/quick_start.html#; jax or pytorch or tensorflow are recommended;
-     pip install spey   
+  h) statistics packages for multibin fits and likelihood combination; only needed when multibin
+     fits are requested (-mb select/scan/detailed), a plain CheckMATE run works without them:
+     - '-mod simple' or '-mod fullpyhf' fits need pyhf (and jsonpatch)
+     - '-mod full' fits need spey and spey-pyhf ('pip install spey spey-pyhf'); jax or pytorch or tensorflow are recommended
+     - analyses with hs3 likelihoods need ROOT >= 6.32.14 with XRooFit Python bindings
+     see https://speysidehep.github.io/spey/quick_start.html
      
      
 2) Installation
