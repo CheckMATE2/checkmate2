@@ -32,6 +32,9 @@ cardsdir = $(prefix)/
 remote = False
 endif
 
+CHECKMATE_DATA = $(datadir)
+export CHECKMATE_DATA
+
 bin/CheckMATE: tools/python/CheckMATE.raw
 	$(AM_V_GEN)$(MKDIR_P) bin
 	sed -e 's,\#!.*,\#!$(PYTHON),' \

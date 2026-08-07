@@ -1,0 +1,14 @@
+[Parameters]
+Name: 13TeV-test0-hepmc
+Analyses: atlas13TeV,cms13TeV
+Multibin: select
+Uplim: True
+Expected: True
+Model: full
+Backend: jax
+RandomSeed: 42
+
+[13TeV-hepmc]
+Events: ./tag_1_pythia8_events.hepmc
+XSect: 2.7 fb
+#MaxEvents: 1000

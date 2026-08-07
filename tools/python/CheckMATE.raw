@@ -12,7 +12,10 @@ config_paths['pythia8_lib_path']='PYTHIA_DIR'
 config_paths['install_dir']='PREFIX' 
 config_paths['data_dir']='DATA_DIR'
 config_paths['source']='SOURCE_DIR'
-config_paths['results']='RESULTS_DIR'
+if os.getenv("CHECKMATE_RESULTS") is not None:
+    config_paths['results']=os.getenv("CHECKMATE_RESULTS")
+else:
+    config_paths['results']='RESULTS_DIR'
 config_paths['remote']='REMOTE'
 
 global Info, AdvPrint

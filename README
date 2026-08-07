@@ -19,6 +19,7 @@ If desired, event generation can be enabled by furthermore providing the followi
 For installation in a remote directory (by default the installation is in the source directory):
 --prefix=(DIR)  - defines the target directory
 --with-resultsdir=(RESULTSDIR)   - when using --prefix this defines the standard output directory (for each run one can override this later); if none defined CheckMATE will output to prefix/share/results
+The results folder can also be defined using the environmental variable CHECKMATE_RESULTS
 
 A) Steps for installation in the current folder:
     1) autoreconf
@@ -27,6 +28,10 @@ A) Steps for installation in the current folder:
     4) you can check the installation by running a full analysis (requires MadGraph and Pythia):
         a) ./bin/CheckMATE ./bin/13tev_test.in    (quicker)
         b) ./bin/CheckMATE ./bin/13tev_testfull2.in   (takes time)
+        c) using a hepmc file (no MadGraph or Pythia needed; note that you might need to update the file path in the input file):
+            curl -L "https://mycloud.fuw.edu.pl/s/xgWj6oaTMw2FCY3/download" --output "tag_1_pythia8_events.hepmc.tar.gz"
+            tar -xvf tag_1_pythia8_events.hepmc.tar.gz
+            ./bin/CheckMATE ./bin/13tev_test_hepmc.in
         
 B) Steps for installation in a remote folder (defined using --prefix= ):
     1) autoreconf
@@ -34,6 +39,8 @@ B) Steps for installation in a remote folder (defined using --prefix= ):
     3) make (you can add -j8 or similar to speed things up for multicore making)
     4) you can check the installation by running a full analysis (requires MadGraph and Pythia):
         a) your_folder/bin/CheckMATE your_folder/share/CheckMATE/bin/13tev_test.in    (quicker)
-        b) your_folder/bin/CheckMATE your_folder/bin/13tev_testfull2.in   (takes time)        
+        b) your_folder/bin/CheckMATE your_folder/bin/13tev_testfull2.in   (takes time)     
+    5) The results folder can be defined using the environmental variable CHECKMATE_RESULTS
+    6) There is a convenience script for downloading of data after build, downloads.sh. Make sure the environmental variable CHECKMATE_DATA is defined!
 
 If you are not an expert on this subject, we highly recommend to go to the 'Installation Tutorial' on our website, http://checkmate.hepforge.org . There we will go through the above configuration step in all detail and most importantly explain to you how to find and install missing libraries. 
