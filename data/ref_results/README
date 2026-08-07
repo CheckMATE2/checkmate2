@@ -1,0 +1,14 @@
+Note to myself:
+
+The RandomSeed option is (at least partially) broken, so the results are not exactly reproducible. The limits on mu should in any case be very close provided mu is around 1. Larger values will be subject to statistical fluctuations. Note that the sample is rather small. This mainly tests strong production.
+
+Obtained with the file: curl -L "https://mycloud.fuw.edu.pl/s/xgWj6oaTMw2FCY3/download" --output "tag_1_pythia8_events.hepmc.tar.gz"
+
+This is 1000 events combining various SUSY processes (cards included, MG5 v3.5.12).
+
+Approximate timing (almost entirely in statistical models evaluation), Ubuntu 22.04.5:
+A) Intel Core i7-8565U CPU @ 1.80GHz × 8, GPU GeForce MX150
+    about 2 hours
+    
+B) Intel Core i7-7700 CPU @ 3.60GHz x 8
+    about 1 hour 10 minutes

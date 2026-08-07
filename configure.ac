@@ -71,7 +71,8 @@ CHECK_ONNX([6], ,AC_MSG_ERROR("No ONNX... but why?") )
                    
 AC_CONFIG_FILES([Makefile
                  tools/analysis/Makefile
-                 tools/fritz/Makefile])
+                 tools/fritz/Makefile
+                 download.sh])
 AC_OUTPUT
 
 DOWNLOADS( , , )

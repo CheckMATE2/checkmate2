@@ -1,0 +1,228 @@
+================================
+ Analysis: atlas_2101_01629 , SR: combined
+Limits with full likelihood (spey):
+Observed upper limit: mu = 0.9383
+Expected (+/-1sigma) upper limit: mu = 0.8201   1.1676   1.6850
+
+================================
+================================
+ Analysis: atlas_2004_14060 , SR: SRA-B
+Limits with simplified likelihood (pyhf):
+Observed upper limit: mu = 2.6768
+Expected upper limit (+/-2 sigma): mu = [1.4875, 2.0502, 2.9799, 4.4783, 6.6543]
+================================
+================================
+ Analysis: atlas_2004_14060 , SR: SRC
+Limits with simplified likelihood (pyhf):
+Observed upper limit: mu = 9.0000
+Expected upper limit (+/-2 sigma): mu = [9.0000, 9.0000, 9.0000, 9.0000, 9.0000]
+================================
+================================
+ Analysis: atlas_2004_14060 , SR: SRD
+Limits with simplified likelihood (pyhf):
+Observed upper limit: mu = 9.0000
+Expected upper limit (+/-2 sigma): mu = [9.0000, 9.0000, 9.0000, 9.0000, 9.0000]
+================================
+================================
+ Analysis: atlas_1908_03122 , SR: RegionC
+Limits with full likelihood (spey):
+Observed upper limit: mu = 3.5935
+Expected (+/-1sigma) upper limit: mu = 1.7176   2.6839   4.4302
+
+================================
+================================
+ Analysis: atlas_1911_06660 , SR: Combined
+Limits with full likelihood (spey):
+Observed upper limit: mu = 7.4749
+Expected (+/-1sigma) upper limit: mu = 6.9987   10.5911   17.2872
+
+================================
+================================
+ Analysis: atlas_2010_14293 , SR: MB-SSd
+Limits with full likelihood (spey):
+Observed upper limit: mu = 0.2237
+Expected (+/-1sigma) upper limit: mu = 0.1999   0.2914   0.4336
+
+================================
+================================
+ Analysis: atlas_2010_14293 , SR: MB-GGd
+Limits with full likelihood (spey):
+Observed upper limit: mu = 0.5330
+Expected (+/-1sigma) upper limit: mu = 0.2778   0.4311   0.6900
+
+================================
+================================
+ Analysis: atlas_2010_14293 , SR: MB-C
+Limits with full likelihood (spey):
+Observed upper limit: mu = 0.3551
+Expected (+/-1sigma) upper limit: mu = 0.2964   0.4180   0.5947
+
+================================
+================================
+ Analysis: atlas_2211_08028 , SR: CC_Gbb_B
+Limits with full likelihood (spey):
+Observed upper limit: mu = 66.1929
+Expected (+/-1sigma) upper limit: mu = 25.3795   37.9386   58.7244
+
+================================
+================================
+ Analysis: atlas_2211_08028 , SR: CC_Gbb_M
+Limits with full likelihood (spey):
+Observed upper limit: mu = 2.8485
+Expected (+/-1sigma) upper limit: mu = 1.4811   2.0841   2.9826
+
+================================
+================================
+ Analysis: atlas_2211_08028 , SR: CC_Gbb_C
+Limits with full likelihood (spey):
+Observed upper limit: mu = 66.5713
+Expected (+/-1sigma) upper limit: mu = 52.7971   70.4031   94.7923
+
+================================
+================================
+ Analysis: atlas_2211_08028 , SR: CC_Gtt_0L_B
+Limits with full likelihood (spey):
+Observed upper limit: mu = 183.1633
+Expected (+/-1sigma) upper limit: mu = 48.8189   80.9204   145.7333
+
+================================
+================================
+ Analysis: atlas_2211_08028 , SR: CC_Gtt_0L_M1
+Limits with full likelihood (spey):
+Observed upper limit: mu = 2.7849
+Expected (+/-1sigma) upper limit: mu = 1.0119   1.6809   3.2006
+
+================================
+================================
+ Analysis: atlas_2211_08028 , SR: CC_Gtt_0L_M2
+Limits with full likelihood (spey):
+Observed upper limit: mu = 4.3159
+Expected (+/-1sigma) upper limit: mu = 1.8621   2.8787   4.7554
+
+================================
+================================
+ Analysis: atlas_2211_08028 , SR: CC_Gtt_0L_C
+Limits with full likelihood (spey):
+Observed upper limit: mu = 228.9175
+Expected (+/-1sigma) upper limit: mu = 55.8695   86.9508   141.3282
+
+================================
+================================
+ Analysis: atlas_2211_08028 , SR: CC_Gtt_1L_B
+Limits with full likelihood (spey):
+Observed upper limit: mu = 35.2740
+Expected (+/-1sigma) upper limit: mu = 17.5973   28.8122   49.3165
+
+================================
+================================
+ Analysis: atlas_2211_08028 , SR: NN_Gbb_2300_1000
+Limits with full likelihood (spey):
+Observed upper limit: mu = 3.0440
+Expected (+/-1sigma) upper limit: mu = 1.7732   3.1235   7.6730
+
+================================
+================================
+ Analysis: atlas_2211_08028 , SR: NN_Gbb_2800_1400
+Limits with full likelihood (spey):
+Observed upper limit: mu = 1.8676
+Expected (+/-1sigma) upper limit: mu = 1.2129   2.0546   4.1419
+
+================================
+================================
+ Analysis: atlas_2211_08028 , SR: NN_Gtt_2100_1
+Limits with full likelihood (spey):
+Observed upper limit: mu = 1.2046
+Expected (+/-1sigma) upper limit: mu = 0.8988   1.6245   4.3252
+
+================================
+================================
+ Analysis: atlas_2211_08028 , SR: NN_Gtt_1800_1
+Limits with full likelihood (spey):
+Observed upper limit: mu = 1.1900
+Expected (+/-1sigma) upper limit: mu = 0.8681   1.5866   4.5159
+
+================================
+================================
+ Analysis: atlas_2006_05880 , SR: MB-Zh-A
+Limits with simplified likelihood (pyhf):
+Observed upper limit: mu = 9.0000
+Expected upper limit (+/-2 sigma): mu = [9.0000, 9.0000, 9.0000, 9.0000, 9.0000]
+================================
+================================
+ Analysis: atlas_2006_05880 , SR: MB-Zh-B
+Limits with simplified likelihood (pyhf):
+Observed upper limit: mu = 9.0000
+Expected upper limit (+/-2 sigma): mu = [9.0000, 9.0000, 9.0000, 9.0000, 9.0000]
+================================
+================================
+ Analysis: atlas_2006_05880 , SR: MB-Z-AB
+Limits with simplified likelihood (pyhf):
+Observed upper limit: mu = 9.0000
+Expected upper limit (+/-2 sigma): mu = [9.0000, 9.0000, 9.0000, 9.0000, 9.0000]
+================================
+================================
+ Analysis: atlas_2111_08372 , SR: Combined
+Limits with simplified likelihood (pyhf):
+Observed upper limit: mu = 9.0000
+Expected upper limit (+/-2 sigma): mu = [9.0000, 9.0000, 9.0000, 9.0000, 9.0000]
+================================
+================================
+ Analysis: atlas_2209_13935 , SR: SR-0J
+Limits with simplified likelihood (pyhf):
+Observed upper limit: mu = 9.0000
+Expected upper limit (+/-2 sigma): mu = [9.0000, 9.0000, 9.0000, 9.0000, 9.0000]
+================================
+================================
+ Analysis: atlas_2209_13935 , SR: SR-1J
+Limits with simplified likelihood (pyhf):
+Observed upper limit: mu = 9.0000
+Expected upper limit (+/-2 sigma): mu = [9.0000, 9.0000, 9.0000, 9.0000, 9.0000]
+================================
+================================
+ Analysis: atlas_2209_13935 , SR: SR-BDT-DF
+Limits with simplified likelihood (pyhf):
+Observed upper limit: mu = 9.0000
+Expected upper limit (+/-2 sigma): mu = [9.0000, 9.0000, 9.0000, 9.0000, 9.0000]
+================================
+================================
+ Analysis: atlas_2209_13935 , SR: SR-BDT-SF
+Limits with simplified likelihood (pyhf):
+Observed upper limit: mu = 9.0000
+Expected upper limit (+/-2 sigma): mu = [9.0000, 9.0000, 9.0000, 9.0000, 9.0000]
+================================
+================================
+ Analysis: atlas_2102_10874 , SR: combined
+Limits with full likelihood (xRooFit):
+Observed upper limit: mu = 1.1200
+Expected upper limit (+/-2 sigma): mu = [0.7800, 1.0530, 1.4750, 2.1000, 2.8200]
+================================
+================================
+ Analysis: cms_sus_19_005 , SR: low
+Limits with covariance matrix likelihood (spey):
+Observed upper limit: mu = 1.7916
+Expected (+/-2sigma) upper limit: mu = 1.8013   2.4515   3.4713   4.9588   6.8480
+================================
+================================
+ Analysis: cms_sus_19_005 , SR: high
+Limits with covariance matrix likelihood (spey):
+Observed upper limit: mu = 0.4502
+Expected (+/-2sigma) upper limit: mu = 0.1297   0.1784   0.2564   0.3730   0.5248
+================================
+================================
+ Analysis: cms_1908_04722 , SR: 174bin
+Limits with covariance matrix likelihood (spey):
+Observed upper limit: mu = 0.2768
+Expected (+/-2sigma) upper limit: mu = 0.1809   0.2436   0.3419   0.4855   0.6673
+================================
+================================
+ Analysis: cms_2107_13201 , SR: combination
+Limits with covariance matrix likelihood (spey):
+Observed upper limit: mu = 2.7331
+Expected (+/-2sigma) upper limit: mu = 0.8250   1.1148   1.5630   2.2055   3.0073
+================================
+================================
+ Analysis: cms_2205_09597 , SR: combination
+Limits with covariance matrix likelihood (spey):
+Observed upper limit: mu = 1.7621
+Expected (+/-2sigma) upper limit: mu = 0.8559   1.1872   1.7292   2.5647   3.6932
+================================

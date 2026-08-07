@@ -40,7 +40,7 @@ B) Steps for installation in a remote folder (defined using --prefix= ):
     4) you can check the installation by running a full analysis (requires MadGraph and Pythia):
         a) your_folder/bin/CheckMATE your_folder/share/CheckMATE/bin/13tev_test.in    (quicker)
         b) your_folder/bin/CheckMATE your_folder/bin/13tev_testfull2.in   (takes time)     
-    5) The results folder can be defined using the environmental variable CHECKMATE_RESULTS
-    6) There is a convenience script for downloading of data after build, downloads.sh. Make sure the environmental variable CHECKMATE_DATA is defined!
+    5) The results folder can be defined using the environment variable CHECKMATE_RESULTS
+    6) There is a convenience script for downloading of data after build, download.sh.
 
 If you are not an expert on this subject, we highly recommend to go to the 'Installation Tutorial' on our website, http://checkmate.hepforge.org . There we will go through the above configuration step in all detail and most importantly explain to you how to find and install missing libraries. 

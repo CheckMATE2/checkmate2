@@ -1,11 +1,12 @@
 #! /bin/sh
 
-srcdir=$CHECKMATE_DATA
+srcdir="@datadir@"
 
-if ! test -d "$srcdir/data" 
-then
-mkdir "$srcdir/data"
-fi
+# if the lines below are needed then something is wrong:
+#if ! test -d "$srcdir/data" 
+#then
+#mkdir "$srcdir/data"
+#fi
 
 
 printf "BDT weights for atlas_2010_14293\n\n"

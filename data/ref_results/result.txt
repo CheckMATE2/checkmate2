@@ -1,0 +1,11 @@
+Test: Calculation of r = signal/(95%CL limit on signal)
+Result: Excluded
+Result for r: 1.7113471443311215
+Analysis: cms_sus_19_005
+SR: 2j_tight
+
+Test: Calculation of upper limit from multibin signal regions
+Result: Excluded
+Result for 1/mu (r): 4.46972607985162
+Analysis: atlas_2010_14293
+MBSR: MB-SSd

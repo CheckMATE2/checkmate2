@@ -12,8 +12,14 @@ export LD_LIBRARY_PATH
 export DYLD_LIBRARY_PATH
 
 all-local: bin/CheckMATE data/cards/mg5_default_me5_configuration.txt bin/13tev_test.in bin/13tev_testfull2.in
+	@echo "========================================="
+	@echo " Build complete! "
+	@echo " You might need to download statistical models "
+	@echo " If this step was skipped during configure "
+	@echo " Run: "
+	@echo " ./download.sh "
 
-CLEANFILES = bin/CheckMATE data/cards/mg5_default_me5_configuration.txt bin/13tev_test.in bin/13tev_testfull2.in
+CLEANFILES = bin/CheckMATE data/cards/mg5_default_me5_configuration.txt bin/13tev_test.in bin/13tev_testfull2.in download.sh
 
 if USER_PREFIX
 # Define the destination directory
@@ -31,9 +37,6 @@ else
 cardsdir = $(prefix)/
 remote = False
 endif
-
-CHECKMATE_DATA = $(datadir)
-export CHECKMATE_DATA
 
 bin/CheckMATE: tools/python/CheckMATE.raw
 	$(AM_V_GEN)$(MKDIR_P) bin
@@ -57,7 +60,7 @@ bin/13tev_testfull2.in: bin/13tev_testfull2.in.raw
 	
 all:
 	@rm -f bin/CheckMATE;
-	@sed 's,sys\.path\.append.*,sys\.path\.append("@ROOTLIBDIR@"),g' tools/python/calculate_zsig.py.raw | \
+#	@sed 's,sys\.path\.append.*,sys\.path\.append("@ROOTLIBDIR@"),g' tools/python/calculate_zsig.py.raw | \
         sed 's,cdll\.LoadLibrary(.*/libCint.so\"),cdll\.LoadLibrary("@ROOTLIBDIR@/libCint.so\"),' | \
         sed 's,os\.path\.isfile(.*/libCint.so\"),os\.path\.isfile("@ROOTLIBDIR@/libCint.so\"),' | \
         sed 's,cdll\.LoadLibrary(.*/libCore.so\"),cdll\.LoadLibrary("@ROOTLIBDIR@/libCore.so\"),' | \
