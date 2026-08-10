@@ -780,7 +780,7 @@ class Info(dict):
         #cls.paths['checkmate'] = os.path.split(os.path.split(os.path.split(os.path.realpath(__file__))[0])[0])[0]
         cls.paths['checkmate'] = Info.paths['install_dir']
         
-        if Info.paths['remote']==True:
+        if Info.paths['remote']=="yes":
             #cls.paths['results'] = Info.paths['results']
             cls.paths['tools'] = os.path.join(cls.paths['checkmate'], 'bin')
             cls.paths['data'] = os.path.join(Info.paths['data_dir'], 'data')      

@@ -202,5 +202,5 @@
 # amcfast = amcfast-config
 
 
-mg5_path = 'MADGRAPH_DIR'
+mg5_path = '@MADGRAPHDIR@'
 

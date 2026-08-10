@@ -1,7 +1,7 @@
 [Parameters]
 Name: 13TeV-test4-mg5
 Analyses: atlas13TeV,cms13TeV
-SLHAFile: 'CARDSDIR'bin/example_run_cards/auxiliary/testspectrum4.slha
+SLHAFile: @cardsdir@bin/example_run_cards/auxiliary/testspectrum4.slha
 Multibin: select
 Uplim: True
 Expected: True

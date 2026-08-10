@@ -29,10 +29,12 @@ AS_IF([test "x$prefix" = xNONE], [
   prefix=$ac_default_prefix
   runpath="$prefix/tools/python/"
   datadir="$prefix/"
+  cardsdir="$prefix/"
   user_defined_prefix=no
 ] , [
   runpath="$prefix/bin/"
   datadir="$prefix/share/CheckMATE/"
+  cardsdir="$prefix/share/CheckMATE/"
   AS_IF([test "x$RESULTSDIR" = xNONE], [RESULTSDIR="$datadir/results"])
   user_defined_prefix=yes
 ])
@@ -55,8 +57,10 @@ AC_SUBST(DYLD_LIBRARY_PATH)
 AC_SUBST(LD_RUN_PATH)
 AC_SUBST([runpath])
 AC_SUBST([datadir])
+AC_SUBST([cardsdir])
 AC_SUBST([sourcedir])
 AC_SUBST([RESULTSDIR])
+AC_SUBST([user_defined_prefix])
 CHECK_DELPHES([6], ,AC_MSG_ERROR("No Delphes... but why?") )
 CHECK_MADGRAPH([6], ,AC_MSG_ERROR("No MadGraph... but why?") )
 CHECK_ONNX([6], ,AC_MSG_ERROR("No ONNX... but why?") )
@@ -72,7 +76,11 @@ CHECK_ONNX([6], ,AC_MSG_ERROR("No ONNX... but why?") )
 AC_CONFIG_FILES([Makefile
                  tools/analysis/Makefile
                  tools/fritz/Makefile
-                 download.sh])
+                 download.sh
+                 bin/13tev_test.in
+                 bin/13tev_testfull2.in
+                 bin/CheckMATE:tools/python/CheckMATE.in
+                 data/cards/mg5_default_me5_configuration.txt])
 AC_OUTPUT
 
 DOWNLOADS( , , )
