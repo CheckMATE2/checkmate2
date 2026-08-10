@@ -44,8 +44,8 @@ AM_CONDITIONAL([USER_PREFIX], [test "x$user_defined_prefix" = xyes])
 THEPEG_CHECK_HEPMC([2], ,AC_MSG_ERROR("No HepMC... but why?") )
 CHECK_PYTHIA([6], ,AC_MSG_ERROR("No Pythia... but why?") )
 # first command allows for --with-python but doesn't check the version. This is why we have two checks.
-PY_PROG_PYTHON([2.7.3], ,AC_MSG_ERROR(You need Python 2.7.3+ to run CheckMATE. Use --with-python and refer to a valid python binary.) )
-AM_PATH_PYTHON([2.7.3], ,AC_MSG_ERROR(You need Python 2.7.3+ to run CheckMATE. Use --with-python and refer to a valid python binary.) )
+PY_PROG_PYTHON([3.6], ,AC_MSG_ERROR(You need Python 3.6+ to run CheckMATE. Use --with-python and refer to a valid python binary.) )
+AM_PATH_PYTHON([3.6], ,AC_MSG_ERROR(You need Python 3.6+ to run CheckMATE. Use --with-python and refer to a valid python binary.) )
 ROOT_PATH([5.20], , AC_MSG_ERROR(ROOT could not be initialised. Try using --with-rootsys and check whether you have ver. 5.34/06 or newer.))
 # removed due to incompatibility with newer root versions (around 6.20); future check should have 'pyroot' instead
 #ROOT_FEATURE(python, ,AC_MSG_ERROR(ROOT could be initialised but apparently it has been configured without Python functionality. Checkout the manual to find out how to add it.))

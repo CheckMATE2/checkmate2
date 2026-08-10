@@ -1,8 +1,3 @@
-from future import standard_library
-standard_library.install_aliases()
-from builtins import str
-from builtins import input
-from builtins import range
 import argparse
 import configparser
 import os
@@ -369,7 +364,7 @@ def prepare_run(analyses, events, files, flags, output, paths):
       flags["skipparamcheck"] = True
       output.mute()
     # Print parameters.
-    output.cout("""
+    output.cout(r"""
    ____ _               _    __  __    _  _____ _____ 
   / ___| |__   ___  ___| | _|  \/  |  / \|_   _| ____|
  | |   | '_ \ / _ \/ __| |/ / |\/| | / _ \ | | |  _|  

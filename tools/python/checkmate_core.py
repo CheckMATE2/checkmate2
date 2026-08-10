@@ -1,13 +1,8 @@
-#!/usr/bin/python
-from future import standard_library
-standard_library.install_aliases()
-from builtins import input
-from builtins import str
-from builtins import object
+#!/usr/bin/env python3
 import sys,os
 from math import sqrt
 from copy import deepcopy
-import json, pickle, pickle
+import json, pickle
 import os
 import shutil
 import subprocess
@@ -125,7 +120,7 @@ class CheckMATE2(object):
     
     def printLogo(self):
         """ Obvious"""
-        AdvPrint.cout( """
+        AdvPrint.cout( r"""
   ____ _               _    __  __    _  _____ _____ ____  
  / ___| |__   ___  ___| | _|  \/  |  / \|_   _| ____|___ \ 
 | |   | '_ \ / _ \/ __| |/ / |\/| | / _ \ | | |  _|   __) |
@@ -136,7 +131,7 @@ class CheckMATE2(object):
 
     def printUsage(self):
         self.printLogo()
-        AdvPrint.cout( """
+        AdvPrint.cout( r"""
                                                   ___   
                                       |__| _       | _  
                                       |  |(_)\)/   |(_) 
@@ -226,13 +221,13 @@ class CheckMATE2(object):
         if Info.flags["write_pythia_events"]:
             AdvPrint.cout("\t - pythia .hepmc files will be written!")
         if Info.parameters["EventResultFileColumns"] != ['analysis', 'sr', 'signal_normevents', 'signal_err_tot']:            
-            AdvPrint.cout("\t - print columns "+str(Info.parameters['EventResultFileColumns']).translate(None, "[]'")+" in event result files!")
+            AdvPrint.cout("\t - print columns "+str(Info.parameters['EventResultFileColumns']).translate({91: None, 93: None, 39: None})+" in event result files!")
         if Info.parameters["ProcessResultFileColumns"] != ['analysis', 'sr', 'signal_normevents', 'signal_err_tot']:            
-            AdvPrint.cout("\t - print columns "+str(Info.parameters['ProcessResultFileColumns']).translate(None, "[]'")+" in process result files!")
+            AdvPrint.cout("\t - print columns "+str(Info.parameters['ProcessResultFileColumns']).translate({91: None, 93: None, 39: None})+" in process result files!")
         if Info.parameters["TotalEvaluationFileColumns"] != ['analysis', 'sr', 'o', 'b', 'db', 's', 'ds', 's95obs', 's95exp', 'robscons', 'rexpcons']:
-            AdvPrint.cout("\t - print columns "+str(Info.parameters['TotalEvaluationFileColumns']).translate({"[":None,"]":None,"'":None})+" in total evaluation files!")
+            AdvPrint.cout("\t - print columns "+str(Info.parameters['TotalEvaluationFileColumns']).translate({91: None, 93: None, 39: None})+" in total evaluation files!")
         if Info.parameters["BestPerAnalysisEvaluationFileColumns"] != ['analysis', 'sr', 'o', 'b', 'db', 's', 'ds', 's95obs', 's95exp', 'robscons', 'rexpcons']:
-            AdvPrint.cout("\t - print columns "+str(Info.parameters['BestPerAnalysisEvaluationFileColumns']).translate({"[":None,"]":None,"'":None})+" in best-per-analysis evaluation files!")
+            AdvPrint.cout("\t - print columns "+str(Info.parameters['BestPerAnalysisEvaluationFileColumns']).translate({91: None, 93: None, 39: None})+" in best-per-analysis evaluation files!")
         if Info.parameters["srcombination"]:
             AdvPrint.cout("\t - Multibin signal regions for statistical combination: " + str(Info.parameters["srcombination"]) )
             

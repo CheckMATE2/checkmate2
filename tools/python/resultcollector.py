@@ -1,8 +1,5 @@
 from __future__ import print_function
 from __future__ import division
-from builtins import str
-from builtins import object
-from past.utils import old_div
 from math import sqrt
 import os, sys
 
@@ -114,8 +111,8 @@ class ResultCollector(object):
             weight_other = 0
         # otherwise, evaluate weights properly
         else: 
-            weight_self = old_div(old_div(self.total_normevents, (other.total_normevents + self.total_normevents)) * (self.total_sumofweights + other.total_sumofweights),self.total_sumofweights)
-            weight_other = old_div(old_div(other.total_normevents, (other.total_normevents + self.total_normevents)) * (self.total_sumofweights + other.total_sumofweights),other.total_sumofweights)
+            weight_self = self.total_normevents/(other.total_normevents + self.total_normevents) * (self.total_sumofweights + other.total_sumofweights)/self.total_sumofweights
+            weight_other = other.total_normevents/(other.total_normevents + self.total_normevents) * (self.total_sumofweights + other.total_sumofweights)/other.total_sumofweights
         
         self.total_mcevents = self.total_mcevents + other.total_mcevents
         self.total_normevents = self.total_normevents + other.total_normevents
@@ -146,9 +143,9 @@ class ResultCollector(object):
         if self.total_normevents == 0:
             self.total_normevents = other.total_normevents
         else:
-            weight1 = old_div(self.total_mcevents, (self.total_mcevents + other.total_mcevents))
-            weight2 = old_div(other.total_mcevents, (self.total_mcevents + other.total_mcevents))
-            self.total_normevents = old_div((self.total_normevents * weight1 + other.total_normevents * weight2),(weight1 + weight2))
+            weight1 = self.total_mcevents/(self.total_mcevents + other.total_mcevents)
+            weight2 = other.total_mcevents/(self.total_mcevents + other.total_mcevents)
+            self.total_normevents = (self.total_normevents * weight1 + other.total_normevents * weight2)/(weight1 + weight2)
         """    
           the below test is not correct anymore as combined runs of the same process with event gneration via Pythia8 or MadGraph can lead to different
           values for the respective cross sections. In that case, total_normevents should be given as the weighted mean of the respective total_normevents-numbers, using
@@ -164,9 +161,9 @@ class ResultCollector(object):
         # store old relative syserror (beware the case N = 0 and that self and other should be consistent!)
         rel_sys_error = 0
         if self.signal_err_sys != 0:
-            rel_sys_error = old_div(self.signal_err_sys,self.signal_normevents)
+            rel_sys_error = self.signal_err_sys/self.signal_normevents
         if other.signal_err_sys != 0:
-            rel_sys_error = old_div(other.signal_err_sys,other.signal_normevents)
+            rel_sys_error = other.signal_err_sys/other.signal_normevents
         # ds1/s1 must equal ds2/s2, or in other words ds1*s2 = ds2*s1, which avoids rounding problems
         if self.signal_err_sys != 0 and other.signal_err_sys != 0 and abs(self.signal_err_sys*other.signal_normevents - other.signal_err_sys*self.signal_normevents)>1E-5:
             print(self.signal_err_sys) # debug
@@ -184,19 +181,19 @@ class ResultCollector(object):
         
         # redetermine event numbers and stat error
         if self.signal_sumofweights != 0:
-            self.signal_normevents = old_div(self.total_normevents * self.signal_sumofweights, self.total_sumofweights)
+            self.signal_normevents = self.total_normevents * self.signal_sumofweights/self.total_sumofweights
             
             if self.signal_sumofweights <= 0: # If there are no events in the signal region, ...
                 if Info.flags['no_mc_stat_err']:
                     self.signal_err_stat = 0.0 
                 else:  
-                    self.signal_err_stat = old_div(1.*self.total_normevents,self.total_sumofweights) # ... set staterror to error on 1 Monte Carlo Event under the assumption that all events have equal weight
+                    self.signal_err_stat = 1.*self.total_normevents/self.total_sumofweights # ... set staterror to error on 1 Monte Carlo Event under the assumption that all events have equal weight
                 self.signal_err_sys = 0 # ... set syserror to 0
             else:
                 if Info.flags['no_mc_stat_err']:
                     self.signal_err_stat = 0.0 
                 else:
-                    self.signal_err_stat = old_div(self.total_normevents*sqrt(self.signal_sumofweights2),(self.total_sumofweights))
+                    self.signal_err_stat = self.total_normevents*sqrt(self.signal_sumofweights2)/(self.total_sumofweights)
                 self.signal_err_sys = self.signal_normevents * rel_sys_error # multiply new normevents by old rel_sys_error
         else: # if there are no events, everything is 0
             self.signal_normevents = 0
