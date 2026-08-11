@@ -80,6 +80,7 @@ AC_CONFIG_FILES([Makefile
                  bin/13tev_test.in
                  bin/13tev_testfull2.in
                  bin/CheckMATE:tools/python/CheckMATE.in
+                 bin/AnalysisManager:tools/python/AnalysisManager.in
                  data/cards/mg5_default_me5_configuration.txt])
 AC_OUTPUT
 

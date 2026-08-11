@@ -2,7 +2,7 @@ import os
 #os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 #import jax
 #jax.config.update('jax_default_device',jax.devices('cpu')[0])
-import json, ROOT  # you really need 6.32.14
+import json, ROOT  # 
 from ROOT.Experimental import XRooFit as XRF
 import numpy as np
 from info import Info
@@ -51,9 +51,9 @@ def workspace_2102_10874( path, analysis, mbsr, s , ds ):
         hs3in = json.load(f)
 
     
-    bkg_only = Info.paths['data']+ "/" + analysis + "/Likelihoods/" + hs3in["analysis"][0]["bkgonly"]
-    ws = ROOT.RooWorkspace(ROOT.TFile(bkg_only).Get("w"))
-    ROOT.RooJSONFactoryWSTool(ws).exportJSON(Info.paths['data']+ "/" + analysis + "/Likelihoods/" + hs3in["analysis"][0]["patchset"])
+    #bkg_only = Info.paths['data']+ "/" + analysis + "/Likelihoods/" + hs3in["analysis"][0]["bkgonly"]
+    #ws = ROOT.RooWorkspace(ROOT.TFile(bkg_only).Get("w"))
+    #ROOT.RooJSONFactoryWSTool(ws).exportJSON(Info.paths['data']+ "/" + analysis + "/Likelihoods/" + hs3in["analysis"][0]["patchset"])
 
     with open(Info.paths['data']+ "/" + analysis + "/Likelihoods/" + hs3in["analysis"][0]["patchset"]) as serialized:
         conf = json.load(serialized)

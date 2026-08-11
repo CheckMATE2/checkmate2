@@ -12,7 +12,8 @@ export LD_LIBRARY_PATH
 export DYLD_LIBRARY_PATH
 
 all-local: bin/CheckMATE data/cards/mg5_default_me5_configuration.txt bin/13tev_test.in bin/13tev_testfull2.in
-	chmod +x bin/CheckMATE
+	@chmod +x bin/CheckMATE
+	@chmod +x bin/AnalysisManager
 	@echo "========================================="
 	@echo " Build complete! "
 	@echo " You might need to download statistical models "
@@ -44,8 +45,8 @@ all:
 
 	
 AnalysisManager:
-	@sed 's,\#!.*,\#!@PYTHON@,' tools/python/AnalysisManager.raw | \
-	sed "s,config_paths\['mg5_source_path'\]='MADGRAPH_DIR',config_paths\['mg5_source_path'\]='@MADGRAPHDIR@',"  > bin/AnalysisManager;
+#	@sed 's,\#!.*,\#!@PYTHON@,' tools/python/AnalysisManager.raw | \
+#	sed "s,config_paths\['mg5_source_path'\]='MADGRAPH_DIR',config_paths\['mg5_source_path'\]='@MADGRAPHDIR@',"  > bin/AnalysisManager;
 	@chmod +x bin/AnalysisManager;
    
 clean-local:
