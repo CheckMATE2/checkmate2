@@ -16,10 +16,10 @@ all-local: bin/CheckMATE data/cards/mg5_default_me5_configuration.txt bin/13tev_
 	@chmod +x bin/AnalysisManager
 	@echo "========================================="
 	@echo " Build complete! "
-	@echo " You might need to download statistical models "
-	@echo " If this step was skipped during configure "
-	@echo " Run: "
-	@echo " ./download.sh "
+#	@echo " You might need to download statistical models "
+#	@echo " If this step was skipped during configure "
+#	@echo " Run: "
+#	@echo " ./download.sh "
 
 CLEANFILES = bin/CheckMATE data/cards/mg5_default_me5_configuration.txt bin/13tev_test.in bin/13tev_testfull2.in download.sh
 
@@ -56,3 +56,9 @@ clean-local:
 
 install-data-hook:
 	@bash $(srcdir)/download.sh
+	
+uninstall-hook:
+if USER_PREFIX
+	@echo "Removing the share/CheckMATE database folder..."
+	rm -rf "$(datadir)/CheckMATE"
+endif
