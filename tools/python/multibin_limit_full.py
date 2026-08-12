@@ -1,7 +1,6 @@
 import json
 import numpy as np
 import pyhf, jsonpatch
-import matplotlib.pyplot as plt
 import os
 import sys, subprocess
 from info import Info

@@ -1,10 +1,8 @@
 import json
 import numpy as np
 import pyhf
-import matplotlib.pyplot as plt
 import os
 import sys
-import scipy
 from info import Info
 from advprint import AdvPrint
 
