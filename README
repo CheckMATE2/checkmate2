@@ -25,7 +25,8 @@ A) Steps for installation in the current folder:
     1) autoreconf
     2) ./configure --with-delphes=... --with-python=... --with-pythia=... etc.
     3) make (you can add -j8 or similar to speed things up for multicore making)
-    4) you can check the installation by running a full analysis (requires MadGraph and Pythia):
+    4) make install
+    5) you can check the installation by running a full analysis (requires MadGraph and Pythia):
         a) ./bin/CheckMATE ./bin/13tev_test.in    (quicker)
         b) ./bin/CheckMATE ./bin/13tev_testfull2.in   (takes time)
         c) using a hepmc file (no MadGraph or Pythia needed; note that you might need to update the file path in the input file):
@@ -37,10 +38,11 @@ B) Steps for installation in a remote folder (defined using --prefix= ):
     1) autoreconf
     2) ./configure --prefix=your_folder --with-resultsdir=... --with-delphes=... --with-python=... --with-pythia=... etc.
     3) make (you can add -j8 or similar to speed things up for multicore making)
-    4) you can check the installation by running a full analysis (requires MadGraph and Pythia):
+    4) make install
+    5) you can check the installation by running a full analysis (requires MadGraph and Pythia):
         a) your_folder/bin/CheckMATE your_folder/share/CheckMATE/bin/13tev_test.in    (quicker)
         b) your_folder/bin/CheckMATE your_folder/bin/13tev_testfull2.in   (takes time)     
-    5) The results folder can be defined using the environment variable CHECKMATE_RESULTS
-    6) There is a convenience script for downloading of data after build, download.sh.
+    6) The results folder can be defined using the environment variable CHECKMATE_RESULTS
+    7) There is a convenience script for downloading of data after build, download.sh.
 
 If you are not an expert on this subject, we highly recommend to go to the 'Installation Tutorial' on our website, http://checkmate.hepforge.org . There we will go through the above configuration step in all detail and most importantly explain to you how to find and install missing libraries. 

@@ -38,9 +38,9 @@ else
 remote = False
 endif
 	
-all:
-	@rm -f bin/CheckMATE;
-	@$(MAKE) install;
+#all:
+#	@rm -f bin/CheckMATE;
+#	@$(MAKE) install;
         
 
 	
@@ -53,3 +53,6 @@ clean-local:
 	-rm -f bin/CheckMATE
 	-rm -f bin/AnalysisManager	
 	@$(MAKE) uninstall;
+
+install-data-hook:
+	@bash $(srcdir)/download.sh

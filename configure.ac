@@ -84,7 +84,7 @@ AC_CONFIG_FILES([Makefile
                  data/cards/mg5_default_me5_configuration.txt])
 AC_OUTPUT
 
-DOWNLOADS( , , )
+# DOWNLOADS( , , )
 
 AC_MSG_RESULT([])
 AC_MSG_RESULT([=== Subconfigurations Done ===])

@@ -1,5 +1,14 @@
 CheckMATE - Changelog
 
+Ver 2.6.0
+---------
+
+2026-08-12  Matthew Feickert, Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ cleaned installation
+    ~ dropped Python2 support
+    ~ conda ready?
+
 Ver 2.5.4
 ---------
 

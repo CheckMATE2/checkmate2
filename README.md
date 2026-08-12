@@ -48,7 +48,7 @@ This is a brief note on how to install CheckMATE from the master branch on https
      ./configure --with-delphes=/path/to/delphes --with-hepmc=/path/to/hepmc --with-madgraph=/path/to/madgraph  
      --with-pythia=/path/to/pythia --with-onnx=/path/to/onnxruntime --with-python=/path/to/python
   
-  c) make
+  c) make followed by make install
      (optional e.g. -j4 if you would like to compile on 4 cores)
   
   d) to test the installation (if you linked Pythia and MadGraph, check README for more possibilities):
@@ -87,6 +87,13 @@ This is a brief note on how to install CheckMATE from the master branch on https
      
 
 # current
+
+
+2026-08-12  Matthew Feickert, Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ cleaned installation
+    ~ dropped Python2 support
+    ~ conda ready?
 
 2026-07-31  Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 
