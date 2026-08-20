@@ -20,6 +20,10 @@ void Atlas_2411_02040::initialize() {
   bookControlRegions("nonresDNN-CR-bin00;nonresDNN-CR-bin01;nonresDNN-CR-bin02;nonresDNN-CR-bin03;nonresDNN-CR-bin04;nonresDNN-CR-bin05;nonresDNN-CR-bin06;nonresDNN-CR-bin07;nonresDNN-CR-bin08;nonresDNN-CR-bin09;nonresDNN-CR-bin10;nonresDNN-CR-bin11;nonresDNN-CR-bin12;nonresDNN-CR-bin13;nonresDNN-CR-bin14;nonresDNN-CR-bin15;nonresDNN-CR-bin16;nonresDNN-CR-bin17;nonresDNN-CR-bin18;resDNN-CR-bin00;resDNN-CR-bin01;resDNN-CR-bin02;resDNN-CR-bin03;resDNN-CR-bin04;resDNN-CR-bin05;resDNN-CR-bin06;resDNN-CR-bin07;resDNN-CR-bin08;resDNN-CR-bin09;resDNN-CR-bin10;resDNN-CR-bin11;resDNN-CR-bin12;resDNN-CR-bin13;resDNN-CR-bin14;resDNN-CR-bin15;resDNN-CR-bin16;resDNN-CR-bin17;resDNN-CR-bin18;heavyresDNN-CR-bin00;heavyresDNN-CR-bin01;heavyresDNN-CR-bin02;heavyresDNN-CR-bin03;heavyresDNN-CR-bin04;heavyresDNN-CR-bin05;heavyresDNN-CR-bin06;heavyresDNN-CR-bin07;heavyresDNN-CR-bin08;heavyresDNN-CR-bin09;heavyresDNN-CR-bin10;heavyresDNN-CR-bin11;heavyresDNN-CR-bin12;heavyresDNN-CR-bin13;heavyresDNN-CR-bin14;heavyresDNN-CR-bin15;heavyresDNN-CR-bin16;heavyresDNN-CR-bin17");  
   // You can also book cutflow regions with bookCutflowRegions("CR1;CR2;..."). Note that the regions are
   //  always ordered alphabetically in the cutflow output files.
+  
+  outputFileIndex = bookFile("ML_in.txt", true);
+  *fStreams[outputFileIndex] << "# mHradius,RMSdeltaRjj,RMSmjj,RMSetaH,RMSdeltaAjj,deltaRH1,deltaRH2,deltaRH3,massH1,HT6j,eta_mHHH_frac,cosTheta,Aplanarity_6j,Sphericity_allj,Sphericity_6j,Transverse_Sphericity_6j,resDNN_Score,nonresDNN_Score,heavyresDNN_Score,eventNumber,weight" << std::endl;
+    
 
   // You should initialize any declared variables here
 #ifdef HAVE_ONNX
@@ -117,6 +121,27 @@ void Atlas_2411_02040::initialize() {
   hist_sphericity6j = new TH1F("Sphericity_6j", "Sphericity_6j", 20, 0., 1.);
   hist_transvsphericty6j = new TH1F("Transverse_Sphericity_6j", "Transverse_Sphericity_6j", 20, 0., 1.);
 
+  hist_mhradius_CR = new TH1F("mHradius", "mHradius", 25, 0., 250.);
+  hist_rmsdeltarjj_CR = new TH1F("RMSdeltaRjj", "RMSdeltaRjj", 20, 0., 2.);
+  hist_rmsdeltarjjrivet_CR = new TH1F("RMSdeltaRjj_rivet", "RMSdeltaRjj", 20, 0., 2.);
+  hist_rmsmjj_CR = new TH1F("RMSmjj", "RMSmjj", 20, 0., 400.);
+  hist_rmsetah_CR = new TH1F("RMSetaH", "RMSetaH", 20, 0., 2.);
+  hist_rmsdeltaajj_CR = new TH1F("RMSdeltaAjj", "RMSdeltaAjj", 15, -1.2, 3.3);
+  hist_rmsdeltaajjrivet_CR = new TH1F("RMSdeltaAjj_rivetBin", "RMSdeltaAjj_rivetBin", 22, -1., 3.5);
+  hist_deltarh1_CR = new TH1F("deltaRH1", "deltaRH1", 25, 0., 5.);
+  hist_deltarh2_CR = new TH1F("deltaRH2", "deltaRH2", 25, 0., 5.);
+  hist_deltarh3_CR = new TH1F("deltaRH3", "deltaRH3", 25, 0., 5.);
+  hist_massh1_CR = new TH1F("massH1", "massH1", 17, 0., 350.);
+  hist_massh1rivet_CR = new TH1F("massH1_rivetBin", "massH1_rivetBin", 20, 0., 400.);
+  hist_ht6j_CR = new TH1F("HT6j", "HT6j", 24, 200., 1400.);
+  hist_ht6jrivet_CR = new TH1F("HT6j_rivetBin", "HT6j_rivetBin", 28, 0., 1600.);
+  hist_etamhhhfrac_CR = new TH1F("eta_mHHH_frac", "eta_mHHH_frac", 20, 0., 1.);
+  hist_costheta_CR = new TH1F("cosTheta", "cosTheta", 20, -1., 1.);
+  hist_aplanarity6j_CR = new TH1F("Aplanarity_6j", "Aplanarity_6j", 20, 0., 0.4);
+  hist_sphericityallj_CR = new TH1F("Sphericity_allj", "Sphericity_allj", 20, 0., 1.);
+  hist_sphericity6j_CR = new TH1F("Sphericity_6j", "Sphericity_6j", 20, 0., 1.);
+  hist_transvsphericty6j_CR = new TH1F("Transverse_Sphericity_6j", "Transverse_Sphericity_6j", 20, 0., 1.);
+
   hist_resdnnscore = new TH1F("resDNN_Score", "resDNN_Score", 20., 0., 1.);
   hist_nonresdnnscore = new TH1F("nonresDNN_Score", "nonresDNN_Score", 20., 0., 1.);
   hist_heavyresdnnscore = new TH1F("heavyresDNN_Score", "heavyresDNN_Score", 20., 0., 1.);
@@ -132,14 +157,19 @@ void Atlas_2411_02040::initialize() {
   float binning[7] = {0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5};
   hist_weight = new TH1F("TotalWeight", "TotalWeight", 6, binning);
 
+  hist_HHinv = new TH1F("HHinv", "HHinv", 25., 100., 600. );
+  hist_HHHinv = new TH1F("HHHinv", "HHHinv", 20., 300., 700. );
+  hist_HHHinv_atlas = new TH1F("HHHinv_atlas", "HHHinv", 22., 0., 2200. );
+
   eventNumber = -1;
 }
 
 void Atlas_2411_02040::analyze() {
 
   eventNumber++;
+  std::ostringstream buffer;
   int cutflow = 0;
-  missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out. Probably not since 3.4.2
+  //missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out. Probably not since 3.4.2
   
   electronsLoose = filterPhaseSpace(electronsLoose, 20, -2.47, 2.47);
   electronsLoose = filterIsolation(electronsLoose);
@@ -401,6 +431,22 @@ void Atlas_2411_02040::analyze() {
     hist_nonresdnnscore_SR->Fill(nonresDNN_Score, weight);
     hist_heavyresdnnscore_SR->Fill(heavyresDNN_Score, weight);  
 
+    TLorentzVector HH1 = sigjets[pairs[0]]->P4() + sigjets[pairs[1]]->P4() + sigjets[pairs[2]]->P4() + sigjets[pairs[3]]->P4();
+    TLorentzVector HH2 = sigjets[pairs[0]]->P4() + sigjets[pairs[1]]->P4() + sigjets[pairs[4]]->P4() + sigjets[pairs[5]]->P4();
+    TLorentzVector HH3 = sigjets[pairs[2]]->P4() + sigjets[pairs[3]]->P4() + sigjets[pairs[4]]->P4() + sigjets[pairs[5]]->P4();
+    TLorentzVector HHH = sigjets[pairs[0]]->P4() + sigjets[pairs[1]]->P4() + sigjets[pairs[2]]->P4() + sigjets[pairs[3]]->P4() + sigjets[pairs[4]]->P4() + sigjets[pairs[5]]->P4();
+    hist_HHinv->Fill(HH1.M(), weight);
+    hist_HHinv->Fill(HH2.M(), weight);
+    hist_HHinv->Fill(HH3.M(), weight);
+    hist_HHHinv->Fill(HHH.M(), weight);
+    hist_HHHinv_atlas->Fill(HHH.M(), weight);
+
+    //# mHradius,RMSdeltaRjj,RMSmjj,RMSetaH,RMSdeltaAjj,deltaRH1,deltaRH2,deltaRH3,massH1,HT6j,eta_mHHH_frac,cosTheta,Aplanarity_6j,Sphericity_allj,Sphericity_6j,Transverse_Sphericity_6j,eventNumber,weight
+    //buffer << std::setprecision(3) << mHradius << "," << RMSdeltaRjj << "," << RMSmjj << "," << RMSetaH << "," << RMSdeltaAjj << "," << deltaRH1 << "," << deltaRH2 << "," << deltaRH3 << "," << massH1 << "," << HT6j << "," << eta_mHHH_frac << "," << cosTheta << "," << Aplanarity_6j << "," << Sphericity_allj << "," << Sphericity_6j << "," << Transverse_Sphericity_6j << "," << resDNN_Score << "," << nonresDNN_Score << "," << heavyresDNN_Score << "," << eventNumber << "," << weight;
+
+    //*fStreams[outputFileIndex] << buffer.str() << std::endl;
+    
+    
     if (nonresDNN_Score > 0.1 and nonresDNN_Score < 0.15) countSignalEvent("nonresDNN-SR-bin00"); 
     else if (nonresDNN_Score > 0.15 and nonresDNN_Score < 0.2) countSignalEvent("nonresDNN-SR-bin01"); 
     else if (nonresDNN_Score > 0.2 and nonresDNN_Score < 0.25) countSignalEvent("nonresDNN-SR-bin02"); 
@@ -462,9 +508,37 @@ void Atlas_2411_02040::analyze() {
   }
 
   if (bjets5) {
+    hist_mhradius_CR->Fill(mHradius, weight);
+    hist_rmsdeltarjj_CR->Fill(RMSdeltaRjj, weight);
+    hist_rmsdeltarjjrivet_CR->Fill(RMSdeltaRjj, weight);
+    hist_rmsmjj_CR->Fill(RMSmjj, weight);
+    hist_rmsetah_CR->Fill(RMSetaH, weight);
+    hist_rmsdeltaajj_CR->Fill(RMSdeltaAjj, weight);
+    hist_rmsdeltaajjrivet_CR->Fill(RMSdeltaAjj, weight);
+    hist_deltarh1_CR->Fill(deltaRH1, weight);
+    hist_deltarh2_CR->Fill(deltaRH2, weight);
+    hist_deltarh3_CR->Fill(deltaRH3, weight);
+    hist_massh1_CR->Fill(massH1, weight);
+    hist_massh1rivet_CR->Fill(massH1, weight);
+    hist_ht6j_CR->Fill(HT6j, weight);
+    hist_ht6jrivet_CR->Fill(HT6j, weight);
+    hist_etamhhhfrac_CR->Fill(eta_mHHH_frac, weight);
+    hist_costheta_CR->Fill(cosTheta, weight);
+    hist_aplanarity6j_CR->Fill(Aplanarity_6j, weight);
+    hist_sphericityallj_CR->Fill(Sphericity_allj, weight);
+    hist_sphericity6j_CR->Fill(Sphericity_6j, weight);
+    hist_transvsphericty6j_CR->Fill(Transverse_Sphericity_6j, weight);
+    hist_resdnnscore_CR->Fill(resDNN_Score, weight);
+    hist_nonresdnnscore_CR->Fill(nonresDNN_Score, weight);
+    hist_heavyresdnnscore_CR->Fill(heavyresDNN_Score, weight);
+
     hist_resdnnscore_CR->Fill(resDNN_Score, weight);
     hist_nonresdnnscore_CR->Fill(nonresDNN_Score, weight);
     hist_heavyresdnnscore_CR->Fill(heavyresDNN_Score, weight);  
+
+    buffer << std::setprecision(3) << mHradius << "," << RMSdeltaRjj << "," << RMSmjj << "," << RMSetaH << "," << RMSdeltaAjj << "," << deltaRH1 << "," << deltaRH2 << "," << deltaRH3 << "," << massH1 << "," << HT6j << "," << eta_mHHH_frac << "," << cosTheta << "," << Aplanarity_6j << "," << Sphericity_allj << "," << Sphericity_6j << "," << Transverse_Sphericity_6j << "," << resDNN_Score << "," << nonresDNN_Score << "," << heavyresDNN_Score << "," << eventNumber << "," << weight;
+
+    *fStreams[outputFileIndex] << buffer.str() << std::endl;
 
     if (nonresDNN_Score > 0.1 and nonresDNN_Score < 0.15) countControlEvent("nonresDNN-CR-bin00"); 
     else if (nonresDNN_Score > 0.15 and nonresDNN_Score < 0.2) countControlEvent("nonresDNN-CR-bin01"); 
@@ -534,6 +608,7 @@ void Atlas_2411_02040::finalize() {
   // Whatever should be done after the run goes here
   hfile->Write();
   hfile->Close();
+  //*fStreams[outputFileIndex] << endl;
 }       
 
 
