@@ -111,6 +111,10 @@ def calc_point( path, analysis, mbsr ):
             inv_r_exp_down, inv_r_exp, inv_r_exp_up =  stat_model.poi_upper_limit(expected = spey.ExpectationType.apriori, expected_pvalue="1sigma")  # for the band 1 (2) sigma band
             #string = string+f"Expected upper limit: mu = {inv_r_exp:.4f}"+'\n'
             string = string+f"Expected (+/-1sigma) upper limit: mu = {inv_r_exp_down:.4f}   {inv_r_exp:.4f}   {inv_r_exp_up:.4f}"+'\n'
+        if inv_r/inv_r_exp < 0.1 or inv_r/inv_r_exp > 10.: # very different expected and observed suggest problem in the model; use results with caution
+            string += "Problems with convergence; check carefully/rerun\n"
+            AdvPrint.cout("Upper limits calculation unreliable.")
+            inv_r = inv_r_exp_down = inv_r_exp = inv_r_exp_up = 10.
     string += "\n================================\n"
     
     with open(path+'/multibin_limits/'+"results.dat", "a") as write_file:
