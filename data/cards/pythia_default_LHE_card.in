@@ -5,4 +5,6 @@ Next:numberShowLHA = 1             ! print LHA information n times
 Next:numberShowInfo = 1            ! print event information n times
 Next:numberShowProcess = 1         ! print process record n times
 Next:numberShowEvent = 0           ! print event record n times
+PartonLevel:MPI = off              ! no multiparton interactions
+Tune:pp = 21
 

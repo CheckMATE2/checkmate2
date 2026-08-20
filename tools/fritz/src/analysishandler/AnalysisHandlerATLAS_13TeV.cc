@@ -829,6 +829,23 @@ double AnalysisHandlerATLAS_13TeV::bSigEff(double pt,
            (pt > 140.) * (pt < 170.) * 0.813 +
            (pt > 170.) * (pt < 210.) * 0.809 +
            (pt > 210.)  * 0.8 );}
+
+    if (true) { https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PLOTS/FTAG-2023-01/
+        //const static vector<double>binedges_pt = {0.00, 20., 30., 40., 60., 85., 110., 140., 175., 250., 400., 800., 1200., 2000.};
+        //const static vector<double> eff_pt = {0.68, 0.74, 0.77, 0.79, 0.8, 0.81, 0.81, 0.805, 0.78, 0.75, 0.7, 0.65, 0.5, 0.5};
+
+        return (eff)/0.77 * ((pt > 20.) * (pt < 30.) * 0.68 +
+           (pt > 30.) * (pt < 40.) * 0.74 +
+           (pt > 40.) * (pt < 60.) * 0.77 +
+           (pt > 60.) * (pt < 85.) * 0.79 +
+           (pt > 85.) * (pt < 110.) * 0.80 +
+            (pt > 110.) * (pt < 140.) * 0.81 +
+           (pt > 140.) * (pt < 175.) * 0.81 +
+           (pt > 175.) * (pt < 250.) * 0.805 +
+           (pt > 250.)  * (pt < 400.) * 0.75 +
+            (pt > 400.)  * (pt < 800.) * 0.7 +
+            (pt > 800.)  * (pt < 1200.) * 0.65 +
+            (pt > 1200.) * 0.5 ) ; }
     
     const double y0 = 0.5523;
     const double x0 = 47.6071;
