@@ -815,7 +815,7 @@ double AnalysisHandlerATLAS_13TeV::tauBkgEffMultiTight(double pt,
 double AnalysisHandlerATLAS_13TeV::bSigEff(double pt,
                                      double eta,
                                      double eff) {
-    if (analysisName == "atlas_2411_02040") {
+    //if (analysisName == "atlas_2411_02040") {
     //bypass
     //arXiv:2211.16345, fig 19a
     //https://chatgpt.com/share/692edf69-f690-8012-8ba5-941633388c6d
