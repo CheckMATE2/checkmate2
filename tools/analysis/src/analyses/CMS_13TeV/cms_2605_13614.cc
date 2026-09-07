@@ -181,6 +181,48 @@ void Cms_2605_13614::analyze() {
 
   double mt2ll0 = mT2(leptons[0]->P4(), leptons[1]->P4(), 0., missingET->P4(), false);
   double mt2ll80 = mT2(leptons[0]->P4(), leptons[1]->P4(), 80., missingET->P4(), false);
+
+  TLorentzVector pll = leptons[0]->P4() + leptons[1]->P4();
+  double JZB = (missingET->P4().Vect() + pll.Vect()).Perp() - pll.Perp();
+#ifdef HAVE_ONNX  
+//"Dilepton_JZB","Dilepton_LeadEta","Dilepton_LeadPT","Dilepton_LeadPhi","Dilepton_MT","Dilepton_MT2_0","Dilepton_MT2_80","Dilepton_MT_wE","Dilepton_SubleadEta","Dilepton_SubleadPT","Dilepton_SubleadPhi","Dilepton_dR","Dilepton_eta","Dilepton_mass","Dilepton_phi","Dilepton_pt","MET_phi","MET_pt","jet_1_eta","jet_1_phi","jet_1_pt","jet_2_eta","jet_2_phi","jet_2_pt","n_jets_20",”run”
+  std::vector<float> input_tensor_values;  
+  input_tensor_values.push_back(JZB);
+  input_tensor_values.push_back(leptons[0]->Eta);
+  input_tensor_values.push_back(leptons[0]->Pt);
+  input_tensor_values.push_back(leptons[0]->Phi);
+
+  for (int i = 0; i < 10; i++) {
+    input_tensor_values.push_back(signal_jets.size() > i ? signal_jets[i]->PT : 0.);
+    input_tensor_values.push_back(signal_jets.size() > i ? signal_jets[i]->Eta : 0.);
+    input_tensor_values.push_back(signal_jets.size() > i ? signal_jets[i]->Phi : 0.);
+    input_tensor_values.push_back(signal_jets.size() > i ? signal_jets[i]->P4().M() : 0.);
+    input_tensor_values.push_back(signal_jets.size() > i ? b_cat[i] : 0);  
+  }
+  
+  for (int i = 0; i < 4; i++) {
+    input_tensor_values.push_back(trimmedJets.size() > i ? trimmedJets[i].pt() : 0.);
+    input_tensor_values.push_back(trimmedJets.size() > i ? trimmedJets[i].eta() : 0.);
+    input_tensor_values.push_back(trimmedJets.size() > i ? trimmedJets[i].phi() : 0.);
+    input_tensor_values.push_back(trimmedJets.size() > i ? trimmedJets[i].m() : 0.);  
+  }
+  
+  for (int i = 0; i < 4; i++) {
+    input_tensor_values.push_back(signalLeps.size() > i ? signalLeps[i]->PT : 0.);
+    input_tensor_values.push_back(signalLeps.size() > i ? signalLeps[i]->Eta : 0.);
+    input_tensor_values.push_back(signalLeps.size() > i ? signalLeps[i]->Phi : 0.);
+    input_tensor_values.push_back(signalLeps.size() > i ? signalLeps[i]->P4().M() : 0.);    
+  }
+  
+  input_tensor_values.push_back(pTmiss.Perp() );
+  input_tensor_values.push_back(pTmiss.Phi() );  
+  
+  input_tensor_values.push_back(Gtt);
+  input_tensor_values.push_back(mgluino);
+  input_tensor_values.push_back(mneut);
+  
+  assert(input_tensor_values.size() == 87);
+
 }
 
 void Cms_2605_13614::finalize() {
