@@ -285,6 +285,11 @@ double AnalysisBase::mT(const TLorentzVector & vis, const TLorentzVector & invis
     return sqrt(m_invis*m_invis +  2.*vis.Pt()*invis.Et()*(1.-cos(fabs(vis.DeltaPhi(invis)))));
 }
 
+double AnalysisBase::mTwE(const TLorentzVector & vis, const TLorentzVector & invis, const double m_inv) {
+    // If no masses are given, assumed to be zero  
+    return sqrt(2.*sqrt(vis.Pt()*vis.Pt() + m_inv*m_inv )*invis.Et()*(1.-cos(fabs(vis.DeltaPhi(invis)))));
+}
+
 double AnalysisBase::mT2(const TLorentzVector & vis1, const TLorentzVector & vis2, double m_inv, const TLorentzVector & invis, bool massive) {
     // Setup mt2 evaluation object.
     mt2_bisect::mt2 mt2_event;

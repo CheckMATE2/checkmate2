@@ -178,9 +178,13 @@ void Cms_2605_13614::analyze() {
 
   if (leptons.size() < 2 || leptons[0]->Charge * leptons[1]->Charge > 0 || leptons[0]->Type != leptons[1]->Type) return;  
   countCutflowEvent("04_OSSF");
+  if (muonsCombined.size() + electronsLoose.size() > 2) return;
+  countCutflowEvent("05_3l_veto");
 
   double mt2ll0 = mT2(leptons[0]->P4(), leptons[1]->P4(), 0., missingET->P4(), false);
   double mt2ll80 = mT2(leptons[0]->P4(), leptons[1]->P4(), 80., missingET->P4(), false);
+  double mtll = mT(leptons[0]->P4() + leptons[1]->P4(), missingET->P4());
+  double mtllwE = mTwE(leptons[0]->P4() + leptons[1]->P4(), missingET->P4(), mll);
 
   TLorentzVector pll = leptons[0]->P4() + leptons[1]->P4();
   double JZB = (missingET->P4().Vect() + pll.Vect()).Perp() - pll.Perp();
@@ -189,42 +193,58 @@ void Cms_2605_13614::analyze() {
   std::vector<float> input_tensor_values;  
   input_tensor_values.push_back(JZB);
   input_tensor_values.push_back(leptons[0]->Eta);
-  input_tensor_values.push_back(leptons[0]->Pt);
+  input_tensor_values.push_back(leptons[0]->PT);
   input_tensor_values.push_back(leptons[0]->Phi);
+  input_tensor_values.push_back(mtll);
+  input_tensor_values.push_back(mt2ll0);
+  input_tensor_values.push_back(mt2ll80);
+  input_tensor_values.push_back(mtllwE);
+  input_tensor_values.push_back(leptons[1]->Eta);
+  input_tensor_values.push_back(leptons[1]->PT);
+  input_tensor_values.push_back(leptons[1]->Phi);
+  input_tensor_values.push_back(leptons[0]->P4().DeltaR(leptons[1]->P4()));
+  input_tensor_values.push_back(pll.Eta());
+  input_tensor_values.push_back(pll.M());
+  input_tensor_values.push_back(pll.Phi());
+  input_tensor_values.push_back(pll.Pt());
+  input_tensor_values.push_back(missingET->Phi);
+  input_tensor_values.push_back(missingET->PT);
+  input_tensor_values.push_back(jets.size() > 0 ? jets[0]->Eta : 0.); 
+  input_tensor_values.push_back(jets.size() > 0 ? jets[0]->Phi : 0.);
+  input_tensor_values.push_back(jets.size() > 0 ? jets[0]->PT : 0.);
+  input_tensor_values.push_back(jets.size() > 1 ? jets[1]->Eta : 0.);
+  input_tensor_values.push_back(jets.size() > 1 ? jets[1]->Phi : 0.);
+  input_tensor_values.push_back(jets.size() > 1 ? jets[1]->PT : 0.);
+  input_tensor_values.push_back(jets.size());
+  input_tensor_values.push_back(0);
 
-  for (int i = 0; i < 10; i++) {
-    input_tensor_values.push_back(signal_jets.size() > i ? signal_jets[i]->PT : 0.);
-    input_tensor_values.push_back(signal_jets.size() > i ? signal_jets[i]->Eta : 0.);
-    input_tensor_values.push_back(signal_jets.size() > i ? signal_jets[i]->Phi : 0.);
-    input_tensor_values.push_back(signal_jets.size() > i ? signal_jets[i]->P4().M() : 0.);
-    input_tensor_values.push_back(signal_jets.size() > i ? b_cat[i] : 0);  
-  }
+  input_tensor_values.push_back(70.); //mH
+  input_tensor_values.push_back(160.); //mA
   
-  for (int i = 0; i < 4; i++) {
-    input_tensor_values.push_back(trimmedJets.size() > i ? trimmedJets[i].pt() : 0.);
-    input_tensor_values.push_back(trimmedJets.size() > i ? trimmedJets[i].eta() : 0.);
-    input_tensor_values.push_back(trimmedJets.size() > i ? trimmedJets[i].phi() : 0.);
-    input_tensor_values.push_back(trimmedJets.size() > i ? trimmedJets[i].m() : 0.);  
-  }
-  
-  for (int i = 0; i < 4; i++) {
-    input_tensor_values.push_back(signalLeps.size() > i ? signalLeps[i]->PT : 0.);
-    input_tensor_values.push_back(signalLeps.size() > i ? signalLeps[i]->Eta : 0.);
-    input_tensor_values.push_back(signalLeps.size() > i ? signalLeps[i]->Phi : 0.);
-    input_tensor_values.push_back(signalLeps.size() > i ? signalLeps[i]->P4().M() : 0.);    
-  }
-  
-  input_tensor_values.push_back(pTmiss.Perp() );
-  input_tensor_values.push_back(pTmiss.Phi() );  
-  
-  input_tensor_values.push_back(Gtt);
-  input_tensor_values.push_back(mgluino);
-  input_tensor_values.push_back(mneut);
-  
-  assert(input_tensor_values.size() == 87);
+  assert(input_tensor_values.size() == 28);
 
+  auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
+  auto input_tensor = Ort::Value::CreateTensor(memory_info, input_tensor_values.data(), input_tensor_size, input_dims.data(), 2); //rank = 2
+  
+  auto output_tensors = session->Run(Ort::RunOptions{nullptr}, input_names.data(), &input_tensor, 1, output_names.data(), 1);
+    
+  float* output = output_tensors.front().GetTensorMutableData<float>();
+
+  float result = *output;
+  //cout << "result: " << result << endl;
+  if (result < 0.9) return;
+  countCutflowEvent("06_pNN>0.9");
+  countSignalEvent("SR_presel");
+
+#endif
+
+return;
 }
 
 void Cms_2605_13614::finalize() {
   // Whatever should be done after the run goes here
+
+#ifdef HAVE_ONNX 
+  delete session;
+#endif  
 }       

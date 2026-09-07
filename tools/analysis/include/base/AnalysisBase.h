@@ -592,6 +592,8 @@ class AnalysisBase {
      */ 
     double mT(const TLorentzVector & vis, const TLorentzVector & invis, const double m_invis=0.);
     
+    double mTwE(const TLorentzVector & vis, const TLorentzVector & invis, const double m_inv);
+    
     //! Evaluates \f$m_{T2}\f$.
     /** The definition is
      * 
