@@ -3,6 +3,11 @@
 #include "onnxruntime_cxx_api.h"
 #endif
 
+std::vector<float> mHmA = {70., 80., 90., 100., 110., 120., 130., 140., 150.};
+std::vector<float> mAin = {160., 170., 180., 190., 200., 210., 220., 230., 240.};
+
+
+
 // AUTHOR: Krzysztof Rolbiecki
 //  EMAIL: krolb@fuw.edu.pl
 
@@ -69,6 +74,37 @@ void Cms_2605_13614::initialize() {
   for (size_t j = 0; j < input_node_dims.size(); j++) 
     std::cout << "Output " << 0 << " : dim[" << j << "] = " << output_node_dims[j] << '\n';  
 #endif  
+
+for (auto &p : mHmA) {
+    std::string name = "SR_mH_" + std::to_string(int(p.first)) + "_mA_" + std::to_string(int(p.second));
+    bookControlRegions(name);
+  }
+
+  float mH; float mA;
+for (const auto& [mH, mA] : mHmA) {
+  for (int i = 0; i < 7; ++i)
+  {
+    std::ostringstream ss;
+    ss << "mH" << std::fixed << std::setprecision(1) << mH
+       << "_mA" << mA << "_EE_bin_" << std::to_string(i);
+    bookControlRegions(ss.str());
+  }
+  for (int i = 0; i < 10; ++i)
+  {
+    std::ostringstream ss;
+    ss << "mH" << std::fixed << std::setprecision(1) << mH
+       << "_mA" << mA << "_MM_bin_0" << std::to_string(i);
+    bookControlRegions(ss.str());
+  }
+    std::ostringstream ss;
+    ss << "mH" << std::fixed << std::setprecision(1) << mH
+       << "_mA" << mA << "_MM_bin_10";
+    bookControlRegions(ss.str());
+}  
+  /*int ifile = bookFile("atlas_2211_08028.root", true);
+  const char *rootFileName = fNames[ifile].c_str() ;
+  hfile = new TFile(rootFileName, "RECREATE", "Saving Histograms");*/
+
 }
 
 void Cms_2605_13614::analyze() {
@@ -126,9 +162,9 @@ void Cms_2605_13614::analyze() {
   electronsLoose = filterPhaseSpace(electronsLoose, 10., -2.5, 2.5);
   electronsTight = filterPhaseSpace(electronsTight, 10., -2.5, 2.5, true);
   muonsCombined = filterPhaseSpace(muonsCombined, 10., -2.4, 2.4);
-  electronsLoose = filterIsolation(electronsLoose, 1);
-  electronsTight = filterIsolation(electronsTight, 1);
-  muonsCombined = filterIsolation(muonsCombined, 1);
+  electronsLoose = filterIsolation(electronsLoose, 0);
+  electronsTight = filterIsolation(electronsTight, 0);
+  muonsCombined = filterIsolation(muonsCombined, 0);
   jets = filterPhaseSpace(jets, 20., -2.4, 2.4);
   
   jets = overlapRemoval(jets, electronsLoose, 0.4);
@@ -190,41 +226,45 @@ void Cms_2605_13614::analyze() {
   double JZB = (missingET->P4().Vect() + pll.Vect()).Perp() - pll.Perp();
 #ifdef HAVE_ONNX  
 //"Dilepton_JZB","Dilepton_LeadEta","Dilepton_LeadPT","Dilepton_LeadPhi","Dilepton_MT","Dilepton_MT2_0","Dilepton_MT2_80","Dilepton_MT_wE","Dilepton_SubleadEta","Dilepton_SubleadPT","Dilepton_SubleadPhi","Dilepton_dR","Dilepton_eta","Dilepton_mass","Dilepton_phi","Dilepton_pt","MET_phi","MET_pt","jet_1_eta","jet_1_phi","jet_1_pt","jet_2_eta","jet_2_phi","jet_2_pt","n_jets_20",”run”
-  std::vector<float> input_tensor_values;  
-  input_tensor_values.push_back(JZB);
-  input_tensor_values.push_back(leptons[0]->Eta);
-  input_tensor_values.push_back(leptons[0]->PT);
-  input_tensor_values.push_back(leptons[0]->Phi);
-  input_tensor_values.push_back(mtll);
-  input_tensor_values.push_back(mt2ll0);
-  input_tensor_values.push_back(mt2ll80);
-  input_tensor_values.push_back(mtllwE);
-  input_tensor_values.push_back(leptons[1]->Eta);
-  input_tensor_values.push_back(leptons[1]->PT);
-  input_tensor_values.push_back(leptons[1]->Phi);
-  input_tensor_values.push_back(leptons[0]->P4().DeltaR(leptons[1]->P4()));
-  input_tensor_values.push_back(pll.Eta());
-  input_tensor_values.push_back(pll.M());
-  input_tensor_values.push_back(pll.Phi());
-  input_tensor_values.push_back(pll.Pt());
-  input_tensor_values.push_back(missingET->Phi);
-  input_tensor_values.push_back(missingET->PT);
-  input_tensor_values.push_back(jets.size() > 0 ? jets[0]->Eta : 0.); 
-  input_tensor_values.push_back(jets.size() > 0 ? jets[0]->Phi : 0.);
-  input_tensor_values.push_back(jets.size() > 0 ? jets[0]->PT : 0.);
-  input_tensor_values.push_back(jets.size() > 1 ? jets[1]->Eta : 0.);
-  input_tensor_values.push_back(jets.size() > 1 ? jets[1]->Phi : 0.);
-  input_tensor_values.push_back(jets.size() > 1 ? jets[1]->PT : 0.);
-  input_tensor_values.push_back(jets.size());
-  input_tensor_values.push_back(0);
+  std::vector<float> x_values;  
+  x_values.push_back(JZB);
+  x_values.push_back(leptons[0]->Eta);
+  x_values.push_back(leptons[0]->PT);
+  x_values.push_back(leptons[0]->Phi);
+  x_values.push_back(mtll);
+  x_values.push_back(mt2ll0);
+  x_values.push_back(mt2ll80);
+  x_values.push_back(mtllwE);
+  x_values.push_back(leptons[1]->Eta);
+  x_values.push_back(leptons[1]->PT);
+  x_values.push_back(leptons[1]->Phi);
+  x_values.push_back(jets.size() > 0 ? jets[0]->P4().DeltaPhi(missingET->P4()) : 0.);
+  x_values.push_back(jets.size() > 0 ? jets[0]->P4().DeltaPhi(pll) : 0.);
+  x_values.push_back(leptons[0]->P4().DeltaR(leptons[1]->P4()));
+  x_values.push_back(pll.Eta());
+  x_values.push_back(pll.M());
+  x_values.push_back(pll.Phi());
+  x_values.push_back(pll.Pt());
+  x_values.push_back(missingET->Phi);
+  x_values.push_back(missingET->PT);
+  x_values.push_back(jets.size() > 0 ? jets[0]->Eta : 0.); 
+  x_values.push_back(jets.size() > 0 ? jets[0]->Phi : 0.);
+  x_values.push_back(jets.size() > 0 ? jets[0]->PT : 0.);
+  x_values.push_back(jets.size() > 1 ? jets[1]->Eta : 0.);
+  x_values.push_back(jets.size() > 1 ? jets[1]->Phi : 0.);
+  x_values.push_back(jets.size() > 1 ? jets[1]->PT : 0.);
+  x_values.push_back(jets.size());
+  x_values.push_back(0);
 
-  input_tensor_values.push_back(70.); //mH
-  input_tensor_values.push_back(160.); //mA
+  std::vector<float> masses_values;
+  masses_values.push_back(70.); //mH
+  masses_values.push_back(160.); //mA
   
-  assert(input_tensor_values.size() == 28);
+  assert(x_values.size() == 28);
 
   auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
-  auto input_tensor = Ort::Value::CreateTensor(memory_info, input_tensor_values.data(), input_tensor_size, input_dims.data(), 2); //rank = 2
+  auto input_tensor = Ort::Value::CreateTensor(memory_info, x_values.data(), input_tensor_size_x, input_dims_x.data(), 2); //rank = 2
+  auto input_tensor_masses = Ort::Value::CreateTensor(memory_info, masses_values.data(), input_tensor_size_masses, input_dims_masses.data(), 2); //rank = 2
   
   auto output_tensors = session->Run(Ort::RunOptions{nullptr}, input_names.data(), &input_tensor, 1, output_names.data(), 1);
     
