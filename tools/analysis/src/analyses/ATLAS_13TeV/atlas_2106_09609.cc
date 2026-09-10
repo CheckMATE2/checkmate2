@@ -27,14 +27,10 @@ void Atlas_2106_09609::initialize() {
   std::vector<const char*> output_node_names;
   std::vector<int64_t> input_node_dims;
 
-  Ort::Env env[5];
-  for (int i = 0; i < 5; i++)
-    env[i] = Ort::Env(ORT_LOGGING_LEVEL_WARNING, "EWK_SR");
-
-  Ort::SessionOptions session_options[5];
+  Ort::SessionOptions session_options;
   for (int i = 0; i < 5; i++) {
     std::string file = maindir  + "/data/atlas_2106_09609/SUSY-2019-04_"  + std::to_string(i+4) +"jets.onnx";
-    session[i] = new Ort::Session(env[i], file.c_str(), session_options[i]);    
+    session[i] = new Ort::Session(env, file.c_str(), session_options);    
   }  
   
   // this shows how to get information about input nodes and tensors

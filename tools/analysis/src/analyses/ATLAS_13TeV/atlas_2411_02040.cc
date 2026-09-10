@@ -31,10 +31,6 @@ void Atlas_2411_02040::initialize() {
   std::vector<const char*> output_node_names;
   std::vector<int64_t> input_node_dims;
 
-  Ort::Env env[6];
-  for (int i = 0; i < 6; i++)
-    env[i] = Ort::Env(ORT_LOGGING_LEVEL_WARNING, "TRIH");
-
   std::vector<std::string> onnx_files = {
     maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_nonresDNN_model_even",
     maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_nonresDNN_model_odd",
@@ -42,7 +38,7 @@ void Atlas_2411_02040::initialize() {
     maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_resDNN_model_odd",
     maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_heavyresDNN_model_even",
     maindir  + "/data/atlas_2411_02040/ANA-HIGP-2024-32_heavyresDNN_model_odd"};
-  Ort::SessionOptions session_options[6];
+  Ort::SessionOptions session_options;
   for (int i = 0; i < 6; i++) {
     std::ifstream input_file((onnx_files[i] + "_variables.json").c_str());
     boost::property_tree::ptree pt;
@@ -51,7 +47,7 @@ void Atlas_2411_02040::initialize() {
     std::vector<double> scale = read_tree<double>(pt, "scale");
     scales.push_back(scale);
     offsets.push_back(offset);
-    session[i] = new Ort::Session(env[i], (onnx_files[i] + ".onnx").c_str(), session_options[i]);
+    session[i] = new Ort::Session(env, (onnx_files[i] + ".onnx").c_str(), session_options);
   }
 
   const size_t num_input_nodes = session[0]->GetInputCount();

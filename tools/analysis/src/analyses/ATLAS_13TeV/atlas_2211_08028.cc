@@ -30,9 +30,6 @@ void Atlas_2211_08028::initialize() {
   char *a = Global::get_maindir();
   std::string maindir(a, strlen(a));
   std::string file = maindir  + std::string("/data/atlas_2211_08028/ANA-SUSY-2018-30_model.onnx");
-  
-  Ort::Env env;
-  env = Ort::Env(ORT_LOGGING_LEVEL_WARNING, "GG");
 
   Ort::SessionOptions session_options;
   session = new Ort::Session(env, file.c_str(), session_options);

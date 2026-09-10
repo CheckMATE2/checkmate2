@@ -27,7 +27,8 @@ class Atlas_2106_09609 : public AnalysisBase {
     TFile *hfile;  TH1F *nn4j, *nn5j, *nn6j, *nn7j, *nn8j;  
 
 #ifdef HAVE_ONNX    
-    Ort::Session *session[5];
+    Ort::Env env{ORT_LOGGING_LEVEL_WARNING, "EWK_SR"}; 
+    Ort::Session *session[5] = {nullptr, nullptr, nullptr, nullptr, nullptr};
     std::vector<int64_t> input_node_dims;
     const int input_tensor_size = 65;
     std::vector<const char*> input_names = {"input.1"};
