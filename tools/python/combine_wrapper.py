@@ -93,3 +93,12 @@ for year in YEARS:
 print("\nSaving and closing file...")
 f.Close()
 print("All done! Both Electron and Muon systematic channels are completely nullified.")
+
+# combine call
+# ulimit -s unlimited; ulimit -u unlimited  # might be necessary
+# combine combined_cards.txt -M AsymptoticLimits --keyword-value MA=140.0 --keyword-value MH=70.0 --strictBounds --rMax 10
+
+# bins Muon
+# [0.9, 0.9174299999999207, 0.9267199999998784, 0.9352799999998395, 0.9441499999997991, 0.9554399999997477, 0.9649899999997043, 0.9742899999996619, 0.9865999999996059, 0.9914799999995837, 0.9951799999995578, 1.0]
+# bins Electron
+# [0.9, 0.9285099999998703, 0.945039999999795, 0.9622399999997168, 0.9795799999996379, 0.9867199999996054, 0.991159999999567, 1.0]

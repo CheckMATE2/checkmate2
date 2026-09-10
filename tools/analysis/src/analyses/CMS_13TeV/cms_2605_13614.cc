@@ -75,31 +75,34 @@ void Cms_2605_13614::initialize() {
     std::cout << "Output " << 0 << " : dim[" << j << "] = " << output_node_dims[j] << '\n';  
 #endif  
 
-for (auto &p : mHmA) {
-    std::string name = "SR_mH_" + std::to_string(int(p.first)) + "_mA_" + std::to_string(int(p.second));
-    bookControlRegions(name);
-  }
+float mH; float mA;
+for (const auto year : years) {
+  for (const auto& [mH, mA] : mHmA) {
+    std::ostringstream ss;
+    ss << "mH" << std::fixed << std::setprecision(1) << mH << "_mA" << mA << "_" << year << "_EE_bin_" ;
+    bookControlRegions(ss.str() + "0");
+    bookControlRegions(ss.str() + "1");
+    bookControlRegions(ss.str() + "2");
+    bookControlRegions(ss.str() + "3");
+    bookControlRegions(ss.str() + "4");
+    bookControlRegions(ss.str() + "5");
+    bookControlRegions(ss.str() + "6");
 
-  float mH; float mA;
-for (const auto& [mH, mA] : mHmA) {
-  for (int i = 0; i < 7; ++i)
-  {
-    std::ostringstream ss;
-    ss << "mH" << std::fixed << std::setprecision(1) << mH
-       << "_mA" << mA << "_EE_bin_" << std::to_string(i);
-    bookControlRegions(ss.str());
+    ss.str("");
+    ss.clear();
+    ss << "mH" << std::fixed << std::setprecision(1) << mH << "_mA" << mA << "_" << year << "_MM_bin_" ;
+    bookControlRegions(ss.str() + "00");
+    bookControlRegions(ss.str() + "01");
+    bookControlRegions(ss.str() + "02");
+    bookControlRegions(ss.str() + "03");
+    bookControlRegions(ss.str() + "04");
+    bookControlRegions(ss.str() + "05");
+    bookControlRegions(ss.str() + "06");
+    bookControlRegions(ss.str() + "07");
+    bookControlRegions(ss.str() + "08");
+    bookControlRegions(ss.str() + "09");
+    bookControlRegions(ss.str() + "10");
   }
-  for (int i = 0; i < 10; ++i)
-  {
-    std::ostringstream ss;
-    ss << "mH" << std::fixed << std::setprecision(1) << mH
-       << "_mA" << mA << "_MM_bin_0" << std::to_string(i);
-    bookControlRegions(ss.str());
-  }
-    std::ostringstream ss;
-    ss << "mH" << std::fixed << std::setprecision(1) << mH
-       << "_mA" << mA << "_MM_bin_10";
-    bookControlRegions(ss.str());
 }  
   /*int ifile = bookFile("atlas_2211_08028.root", true);
   const char *rootFileName = fNames[ifile].c_str() ;
@@ -217,6 +220,10 @@ void Cms_2605_13614::analyze() {
   if (muonsCombined.size() + electronsLoose.size() > 2) return;
   countCutflowEvent("05_3l_veto");
 
+  std::string flavour = "??";
+  if (leptons[0]->Type ==  "electron") flavour = "EE";
+  else if (leptons[0]->Type ==  "muon") flavour = "MM";
+
   double mt2ll0 = mT2(leptons[0]->P4(), leptons[1]->P4(), 0., missingET->P4(), false);
   double mt2ll80 = mT2(leptons[0]->P4(), leptons[1]->P4(), 80., missingET->P4(), false);
   double mtll = mT(leptons[0]->P4() + leptons[1]->P4(), missingET->P4());
@@ -238,8 +245,8 @@ void Cms_2605_13614::analyze() {
   x_values.push_back(leptons[1]->Eta);
   x_values.push_back(leptons[1]->PT);
   x_values.push_back(leptons[1]->Phi);
-  x_values.push_back(jets.size() > 0 ? jets[0]->P4().DeltaPhi(missingET->P4()) : 0.);
-  x_values.push_back(jets.size() > 0 ? jets[0]->P4().DeltaPhi(pll) : 0.);
+  x_values.push_back(jets.size() > 0 ? fabs(jets[0]->P4().DeltaPhi(missingET->P4())) : 0.);
+  x_values.push_back(jets.size() > 0 ? fabs(jets[0]->P4().DeltaPhi(pll)) : 0.);
   x_values.push_back(leptons[0]->P4().DeltaR(leptons[1]->P4()));
   x_values.push_back(pll.Eta());
   x_values.push_back(pll.M());
@@ -255,29 +262,56 @@ void Cms_2605_13614::analyze() {
   x_values.push_back(jets.size() > 1 ? jets[1]->PT : 0.);
   x_values.push_back(jets.size());
   x_values.push_back(0);
-
-  std::vector<float> masses_values;
-  masses_values.push_back(70.); //mH
-  masses_values.push_back(160.); //mA
   
   assert(x_values.size() == 28);
 
   auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
   
   auto input_tensor_x = Ort::Value::CreateTensor(memory_info, x_values.data(), input_tensor_size_x, input_dims_x.data(), 2); //rank = 2
-  auto input_tensor_masses = Ort::Value::CreateTensor(memory_info, masses_values.data(), input_tensor_size_masses, input_dims_masses.data(), 2); //rank = 2
+
+  for (const auto& [mH, mA] : mHmA) {  
+    std::vector<float> masses_values;
+    masses_values.push_back(70.); //mH
+    masses_values.push_back(160.); //mA
+    auto input_tensor_masses = Ort::Value::CreateTensor(memory_info, masses_values.data(), input_tensor_size_masses, input_dims_masses.data(), 2); //rank = 2
   
-  std::array<Ort::Value, 2> input_tensors = {std::move(input_tensor_x), std::move(input_tensor_masses)};
+    std::array<Ort::Value, 2> input_tensors = {std::move(input_tensor_x), std::move(input_tensor_masses)};
 
-  auto output_tensors = session->Run(Ort::RunOptions{nullptr}, input_names.data(), input_tensors.data(), 2, output_names.data(), 1);
+    auto output_tensors = session->Run(Ort::RunOptions{nullptr}, input_names.data(), input_tensors.data(), 2, output_names.data(), 1);
     
-  float* output = output_tensors.front().GetTensorMutableData<float>();
+    float* output = output_tensors[0].GetTensorMutableData<float>();
 
-  float result = *output;
-  //cout << "result: " << result << endl;
-  if (result < 0.9) return;
-  countCutflowEvent("06_pNN>0.9");
-  countSignalEvent("SR_presel");
+    float result = output[0];
+    cout << "result: " << result << endl;
+    if (result < 0.9) return;
+    std::ostringstream ss;
+    ss << "mH" << std::fixed << std::setprecision(1) << mH << "_mA" << mA << "_" << year << "_" << flavour; 
+    countCutflowEvent("06_pNN>0.9_" + ss.str());
+    
+    if (flavour == "EE") {
+      if (result < electron_bins[1]) countControlEvent(ss.str() + "_bin_0");
+      else if (result < electron_bins[2]) countControlEvent(ss.str() + "_bin_1");
+      else if (result < electron_bins[3]) countControlEvent(ss.str() + "_bin_2");
+      else if (result < electron_bins[4]) countControlEvent(ss.str() + "_bin_3");
+      else if (result < electron_bins[5]) countControlEvent(ss.str() + "_bin_4");
+      else if (result < electron_bins[6]) countControlEvent(ss.str() + "_bin_5");
+      else countControlEvent(ss.str() + "_bin_6");
+    }
+    if (flavour == "MM") {
+      if (result < muon_bins[1]) countControlEvent(ss.str() + "_bin_00");
+      else if (result < muon_bins[2]) countControlEvent(ss.str() + "_bin_01");
+      else if (result < muon_bins[3]) countControlEvent(ss.str() + "_bin_02");
+      else if (result < muon_bins[4]) countControlEvent(ss.str() + "_bin_03");
+      else if (result < muon_bins[5]) countControlEvent(ss.str() + "_bin_04");
+      else if (result < muon_bins[6]) countControlEvent(ss.str() + "_bin_05");
+      else if (result < muon_bins[7]) countControlEvent(ss.str() + "_bin_06");
+      else if (result < muon_bins[8]) countControlEvent(ss.str() + "_bin_07");
+      else if (result < muon_bins[9]) countControlEvent(ss.str() + "_bin_08");
+      else if (result < muon_bins[10]) countControlEvent(ss.str() + "_bin_09");
+      else countControlEvent(ss.str() + "_bin_10");
+    }
+    //countSignalEvent("SR_presel");
+  }
 
 #endif
 
