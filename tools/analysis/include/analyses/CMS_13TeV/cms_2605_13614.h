@@ -18,7 +18,8 @@ class Cms_2605_13614 : public AnalysisBase {
 
   private:
   #ifdef HAVE_ONNX    
-    Ort::Session *session;
+    Ort::Env env{ORT_LOGGING_LEVEL_WARNING, "GG"};
+    Ort::Session *session = nullptr;
     std::vector<int64_t> input_node_dims;
     const int input_tensor_size_x = 28;
     const int input_tensor_size_masses = 2;
