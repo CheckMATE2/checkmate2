@@ -96,11 +96,14 @@ void Cms_2111_06295::analyze() {
       }
     }
   }
+
+  //eventually OS check is actually later in the cutflow... need to adjust here
   if (leptons.size() == 2 and mllmin < 1000.) {
     countCutflowEvent("02_tt_dilep"); //found OS pair
     // run stop selections
     if (mllOSmin < 1000.) {
       countCutflowEvent("02_2l_dilep");
+      countCutflowEvent("03_2l_subleppt"); //dodgy requirement
       // run 2l selections
     }
   }
