@@ -15,54 +15,63 @@ void Cms_2111_06295::initialize() {
 }
 
 void Cms_2111_06295::analyze() {
-    countCutflowEvent("cut_00_alwaystrue");
-    countCutflowEvent("cut_01_eventFilters");
-
-  double mET_no_muon = missingET->PT;
-
-  missingET->addMuons(muons);
-
-  double mET = missingET->PT;
-
-  //h4->Fill(mET);
-  //fout1 << "muon.size()=" << muons.size() << std::endl;
-  //fout1 << mET << ", " << mET_no_muon << std::endl;
-
-//reconstruction
-//muonsCombined could not be used in CMS
-//electrons could be used but with worse case compared to electronsLoose and electronsMedium 
-  std::vector<Electron*> electrons_g;
-  std::vector<Muon*> muons_g;
-
-  for ( int i=0; i < electronsLoose.size(); i++ ) {
-    if ( electronsLoose[i]->PT > 5. and electronsLoose[i]->PT < 10 ) {
-      if ( fabs(electronsLoose[i]->Eta) < 2.5 ) {
-        electrons_g.push_back(electronsLoose[i]);
-      }
-    } 
-  }
-
-  for ( int i=0; i < electronsMedium.size(); i++ ) {
-    if ( electronsMedium[i]->PT >= 10 ) {
-      if ( fabs(electronsMedium[i]->Eta) < 2.5 ) {
-        electrons_g.push_back(electronsMedium[i]);
-      }
-    } 
-  }
+  missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out. Probably not since 3.4.2
   
-  muons_g = filterPhaseSpace(muons, 3.5, -2.4, 2.4);
+  std::string year = "1900";
+  double y = rand()/(RAND_MAX+1.);
+  if (y < 0.262) year = "2016";
+  else if (y > 0.565) year = "2018";
+  else year = "2017";
   
-  //isolation
-  electrons_g = filterIsolation( electrons_g );
-  muons_g     = filterIsolation( muons_g );
+  countCutflowEvent("00_all");
+  
+  electronsLoose = filterPhaseSpace(electronsLoose, 5., -2.5, 2.5);
+  electronsTight = filterPhaseSpace(electronsTight, 5., -2.5, 2.5);
+  muonsCombined = filterPhaseSpace(muonsCombined, 3.5, -2.4, 2.4);
+  electronsLoose = filterIsolation(electronsLoose, 0);
+  electronsTight = filterIsolation(electronsTight, 0);
+  muonsCombined = filterIsolation(muonsCombined, 0);
+  jets = filterPhaseSpace(jets, 20., -2.4, 2.4);
+  
+  jets = overlapRemoval(jets, electronsLoose, 0.4);
+  jets = overlapRemoval(jets, muonsCombined, 0.4);
+  electronsLoose = overlapRemoval(electronsLoose, jets, 0.4);
+  electronsTight = overlapRemoval(electronsTight, jets, 0.4);
+  muonsCombined = overlapRemoval(muonsCombined, jets, 0.4);
 
-  //jets and b-taging jets
-  jets = filterPhaseSpace(jets, 25, -2.4, 2.4);
+  if (electronsLoose.size() + muonsCombined.size() > 3) return;
+  countCutflowEvent("00_leptons<4");
+  
+  electronsLoose = filterPhaseSpace(electronsLoose, 30., -2.5, 2.5, false, true); //this excludes leptons with pt>30
+  std::vector<Electron*> electronsSignal = filterPhaseSpace(electronsTight, 30., -2.5, 2.5, false, true); //this excludes leptons with pt>30
+  std::vector<Muon*> muonsSignal = filterPhaseSpace(muonsCombined, 30., -2.4, 2.4, false, true);
+  std::vector<Jet*> jetsSignal = filterPhaseSpace(jets, 25., -2.4, 2.4);
+  if (electronsSignal.size() + muonsSignal.size() < 2) return;
+  if (electronsSignal.size() + muonsSignal.size() < electronsTight.size() + muonsCombined.size()) return; //veto events with additional leptons with pt>30
+  countCutflowEvent("01_2-3leptons");
 
-  jets = overlapRemoval( jets, electrons_g, 0.4 );
-  jets = overlapRemoval( jets, muons_g, 0.4 );
-  electrons_g = overlapRemoval( electrons_g, jets, 0.4);
-  muons_g = overlapRemoval( muons_g, jets, 0.4);
+  bool SS = false; //this selects events for SS CR
+  if (electronsSignal.size() == 2 and muonsSignal.size() == 0 and electronsSignal[0]->Charge * electronsSignal[1]->Charge > 0) SS = true;
+  if (muonsSignal.size() == 2 and electronsSignal.size() == 0 and muonsSignal[0]->Charge * muonsSignal[1]->Charge > 0) SS = true;
+  if (muonsSignal.size() == 1 and electronsSignal.size() == 1 and muonsSignal[0]->Charge * electronsSignal[0]->Charge > 0) SS = true;
+  
+  std::vector<FinalStateObject*> leptons;
+  for ( int i = 0; i <  electronsLoose.size(); i++ ) { //we later check that Loose survives to Tight
+    FinalStateObject* lep = newFinalStateObject(electronsLoose[i]);
+    leptons.push_back(lep);
+    //cout << "e " ;
+  }
+  for ( int i = 0; i < muonsSignal.size(); i++ ) {
+    FinalStateObject* lep = newFinalStateObject(muonsSignal[i]);
+    leptons.push_back(lep);
+    //cout << "mu " ;
+  }
+  std::sort(leptons.begin(), leptons.end(), FinalStateObject::sortByPT);
+
+  if (SS) {
+    // run SS selection and quit
+    return;
+  }
 
   std::vector<Jet*> bjets;
   for(int i=0; i<jets.size(); i++) {
@@ -70,6 +79,38 @@ void Cms_2111_06295::analyze() {
       bjets.push_back(jets[i]);
     }
   }
+  
+  double mllOSmin = 999999.;
+  double mllmin = 999999.;
+  double mllmax = 0.;
+  for ( int i = 0; i < leptons.size(); i++ ) {
+    for ( int j = i+1; j < leptons.size(); j++ ) {
+      if (leptons[i]->Charge * leptons[j]->Charge < 0 and leptons[i]->Type == leptons[j]->Type ) {
+        double mll = (leptons[i]->P4() + leptons[j]->P4()).M();
+        if (mll < mllmin) mllmin = mll;
+      }
+      if (leptons[i]->Charge * leptons[j]->Charge < 0  ) {
+        double mll = (leptons[i]->P4() + leptons[j]->P4()).M();
+        if (mll > mllmax) mllmax = mll;
+
+      }
+    }
+  }
+  if (leptons.size() == 2 and mllmin < 1000.) {
+    countCutflowEvent("02_tt_dilep"); //found OS pair
+    // run stop selections
+    if (mllOSmin < 1000.) {
+      countCutflowEvent("02_2l_dilep");
+      // run 2l selections
+    }
+  }
+  else if  (leptons.size() == 3 and mllOSmin < 1000.) {
+    countCutflowEvent("02_3l_dilep");
+    // run 3l selections
+  }
+  else return; // 3 SS leptons or something weird
+
+
 
   //ht
   double ht=0.;
