@@ -39,6 +39,8 @@
 
 #include "Global.h"
 
+using namespace ROOT::Math;
+
 /*! \mainpage Introduction
  * This documentation describes all classes and functions that are used within the CheckMATE
  * analysis framework and how to use them in order to implement a given analysis. It also includes

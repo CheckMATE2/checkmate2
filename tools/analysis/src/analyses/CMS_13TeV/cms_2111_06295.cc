@@ -25,9 +25,9 @@ void Cms_2111_06295::analyze() {
   
   countCutflowEvent("00_all");
   
-  electronsLoose = filterPhaseSpace(electronsLoose, 5., -2.5, 2.5);
-  electronsTight = filterPhaseSpace(electronsTight, 5., -2.5, 2.5);
-  muonsCombined = filterPhaseSpace(muonsCombined, 3.5, -2.4, 2.4);
+  electronsLoose = filterPhaseSpace(electronsLoose, 3., -2.5, 2.5);
+  electronsTight = filterPhaseSpace(electronsTight, 3., -2.5, 2.5);
+  muonsCombined = filterPhaseSpace(muonsCombined, 3., -2.4, 2.4);
   electronsLoose = filterIsolation(electronsLoose, 0);
   electronsTight = filterIsolation(electronsTight, 0);
   muonsCombined = filterIsolation(muonsCombined, 0);
@@ -93,7 +93,7 @@ void Cms_2111_06295::analyze() {
     }
   }
   
-  double mllOSmin = 999999.;
+ /* double mllOSmin = 999999.;
   double mllmin = 999999.;
   double mllmax = 0.;
   for ( int i = 0; i < leptons.size(); i++ ) {
@@ -108,68 +108,28 @@ void Cms_2111_06295::analyze() {
 
       }
     }
-  }
+  }*/
 
+  bool SR = false; bool CR = false;
   //eventually OS-check is actually later in the cutflow... need to adjust here.. or maybe not
   // the CMS cutflow is totally stupid
-  if (leptons.size() == 2 and mllmin < 1000.) {
+  if (leptonsLoose.size() == 2) {
     countCutflowEvent("02_tt_dilep"); //found OS pair
     // run stop selections
-    if (mllOSmin < 1000.) {
-      countCutflowEvent("02_2l_dilep");
-      countCutflowEvent("03_2l_subleppt"); //dodgy requirement
-      mll = (leptons[0]->P4() + leptons[1]->P4()).M();
-      if ( (mll > 3. and mll < 3.2) or (mll > 9. and mll < 10.5) ) return; //veto J/psi and Upsilon
-      countCutflowEvent("04_2l_Jpsi_veto");
-      countCutflowEvent("05_subpT"); //another meaningless requirement
-      if ( jets.size() < 1 ) return;  
-      countCutflowEvent("06_ISRjet");
-      // run 2l selections
-    }
+    countCutflowEvent("02_2l_dilep");
+    SR = SR_2l_low(leptonsLoose, leptonsTight, jetsSignal);
+    SR = SR_2l_med(leptonsLoose, leptonsTight, jetsSignal);
+    SR = SR_2l_high(leptonsLoose, leptonsTight, jetsSignal);
+    SR = SR_2l_ultra(leptonsLoose, leptonsTight, jetsSignal);
+
+    CR = CR_2l_DY_low(leptonsLoose, leptonsTight, jetsSignal);
   }
-  else if  (leptons.size() == 3 and mllOSmin < 1000.) {
+  else if  (leptonsLoose.size() == 3 ) {
     countCutflowEvent("02_3l_dilep");
     // run 3l selections
   }
   else return; // 3 SS leptons or something weird
 
-
-
-  //ht
-  double ht=0.;
-  for(int i=0; i<jets.size(); i++) {
-    ht += jets[i]->PT;
-  }  
- 
-  bool softmu = false; //soft muon requires higher met threshold
-  //for leptons with PT order
-  std::vector<FinalStateObject*> leptons;
-  for( int i=0; i < electrons_g.size(); i++) {
-    FinalStateObject* lep = new FinalStateObject( electrons_g[i] );
-    leptons.push_back(lep);
-  }
-  for( int i=0; i < muons_g.size(); i++) {
-    if (muons_g[i]->PT < 5.) softmu = true; 
-    FinalStateObject* lep = new FinalStateObject( muons_g[i] );
-    leptons.push_back(lep);
-  }
-  std::sort( leptons.begin(), leptons.end(), FinalStateObject::sortByPT );
-
-  //for two leptons at the trigger level
-  if(leptons.size() != 2) return;
-
-  //for two opposite-sign leptons 
-  if(leptons[0]->Charge * leptons[1]->Charge > 0 ) return;
-  
-  bool SF = false;
-  if(leptons[0]->Type == leptons[1]->Type ) SF = true;
-
-  countCutflowEvent("cut_02_dilep"); //lep pt was ok from start 
-  countCutflowEvent("cut_03_sublepPt"); 
-  
-  PxPyPzEVector dilepton = leptons[0]->P4() + leptons[0]->P4();
-  double mll = dilepton.M();
-  double pll = dilpeton.Pt();
  
 }
 
@@ -181,50 +141,337 @@ void Cms_2111_06295::finalize() {
 bool Cms_2111_06295::SR_2l_low(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
 
     countCutflowEvent("02_2llow_dilep");
-    countCutflowEvent("03_2llow_subleppt"); //dodgy requirement
+    if ( (leptons[1]->Type == "muon" and leptons[1]->PT < 3.5) or (leptons[1]->Type == "electron" and leptons[1]->PT < 5.) ) return false;
+    countCutflowEvent("03_2llow_subleppt"); 
+    
     double mll = (leptons[0]->P4() + leptons[1]->P4()).M();
     if ( mll < 4. or mll > 50. ) return false;
     countCutflowEvent("04_2llow_mll");
+    
     if ( (mll > 9. and mll < 10.5) ) return false; //veto J/psi and Upsilon
     countCutflowEvent("05_2llow_Ups_veto");
+    
     double pll = (leptons[0]->P4() + leptons[1]->P4()).Pt();
-    if ( pll < 3. ) return false;
+    if (  leptons[0]->Type == "muon" and leptons[1]->Type == "muon" and pll < 3. ) return false;
     countCutflowEvent("06_2llow_dilepPt"); //unclear if it's just for muons or any leptons
+    
     if ( jetsSignal.size() < 1 ) return false;  
     countCutflowEvent("07_2llow_ISRjet");
+    
     double ht=0.;
-    double met = missingET->ET;
+    double met = missingET->PT;
     for(int i=0; i<jetsSignal.size(); i++) ht += jetsSignal[i]->PT;
     if ( met/ht < 0.66666 or met/ht > 1.6 ) return false;
     countCutflowEvent("08_2llow_METoverHT");
+    
     if ( ht < 100. ) return false;
+    
     countCutflowEvent("09_2llow_minHT");
+    
     if ( met > 200. or met < 125. ) return false;
     countCutflowEvent("10_2llow_MET");
-    double ptrig = 0.4 + 0.5/75.*(met-125.); // some approx of fig.5 in 1903.06078; trigger efficiency for met
-    if (rand()/double(RAND_MAX) > ptrig) return false;
+    //double ptrig = 0.4 + 0.5/75.*(met-125.); // some approx of fig.5 in 1903.06078; trigger efficiency for met
+    //eventually it seems only muon trigger is used
+    //if (rand()/double(RAND_MAX) > ptrig) return false;
+    
+    if (leptons[0]->Type != "muon" or leptons[1]->Type != "muon") return false; 
     countCutflowEvent("11_2llow_METtrigger");
+    
     if ( leptons[0]->Charge * leptons[1]->Charge > 0 ) return false;
     countCutflowEvent("12_2llow_OS");
+    
     if (leptons[0]->PT < 5. or leptons[0]->PT > 30.) return false;
     countCutflowEvent("13_2llow_leadlepPT");
-    if (leptons[0].size() != leptonsTight.size() ) return false; //veto events with additional leptons with pt>30
+    
+    if (leptons.size() != leptonsTight.size() ) return false; //veto events with additional leptons with pt>30
     countCutflowEvent("14_2llow_twoTight");
+    
     for(int i=0; i<jetsSignal.size(); i++) if ( checkBTag(jetsSignal[i]) ) return false;
     countCutflowEvent("15_2llow_bveto");
-    double mtautau = mtautau(leptons);
-    if (mtautau > 0. and mtautau <  160.) return false;
+    
+    double mtata = mtautau(leptons);
+    if (mtata > 0. and mtata <  160.) return false;
     countCutflowEvent("16_2llow_mtautau");
+    
+    double mtl1 = mT(leptons[0]->P4(), missingET->P4());
+    double mtl2 = mT(leptons[1]->P4(), missingET->P4());
+    if (mtl1 > 70. or mtl2 > 70.) return false;
+    countCutflowEvent("17_2llow_mT");
+    
+    countCutflowEvent("18_2llow_SF");
+    countCutflowEvent("19_2llow_mm");
+    
+    if (leptons[1]->PT < 5.) return false;
+    countCutflowEvent("20_2llow_pt5sublep");
 
+    if (mll > 4. and mll <  10.) countSignalEvent("2l_low_04");
+    if (mll > 10. and mll <  20.) countSignalEvent("2l_low_10");
+    if (mll > 20. and mll <  30.) countSignalEvent("2l_low_20");
+    if (mll > 30. and mll <  50.) countSignalEvent("2l_low_30");
+    return true;
 
+}
 
+bool Cms_2111_06295::SR_2l_med(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
+
+    countCutflowEvent("02_2lmed_dilep");
+    
+    if ( (leptons[1]->Type == "muon" and leptons[1]->PT < 3.5) or (leptons[1]->Type == "electron" and leptons[1]->PT < 5.) ) return false;
+    countCutflowEvent("03_2lmed_subleppt"); 
+    
+    double mll = (leptons[0]->P4() + leptons[1]->P4()).M();
+    if ( (mll > 9. and mll < 10.5) ) return false; //veto J/psi and Upsilon
+    countCutflowEvent("04_2lmed_Ups_veto");
+
+    double pll = (leptons[0]->P4() + leptons[1]->P4()).Pt();
+    if ( leptons[0]->Type == "muon" and leptons[1]->Type == "muon" and pll < 3. ) return false;
+    countCutflowEvent("05_2lmed_dilepPt"); //unclear if it's just for muons or any leptons
+    
+    if ( jetsSignal.size() < 1 ) return false;  
+    countCutflowEvent("06_2lmed_ISRjet");
+
+    double ht=0.;
+    double met = missingET->PT;
+    for(int i=0; i<jetsSignal.size(); i++) ht += jetsSignal[i]->PT;
+    if ( met/ht < 0.66666 or met/ht > 1.6 ) return false;
+    countCutflowEvent("07_2lmed_METoverHT");
+
+    if ( ht < 100. ) return false;
+    countCutflowEvent("08_2lmed_minHT");
+
+    if ( met < 200. or met > 240. ) return false;
+    countCutflowEvent("09_2lmed_MET");
+    
+    if (rand()/double(RAND_MAX) > 0.95) return false; //efficency correction
+    countCutflowEvent("10_2lmed_METtrigger");
+    
+    if ( leptons[0]->Charge * leptons[1]->Charge > 0 ) return false;
+    countCutflowEvent("11_2lmed_OS");
+    
+    if (leptons.size() != leptonsTight.size() ) return false; //veto events with additional leptons with pt>30
+    countCutflowEvent("12_2lmed_twoTight");
+
+    for(int i=0; i<jetsSignal.size(); i++) if ( checkBTag(jetsSignal[i]) ) return false;
+    countCutflowEvent("13_2lmed_bveto");
+
+    double mtata = mtautau(leptons);
+    if (mtata > 0. and mtata <  160.) return false;
+    countCutflowEvent("14_2lmed_mtautau");
+
+    double mtl1 = mT(leptons[0]->P4(), missingET->P4());
+    double mtl2 = mT(leptons[1]->P4(), missingET->P4());
+    if (mtl1 > 70. or mtl2 > 70.) return false;
+    countCutflowEvent("15_2lmed_mT");
+
+    if (leptons[0]->Type != leptons[1]->Type) return false;
+    countCutflowEvent("16_2lmed_SF");
+
+    if ( mll < 1. or mll > 50. ) return false;
+    countCutflowEvent("17_2lmed_mll");
+    
+    if ( (mll > 3. and mll < 3.2) ) return false; //veto J/psi
+    countCutflowEvent("18_2lmed_Jpsi_veto");
+    
+    if ((leptons[0]->Type == "electron" and leptons[0]->PT < 5.) or (leptons[0]->Type == "muon" and leptons[0]->PT < 3.5) or leptons[0]->PT > 30.) return false;
+    countCutflowEvent("19_2lmed_leadlepPT");
+    
+    if( leptons[0]->P4().DeltaR(leptons[1]->P4()) < 0.3 ) return false;
+    countCutflowEvent("20_2lmed_mindR");
+
+    if (mll > 1. and mll <  4.) countSignalEvent("2l_med_01");
+    if (mll > 4. and mll <  10.) countSignalEvent("2l_med_04");
+    if (mll > 10. and mll <  20.) countSignalEvent("2l_med_10");
+    if (mll > 20. and mll <  30.) countSignalEvent("2l_med_20");
+    if (mll > 30. and mll <  50.) countSignalEvent("2l_med_30");
+    return true;
+
+}
+
+bool Cms_2111_06295::SR_2l_high(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
+
+    countCutflowEvent("02_2lhigh_dilep");
+    
+    if ( (leptons[1]->Type == "muon" and leptons[1]->PT < 3.5) or (leptons[1]->Type == "electron" and leptons[1]->PT < 5.) ) return false;
+    countCutflowEvent("03_2lhigh_subleppt"); 
+    
+    double mll = (leptons[0]->P4() + leptons[1]->P4()).M();
+    if ( (mll > 9. and mll < 10.5) ) return false; //veto J/psi and Upsilon
+    countCutflowEvent("04_2lhigh_Ups_veto");
+
+    double pll = (leptons[0]->P4() + leptons[1]->P4()).Pt();
+    if ( leptons[0]->Type == "muon" and leptons[1]->Type == "muon" and pll < 3. ) return false;
+    countCutflowEvent("05_2lhigh_dilepPt"); //unclear if it's just for muons or any leptons
+    
+    if ( jetsSignal.size() < 1 ) return false;  
+    countCutflowEvent("06_2lhigh_ISRjet");
+
+    double ht=0.;
+    double met = missingET->PT;
+    for(int i=0; i<jetsSignal.size(); i++) ht += jetsSignal[i]->PT;
+    if ( met/ht < 0.66666 or met/ht > 1.6 ) return false;
+    countCutflowEvent("07_2lhigh_METoverHT");
+
+    if ( ht < 100. ) return false;
+    countCutflowEvent("08_2lhigh_minHT");
+
+    if ( met < 240. or met > 290. ) return false;
+    countCutflowEvent("09_2lhigh_MET");
+    
+    if (rand()/double(RAND_MAX) > 1.) return false; //efficency correction
+    countCutflowEvent("10_2lhigh_METtrigger");
+    
+    if ( leptons[0]->Charge * leptons[1]->Charge > 0 ) return false;
+    countCutflowEvent("11_2lhigh_OS");
+    
+    if (leptons.size() != leptonsTight.size() ) return false; //veto events with additional leptons with pt>30
+    countCutflowEvent("12_2lhigh_twoTight");
+
+    for(int i=0; i<jetsSignal.size(); i++) if ( checkBTag(jetsSignal[i]) ) return false;
+    countCutflowEvent("13_2lhigh_bveto");
+
+    double mtata = mtautau(leptons);
+    if (mtata > 0. and mtata <  160.) return false;
+    countCutflowEvent("14_2lhigh_mtautau");
+
+    double mtl1 = mT(leptons[0]->P4(), missingET->P4());
+    double mtl2 = mT(leptons[1]->P4(), missingET->P4());
+    if (mtl1 > 70. or mtl2 > 70.) return false;
+    countCutflowEvent("15_2lhigh_mT");
+
+    if (leptons[0]->Type != leptons[1]->Type) return false;
+    countCutflowEvent("16_2lhigh_SF");
+
+    if ( mll < 1. or mll > 50. ) return false;
+    countCutflowEvent("17_2lhigh_mll");
+    
+    if ( (mll > 3. and mll < 3.2) ) return false; //veto J/psi
+    countCutflowEvent("18_2lhigh_Jpsi_veto");
+    
+    if ((leptons[0]->Type == "electron" and leptons[0]->PT < 5.) or (leptons[0]->Type == "muon" and leptons[0]->PT < 3.5) or leptons[0]->PT > 30.) return false;
+    countCutflowEvent("19_2lhigh_leadlepPT");
+    
+    if( leptons[0]->P4().DeltaR(leptons[1]->P4()) < 0.3 ) return false;
+    countCutflowEvent("20_2lhigh_mindR");
+
+    if (mll > 1. and mll <  4.) countSignalEvent("2l_high_01");
+    if (mll > 4. and mll <  10.) countSignalEvent("2l_high_04");
+    if (mll > 10. and mll <  20.) countSignalEvent("2l_high_10");
+    if (mll > 20. and mll <  30.) countSignalEvent("2l_high_20");
+    if (mll > 30. and mll <  50.) countSignalEvent("2l_high_30");
+    return true;
+
+}
+
+bool Cms_2111_06295::SR_2l_ultra(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
+
+    countCutflowEvent("02_2lultra_dilep");
+    
+    if ( (leptons[1]->Type == "muon" and leptons[1]->PT < 3.5) or (leptons[1]->Type == "electron" and leptons[1]->PT < 5.) ) return false;
+    countCutflowEvent("03_2lultra_subleppt"); 
+    
+    double mll = (leptons[0]->P4() + leptons[1]->P4()).M();
+    if ( (mll > 9. and mll < 10.5) ) return false; //veto J/psi and Upsilon
+    countCutflowEvent("04_2lultra_Ups_veto");
+
+    double pll = (leptons[0]->P4() + leptons[1]->P4()).Pt();
+    if ( leptons[0]->Type == "muon" and leptons[1]->Type == "muon" and pll < 3. ) return false;
+    countCutflowEvent("05_2lultra_dilepPt"); //unclear if it's just for muons or any leptons
+    
+    if ( jetsSignal.size() < 1 ) return false;  
+    countCutflowEvent("06_2lultra_ISRjet");
+
+    double ht=0.;
+    double met = missingET->PT;
+    for(int i=0; i<jetsSignal.size(); i++) ht += jetsSignal[i]->PT;
+    if ( met/ht < 0.66666 or met/ht > 1.6 ) return false;
+    countCutflowEvent("07_2lultra_METoverHT");
+
+    if ( ht < 100. ) return false;
+    countCutflowEvent("08_2lultra_minHT");
+
+    if ( met < 290. ) return false;
+    countCutflowEvent("09_2lultra_MET");
+    
+    if (rand()/double(RAND_MAX) > 1.) return false; //efficency correction
+    countCutflowEvent("10_2lultra_METtrigger");
+    
+    if ( leptons[0]->Charge * leptons[1]->Charge > 0 ) return false;
+    countCutflowEvent("11_2lultra_OS");
+    
+    if (leptons.size() != leptonsTight.size() ) return false; //veto events with additional leptons with pt>30
+    countCutflowEvent("12_2lultra_twoTight");
+
+    for(int i=0; i<jetsSignal.size(); i++) if ( checkBTag(jetsSignal[i]) ) return false;
+    countCutflowEvent("13_2lultra_bveto");
+
+    double mtata = mtautau(leptons);
+    if (mtata > 0. and mtata <  160.) return false;
+    countCutflowEvent("14_2lultra_mtautau");
+
+    double mtl1 = mT(leptons[0]->P4(), missingET->P4());
+    double mtl2 = mT(leptons[1]->P4(), missingET->P4());
+    if (mtl1 > 70. or mtl2 > 70.) return false;
+    countCutflowEvent("15_2lultra_mT");
+
+    if (leptons[0]->Type != leptons[1]->Type) return false;
+    countCutflowEvent("16_2lultra_SF");
+
+    if ( mll < 1. or mll > 50. ) return false;
+    countCutflowEvent("17_2lultra_mll");
+    
+    if ( (mll > 3. and mll < 3.2) ) return false; //veto J/psi
+    countCutflowEvent("18_2lultra_Jpsi_veto");
+    
+    if ((leptons[0]->Type == "electron" and leptons[0]->PT < 5.) or (leptons[0]->Type == "muon" and leptons[0]->PT < 3.5) or leptons[0]->PT > 30.) return false;
+    countCutflowEvent("19_2lultra_leadlepPT");
+    
+    if( leptons[0]->P4().DeltaR(leptons[1]->P4()) < 0.3 ) return false;
+    countCutflowEvent("20_2lultra_mindR");
+
+    if (mll > 1. and mll <  4.) countSignalEvent("2l_ultra_01");
+    if (mll > 4. and mll <  10.) countSignalEvent("2l_ultra_04");
+    if (mll > 10. and mll <  20.) countSignalEvent("2l_ultra_10");
+    if (mll > 20. and mll <  30.) countSignalEvent("2l_ultra_20");
+    if (mll > 30. and mll <  50.) countSignalEvent("2l_ultra_30");
+    return true;
+
+}
+
+bool Cms_2111_06295::CR_2l_DY_low(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
+    
+    if ( (leptons[1]->Type == "muon" and leptons[1]->PT < 3.5) or (leptons[1]->Type == "electron" and leptons[1]->PT < 5.) ) return false;
+    double mll = (leptons[0]->P4() + leptons[1]->P4()).M();
+    if ( mll < 4. or mll > 50. ) return false;
+    if ( (mll > 9. and mll < 10.5) ) return false; //veto J/psi and Upsilon
+    double pll = (leptons[0]->P4() + leptons[1]->P4()).Pt();
+    if (  leptons[0]->Type == "muon" and leptons[1]->Type == "muon" and pll < 3. ) return false;
+    if ( jetsSignal.size() < 1 ) return false;  
+    double ht=0.;
+    double met = missingET->PT;
+    for(int i=0; i<jetsSignal.size(); i++) ht += jetsSignal[i]->PT;
+    if ( met/ht < 0.66666 or met/ht > 1.6 ) return false;
+    if ( ht < 100. ) return false;
+    if ( met > 200. or met < 125. ) return false;
+    if (leptons[0]->Type != "muon" or leptons[1]->Type != "muon") return false; 
+    if ( leptons[0]->Charge * leptons[1]->Charge > 0 ) return false;
+    if (leptons[0]->PT < 5.) return false;
+    if (leptons.size() != leptonsTight.size() ) return false; //veto events with additional leptons with pt>30
+    for(int i=0; i<jetsSignal.size(); i++) if ( checkBTag(jetsSignal[i]) ) return false;
+    double mtata = mtautau(leptons);
+    if (mtata < 0. or mtata >  160.) return false;
+    double mtl1 = mT(leptons[0]->P4(), missingET->P4());
+    double mtl2 = mT(leptons[1]->P4(), missingET->P4());
+    if (mtl1 > 70. or mtl2 > 70.) return false;
+    if (leptons[1]->PT < 5.) return false;
+    
+    return true;
 }
 
 double Cms_2111_06295::mtautau(std::vector<FinalStateObject*> leptons) {
   
-  XYZVector p1 = XYZVector(leptons[0]->PX(), leptons[0]->PY(), 0.);
-  XYZVector p2 = XYZVector(leptons[1]->PX(), leptons[1]->PY(), 0.);
-  XYZVector pmiss = XYZVector(missingET->Px(), missingET->Py(), 0.);
+  TVector3 p1(leptons[0]->P4().Px(), leptons[0]->P4().Py(), 0.);
+  TVector3 p2(leptons[1]->P4().Px(), leptons[1]->P4().Py(), 0.);
+  TVector3 pmiss(missingET->P4().Px(), missingET->P4().Py(), 0.);
 
   double a11 =  p1.Dot(p1);
   double a12 =  p1.Dot(p2);
