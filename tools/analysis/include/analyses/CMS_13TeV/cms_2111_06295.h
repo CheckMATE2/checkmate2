@@ -19,6 +19,8 @@ class Cms_2111_06295 : public AnalysisBase {
     bool SR_2l_med(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal);
     bool SR_2l_high(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal);
     bool SR_2l_ultra(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal);
+    bool SR_3l_low(std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal);
+    bool SR_3l_med(std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal);
 
     bool CR_2l_DY_low(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal);
     
