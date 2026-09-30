@@ -414,7 +414,7 @@ class CheckMATE2(object):
                         best_analysis = analysis
                         best_sr = mbsr
                             
-        if best_param < 50. and cls_limit == False:
+        if best_param < 5000. and cls_limit == False:
             AdvPrint.set_cout_file(Info.files["output_result"], False)
             AdvPrint.cout("\nTest: Calculation of upper limit from multibin signal regions")                 
             if best_param < 1.:
@@ -439,7 +439,7 @@ class CheckMATE2(object):
             AdvPrint.cout("MBSR: "+best_sr)
             AdvPrint.set_cout_file("#None")
         else:
-            AdvPrint.cout("Results of approximate/fast likelihood to weak to exclude model or no multibin analysis available")       
+            AdvPrint.cout("Results of approximate/fast likelihood too weak to exclude model or no multibin analysis available")
             
         if combine and combination_list:
             spey_wrapper.combination_stat(combination_models, combination_list)
