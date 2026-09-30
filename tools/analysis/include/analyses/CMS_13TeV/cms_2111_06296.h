@@ -1,13 +1,13 @@
-#ifndef CMS_2111_06295_H_
-#define CMS_2111_06295_H_
+#ifndef CMS_2111_06296_H_
+#define CMS_2111_06296_H_
 // AUTHOR: kr
 //  EMAIL: krolb@fuw.edu.pl
 #include "AnalysisBase.h"
 
-class Cms_2111_06295 : public AnalysisBase {
+class Cms_2111_06296 : public AnalysisBase {
   public:
-    Cms_2111_06295() : AnalysisBase()  {}               
-    ~Cms_2111_06295() {}
+    Cms_2111_06296() : AnalysisBase()  {}               
+    ~Cms_2111_06296() {}
   
     void initialize();
     void analyze();        

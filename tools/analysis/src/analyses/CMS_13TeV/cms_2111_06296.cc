@@ -1,8 +1,8 @@
-#include "cms_2111_06295.h"
+#include "cms_2111_06296.h"
 // AUTHOR: kr
 //  EMAIL: krolb@fuw.edu.pl
-void Cms_2111_06295::initialize() {
-  setAnalysisName("cms_2111_06295");          
+void Cms_2111_06296::initialize() {
+  setAnalysisName("cms_2111_06296");          
   setInformation(""
     "\n"
   "");
@@ -14,7 +14,7 @@ void Cms_2111_06295::initialize() {
   // You should initialize any declared variables here
 }
 
-void Cms_2111_06295::analyze() {
+void Cms_2111_06296::analyze() {
   missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out. Probably not since 3.4.2
   
   std::string year = "1900";
@@ -141,11 +141,11 @@ void Cms_2111_06295::analyze() {
  
 }
 
-void Cms_2111_06295::finalize() {
+void Cms_2111_06296::finalize() {
   // Whatever should be done after the run goes here
 }       
 
-bool Cms_2111_06295::SR_3l_low(std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
+bool Cms_2111_06296::SR_3l_low(std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
 
   double mllOSSFmin = 999999.;
   double mllSFASmax = 0.;
@@ -182,7 +182,7 @@ bool Cms_2111_06295::SR_3l_low(std::vector<FinalStateObject*> leptonsTight, std:
 
 }
 
-bool Cms_2111_06295::SR_3l_med(std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
+bool Cms_2111_06296::SR_3l_med(std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
 
   double mllOSSFmin = 999999.;
   double mllSFASmax = 0.;
@@ -226,7 +226,7 @@ bool Cms_2111_06295::SR_3l_med(std::vector<FinalStateObject*> leptonsTight, std:
 }
 
 
-bool Cms_2111_06295::SR_2l_low(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
+bool Cms_2111_06296::SR_2l_low(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
 
     countCutflowEvent("2llow_02_dilep");
     if ( (leptons[1]->Type == "muon" and leptons[1]->PT < 3.5) or (leptons[1]->Type == "electron" and leptons[1]->PT < 5.) ) return false;
@@ -300,7 +300,7 @@ bool Cms_2111_06295::SR_2l_low(std::vector<FinalStateObject*> leptons, std::vect
 
 }
 
-bool Cms_2111_06295::SR_2l_med(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
+bool Cms_2111_06296::SR_2l_med(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
 
     countCutflowEvent("2lmed_02_dilep");
     
@@ -375,7 +375,7 @@ bool Cms_2111_06295::SR_2l_med(std::vector<FinalStateObject*> leptons, std::vect
 
 }
 
-bool Cms_2111_06295::SR_2l_high(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
+bool Cms_2111_06296::SR_2l_high(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
 
     countCutflowEvent("2lhigh_02_dilep");
     
@@ -450,7 +450,7 @@ bool Cms_2111_06295::SR_2l_high(std::vector<FinalStateObject*> leptons, std::vec
 
 }
 
-bool Cms_2111_06295::SR_2l_ultra(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
+bool Cms_2111_06296::SR_2l_ultra(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
 
     countCutflowEvent("2lultra_02_dilep");
     
@@ -525,7 +525,7 @@ bool Cms_2111_06295::SR_2l_ultra(std::vector<FinalStateObject*> leptons, std::ve
 
 }
 
-bool Cms_2111_06295::CR_2l_DY_low(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
+bool Cms_2111_06296::CR_2l_DY_low(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
     
     if ( (leptons[1]->Type == "muon" and leptons[1]->PT < 3.5) or (leptons[1]->Type == "electron" and leptons[1]->PT < 5.) ) return false;
     double mll = (leptons[0]->P4() + leptons[1]->P4()).M();
@@ -555,7 +555,7 @@ bool Cms_2111_06295::CR_2l_DY_low(std::vector<FinalStateObject*> leptons, std::v
     return true;
 }
 
-double Cms_2111_06295::mtautau(std::vector<FinalStateObject*> leptons) {
+double Cms_2111_06296::mtautau(std::vector<FinalStateObject*> leptons) {
   
   TVector3 p1(leptons[0]->P4().Px(), leptons[0]->P4().Py(), 0.);
   TVector3 p2(leptons[1]->P4().Px(), leptons[1]->P4().Py(), 0.);
