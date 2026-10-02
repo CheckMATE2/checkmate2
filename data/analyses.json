@@ -1,125 +1,382 @@
 {
-        "1442359": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_1604_01306"
-        ],
-        "1466302": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_1605_09318"
-        ],
-        "1591328": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_1704_03848"
-        ],
-        "1410175": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_conf_2015_082"
-        ],
-        "1434358": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_conf_2016_013"
-        ],
-        "1480030": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_conf_2016_050"
-        ],
-        "1480056": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_conf_2016_076"
-        ],
-        "1609537": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_conf_2017_060"
-        ],
-        "1480046": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_conf_2016_066"
-        ],
-        "1641270": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_1712_02332"
-        ],
-        "1654357": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_1802_03158"
-        ],
-        "1620202": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_1708_07875"
-        ],
-        "1604276": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_1706_03731"
-        ],
-        "1750597": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_1908_08215"
-        ],
-        "1754675": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_1909_08457"
-        ],
-        "1839446": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_2101_01629"
-        ],
-        "1847779": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_2102_10874"
-        ],
-        "1793461": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_2004_14060"
-        ],
-        "1748602": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_1908_03122"
-        ],
-        "1767649": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_1911_12606"
-        ],
-        "1869040": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_2106_09609"
-        ],
-        "1765529": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_1911_06660"
-        ],
-        "1827025": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_2010_14293"
-        ],
-        "2182381": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_2211_08028"
-        ],
-        "1866951": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_2106_01676"
-        ],
-        "1800411": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_2006_05880"
-        ],
-        "1969392": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_2111_08372"
-        ],
-        "2033393": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_2202_07953"
-        ],
-        "1518829": [
-                "https://checkmate.hepforge.org/AnalysesList/CMS_13TeV.html#cms_sus_16_039"
-        ],
-        "1479793": [
-                "https://checkmate.hepforge.org/AnalysesList/CMS_13TeV.html#cms_sus_16_025"
-        ],
-        "1518834": [
-                "https://checkmate.hepforge.org/AnalysesList/CMS_13TeV.html#cms_sus_16_048"
-        ],
-        "1753215": [
-                "https://checkmate.hepforge.org/AnalysesList/CMS_13TeV.html#cms_sus_19_005"
-        ],
-        "1749379": [
-                "https://checkmate.hepforge.org/AnalysesList/CMS_13TeV.html#cms_1908_04722"
-        ],
-        "1894408": [
-                "https://checkmate.hepforge.org/AnalysesList/CMS_13TeV.html#cms_2107_13201"
-        ],
-        "2085373": [
-                "https://checkmate.hepforge.org/AnalysesList/CMS_13TeV.html#cms_2205_09597"
-        ],
-        "1479633": [
-                "https://checkmate.hepforge.org/AnalysesList/CMS_13TeV.html#cms_pas_exo_16_022"
-        ],
-        "1630632": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_1710_04901"
-        ],
-        "1788448": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_2003_11956"
-        ], 
-        "1718558": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_1902_01636"
-        ],  
-        "1641262": [
-                "https://checkmate.hepforge.org/AnalysesList/ATLAS_13TeV.html#atlas_1712_02118"
-        ],
-        "2845789": [
-                "https://arxiv.org/abs/2606.01966"
-        ]
+  "schema_version": "1.0.0",
+  "tool": "CheckMATE",
+  "version": "2.5.4",
+  "date_created": "2026-10-02T16:19:00+00:00",
+  "implementations_description": "CheckMATE analysis",
+  "url_templates": {
+    "main_url": "https://github.com/CheckMATE2/checkmate2/tree/master/tools/analysis/src/analyses/{path}/{name}.cc",
+    "val_url": "https://checkmate.hepforge.org/AnalysesList/{path}.html#{name}"
+  },
+    "analyses": [
+        {
+          "inspire_id": 1442359,
+          "implementations": [
+                {
+                  "name": "atlas_1604_01306",
+                  "path": "ATLAS_13TeV"
+                }
+         ]
+        },
+        {
+          "inspire_id": 1466302,
+          "implementations": [
+                {
+                  "name": "atlas_1605_09318",
+                  "path": "ATLAS_13TeV"
+                }
+         ]
+        },
+        {
+          "inspire_id": 1591328,
+          "implementations": [
+                {
+                  "name": "atlas_1704_03848",
+                  "path": "ATLAS_13TeV"
+                }
+         ]
+        },
+        {
+          "inspire_id": 1410175,
+          "implementations": [
+                {
+                  "name": "atlas_conf_2015_082",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1434358,
+          "implementations": [
+                {
+                  "name": "atlas_conf_2016_013",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1480030,
+          "implementations": [
+                {
+                  "name": "atlas_conf_2016_050",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1480056,
+          "implementations": [
+                {
+                  "name": "atlas_conf_2016_076",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1609537,
+          "implementations": [
+                {
+                  "name": "atlas_conf_2017_060",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1480046,
+          "implementations": [
+                {
+                  "name": "atlas_conf_2016_066",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1641270,
+          "implementations": [
+                {
+                  "name": "atlas_1712_02332",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1654357,
+          "implementations": [
+                {
+                  "name": "atlas_1802_03158",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1620202,
+          "implementations": [
+                {
+                  "name": "atlas_1708_07875",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1604276,
+          "implementations": [
+                {
+                  "name": "atlas_1706_03731",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1750597,
+          "implementations": [
+                {
+                  "name": "atlas_1908_08215",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1754675,
+          "implementations": [
+                {
+                  "name": "atlas_1909_08457",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1839446,
+          "implementations": [
+                {
+                  "name": "atlas_2101_01629",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1847779,
+          "implementations": [
+                {
+                  "name": "atlas_2102_10874",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1793461,
+          "implementations": [
+                {
+                  "name": "atlas_2004_14060",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1748602,
+          "implementations": [
+                {
+                  "name": "atlas_1908_03122",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1767649,
+          "implementations": [
+                {
+                  "name": "atlas_1911_12606",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1869040,
+          "implementations": [
+                {
+                  "name": "atlas_2106_09609",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1765529,
+          "implementations": [
+                {
+                  "name": "atlas_1911_06660",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1827025,
+          "implementations": [
+                {
+                  "name": "atlas_2010_14293",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 2182381,
+          "implementations": [
+                {
+                  "name": "atlas_2211_08028",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1866951,
+          "implementations": [
+                {
+                  "name": "atlas_2106_01676",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1800411,
+          "implementations": [
+                {
+                  "name": "atlas_2006_05880",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1969392,
+          "implementations": [
+                {
+                  "name": "atlas_2111_08372",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 2033393,
+          "implementations": [
+                {
+                  "name": "atlas_2202_07953",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1518829,
+          "implementations": [
+                {
+                  "name": "cms_sus_16_039",
+                  "path": "CMS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1479793,
+          "implementations": [
+                {
+                  "name": "cms_sus_16_025",
+                  "path": "CMS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1518834,
+          "implementations": [
+                {
+                  "name": "cms_sus_16_048",
+                  "path": "CMS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1753215,
+          "implementations": [
+                {
+                  "name": "cms_sus_19_005",
+                  "path": "CMS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1749379,
+          "implementations": [
+                {
+                  "name": "cms_1908_04722",
+                  "path": "CMS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1894408,
+          "implementations": [
+                {
+                  "name": "cms_2107_13201",
+                  "path": "CMS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 2085373,
+          "implementations": [
+                {
+                  "name": "cms_2205_09597",
+                  "path": "CMS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1479633,
+          "implementations": [
+                {
+                  "name": "cms_pas_exo_16_022",
+                  "path": "CMS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1630632,
+          "implementations": [
+                {
+                  "name": "atlas_1710_04901",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1788448,
+          "implementations": [
+                {
+                  "name": "atlas_2003_11956",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1718558,
+          "implementations": [
+                {
+                  "name": "atlas_1902_01636",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 1641262,
+          "implementations": [
+                {
+                  "name": "atlas_1712_02118",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        },
+        {
+          "inspire_id": 2845789,
+          "implementations": [
+                {
+                  "name": "atlas_2411_02040",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
+        }
+  ]
 }
