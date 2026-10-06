@@ -71,16 +71,16 @@ void Cms_2111_06296::analyze() {
   std::vector<FinalStateObject*> leptonsTight;
   for ( int i = 0; i <  electronsTight.size(); i++ ) { //we later check that Tight survives
     double eff = rand()/double(RAND_MAX);
-    //if (electronsTight[i]->PT < 10. and eff > 0.75) continue;
+    if (electronsTight[i]->PT < 10. and eff > 0.6) continue;
     FinalStateObject* lep = newFinalStateObject(electronsTight[i]);
     leptonsTight.push_back(lep);
     //cout << "e " ;
   }
   for ( int i = 0; i < muonsSignal.size(); i++ ) {
     double eff = rand()/double(RAND_MAX);
-    if (muonsSignal[i]->PT < 10. and eff > 0.75) continue;
-    else if (muonsSignal[i]->PT < 20. and eff > 0.80) continue; 
-    else if (eff > 0.85) continue; //efficiency correction for muon trigger
+    if (muonsSignal[i]->PT < 10. and eff > 0.70) continue;
+    else if (muonsSignal[i]->PT < 20. and eff > 0.75) continue;
+    else if (eff > 0.80) continue; //efficiency correction for muon trigger
     FinalStateObject* lep = newFinalStateObject(muonsSignal[i]);
     leptonsTight.push_back(lep);
     //cout << "mu " ;
@@ -123,17 +123,22 @@ void Cms_2111_06296::analyze() {
     countCutflowEvent("02_tt_dilep"); //found OS pair
     // run stop selections
     countCutflowEvent("02_2l_dilep");
-    SR = SR_2l_low(leptonsLoose, leptonsTight, jetsSignal);
-    SR = SR_2l_med(leptonsLoose, leptonsTight, jetsSignal);
-    SR = SR_2l_high(leptonsLoose, leptonsTight, jetsSignal);
-    SR = SR_2l_ultra(leptonsLoose, leptonsTight, jetsSignal);
+    SR = SR_2l_low(leptonsLoose, leptonsTight, jetsSignal, year);
+    SR = SR_2l_med(leptonsLoose, leptonsTight, jetsSignal, year);
+    SR = SR_2l_high(leptonsLoose, leptonsTight, jetsSignal, year);
+    SR = SR_2l_ultra(leptonsLoose, leptonsTight, jetsSignal, year);
+    SR = SR_2l_tt_med(leptonsLoose, leptonsTight, jetsSignal, year);
 
-    CR = CR_2l_DY_low(leptonsLoose, leptonsTight, jetsSignal);
+    CR = CR_2l_DY_low(leptonsLoose, leptonsTight, jetsSignal, year);
+    CR = CR_2l_DY_med(leptonsLoose, leptonsTight, jetsSignal, year);
+    CR = CR_2l_SS(leptonsLoose, leptonsTight, jetsSignal, year);
   }
   else if  (leptonsTight.size() == 3 ) {
     countCutflowEvent("02_3l_dilep");
-    SR = SR_3l_low(leptonsTight, jetsSignal);
-    SR = SR_3l_med(leptonsTight, jetsSignal);
+    SR = SR_3l_low(leptonsTight, jetsSignal, year);
+    SR = SR_3l_med(leptonsTight, jetsSignal, year);
+    SR = SRCR_WZ_low(leptonsTight, jetsSignal, year);
+    SR = SRCR_WZ_med(leptonsTight, jetsSignal, year);
     // run 3l selections
   }
   else return; // 3 SS leptons or something weird
@@ -145,7 +150,7 @@ void Cms_2111_06296::finalize() {
   // Whatever should be done after the run goes here
 }       
 
-bool Cms_2111_06296::SR_3l_low(std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
+bool Cms_2111_06296::SR_3l_low(std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal, std::string year) {
 
   double mllOSSFmin = 999999.;
   double mllSFASmax = 0.;
@@ -169,20 +174,35 @@ bool Cms_2111_06296::SR_3l_low(std::vector<FinalStateObject*> leptonsTight, std:
   for(int i=0; i<jetsSignal.size(); i++) ht += jetsSignal[i]->PT;
   for(int i=0; i<jetsSignal.size(); i++) if ( checkBTag(jetsSignal[i]) ) return false;
 
+  if (rand()/double(RAND_MAX) > 0.7) return false; //educated guess for dimu trigger efficiency
+
   double met = missingET->PT;
   double mll = mllOSSFmin;
   if ( mllOSSFmin < 4. or mllOSSFmin > 50. or mllSFASmax > 60. or (mll > 9. and mll < 10.5) or (mll > 3. and mll < 3.2) or leptonsTight[0]->PT > 30. or leptonsTight[2]->PT < 5. or ht < 100. or !ismuon or met > 200. or met < 125. ) return false;
 
   countCutflowEvent("3llow_SR");
-  if (mll > 4. and mll <  10.) countSignalEvent("3l_low_04");
-  if (mll > 10. and mll <  20.) countSignalEvent("3l_low_10");
-  if (mll > 20. and mll <  30.) countSignalEvent("3l_low_20");
-  if (mll > 30. and mll <  50.) countSignalEvent("3l_low_30");
+  if (mll > 4. and mll <  10.) {
+    countSignalEvent("3l_low_04");
+    countControlEvent("sos_3l_sr_low_+"+year+"_0");
+  }
+  if (mll > 10. and mll <  20.) {
+    countSignalEvent("3l_low_10");
+    countControlEvent("sos_3l_sr_low_+"+year+"_1");
+  }
+  if (mll > 20. and mll <  30.) {
+    countSignalEvent("3l_low_20");
+    countControlEvent("sos_3l_sr_low_+"+year+"_2");
+  }
+  if (mll > 30. and mll <  50.) {
+    countSignalEvent("3l_low_30");
+    countControlEvent("sos_3l_sr_low_+"+year+"_3");
+  }
+
   return true;
 
 }
 
-bool Cms_2111_06296::SR_3l_med(std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
+bool Cms_2111_06296::SR_3l_med(std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal, std::string year) {
 
   double mllOSSFmin = 999999.;
   double mllSFASmax = 0.;
@@ -216,17 +236,32 @@ bool Cms_2111_06296::SR_3l_med(std::vector<FinalStateObject*> leptonsTight, std:
 
   countCutflowEvent("3lmed_SR");
 
-  if (mll > 1. and mll <  40.) countSignalEvent("3l_med_01");
-  if (mll > 4. and mll <  10.) countSignalEvent("3l_med_04");
-  if (mll > 10. and mll <  20.) countSignalEvent("3l_med_10");
-  if (mll > 20. and mll <  30.) countSignalEvent("3l_med_20");
-  if (mll > 30. and mll <  50.) countSignalEvent("3l_med_30");
+  if (mll > 1. and mll <  4.) {
+    countSignalEvent("3l_med_01");
+    countControlEvent("sos_3l_sr_med_+"+year+"_0");
+  }
+  if (mll > 4. and mll <  10.) {
+    countSignalEvent("3l_med_04");
+    countControlEvent("sos_3l_sr_med_+"+year+"_1");
+  }
+  if (mll > 10. and mll <  20.) {
+    countSignalEvent("3l_med_10");
+    countControlEvent("sos_3l_sr_med_+"+year+"_2");
+  }
+  if (mll > 20. and mll <  30.) {
+    countSignalEvent("3l_med_20");
+    countControlEvent("sos_3l_sr_med_+"+year+"_3");
+  }
+  if (mll > 30. and mll <  50.) {
+    countSignalEvent("3l_med_30");
+    countControlEvent("sos_3l_sr_med_+"+year+"_4");
+  }
   return true;
 
 }
 
 
-bool Cms_2111_06296::SR_2l_low(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
+bool Cms_2111_06296::SR_2l_low(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal, std::string year) {
 
     countCutflowEvent("2llow_02_dilep");
     if ( (leptons[1]->Type == "muon" and leptons[1]->PT < 3.5) or (leptons[1]->Type == "electron" and leptons[1]->PT < 5.) ) return false;
@@ -258,6 +293,7 @@ bool Cms_2111_06296::SR_2l_low(std::vector<FinalStateObject*> leptons, std::vect
     
     if ( met > 200. or met < 125. ) return false;
     countCutflowEvent("2llow_10_MET");
+    if (rand()/double(RAND_MAX) > 0.7) return false; //educated guess for dimu trigger efficiency
     //double ptrig = 0.4 + 0.5/75.*(met-125.); // some approx of fig.5 in 1903.06078; trigger efficiency for met
     //eventually it seems only muon trigger is used
     //if (rand()/double(RAND_MAX) > ptrig) return false;
@@ -292,15 +328,27 @@ bool Cms_2111_06296::SR_2l_low(std::vector<FinalStateObject*> leptons, std::vect
     if (leptons[1]->PT < 5.) return false;
     countCutflowEvent("2llow_20_pt5sublep");
 
-    if (mll > 4. and mll <  10.) countSignalEvent("2l_low_04");
-    if (mll > 10. and mll <  20.) countSignalEvent("2l_low_10");
-    if (mll > 20. and mll <  30.) countSignalEvent("2l_low_20");
-    if (mll > 30. and mll <  50.) countSignalEvent("2l_low_30");
+    if (mll > 4. and mll <  10.) {
+      countSignalEvent("2l_low_04");
+      countControlEvent("sos_2los_sr_low_+"+year+"_0");
+    }
+    if (mll > 10. and mll <  20.) {
+      countSignalEvent("2l_low_10");
+      countControlEvent("sos_2los_sr_low_+"+year+"_1");
+    }
+    if (mll > 20. and mll <  30.) {
+      countSignalEvent("2l_low_20");
+      countControlEvent("sos_2los_sr_low_+"+year+"_2");
+    }
+    if (mll > 30. and mll <  50.) {
+      countSignalEvent("2l_low_30");
+      countControlEvent("sos_2los_sr_low_+"+year+"_3");
+    }
     return true;
 
 }
 
-bool Cms_2111_06296::SR_2l_med(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
+bool Cms_2111_06296::SR_2l_med(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal, std::string year) {
 
     countCutflowEvent("2lmed_02_dilep");
     
@@ -366,16 +414,31 @@ bool Cms_2111_06296::SR_2l_med(std::vector<FinalStateObject*> leptons, std::vect
     if( leptons[0]->P4().DeltaR(leptons[1]->P4()) < 0.3 ) return false;
     countCutflowEvent("2lmed_20_mindR");
 
-    if (mll > 1. and mll <  4.) countSignalEvent("2l_med_01");
-    if (mll > 4. and mll <  10.) countSignalEvent("2l_med_04");
-    if (mll > 10. and mll <  20.) countSignalEvent("2l_med_10");
-    if (mll > 20. and mll <  30.) countSignalEvent("2l_med_20");
-    if (mll > 30. and mll <  50.) countSignalEvent("2l_med_30");
+    if (mll > 1. and mll <  4.) {
+      countSignalEvent("2l_med_01");
+      countControlEvent("sos_2los_sr_med_+"+year+"_0");
+    }
+    if (mll > 4. and mll <  10.) {
+      countSignalEvent("2l_med_04");
+      countControlEvent("sos_2los_sr_med_+"+year+"_1");
+    }
+    if (mll > 10. and mll <  20.) {
+      countSignalEvent("2l_med_10");
+      countControlEvent("sos_2los_sr_med_+"+year+"_2");
+    }
+    if (mll > 20. and mll <  30.) {
+      countSignalEvent("2l_med_20");
+      countControlEvent("sos_2los_sr_med_+"+year+"_3");
+    }
+    if (mll > 30. and mll <  50.) {
+      countSignalEvent("2l_med_30");
+      countControlEvent("sos_2los_sr_med_+"+year+"_4");
+    }
     return true;
 
 }
 
-bool Cms_2111_06296::SR_2l_high(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
+bool Cms_2111_06296::SR_2l_high(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal, std::string year) {
 
     countCutflowEvent("2lhigh_02_dilep");
     
@@ -441,16 +504,31 @@ bool Cms_2111_06296::SR_2l_high(std::vector<FinalStateObject*> leptons, std::vec
     if( leptons[0]->P4().DeltaR(leptons[1]->P4()) < 0.3 ) return false;
     countCutflowEvent("2lhigh_20_mindR");
 
-    if (mll > 1. and mll <  4.) countSignalEvent("2l_high_01");
-    if (mll > 4. and mll <  10.) countSignalEvent("2l_high_04");
-    if (mll > 10. and mll <  20.) countSignalEvent("2l_high_10");
-    if (mll > 20. and mll <  30.) countSignalEvent("2l_high_20");
-    if (mll > 30. and mll <  50.) countSignalEvent("2l_high_30");
+    if (mll > 1. and mll <  4.) {
+      countSignalEvent("2l_high_01");
+      countControlEvent("sos_2los_sr_high_+"+year+"_0");
+    }
+    if (mll > 4. and mll <  10.) {
+      countSignalEvent("2l_high_04");
+      countControlEvent("sos_2los_sr_high_+"+year+"_1");
+    }
+    if (mll > 10. and mll <  20.) {
+      countSignalEvent("2l_high_10");
+      countControlEvent("sos_2los_sr_high_+"+year+"_2");
+    }
+    if (mll > 20. and mll <  30.) {
+      countSignalEvent("2l_high_20");
+      countControlEvent("sos_2los_sr_high_+"+year+"_3");
+    }
+    if (mll > 30. and mll <  50.) {
+      countSignalEvent("2l_high_30");
+      countControlEvent("sos_2los_sr_high_+"+year+"_4");
+    }
     return true;
 
 }
 
-bool Cms_2111_06296::SR_2l_ultra(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
+bool Cms_2111_06296::SR_2l_ultra(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal, std::string year) {
 
     countCutflowEvent("2lultra_02_dilep");
     
@@ -516,16 +594,31 @@ bool Cms_2111_06296::SR_2l_ultra(std::vector<FinalStateObject*> leptons, std::ve
     if( leptons[0]->P4().DeltaR(leptons[1]->P4()) < 0.3 ) return false;
     countCutflowEvent("2lultra_20_mindR");
 
-    if (mll > 1. and mll <  4.) countSignalEvent("2l_ultra_01");
-    if (mll > 4. and mll <  10.) countSignalEvent("2l_ultra_04");
-    if (mll > 10. and mll <  20.) countSignalEvent("2l_ultra_10");
-    if (mll > 20. and mll <  30.) countSignalEvent("2l_ultra_20");
-    if (mll > 30. and mll <  50.) countSignalEvent("2l_ultra_30");
+    if (mll > 1. and mll <  4.) {
+      countSignalEvent("2l_ultra_01");
+      countControlEvent("sos_2los_sr_ultra_+"+year+"_0");
+    }
+    if (mll > 4. and mll <  10.) {
+      countSignalEvent("2l_ultra_04");
+      countControlEvent("sos_2los_sr_ultra_+"+year+"_1");
+    }
+    if (mll > 10. and mll <  20.) {
+      countSignalEvent("2l_ultra_10");
+      countControlEvent("sos_2los_sr_ultra_+"+year+"_2");
+    }
+    if (mll > 20. and mll <  30.) {
+      countSignalEvent("2l_ultra_20");
+      countControlEvent("sos_2los_sr_ultra_+"+year+"_3");
+    }
+    if (mll > 30. and mll <  50.) {
+      countSignalEvent("2l_ultra_30");
+      countControlEvent("sos_2los_sr_ultra_+"+year+"_4");
+    }
     return true;
 
 }
 
-bool Cms_2111_06296::CR_2l_DY_low(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal) {
+bool Cms_2111_06296::CR_2l_DY_low(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal, std::string year) {
     
     if ( (leptons[1]->Type == "muon" and leptons[1]->PT < 3.5) or (leptons[1]->Type == "electron" and leptons[1]->PT < 5.) ) return false;
     double mll = (leptons[0]->P4() + leptons[1]->P4()).M();
@@ -533,6 +626,7 @@ bool Cms_2111_06296::CR_2l_DY_low(std::vector<FinalStateObject*> leptons, std::v
     if ( (mll > 9. and mll < 10.5) ) return false; //veto J/psi and Upsilon
     double pll = (leptons[0]->P4() + leptons[1]->P4()).Pt();
     if (  leptons[0]->Type == "muon" and leptons[1]->Type == "muon" and pll < 3. ) return false;
+    if (  leptons[0]->Type != leptons[1]->Type ) return false;
     if ( jetsSignal.size() < 1 ) return false;  
     double ht=0.;
     double met = missingET->PT;
@@ -552,7 +646,282 @@ bool Cms_2111_06296::CR_2l_DY_low(std::vector<FinalStateObject*> leptons, std::v
     if (mtl1 > 70. or mtl2 > 70.) return false;
     if (leptons[1]->PT < 5.) return false;
     
+    if (mll > 4. and mll <  10.) {
+      countControlEvent("sos_2los_cr_dy_low_+"+year+"_0");
+    }
+    if (mll > 10. and mll <  20.) {
+      countControlEvent("sos_2los_cr_dy_low_+"+year+"_1");
+    }
+    if (mll > 20. and mll <  30.) {
+      countControlEvent("sos_2los_cr_dy_low_+"+year+"_2");
+    }
+    if (mll > 30. and mll <  50.) {
+      countControlEvent("sos_2los_cr_dy_low_+"+year+"_3");
+    }
+
     return true;
+}
+
+bool Cms_2111_06296::CR_2l_DY_med(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal, std::string year) {
+    
+    if ( (leptons[1]->Type == "muon" and leptons[1]->PT < 3.5) or (leptons[1]->Type == "electron" and leptons[1]->PT < 5.) ) return false;
+    double mll = (leptons[0]->P4() + leptons[1]->P4()).M();
+    if ( mll < 1. or mll > 50. ) return false;
+    if ( (mll > 9. and mll < 10.5) ) return false;
+    if ( (mll > 3. and mll < 3.2) ) return false; //veto J/psi and Upsilon
+    double pll = (leptons[0]->P4() + leptons[1]->P4()).Pt();
+    if (  leptons[0]->Type == "muon" and leptons[1]->Type == "muon" and pll < 3. ) return false;
+    if (  leptons[0]->Type != leptons[1]->Type ) return false;
+    if ( jetsSignal.size() < 1 ) return false;  
+    double ht=0.;
+    double met = missingET->PT;
+    for(int i=0; i<jetsSignal.size(); i++) ht += jetsSignal[i]->PT;
+    if ( met/ht < 0.66666 or met/ht > 1.6 ) return false;
+    if ( ht < 100. ) return false;
+    if ( met < 200.  ) return false;
+    if ( leptons[0]->Charge * leptons[1]->Charge > 0 ) return false;
+    if (leptons.size() != leptonsTight.size() ) return false; //veto events with additional leptons with pt>30
+    for(int i=0; i<jetsSignal.size(); i++) if ( checkBTag(jetsSignal[i]) ) return false;
+    double mtata = mtautau(leptons);
+    if (mtata < 0. or mtata >  160.) return false;
+    double mtl1 = mT(leptons[0]->P4(), missingET->P4());
+    double mtl2 = mT(leptons[1]->P4(), missingET->P4());
+    if (mtl1 > 70. or mtl2 > 70.) return false;
+    if( leptons[0]->P4().DeltaR(leptons[1]->P4()) < 0.3 ) return false;
+    
+    if (mll > 1. and mll <  4.) {
+      countControlEvent("sos_2los_cr_dy_med_+"+year+"_0");
+    }
+    if (mll > 4. and mll <  10.) {
+      countControlEvent("sos_2los_cr_dy_med_+"+year+"_1");
+    }
+    if (mll > 10. and mll <  20.) {
+      countControlEvent("sos_2los_cr_dy_med_+"+year+"_2");
+    }
+    if (mll > 20. and mll <  30.) {
+      countControlEvent("sos_2los_cr_dy_med_+"+year+"_3");
+    }
+    if (mll > 30. and mll <  50.) {
+      countControlEvent("sos_2los_cr_dy_med_+"+year+"_4");
+    }
+
+    return true;
+}
+
+bool Cms_2111_06296::CR_2l_SS(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal, std::string year) {
+    
+    if ( (leptons[1]->Type == "muon" and leptons[1]->PT < 3.5) or (leptons[1]->Type == "electron" and leptons[1]->PT < 5.) ) return false;
+    double mll = (leptons[0]->P4() + leptons[1]->P4()).M();
+    if ( mll < 1. or mll > 50. ) return false;
+    if ( (mll > 9. and mll < 10.5) ) return false;
+    if ( (mll > 3. and mll < 3.2) ) return false; //veto J/psi and Upsilon
+    double pll = (leptons[0]->P4() + leptons[1]->P4()).Pt();
+    if (  leptons[0]->Type == "muon" and leptons[1]->Type == "muon" and pll < 3. ) return false;
+    if ( jetsSignal.size() < 1 ) return false;  
+    double ht=0.;
+    double met = missingET->PT;
+    for(int i=0; i<jetsSignal.size(); i++) ht += jetsSignal[i]->PT;
+    if ( met/ht < 0.66666 or met/ht > 1.6 ) return false;
+    if ( ht < 100. ) return false;
+    if ( met < 200.  ) return false;
+    if ( leptons[0]->Charge * leptons[1]->Charge < 0 ) return false;
+    if (leptons.size() != leptonsTight.size() ) return false; //veto events with additional leptons with pt>30
+    for(int i=0; i<jetsSignal.size(); i++) if ( checkBTag(jetsSignal[i]) ) return false;
+    double mtata = mtautau(leptons);
+    if (mtata > 0. and mtata <  160.) return false;
+    if( leptons[0]->P4().DeltaR(leptons[1]->P4()) < 0.3 ) return false;
+    
+    if (mll > 1. and mll <  4.) {
+      countControlEvent("sos_2los_cr_ss_med_+"+year+"_0");
+    }
+    if (mll > 4. and mll <  10.) {
+      countControlEvent("sos_2los_cr_ss_med_+"+year+"_1");
+    }
+    if (mll > 10. and mll <  20.) {
+      countControlEvent("sos_2los_cr_ss_med_+"+year+"_2");
+    }
+    if (mll > 20. and mll <  30.) {
+      countControlEvent("sos_2los_cr_ss_med_+"+year+"_3");
+    }
+    if (mll > 30. and mll <  50.) {
+      countControlEvent("sos_2los_cr_ss_med_+"+year+"_4");
+    }
+
+    return true;
+}
+
+bool Cms_2111_06296::SR_2l_tt_med(std::vector<FinalStateObject*> leptons, std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal, std::string year) {
+    
+    if ( (leptons[1]->Type == "muon" and leptons[1]->PT < 3.5) or (leptons[1]->Type == "electron" and leptons[1]->PT < 5.) ) return false;
+    double mll = (leptons[0]->P4() + leptons[1]->P4()).M();
+    if ( mll < 1. or mll > 50. ) return false;
+    if ( (mll > 9. and mll < 10.5) ) return false;
+    if ( (mll > 3. and mll < 3.2) ) return false; //veto J/psi and Upsilon
+    double pll = (leptons[0]->P4() + leptons[1]->P4()).Pt();
+    if (  leptons[0]->Type == "muon" and leptons[1]->Type == "muon" and pll < 3. ) return false;
+    if ( jetsSignal.size() < 1 ) return false;  
+    double ht=0.;
+    double met = missingET->PT;
+    for(int i=0; i<jetsSignal.size(); i++) ht += jetsSignal[i]->PT;
+    if ( met/ht < 0.66666 or met/ht > 1.6 ) return false;
+    if ( ht < 100. ) return false;
+    if ( met < 200.  ) return false;
+    if ( leptons[0]->Charge * leptons[1]->Charge > 0 ) return false;
+    if (leptons.size() != leptonsTight.size() ) return false; //veto events with additional leptons with pt>30
+    for(int i=0; i<jetsSignal.size(); i++) if ( checkBTag(jetsSignal[i]) ) return false;
+    double mtata = mtautau(leptons);
+    if (mtata > 0. and mtata <  160.) return false;
+    if( leptons[0]->P4().DeltaR(leptons[1]->P4()) < 0.3 ) return false;
+    
+    std::string region = "dummy";
+    if(met < 240.) region = "med";
+    else if(met < 290.) region = "high";
+    else region = "ultra";
+
+    countCutflowEvent("2l_tt_"+region+"_SR");
+    double ptl = lepton[0]->PT;
+    if (ptl > 3.5 and ptl <  8.) {
+      countControlEvent("sos_2los_sr_col_" + region + "_" + year + "_0");
+      countSignalEvent("stop_" + region + "_03");
+    }
+    if (ptl > 8. and ptl <  12.) {
+      countControlEvent("sos_2los_sr_col_" + region + "_" + year + "_1");
+      countSignalEvent("stop_" + region + "_08");
+    }
+    if (ptl > 12. and ptl <  16.) {
+      countControlEvent("sos_2los_sr_col_" + region + "_" + year + "_2");
+      countSignalEvent("stop_" + region + "_12");
+    }
+    if (ptl > 16. and ptl <  20.) {
+      countControlEvent("sos_2los_sr_col_" + region + "_" + year + "_3");
+      countSignalEvent("stop_" + region + "_16");
+    }
+    if (ptl > 20. and ptl <  25.) {
+      countControlEvent("sos_2los_sr_col_" + region + "_" + year + "_4");
+      countSignalEvent("stop_" + region + "_20");
+    }
+    if (ptl > 25. and ptl <  30.) {
+      countControlEvent("sos_2los_sr_col_" + region + "_" + year + "_4");
+      countSignalEvent("stop_" + region + "_25");
+    }
+
+    return true;
+}
+
+bool Cms_2111_06296::SRCR_WZ_low(std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal, std::string year) {
+
+  double mllOSSFmin = 999999.;
+  double mllSFASmax = 0.;
+  bool ismuon = false;
+  for ( int i = 0; i < leptonsTight.size(); i++ ) {
+    for ( int j = i+1; j < leptonsTight.size(); j++ ) {
+      if (leptonsTight[i]->Charge * leptonsTight[j]->Charge < 0 and leptonsTight[i]->Type == leptonsTight[j]->Type ) {
+        double mll = (leptonsTight[i]->P4() + leptonsTight[j]->P4()).M();
+        if (mll < mllOSSFmin) mllOSSFmin = mll;
+        if (leptonsTight[i]->Type == "muon") ismuon = true; else ismuon = false;
+      }
+      if (leptonsTight[i]->Type == leptonsTight[j]->Type ) {
+        double mll = (leptonsTight[i]->P4() + leptonsTight[j]->P4()).M();
+        if (mll > mllSFASmax) mllSFASmax = mll;
+      }
+    }
+  }
+
+  bool mupt = false;
+  for ( int i = 0; i < leptonsTight.size(); i++ ) 
+    if ( leptonsTight[i]->PT > 20. and leptonsTight[i]->Type == "muon" ) mupt = true;
+  
+
+  double ht=0.;
+  for(int i=0; i<jetsSignal.size(); i++) ht += jetsSignal[i]->PT;
+  for(int i=0; i<jetsSignal.size(); i++) if ( checkBTag(jetsSignal[i]) ) return false;
+
+  if (rand()/double(RAND_MAX + 1) > 0.7) return false; //educated guess for dimu trigger efficiency
+
+  double met = missingET->PT;
+  double mll = mllOSSFmin;
+  if ( mllOSSFmin < 4. or mllOSSFmin > 50. or mllSFASmax > 60. or (mll > 9. and mll < 10.5) or (mll > 3. and mll < 3.2) or leptonsTight[0]->PT < 30. or leptonsTight[2]->PT < 10. or ht < 100. or !ismuon or !mupt or met > 200. or met < 125. ) return false;
+
+  countCutflowEvent("3l_WZ_low_SR");
+  if (mll > 4. and mll <  10.) {
+    countSignalEvent("3l_WZ_low_04");
+    countControlEvent("sos_3l_cr_wz_low_+"+year+"_0");
+  }
+  if (mll > 10. and mll <  20.) {
+    countSignalEvent("3l_WZ_low_10");
+    countControlEvent("sos_3l_cr_wz_low_+"+year+"_1");
+  }
+  if (mll > 20. and mll <  30.) {
+    countSignalEvent("3l_WZ_low_20");
+    countControlEvent("sos_3l_cr_wz_low_+"+year+"_2");
+  }
+  if (mll > 30. and mll <  50.) {
+    countControlEvent("sos_3l_cr_wz_low_+"+year+"_3");
+  }
+
+  return true;
+
+}
+
+
+bool Cms_2111_06296::SRCR_WZ_med(std::vector<FinalStateObject*> leptonsTight, std::vector<Jet*> jetsSignal, std::string year) {
+
+  double mllOSSFmin = 999999.;
+  double mllSFASmax = 0.;
+  for ( int i = 0; i < leptonsTight.size(); i++ ) {
+    for ( int j = i+1; j < leptonsTight.size(); j++ ) {
+      if (leptonsTight[i]->P4().DeltaR(leptonsTight[j]->P4()) < 0.3) return false;
+      if (leptonsTight[i]->Charge * leptonsTight[j]->Charge < 0 and leptonsTight[i]->Type == leptonsTight[j]->Type ) {
+        double mll = (leptonsTight[i]->P4() + leptonsTight[j]->P4()).M();
+        if (mll < mllOSSFmin) mllOSSFmin = mll;
+      }
+      if (leptonsTight[i]->Type == leptonsTight[j]->Type ) {
+        double mll = (leptonsTight[i]->P4() + leptonsTight[j]->P4()).M();
+        if (mll > mllSFASmax) mllSFASmax = mll;
+      }
+    }
+  }
+
+
+  double ht=0.;
+  for(int i=0; i<jetsSignal.size(); i++) ht += jetsSignal[i]->PT;
+  for(int i=0; i<jetsSignal.size(); i++) if ( checkBTag(jetsSignal[i]) ) return false;
+
+  for ( int i = 0; i < leptonsTight.size(); i++ ) 
+    if ( leptonsTight[i]->PT > 20. and leptonsTight[i]->Type == "muon" ) mupt = true;
+
+  if ( leptonsTight[1]->Type == "muon" and leptonsTight[1]->PT < 10. ) return false;
+  if ( leptonsTight[1]->Type == "electron" and leptonsTight[1]->PT < 15. ) return false;
+  if ( leptonsTight[2]->Type == "muon" and leptonsTight[2]->PT < 10. ) return false;
+  if ( leptonsTight[2]->Type == "electron" and leptonsTight[2]->PT < 15. ) return false;
+
+  double met = missingET->PT;
+  double mll = mllOSSFmin;
+  if ( mllOSSFmin < 1. or mllOSSFmin > 50. or (mll > 9. and mll < 10.5) or (mll > 3. and mll < 3.2) or leptonsTight[0]->PT < 30. or ht < 100. or met < 200. or !mupt ) return false;
+
+  countCutflowEvent("3l_WZ_med_SR");
+
+  if (mll > 1. and mll <  4.) {
+    countSignalEvent("3l_WZ_med_01");
+    countControlEvent("sos_3l_cr_wz_med_+"+year+"_0");
+  }
+  if (mll > 4. and mll <  10.) {
+    countSignalEvent("3l_WZ_med_04");
+    countControlEvent("sos_3l_cr_wz_med_+"+year+"_1");
+  }
+  if (mll > 10. and mll <  20.) {
+    countSignalEvent("3l_WZ_med_10");
+    countControlEvent("sos_3l_cr_wz_med_+"+year+"_2");
+  }
+  if (mll > 20. and mll <  30.) {
+    countSignalEvent("3l_WZ_med_20");
+    countControlEvent("sos_3l_cr_wz_med_+"+year+"_3");
+  }
+  if (mll > 30. and mll <  50.) {
+    countControlEvent("sos_3l_cr_wz_med_+"+year+"_4");
+  }
+  return true;
+
 }
 
 double Cms_2111_06296::mtautau(std::vector<FinalStateObject*> leptons) {
