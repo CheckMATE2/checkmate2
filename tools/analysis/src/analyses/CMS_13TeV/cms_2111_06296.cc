@@ -183,19 +183,19 @@ bool Cms_2111_06296::SR_3l_low(std::vector<FinalStateObject*> leptonsTight, std:
   countCutflowEvent("3llow_SR");
   if (mll > 4. and mll <  10.) {
     countSignalEvent("3l_low_04");
-    countControlEvent("sos_3l_sr_low_+"+year+"_0");
+    countControlEvent("sos_3l_sr_low_"+year+"_0");
   }
   if (mll > 10. and mll <  20.) {
     countSignalEvent("3l_low_10");
-    countControlEvent("sos_3l_sr_low_+"+year+"_1");
+    countControlEvent("sos_3l_sr_low_"+year+"_1");
   }
   if (mll > 20. and mll <  30.) {
     countSignalEvent("3l_low_20");
-    countControlEvent("sos_3l_sr_low_+"+year+"_2");
+    countControlEvent("sos_3l_sr_low_"+year+"_2");
   }
   if (mll > 30. and mll <  50.) {
     countSignalEvent("3l_low_30");
-    countControlEvent("sos_3l_sr_low_+"+year+"_3");
+    countControlEvent("sos_3l_sr_low_"+year+"_3");
   }
 
   return true;
@@ -238,23 +238,23 @@ bool Cms_2111_06296::SR_3l_med(std::vector<FinalStateObject*> leptonsTight, std:
 
   if (mll > 1. and mll <  4.) {
     countSignalEvent("3l_med_01");
-    countControlEvent("sos_3l_sr_med_+"+year+"_0");
+    countControlEvent("sos_3l_sr_med_"+year+"_0");
   }
   if (mll > 4. and mll <  10.) {
     countSignalEvent("3l_med_04");
-    countControlEvent("sos_3l_sr_med_+"+year+"_1");
+    countControlEvent("sos_3l_sr_med_"+year+"_1");
   }
   if (mll > 10. and mll <  20.) {
     countSignalEvent("3l_med_10");
-    countControlEvent("sos_3l_sr_med_+"+year+"_2");
+    countControlEvent("sos_3l_sr_med_"+year+"_2");
   }
   if (mll > 20. and mll <  30.) {
     countSignalEvent("3l_med_20");
-    countControlEvent("sos_3l_sr_med_+"+year+"_3");
+    countControlEvent("sos_3l_sr_med_"+year+"_3");
   }
   if (mll > 30. and mll <  50.) {
     countSignalEvent("3l_med_30");
-    countControlEvent("sos_3l_sr_med_+"+year+"_4");
+    countControlEvent("sos_3l_sr_med_"+year+"_4");
   }
   return true;
 
@@ -330,19 +330,19 @@ bool Cms_2111_06296::SR_2l_low(std::vector<FinalStateObject*> leptons, std::vect
 
     if (mll > 4. and mll <  10.) {
       countSignalEvent("2l_low_04");
-      countControlEvent("sos_2los_sr_low_+"+year+"_0");
+      countControlEvent("sos_2los_sr_low_"+year+"_0");
     }
     if (mll > 10. and mll <  20.) {
       countSignalEvent("2l_low_10");
-      countControlEvent("sos_2los_sr_low_+"+year+"_1");
+      countControlEvent("sos_2los_sr_low_"+year+"_1");
     }
     if (mll > 20. and mll <  30.) {
       countSignalEvent("2l_low_20");
-      countControlEvent("sos_2los_sr_low_+"+year+"_2");
+      countControlEvent("sos_2los_sr_low_"+year+"_2");
     }
     if (mll > 30. and mll <  50.) {
       countSignalEvent("2l_low_30");
-      countControlEvent("sos_2los_sr_low_+"+year+"_3");
+      countControlEvent("sos_2los_sr_low_"+year+"_3");
     }
     return true;
 
@@ -416,23 +416,23 @@ bool Cms_2111_06296::SR_2l_med(std::vector<FinalStateObject*> leptons, std::vect
 
     if (mll > 1. and mll <  4.) {
       countSignalEvent("2l_med_01");
-      countControlEvent("sos_2los_sr_med_+"+year+"_0");
+      countControlEvent("sos_2los_sr_med_"+year+"_0");
     }
     if (mll > 4. and mll <  10.) {
       countSignalEvent("2l_med_04");
-      countControlEvent("sos_2los_sr_med_+"+year+"_1");
+      countControlEvent("sos_2los_sr_med_"+year+"_1");
     }
     if (mll > 10. and mll <  20.) {
       countSignalEvent("2l_med_10");
-      countControlEvent("sos_2los_sr_med_+"+year+"_2");
+      countControlEvent("sos_2los_sr_med_"+year+"_2");
     }
     if (mll > 20. and mll <  30.) {
       countSignalEvent("2l_med_20");
-      countControlEvent("sos_2los_sr_med_+"+year+"_3");
+      countControlEvent("sos_2los_sr_med_"+year+"_3");
     }
     if (mll > 30. and mll <  50.) {
       countSignalEvent("2l_med_30");
-      countControlEvent("sos_2los_sr_med_+"+year+"_4");
+      countControlEvent("sos_2los_sr_med_"+year+"_4");
     }
     return true;
 
@@ -506,23 +506,23 @@ bool Cms_2111_06296::SR_2l_high(std::vector<FinalStateObject*> leptons, std::vec
 
     if (mll > 1. and mll <  4.) {
       countSignalEvent("2l_high_01");
-      countControlEvent("sos_2los_sr_high_+"+year+"_0");
+      countControlEvent("sos_2los_sr_high_"+year+"_0");
     }
     if (mll > 4. and mll <  10.) {
       countSignalEvent("2l_high_04");
-      countControlEvent("sos_2los_sr_high_+"+year+"_1");
+      countControlEvent("sos_2los_sr_high_"+year+"_1");
     }
     if (mll > 10. and mll <  20.) {
       countSignalEvent("2l_high_10");
-      countControlEvent("sos_2los_sr_high_+"+year+"_2");
+      countControlEvent("sos_2los_sr_high_"+year+"_2");
     }
     if (mll > 20. and mll <  30.) {
       countSignalEvent("2l_high_20");
-      countControlEvent("sos_2los_sr_high_+"+year+"_3");
+      countControlEvent("sos_2los_sr_high_"+year+"_3");
     }
     if (mll > 30. and mll <  50.) {
       countSignalEvent("2l_high_30");
-      countControlEvent("sos_2los_sr_high_+"+year+"_4");
+      countControlEvent("sos_2los_sr_high_"+year+"_4");
     }
     return true;
 
@@ -596,23 +596,23 @@ bool Cms_2111_06296::SR_2l_ultra(std::vector<FinalStateObject*> leptons, std::ve
 
     if (mll > 1. and mll <  4.) {
       countSignalEvent("2l_ultra_01");
-      countControlEvent("sos_2los_sr_ultra_+"+year+"_0");
+      countControlEvent("sos_2los_sr_ultra_"+year+"_0");
     }
     if (mll > 4. and mll <  10.) {
       countSignalEvent("2l_ultra_04");
-      countControlEvent("sos_2los_sr_ultra_+"+year+"_1");
+      countControlEvent("sos_2los_sr_ultra_"+year+"_1");
     }
     if (mll > 10. and mll <  20.) {
       countSignalEvent("2l_ultra_10");
-      countControlEvent("sos_2los_sr_ultra_+"+year+"_2");
+      countControlEvent("sos_2los_sr_ultra_"+year+"_2");
     }
     if (mll > 20. and mll <  30.) {
       countSignalEvent("2l_ultra_20");
-      countControlEvent("sos_2los_sr_ultra_+"+year+"_3");
+      countControlEvent("sos_2los_sr_ultra_"+year+"_3");
     }
     if (mll > 30. and mll <  50.) {
       countSignalEvent("2l_ultra_30");
-      countControlEvent("sos_2los_sr_ultra_+"+year+"_4");
+      countControlEvent("sos_2los_sr_ultra_"+year+"_4");
     }
     return true;
 
@@ -647,16 +647,16 @@ bool Cms_2111_06296::CR_2l_DY_low(std::vector<FinalStateObject*> leptons, std::v
     if (leptons[1]->PT < 5.) return false;
     
     if (mll > 4. and mll <  10.) {
-      countControlEvent("sos_2los_cr_dy_low_+"+year+"_0");
+      countControlEvent("sos_2los_cr_dy_low_"+year+"_0");
     }
     if (mll > 10. and mll <  20.) {
-      countControlEvent("sos_2los_cr_dy_low_+"+year+"_1");
+      countControlEvent("sos_2los_cr_dy_low_"+year+"_1");
     }
     if (mll > 20. and mll <  30.) {
-      countControlEvent("sos_2los_cr_dy_low_+"+year+"_2");
+      countControlEvent("sos_2los_cr_dy_low_"+year+"_2");
     }
     if (mll > 30. and mll <  50.) {
-      countControlEvent("sos_2los_cr_dy_low_+"+year+"_3");
+      countControlEvent("sos_2los_cr_dy_low_"+year+"_3");
     }
 
     return true;
@@ -690,19 +690,19 @@ bool Cms_2111_06296::CR_2l_DY_med(std::vector<FinalStateObject*> leptons, std::v
     if( leptons[0]->P4().DeltaR(leptons[1]->P4()) < 0.3 ) return false;
     
     if (mll > 1. and mll <  4.) {
-      countControlEvent("sos_2los_cr_dy_med_+"+year+"_0");
+      countControlEvent("sos_2los_cr_dy_med_"+year+"_0");
     }
     if (mll > 4. and mll <  10.) {
-      countControlEvent("sos_2los_cr_dy_med_+"+year+"_1");
+      countControlEvent("sos_2los_cr_dy_med_"+year+"_1");
     }
     if (mll > 10. and mll <  20.) {
-      countControlEvent("sos_2los_cr_dy_med_+"+year+"_2");
+      countControlEvent("sos_2los_cr_dy_med_"+year+"_2");
     }
     if (mll > 20. and mll <  30.) {
-      countControlEvent("sos_2los_cr_dy_med_+"+year+"_3");
+      countControlEvent("sos_2los_cr_dy_med_"+year+"_3");
     }
     if (mll > 30. and mll <  50.) {
-      countControlEvent("sos_2los_cr_dy_med_+"+year+"_4");
+      countControlEvent("sos_2los_cr_dy_med_"+year+"_4");
     }
 
     return true;
@@ -732,19 +732,19 @@ bool Cms_2111_06296::CR_2l_SS(std::vector<FinalStateObject*> leptons, std::vecto
     if( leptons[0]->P4().DeltaR(leptons[1]->P4()) < 0.3 ) return false;
     
     if (mll > 1. and mll <  4.) {
-      countControlEvent("sos_2los_cr_ss_med_+"+year+"_0");
+      countControlEvent("sos_2los_cr_ss_med_"+year+"_0");
     }
     if (mll > 4. and mll <  10.) {
-      countControlEvent("sos_2los_cr_ss_med_+"+year+"_1");
+      countControlEvent("sos_2los_cr_ss_med_"+year+"_1");
     }
     if (mll > 10. and mll <  20.) {
-      countControlEvent("sos_2los_cr_ss_med_+"+year+"_2");
+      countControlEvent("sos_2los_cr_ss_med_"+year+"_2");
     }
     if (mll > 20. and mll <  30.) {
-      countControlEvent("sos_2los_cr_ss_med_+"+year+"_3");
+      countControlEvent("sos_2los_cr_ss_med_"+year+"_3");
     }
     if (mll > 30. and mll <  50.) {
-      countControlEvent("sos_2los_cr_ss_med_+"+year+"_4");
+      countControlEvent("sos_2los_cr_ss_med_"+year+"_4");
     }
 
     return true;
@@ -779,7 +779,7 @@ bool Cms_2111_06296::SR_2l_tt_med(std::vector<FinalStateObject*> leptons, std::v
     else region = "ultra";
 
     countCutflowEvent("2l_tt_"+region+"_SR");
-    double ptl = lepton[0]->PT;
+    double ptl = leptonsTight[0]->PT;
     if (ptl > 3.5 and ptl <  8.) {
       countControlEvent("sos_2los_sr_col_" + region + "_" + year + "_0");
       countSignalEvent("stop_" + region + "_03");
@@ -845,18 +845,18 @@ bool Cms_2111_06296::SRCR_WZ_low(std::vector<FinalStateObject*> leptonsTight, st
   countCutflowEvent("3l_WZ_low_SR");
   if (mll > 4. and mll <  10.) {
     countSignalEvent("3l_WZ_low_04");
-    countControlEvent("sos_3l_cr_wz_low_+"+year+"_0");
+    countControlEvent("sos_3l_cr_wz_low_"+year+"_0");
   }
   if (mll > 10. and mll <  20.) {
     countSignalEvent("3l_WZ_low_10");
-    countControlEvent("sos_3l_cr_wz_low_+"+year+"_1");
+    countControlEvent("sos_3l_cr_wz_low_"+year+"_1");
   }
   if (mll > 20. and mll <  30.) {
     countSignalEvent("3l_WZ_low_20");
-    countControlEvent("sos_3l_cr_wz_low_+"+year+"_2");
+    countControlEvent("sos_3l_cr_wz_low_"+year+"_2");
   }
   if (mll > 30. and mll <  50.) {
-    countControlEvent("sos_3l_cr_wz_low_+"+year+"_3");
+    countControlEvent("sos_3l_cr_wz_low_"+year+"_3");
   }
 
   return true;
@@ -887,6 +887,7 @@ bool Cms_2111_06296::SRCR_WZ_med(std::vector<FinalStateObject*> leptonsTight, st
   for(int i=0; i<jetsSignal.size(); i++) ht += jetsSignal[i]->PT;
   for(int i=0; i<jetsSignal.size(); i++) if ( checkBTag(jetsSignal[i]) ) return false;
 
+  bool mupt = false;
   for ( int i = 0; i < leptonsTight.size(); i++ ) 
     if ( leptonsTight[i]->PT > 20. and leptonsTight[i]->Type == "muon" ) mupt = true;
 
@@ -903,22 +904,22 @@ bool Cms_2111_06296::SRCR_WZ_med(std::vector<FinalStateObject*> leptonsTight, st
 
   if (mll > 1. and mll <  4.) {
     countSignalEvent("3l_WZ_med_01");
-    countControlEvent("sos_3l_cr_wz_med_+"+year+"_0");
+    countControlEvent("sos_3l_cr_wz_med_"+year+"_0");
   }
   if (mll > 4. and mll <  10.) {
     countSignalEvent("3l_WZ_med_04");
-    countControlEvent("sos_3l_cr_wz_med_+"+year+"_1");
+    countControlEvent("sos_3l_cr_wz_med_"+year+"_1");
   }
   if (mll > 10. and mll <  20.) {
     countSignalEvent("3l_WZ_med_10");
-    countControlEvent("sos_3l_cr_wz_med_+"+year+"_2");
+    countControlEvent("sos_3l_cr_wz_med_"+year+"_2");
   }
   if (mll > 20. and mll <  30.) {
     countSignalEvent("3l_WZ_med_20");
-    countControlEvent("sos_3l_cr_wz_med_+"+year+"_3");
+    countControlEvent("sos_3l_cr_wz_med_"+year+"_3");
   }
   if (mll > 30. and mll <  50.) {
-    countControlEvent("sos_3l_cr_wz_med_+"+year+"_4");
+    countControlEvent("sos_3l_cr_wz_med_"+year+"_4");
   }
   return true;
 

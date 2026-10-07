@@ -272,6 +272,10 @@ def upperlim_with_cov(_o, _b, _db, _s, _ds, _cov, calculator, sigconstraint):
 def get_cov(analysis, db, corrmat = False, mbsr = None):
     global hepfiles_folder
     hepfiles_folder = Info.paths['data']+"/"   #<----Set the path of the folder with the models here.
+    if (mbsr is None or os.path.isfile(hepfiles_folder+analysis+"/cov.json")):
+        json_name = "cov.json"
+    else:
+        json_name = "cov_"+mbsr+".json"
     
     if corrmat and os.path.isfile(hepfiles_folder+analysis+"/corr.json"):
         with open(hepfiles_folder+analysis+"/corr.json") as serialized:
@@ -284,8 +288,8 @@ def get_cov(analysis, db, corrmat = False, mbsr = None):
         for i in range(corr_mat.shape[0]):
             for j in range(corr_mat.shape[0]):
                     cov_mat[i,j]=corr_mat[i,j]*db[i]*db[j]
-    elif os.path.isfile(hepfiles_folder+analysis+"/cov.json"):
-        with open(hepfiles_folder+analysis+"/cov.json") as serialized:
+    elif os.path.isfile(hepfiles_folder+analysis+"/"+json_name):
+        with open(hepfiles_folder+analysis+"/"+json_name) as serialized:
             cov = json.load(serialized)
         offset2 = 0.    
         if analysis == "cms_sus_19_005" and mbsr == "low":

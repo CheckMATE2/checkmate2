@@ -43,20 +43,21 @@ def lookup_SRs(file_p):
 
 
 #Loads the data corresponding to observed, background and signal events from the CheckMATE results file in the results folder passed.
-def data_from_CMresults(path):
+def data_from_CMresults(path, CRonly = False):
     f_results = open(path+'/evaluation/total_results.txt','r')
     table = f_results.read()
     f_results.close()
     SRs = []
-    for line in table.split('\n')[1:]:
-        if line!='':
-            SRs.append({'SR':line.split()[1],
-                'o':float(line.split()[2]),
-                'b':float(line.split()[3]),
-                'db':float(line.split()[4]),
-                's':float(line.split()[5]),
-                'ds':float(line.split()[6])
-                })
+    if not CRonly:
+        for line in table.split('\n')[1:]:
+            if line!='':
+                SRs.append({'SR':line.split()[1],
+                    'o':float(line.split()[2]),
+                    'b':float(line.split()[3]),
+                    'db':float(line.split()[4]),
+                    's':float(line.split()[5]),
+                    'ds':float(line.split()[6])
+                    })
     CR_paths=[CR_dir for CR_dir in os.listdir(path+'/analysis/') if 'control' in CR_dir]
     for CR_path in CR_paths:
         if os.path.exists(path+'/analysis/'+CR_path):

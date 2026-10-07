@@ -130,7 +130,13 @@ def calc_cov(path, analysis, mbsr):
     
     mb_signal_regions = Info.get_analysis_parameters(analysis)["mb_signal_regions"]
     sr_list = mb_signal_regions[mbsr]
-    o, b, db, s, ds = mb.select_MBsr(sr_list, mb.data_from_CMresults(Info.paths['output'])) #prepare data
+    if analysis == "cms_2111_06296":
+        mbfull.init(path, analysis, mbsr)
+        names = mbfull.SR_dict.keys()
+        o, b, db, s, ds = mbfull.select_MBsr(names, mbfull.data_from_CMresults(Info.paths['output'], CRonly = True)) #prepare data
+    else:
+        o, b, db, s, ds = mb.select_MBsr(sr_list, mb.data_from_CMresults(Info.paths['output'])) #prepare data
+
     r = [x - 1.64*y for x, y in zip(s,ds)] #s - 1.64 ds
     if max(s) == 0. or max(r) <= 0.:
         AdvPrint.cout("No signal events in the selected SRs! Skipping")
@@ -138,7 +144,7 @@ def calc_cov(path, analysis, mbsr):
     if max(r) <= 0.:
         AdvPrint.cout("Signal events below MC uncertainty in the selected SRs! Skipping")
         return inv_r, inv_r_exp, 1-cls_obs, cls_exp, None    
-    stat_wrapper = spey.get_backend ("default_pdf.correlated_background")
+    stat_wrapper = spey.get_backend ("default.correlated_background")
     
     cov_mat = mb.get_cov(analysis, db, Info.flags["corr"], mbsr)
     if  Info.flags["corr"] and analysis == "cms_1908_04722":
@@ -156,6 +162,8 @@ def calc_cov(path, analysis, mbsr):
     #AdvPrint.cout("Log det: " + str(sign) + " " + str(logdet))
     #AdvPrint.cout(str(s))
     #stat_model = stat_wrapper(signal_yields = np.array(s)[0:dim], background_yields = np.array(b)[0:dim], data = np.array(o)[0:dim], covariance_matrix = np.array(cov_mat)[0:dim,0:dim])
+    if Info.parameters["backend"] == "jax":
+        pyhf.set_backend("jax")
     stat_model = stat_wrapper(analysis = analysis+mbsr , signal_yields = np.array(s), background_yields = np.array(b), data = np.array(o), covariance_matrix = np.array(cov_mat))
     
     string = "================================\n Analysis: "+analysis+" , SR: "+mbsr+"\n"
