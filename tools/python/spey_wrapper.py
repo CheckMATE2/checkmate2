@@ -130,12 +130,8 @@ def calc_cov(path, analysis, mbsr):
     
     mb_signal_regions = Info.get_analysis_parameters(analysis)["mb_signal_regions"]
     sr_list = mb_signal_regions[mbsr]
-    if analysis == "cms_2111_06296":
-        mbfull.init(path, analysis, mbsr)
-        names = mbfull.SR_dict.keys()
-        o, b, db, s, ds = mbfull.select_MBsr(names, mbfull.data_from_CMresults(Info.paths['output'], CRonly = True)) #prepare data
-    else:
-        o, b, db, s, ds = mb.select_MBsr(sr_list, mb.data_from_CMresults(Info.paths['output'])) #prepare data
+    
+    o, b, db, s, ds = mb.select_MBsr(sr_list, mb.data_from_CMresults(Info.paths['output'])) #prepare data
 
     r = [x - 1.64*y for x, y in zip(s,ds)] #s - 1.64 ds
     if max(s) == 0. or max(r) <= 0.:
@@ -164,6 +160,7 @@ def calc_cov(path, analysis, mbsr):
     #stat_model = stat_wrapper(signal_yields = np.array(s)[0:dim], background_yields = np.array(b)[0:dim], data = np.array(o)[0:dim], covariance_matrix = np.array(cov_mat)[0:dim,0:dim])
     if Info.parameters["backend"] == "jax":
         pyhf.set_backend("jax")
+    print("Pyhf backend: "+pyhf.tensorlib.name)
     stat_model = stat_wrapper(analysis = analysis+mbsr , signal_yields = np.array(s), background_yields = np.array(b), data = np.array(o), covariance_matrix = np.array(cov_mat))
     
     string = "================================\n Analysis: "+analysis+" , SR: "+mbsr+"\n"
