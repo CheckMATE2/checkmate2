@@ -26,6 +26,10 @@ class DetectorSettings(object):
             line = ""
             for pid in Info.parameters['invisiblePIDs']:
                 line += "  add EnergyFraction {"+str(pid)+"} {0.0 0.0}\n"
+        if Info.parameters['invisiblePIDs'] != [] and "  #@@newInvisibles2@@" in line:
+            line = ""
+            for pid in Info.parameters['invisiblePIDs']:
+                line += "  add PdgCode {"+str(pid)+"}\n"
         return line
 
     # Add random seed to detector card, if needed

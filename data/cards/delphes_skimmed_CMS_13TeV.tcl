@@ -3,6 +3,7 @@
 #######################################
 
 set ExecutionPath {
+  InvisibleFilter
   ParticlePropagator
 
   ChargedHadronTrackingEfficiency
@@ -29,12 +30,24 @@ set ExecutionPath {
   TreeWriter
 }
 
+module PdgCodeFilter InvisibleFilter {
+
+  set InputArray Delphes/stableParticles
+  set OutputArray visibleParticles
+
+  set PTMin 0.0
+
+  #@@newInvisibles2@@
+
+}
+
 #################################
 # Propagate particles in cylinder
 #################################
 
 module ParticlePropagator ParticlePropagator {
-  set InputArray Delphes/stableParticles
+  #set InputArray Delphes/stableParticles
+  set InputArray InvisibleFilter/visibleParticles
 
   set OutputArray stableParticles
   set ChargedHadronOutputArray chargedHadrons

@@ -25,7 +25,7 @@ void Cms_2605_13614::initialize() {
   std::vector<int64_t> input_node_dims;
   char *a = Global::get_maindir();
   std::string maindir(a, strlen(a));
-  std::string file = maindir  + std::string("/data/cms_2605_13614/pnn_model.onnx");
+  std::string file = maindir  + std::string("/data/cms_2605_13614/pnn_model_with_preprocessing.onnx");
   
 
   Ort::SessionOptions session_options;
@@ -241,7 +241,8 @@ void Cms_2605_13614::analyze() {
     if (result < 0.9) return;
     std::ostringstream ss;
     ss << "mH" << std::fixed << std::setprecision(1) << mH << "_mA" << mA << "_" << year << "_" << flavour; 
-    countCutflowEvent("06_pNN>0.9_" + ss.str());
+    countCutflowEvent("07_pNN>0.9_" + ss.str());
+    countCutflowEvent("06_pNN>0.9");
     
     if (flavour == "EE") {
       if (result < electron_bins[1]) countControlEvent(ss.str() + "_bin_0");
