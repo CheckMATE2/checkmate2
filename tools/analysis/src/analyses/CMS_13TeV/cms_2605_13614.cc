@@ -222,22 +222,22 @@ void Cms_2605_13614::analyze() {
 
   for (const auto& [mH, mA] : mHmA) {  
     std::vector<float> masses_values;
-    masses_values.push_back(70.); //mH
-    masses_values.push_back(160.); //mA
+    masses_values.push_back(mH); //mH
+    masses_values.push_back(mA); //mA
     auto input_tensor_x = Ort::Value::CreateTensor(memory_info, x_values.data(), input_tensor_size_x, input_dims_x.data(), 2); //rank = 2
     auto input_tensor_masses = Ort::Value::CreateTensor(memory_info, masses_values.data(), input_tensor_size_masses, input_dims_masses.data(), 2); //rank = 2
   
     std::array<Ort::Value, 2> input_tensors = {std::move(input_tensor_x), std::move(input_tensor_masses)};
 
-    const float* check = input_tensors[0].GetTensorData<float>();
-    for (size_t i = 0; i < 28; ++i) cout << check[i] << " ";
+    //const float* check = input_tensors[0].GetTensorData<float>();
+    //for (size_t i = 0; i < 28; ++i) cout << check[i] << " ";
 
     auto output_tensors = session->Run(Ort::RunOptions{nullptr}, input_names.data(), input_tensors.data(), 2, output_names.data(), 1);
     
     float* output = output_tensors[0].GetTensorMutableData<float>();
 
     float result = output[0];
-    cout << "result: " << result << endl;
+    //cout << "result: " << result << endl;
     if (result < 0.9) return;
     std::ostringstream ss;
     ss << "mH" << std::fixed << std::setprecision(1) << mH << "_mA" << mA << "_" << year << "_" << flavour; 
