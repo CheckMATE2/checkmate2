@@ -238,7 +238,7 @@ void Cms_2605_13614::analyze() {
 
     float result = output[0];
     //cout << "result: " << result << endl;
-    if (result < 0.9) return;
+    if (result < 0.9) continue;
     std::ostringstream ss;
     ss << "mH" << std::fixed << std::setprecision(1) << mH << "_mA" << mA << "_" << year << "_" << flavour; 
     countCutflowEvent("07_pNN>0.9_" + ss.str());
