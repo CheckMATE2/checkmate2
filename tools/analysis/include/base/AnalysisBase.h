@@ -66,6 +66,7 @@ class AnalysisBase {
     friend class AnalysisHandlerCMS_7TeV; // Need access to members to set them
     friend class AnalysisHandlerCMS_8TeV; // Need access to members to set them
     friend class AnalysisHandlerCMS_13TeV; // Need access to members to set them
+    friend class AnalysisHandlerCMS_13_6TeV; // Need access to members to set them
     friend class AnalysisHandlerCMS_14TeV_projected; // Need access to members to set them
  public:
     //! Constructor function to load the Delphes ROOT file.

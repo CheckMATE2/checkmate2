@@ -217,6 +217,8 @@ void Fritz::setupAnalysisHandler(Config conf) {
             aHandler = new AnalysisHandlerCMS_8TeV();
         } else if (type == "cms13tev") {
             aHandler = new AnalysisHandlerCMS_13TeV();
+        } else if (type == "cms13_6tev") {
+            aHandler = new AnalysisHandlerCMS_13_6TeV();
         } else if (type == "cms14tev_projected") {
             aHandler = new AnalysisHandlerCMS_14TeV_projected();
         } else {

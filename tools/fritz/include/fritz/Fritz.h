@@ -21,6 +21,7 @@
 #include "AnalysisHandlerCMS_7TeV.h"
 #include "AnalysisHandlerCMS_8TeV.h"
 #include "AnalysisHandlerCMS_13TeV.h"
+#include "AnalysisHandlerCMS_13_6TeV.h"
 #include "AnalysisHandlerCMS_14TeV_projected.h"
 #include "EventFile.h"
 

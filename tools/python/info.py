@@ -67,6 +67,7 @@ class Info(dict):
                 "CMS_7TeV",
                 "CMS_8TeV",
                 "CMS_13TeV",
+                "CMS_13_6TeV",
                 "CMS_14TeV_HighLumi"           
         }
         cls.experiments = {
@@ -80,6 +81,7 @@ class Info(dict):
                 "cms7tev",
                 "cms8tev",
                 "cms13tev",
+                "cms13_6tev",
                 "cms14tev_projected"
                 }
         cls.detector_setups = {
@@ -96,6 +98,7 @@ class Info(dict):
                     7.0: {"default": ("cms7tev", "CMS_7TeV")},
                     8.0: {"default": ("cms8tev", "CMS_8TeV")},
                     13.0: {"default": ("cms13tev", "CMS_13TeV")},
+                    13.6: {"default": ("cms13_6tev", "CMS_13_6TeV")},
                     14.0: {"projected": ("cms14tev_projected", "CMS_14TeV_HighLumi")},
                     }
                 }
@@ -110,6 +113,7 @@ class Info(dict):
                 "cms7tev": "AnalysisHandlerCMS_7TeV",
                 "cms8tev": "AnalysisHandlerCMS_8TeV",
                 "cms13tev": "AnalysisHandlerCMS_13TeV",
+                "cms13_6tev": "AnalysisHandlerCMS_13_6TeV",
                 "cms14tev_projected": "AnalysisHandlerCMS_14TeV_projected",
                 }
         cls.paths = paths
@@ -817,6 +821,7 @@ class Info(dict):
         delphes_global_config["cms7tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS.tcl')
         delphes_global_config["cms8tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS.tcl')
         delphes_global_config["cms13tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS_13TeV.tcl')
+        delphes_global_config["cms13_6tev"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS_13TeV.tcl')
         delphes_global_config["cms14tev_projected"] = os.path.join(cls.paths['cards'], 'delphes_skimmed_CMS_14TeV.tcl')
         cls.files['delphes_global_config'] = delphes_global_config
         

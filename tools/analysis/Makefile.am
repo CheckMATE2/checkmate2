@@ -3,7 +3,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 AM_CXXFLAGS = @ROOTCFLAGS@ @DELPHESCFLAGS@ -Iinclude/base -Iinclude/base/MVAUtils -Iinclude/kinematics -Iinclude/kinematics/mctlib \
              -Iinclude/kinematics/mt2family -Iinclude/kinematics/topness -Iinclude/global \
              -Iinclude/analyses/ATLAS_7TeV -Iinclude/analyses/ATLAS_8TeV -Iinclude/analyses/ATLAS_13TeV -Iinclude/analyses/ATLAS_14TeV_HighLumi \
-             -Iinclude/analyses/CMS_7TeV -Iinclude/analyses/CMS_8TeV -Iinclude/analyses/CMS_13TeV -Iinclude/analyses/CMS_14TeV_HighLumi
+             -Iinclude/analyses/CMS_7TeV -Iinclude/analyses/CMS_8TeV -Iinclude/analyses/CMS_13TeV -Iinclude/analyses/CMS_13_6TeV -Iinclude/analyses/CMS_14TeV_HighLumi
 
 if HAVE_ONNX
    AM_CXXFLAGS += @ONNXINCLUDE@ -DHAVE_ONNX=1
@@ -171,6 +171,7 @@ libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2209_13935.h src/an
 libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2102_10874.h src/analyses/ATLAS_13TeV/atlas_2102_10874.cc
 libanalyses_la_SOURCES += include/analyses/ATLAS_13TeV/atlas_2411_02040.h src/analyses/ATLAS_13TeV/atlas_2411_02040.cc
 libanalyses_la_SOURCES += include/analyses/CMS_13TeV/cms_2605_13614.h src/analyses/CMS_13TeV/cms_2605_13614.cc
+libanalyses_la_SOURCES += include/analyses/CMS_13_6TeV/cms_2605_13614_13p6.h src/analyses/CMS_13_6TeV/cms_2605_13614_13p6.cc
 #@@extraanalysis@@
 
 libanalyses_la_LDFLAGS = -avoid-version -shared
