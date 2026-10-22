@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+import sys,os
+sys.path.append("@runpath@")
+sys.path.append("@ROOTLIBDIR@")
+from info import Info
+from cms_2605_13614_combination import main
+
+config_paths = dict()
+config_paths['mg5_source_path']='@MADGRAPHDIR@'
+config_paths['pythia8_lib_path']='@PYTHIALIBDIR@'
+config_paths['install_dir']='@prefix@' 
+config_paths['data_dir']='@datadir@'
+config_paths['source']='@sourcedir@'
+if os.getenv("CHECKMATE_RESULTS") is not None:
+    config_paths['results']=os.getenv("CHECKMATE_RESULTS")
+else:
+    config_paths['results']='@RESULTSDIR@'
+config_paths['remote']="@user_defined_prefix@"
+
+Info.init(config_paths)
+
+main()

@@ -14,6 +14,7 @@ export DYLD_LIBRARY_PATH
 all-local: bin/CheckMATE data/cards/mg5_default_me5_configuration.txt bin/13tev_test.in bin/13tev_testfull2.in
 	@chmod +x bin/CheckMATE
 	@chmod +x bin/AnalysisManager
+	@chmod +x bin/combine_cms_2605_13614.py
 	@echo "========================================="
 	@echo " Build complete! "
 #	@echo " You might need to download statistical models "
@@ -21,7 +22,7 @@ all-local: bin/CheckMATE data/cards/mg5_default_me5_configuration.txt bin/13tev_
 #	@echo " Run: "
 #	@echo " ./download.sh "
 
-CLEANFILES = bin/CheckMATE data/cards/mg5_default_me5_configuration.txt bin/13tev_test.in bin/13tev_testfull2.in download.sh
+CLEANFILES = bin/CheckMATE bin/combine_cms_2605_13614.py data/cards/mg5_default_me5_configuration.txt bin/13tev_test.in bin/13tev_testfull2.in download.sh
 
 if USER_PREFIX
 # Define the destination directory
@@ -31,7 +32,7 @@ mydatadir = $(datadir)
 nobase_mydata_DATA = $(shell find data -type f)
 nobase_cards_DATA = $(shell find bin -type f)
 
-bin_SCRIPTS = bin/CheckMATE tools/python/advprint.py tools/python/checkmate_core.py tools/python/cls.py tools/python/detectorsettings.py tools/python/evaluator.py tools/python/events.py tools/python/example.py tools/python/get_s95.py tools/python/hs3_wrapper.py tools/python/info.py tools/python/initialize.py tools/python/multibin_limit_full.py tools/python/multibin_limit.py tools/python/process.py tools/python/resultcollector.py tools/python/spey_wrapper.py tools/python/workspace_calc.py
+bin_SCRIPTS = bin/CheckMATE bin/combine_cms_2605_13614.py tools/python/advprint.py tools/python/checkmate_core.py tools/python/cls.py tools/python/cms_2605_13614_combination.py tools/python/combine_control.py tools/python/combine_wrapper.py tools/python/detectorsettings.py tools/python/evaluator.py tools/python/events.py tools/python/example.py tools/python/get_s95.py tools/python/hs3_wrapper.py tools/python/info.py tools/python/initialize.py tools/python/multibin_limit_full.py tools/python/multibin_limit.py tools/python/process.py tools/python/resultcollector.py tools/python/spey_wrapper.py tools/python/workspace_calc.py
 
 remote = True
 else

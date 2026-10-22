@@ -81,6 +81,7 @@ AC_CONFIG_FILES([Makefile
                  bin/13tev_testfull2.in
                  bin/CheckMATE:tools/python/CheckMATE.in
                  bin/AnalysisManager:tools/python/AnalysisManager.in
+                 bin/combine_cms_2605_13614.py:tools/python/combine_cms_2605_13614.in
                  data/cards/mg5_default_me5_configuration.txt])
 AC_OUTPUT
 

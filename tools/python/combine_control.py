@@ -72,15 +72,11 @@ def read_control_regions(path):
 	return values
 
 
-def combine(folder, analysis):
-	folder = Path(folder)
-	suffix = f"_{analysis}_control.dat"
-	files = sorted(
-		path for path in folder.iterdir()
-		if path.is_file() and path.name.endswith(suffix)
-	)
+def combine_files(files):
+	"""Sum control-region yields over files, adding errors in quadrature."""
+	files = list(files)
 	if not files:
-		raise ValueError(f"No files ending in {suffix!r} were found")
+		raise ValueError("No control-region files given")
 
 	first_file_values = read_control_regions(files[0])
 	regions = list(first_file_values)
@@ -102,11 +98,29 @@ def combine(folder, analysis):
 				error = norm_events / math.sqrt(acceptance * mc_events)
 				totals[region][1] += error * error
 
-	results = {
+	return {
 		region: (events, math.sqrt(variance))
 		for region, (events, variance) in totals.items()
 	}
-	return files, results
+
+
+def combine(folder, analysis):
+	folder = Path(folder)
+	suffix = f"_{analysis}_control.dat"
+	files = sorted(
+		path for path in folder.iterdir()
+		if path.is_file() and path.name.endswith(suffix)
+	)
+	if not files:
+		raise ValueError(f"No files ending in {suffix!r} were found")
+	return files, combine_files(files)
+
+
+def write_combined(path, results):
+	with Path(path).open("w", encoding="utf-8") as output_file:
+		output_file.write("Control region\tEvents\tError\n")
+		for region, (events, error) in results.items():
+			output_file.write(f"{region}\t{events:.10g}\t{error:.10g}\n")
 
 
 def main():
@@ -121,10 +135,7 @@ def main():
 		parser.error(str(error))
 
 	output_path = Path(args.folder) / f"{args.analysis}_combined_control.txt"
-	with output_path.open("w", encoding="utf-8") as output_file:
-		output_file.write("Control region\tEvents\tError\n")
-		for region, (events, error) in results.items():
-			output_file.write(f"{region}\t{events:.10g}\t{error:.10g}\n")
+	write_combined(output_path, results)
 
 	print(f"Files combined: {len(files)}")
 	print("Control region\tEvents\tError")
