@@ -1,0 +1,2 @@
+#Name                          NSR  Description                                                      Lumi    CR?  
+cms_2605_13614_13p6             1   Inert doublet                                                    35.0  no  
