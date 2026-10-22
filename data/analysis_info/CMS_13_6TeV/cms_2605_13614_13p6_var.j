@@ -36,7 +36,7 @@
   "long_info": [
     "Inert doublet IDM search in Z+MET"
   ],
-  "lumi": "138.0",
+  "lumi": "35.0",
   "muon_iso_absorrel": [
     "r",
     "r"

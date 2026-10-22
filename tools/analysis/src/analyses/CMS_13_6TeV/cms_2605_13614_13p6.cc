@@ -219,14 +219,14 @@ void Cms_2605_13614_13p6::analyze() {
     std::array<Ort::Value, 2> input_tensors = {std::move(input_tensor_x), std::move(input_tensor_masses)};
 
     const float* check = input_tensors[0].GetTensorData<float>();
-    for (size_t i = 0; i < 28; ++i) cout << check[i] << " ";
+    //for (size_t i = 0; i < 28; ++i) cout << check[i] << " ";
 
     auto output_tensors = session->Run(Ort::RunOptions{nullptr}, input_names.data(), input_tensors.data(), 2, output_names.data(), 1);
     
     float* output = output_tensors[0].GetTensorMutableData<float>();
 
     float result = output[0];
-    cout << "result: " << result << endl;
+    //cout << "result: " << result << endl;
     if (result < 0.9) continue;
     std::ostringstream ss;
     ss << "mH" << std::fixed << std::setprecision(1) << mH << "_mA" << mA << "_" << year << "_" << flavour; 
