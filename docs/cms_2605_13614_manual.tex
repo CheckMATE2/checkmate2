@@ -1,0 +1,406 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+% keep "--" in options as two hyphens
+\DisableLigatures[-]{family=tt*}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{black!4},
+  frame=single,
+  rulecolor=\color{black!20},
+  columns=fullflexible,
+  keepspaces=true,
+  breaklines=true,
+  showstringspaces=false,
+  xleftmargin=0.5em,
+  xrightmargin=0.5em,
+}
+
+\newcommand{\cm}{\textsc{CheckMATE}}
+\newcommand{\combine}{\textsc{Combine}}
+\newcommand{\file}[1]{\texttt{#1}}
+\emergencystretch=2em
+\newcommand{\opt}[1]{\texttt{#1}}
+
+\title{\cm{} implementation of CMS-NPS-025-002 (\file{cms\_2605\_13614})\\[0.3em]
+\large 13 and 13.6\,TeV analyses and the statistical combination with \combine{}}
+\author{Krzysztof Rolbiecki}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+%======================================================================
+\section{Overview}
+%======================================================================
+
+The CMS search for pair production of additional neutral scalars of the
+Inert Doublet Model (IDM) in final states with two electrons or two muons
+and missing transverse momentum uses the full Run~2 (2016--2018,
+$\sqrt{s}=13$\,TeV) and the 2022 (Run~3, $\sqrt{s}=13.6$\,TeV) data sets.
+The signal is extracted with a parametrised neural network (pNN) whose
+output is fitted in the full CMS statistical model with \combine{}.
+
+In \cm{} the analysis is split into two implementations, one per
+centre-of-mass energy, and the results of the two \cm{} runs are combined
+afterwards:
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+Analysis & $\sqrt{s}$ & Data sets & Detector setup (experiment) \\
+\midrule
+\file{cms\_2605\_13614}      & 13\,TeV   & 2016, 2017, 2018 & \file{cms13tev} \\
+\file{cms\_2605\_13614\_13p6} & 13.6\,TeV & 2022             & \file{cms13\_6tev} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The full workflow is:
+\begin{enumerate}
+  \item generate signal events at 13 and 13.6\,TeV,
+  \item run \cm{} on the 13\,TeV events with the analysis
+        \file{cms\_2605\_13614} and on the 13.6\,TeV events with the
+        analysis \file{cms\_2605\_13614\_13p6},
+  \item run \file{bin/combine\_cms\_2605\_13614.py} on the two runs to
+        obtain the limits for each IDM mass point.
+\end{enumerate}
+
+%======================================================================
+\section{Requirements}
+%======================================================================
+
+\begin{itemize}
+  \item \cm{} compiled with ONNX Runtime support (\texttt{HAVE\_ONNX}); the
+        pNN model is read from
+        \file{data/cms\_2605\_13614/pnn\_model\_with\_preprocessing.onnx}.
+  \item The CMS datacards in \file{data/cms\_2605\_13614/datacards}:
+        \begin{itemize}
+          \item the main datacard \file{input/combined\_cards.txt},
+          \item the histograms of every mass point,\\
+                \file{input/histograms/mH<mH>\_mA<mA>/histograms.root}\\
+                (about 17\,MB per mass point, 9\,GB in total).
+        \end{itemize}
+  \item PyROOT, used to update the signal histograms.
+  \item \combine{} available in the \texttt{PATH} (the CMS results were
+        produced with version~v10.5.0). It may be necessary to run
+        \texttt{ulimit -s unlimited; ulimit -u unlimited} before running
+        \combine{}.
+\end{itemize}
+
+%======================================================================
+\section{The CMS 13.6\,TeV detector setup}
+%======================================================================
+
+The analysis handler \file{AnalysisHandlerCMS\_13\_6TeV}
+(\file{tools/fritz/src/analysishandler}) provides the detector setup for
+CMS analyses at $\sqrt{s}=13.6$\,TeV. All its settings, i.e.\ the photon,
+electron and muon identification efficiencies and the $b$- and $\tau$-tagging
+efficiencies, are taken over unchanged from the 13\,TeV handler
+\file{AnalysisHandlerCMS\_13TeV}. The Delphes card of the 13\,TeV setup,
+\file{delphes\_skimmed\_CMS\_13TeV.tcl}, is used as well.
+
+The setup is registered in \cm{} as
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Experiment                 & \file{cms13\_6tev} \\
+Analysis group             & \file{CMS\_13\_6TeV} \\
+Centre-of-mass energy      & 13.6\,TeV \\
+Analysis list              & \file{data/analysis\_info/CMS\_13\_6TeV\_analyses.txt} \\
+Analysis sources           & \file{tools/analysis/\{src,include\}/analyses/CMS\_13\_6TeV} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+New 13.6\,TeV analyses are added with the \file{AnalysisManager} by
+choosing CMS and a centre-of-mass energy of 13.6\,TeV. The experiment
+recorded in the analysis settings file (\file{\_var.j}) selects the
+analysis handler at run time:
+\begin{lstlisting}
+"ecm": "13.6",
+"experiment": "cms13_6tev",
+\end{lstlisting}
+
+\paragraph{Note.} Analysis names must be unique in \cm{} across all
+analysis groups. A 13.6\,TeV version of an existing analysis therefore needs
+a new name, e.g.\ with the suffix \file{\_13p6}. When the settings file of
+an existing analysis is copied by hand, the \texttt{experiment} entry has to
+be changed as well; otherwise the analysis is booked in the 13\,TeV handler
+and \cm{} stops with \emph{``Cannot load analysis \ldots{} -- analysis
+unknown''}.
+
+%======================================================================
+\section{The analyses}
+%======================================================================
+
+\subsection{Event selection and pNN evaluation}
+
+Both implementations apply the event preselection of the CMS analysis to
+events with two same-flavour leptons and evaluate the pNN for every mass
+point $(m_H, m_A)$ of the mass grid (Section~\ref{sec:grid}). Events with a
+pNN output of at least 0.9 are counted in the bins of the pNN distribution
+used by CMS: 7 bins in the electron channel and 11 bins in the muon channel.
+
+\begin{itemize}
+  \item \file{cms\_2605\_13614} (13\,TeV, $\mathcal{L}=138$\,fb$^{-1}$):
+        every event is assigned at random to one of the data-taking years
+        2016, 2017 and 2018, with probabilities 25.3\,\%, 27.8\,\% and
+        46.9\,\% according to the luminosities of the years. The
+        year-dependent lepton trigger thresholds are applied.
+  \item \file{cms\_2605\_13614\_13p6} (13.6\,TeV, $\mathcal{L}=35$\,fb$^{-1}$):
+        all events are assigned to 2022.
+\end{itemize}
+
+\subsection{Output: control regions}
+
+The yields are stored as control regions in the \cm{} output file
+\begin{center}
+\file{results/<run>/analysis/<process>\_<analysis>\_control.dat}
+\end{center}
+with one control region per mass point, year, channel and pNN bin:
+\begin{center}
+\file{mH<mH>\_mA<mA>\_<year>\_<channel>\_bin\_<n>}
+\end{center}
+where \file{<channel>} is \file{EE} (bins \file{0}--\file{6}) or \file{MM}
+(bins \file{00}--\file{10}), e.g.\ \file{mH70.0\_mA140.0\_2016\_EE\_bin\_3}.
+Both analyses book the regions of all four years, so that the output files
+of the two energies have the same structure; the regions of the years not
+covered by an analysis remain empty.
+
+\subsection{Mass grid}
+\label{sec:grid}
+
+The mass points are defined in the \texttt{mHmA} list in the analysis
+headers \file{cms\_2605\_13614.h} and \file{cms\_2605\_13614\_13p6.h}. The
+list contains all 524 mass points for which CMS provides histograms in the
+datacards:
+\begin{itemize}
+  \item $m_H = 60$--$150$\,GeV in steps of 2.5\,GeV,
+  \item $m_A$ mostly on a 5\,GeV grid with
+        $20\,\mathrm{GeV} \le m_A - m_H \le 100\,\mathrm{GeV}$, including
+        additional points at $m_A = m_H+92$\,GeV; for $m_H \ge 135$\,GeV the
+        grid is $m_A = m_H+20, 30, \ldots, 100$\,GeV and $m_H+92$\,GeV.
+\end{itemize}
+The exact list of points is given in the headers.
+Since the control regions are cheap to produce, \cm{} always evaluates the
+full grid. The selection of the mass points for the statistical evaluation
+is done in the combination script.
+
+%======================================================================
+\section{Running \cm{}}
+%======================================================================
+
+The two energies are run separately, each with events generated at the
+corresponding centre-of-mass energy. Example parameter files:
+
+\begin{lstlisting}
+[Parameters]
+Name: wino_320_40_decay
+Analyses: cms_2605_13614
+
+[hhh]
+Events: /path/to/events_13TeV.hepmc
+XSect: 18.8 fb
+\end{lstlisting}
+
+\begin{lstlisting}
+[Parameters]
+Name: wino_320_40_decay_136
+Analyses: cms_2605_13614_13p6
+
+[hhh]
+Events: /path/to/events_13p6TeV.hepmc
+XSect: 20.8 fb
+\end{lstlisting}
+
+All control-region files of a run (one per process) are taken into account
+in the combination.
+
+%======================================================================
+\section{Statistical combination: \file{combine\_cms\_2605\_13614.py}}
+%======================================================================
+
+\subsection{Synopsis}
+
+\begin{lstlisting}
+bin/combine_cms_2605_13614.py run [run ...]
+    [--mH MH --mA MA | --all]
+    [--datacards DIR] [--output DIR]
+    [--r-max R] [--combine-executable EXE]
+    [--prepare-only] [--keep-histograms]
+\end{lstlisting}
+
+The script is generated by \texttt{configure} from
+\file{tools/python/combine\_cms\_2605\_13614.in}, in the same way as
+\file{bin/CheckMATE}. It therefore uses the same results and data folders as
+\cm{}: the results folder is \file{results/} in the \cm{} directory, or the
+folder given in the environment variable \texttt{CHECKMATE\_RESULTS}.
+
+\subsection{Description}
+
+The script
+\begin{enumerate}
+  \item collects the files \file{*\_cms\_2605\_13614*\_control.dat} from
+        \file{<results>/<run>/analysis/} of all given runs, i.e.\ the output
+        of both \file{cms\_2605\_13614} and \file{cms\_2605\_13614\_13p6};
+  \item sums the yields of every control region over all files. The
+        statistical uncertainty of each file,
+        $\Delta N = N / \sqrt{A \cdot N_\mathrm{MC}}$ with the acceptance $A$
+        and the number of generated events $N_\mathrm{MC}$, is added in
+        quadrature. The result is written to
+        \file{cms\_2605\_13614\_combined\_control.txt} in the output folder;
+  \item evaluates the selected mass points one after another. For every
+        mass point it
+        \begin{enumerate}
+          \item copies the original \file{histograms.root} of the mass point
+                from the datacards to the output folder,
+          \item replaces the signal histograms of the copy (the
+                \texttt{nominal} histogram and all systematic variations in
+                \file{<year>/SR/\{Electron,Muon\}/idm}) by the combined yields,
+          \item runs
+\begin{lstlisting}
+combine combined_cards.txt -M AsymptoticLimits \
+    --keyword-value MA=<mA> --keyword-value MH=<mH> \
+    --strictBounds --rMax <R> -n _mH<mH>_mA<mA>
+\end{lstlisting}
+                in the output folder, which contains a copy of
+                \file{combined\_cards.txt},
+          \item extracts the observed and expected limits on the signal
+                strength $r$ and adds them to \file{limits.txt},
+          \item deletes the modified histogram file.
+        \end{enumerate}
+\end{enumerate}
+
+\paragraph{Handling of the histograms.} The datacards are never modified.
+Only one modified histogram file (about 17\,MB) exists at any time, and it
+is deleted after the mass point has been evaluated, also when the evaluation
+fails or the script is interrupted (Ctrl-C). Modified histograms are only
+kept with \opt{--keep-histograms} or \opt{--prepare-only}; note that this
+requires about 1.5\,GB for the default selection and 9\,GB with
+\opt{--all}.
+
+\subsection{Arguments and options}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\opt{run [run ...]} & Names of the \cm{} runs to combine (folders in the
+                      results folder), typically the 13\,TeV and the
+                      13.6\,TeV run. A single run can be given as well. \\
+\opt{--mH MH --mA MA} & Evaluate a single mass point. Both masses have to be
+                      given, and the point has to be in the mass grid of
+                      the analysis and have histograms in the datacards. \\
+\opt{--all}         & Evaluate all 524 mass points of the analysis. \\
+\opt{--datacards DIR} & Folder with the \combine{} datacards; default:\newline
+                      \file{data/cms\_2605\_13614/datacards}. \\
+\opt{--output DIR}  & Output folder (default:
+                      \file{combined\_<run1>\_<run2>\ldots} in the results
+                      folder). \\
+\opt{--r-max R}     & Maximum signal strength passed to \combine{}
+                      (default: 10). \\
+\opt{--combine-executable EXE} & \combine{} executable (default:
+                      \texttt{combine}). \\
+\opt{--prepare-only} & Only prepare the histograms, do not run \combine{}.
+                      The modified histograms are kept. \\
+\opt{--keep-histograms} & Keep the modified histograms after running
+                      \combine{}. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{Selection of mass points}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Command line & Evaluated mass points \\
+\midrule
+(default)              & 90 points with $m_H$ and $m_A$ on a 10\,GeV grid \\
+\opt{--all}            & all 524 points \\
+\opt{--mH X --mA Y}    & the single point $(X, Y)$, any of the 524 points \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\opt{--all} cannot be combined with \opt{--mH}/\opt{--mA}. Mass points
+without histograms in the datacards are skipped with a warning.
+
+\subsection{Output}
+
+The output folder contains
+\begin{description}
+  \item[\file{cms\_2605\_13614\_combined\_control.txt}] combined
+        control-region yields and uncertainties of all mass points,
+  \item[\file{combined\_cards.txt}] copy of the \combine{} datacard,
+  \item[\file{limits.txt}] table of the limits on $r$ per mass point (see
+        below),
+  \item[\file{logs/mH<mH>\_mA<mA>.log}] full \combine{} output of every
+        mass point,
+  \item[\file{higgsCombine\_mH<mH>\_mA<mA>.AsymptoticLimits.mH120.root}]
+        \mbox{}\\ \combine{} output file of every mass point.
+\end{description}
+
+\file{limits.txt} has the columns
+\begin{lstlisting}
+mH  mA  obs  exp2.5  exp16  exp50  exp84  exp97.5  status
+\end{lstlisting}
+with the observed limit, the expected limit and its quantiles, and the
+status \texttt{ok}, \texttt{failed} or \texttt{prepared}
+(\opt{--prepare-only}); missing values are written as \texttt{-}. A mass
+point is excluded at 95\,\%~CL if $r_\mathrm{obs} < 1$. Results of earlier
+calls with the same output folder are kept, so the table can be filled
+point by point. The script ends with exit code 1 if any mass point failed
+and lists these points.
+
+\subsection{Examples}
+
+Evaluate a single mass point:
+\begin{lstlisting}
+bin/combine_cms_2605_13614.py wino_320_40_decay wino_320_40_decay_136 \
+    --mH 70 --mA 140
+\end{lstlisting}
+
+Evaluate the default selection of 90 mass points:
+\begin{lstlisting}
+bin/combine_cms_2605_13614.py wino_320_40_decay wino_320_40_decay_136
+\end{lstlisting}
+
+Evaluate all mass points:
+\begin{lstlisting}
+bin/combine_cms_2605_13614.py wino_320_40_decay wino_320_40_decay_136 --all
+\end{lstlisting}
+
+Prepare the histograms of one mass point for inspection without running
+\combine{}:
+\begin{lstlisting}
+bin/combine_cms_2605_13614.py wino_320_40_decay wino_320_40_decay_136 \
+    --mH 70 --mA 140 --prepare-only --output /tmp/check
+\end{lstlisting}
+
+\subsection{Helper scripts}
+
+The script uses two modules in \file{tools/python} that can also be run on
+their own:
+\begin{description}
+  \item[\file{combine\_control.py <folder> <analysis>}] \mbox{}\\
+        sums the control-region files \file{*\_<analysis>\_control.dat}
+        in one folder and writes the result to
+        \file{<analysis>\_combined\_control.txt}.
+  \item[\file{combine\_wrapper.py <mH> <mA> --control-file F --histogram-file H}]
+        \mbox{}\\ fills the combined yields of one mass point into a
+        histogram file. \emph{This modifies the given file in place.}
+\end{description}
+
+\end{document}

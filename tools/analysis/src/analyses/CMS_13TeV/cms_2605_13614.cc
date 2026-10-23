@@ -239,11 +239,14 @@ void Cms_2605_13614::analyze() {
     float result = output[0];
     //cout << "result: " << result << endl;
     if (result < 0.9) continue;
-    std::ostringstream ss;
+    std::ostringstream ss, ss1;
     ss << "mH" << std::fixed << std::setprecision(1) << mH << "_mA" << mA << "_" << year << "_" << flavour; 
-    countCutflowEvent("07_pNN>0.9_" + ss.str());
+    ss1 << "mH" << std::fixed << std::setprecision(1) << mH << "_mA" << mA ; 
+
+    countCutflowEvent("08_pNN>0.9_" + ss.str());
     countCutflowEvent("06_pNN>0.9");
-    
+    countCutflowEvent("07_pNN>0.9" + ss1.str());
+
     if (flavour == "EE") {
       if (result < electron_bins[1]) countControlEvent(ss.str() + "_bin_0");
       else if (result < electron_bins[2]) countControlEvent(ss.str() + "_bin_1");
