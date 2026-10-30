@@ -9,7 +9,9 @@ processed, or all of them with --all.
 
 The histograms in the datacards folder are never modified: for every mass
 point they are copied to the output folder, updated there and removed after
-Combine has run (unless --keep-histograms is given).
+Combine has run (unless --keep-histograms is given). With --histos, the
+original and the updated signal histograms are compared in plots, separately
+for the EE and MM channels and for 2016-2018 (summed) and 2022.
 """
 
 import argparse
@@ -21,7 +23,7 @@ from pathlib import Path
 
 from info import Info
 from combine_control import combine_files, write_combined
-from combine_wrapper import mass_point_name, update_histograms
+from combine_wrapper import mass_point_name, plot_histograms, update_histograms
 
 
 ANALYSIS = "cms_2605_13614"
@@ -31,6 +33,7 @@ CONTROL_FILE_GLOB = f"*_{ANALYSIS}*_control.dat"
 COMBINED_CONTROL_FILE = f"{ANALYSIS}_combined_control.txt"
 CARDS_FILE = "combined_cards.txt"
 LIMITS_FILE = "limits.txt"
+PLOTS_DIR = "plots"
 # Without --all, only mass points with both masses on this grid are evaluated
 DEFAULT_GRID_STEP = 10.0
 
@@ -263,6 +266,14 @@ def main():
         action="store_true",
         help="keep the updated histograms after running Combine",
     )
+    parser.add_argument(
+        "--histos",
+        action="store_true",
+        help=(
+            "plot the original and the updated signal histograms of each mass "
+            f"point (written to <output>/{PLOTS_DIR}/<mass point>)"
+        ),
+    )
     args = parser.parse_args()
 
     if (args.mH is None) != (args.mA is None):
@@ -342,12 +353,21 @@ def main():
         histogram_file = output_dir / "histograms" / mass_point / "histograms.root"
         histogram_file.parent.mkdir(parents=True, exist_ok=True)
         limits = {}
+        original_histogram_file = (
+            cards_dir / "histograms" / mass_point / "histograms.root"
+        )
         try:
-            shutil.copy2(
-                cards_dir / "histograms" / mass_point / "histograms.root",
-                histogram_file,
-            )
+            shutil.copy2(original_histogram_file, histogram_file)
             update_histograms(m_h, m_a, combined_control_file, histogram_file)
+            if args.histos:
+                for plot in plot_histograms(
+                    m_h,
+                    m_a,
+                    original_histogram_file,
+                    histogram_file,
+                    output_dir / PLOTS_DIR / mass_point,
+                ):
+                    print(f"Plot written to {plot}")
             if args.prepare_only:
                 status = "prepared"
             else:

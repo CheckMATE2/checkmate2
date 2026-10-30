@@ -13,6 +13,8 @@ FILE_PATH_TEMPLATE = "histograms/{mass_point}/histograms.root"
 CONTROL_FILE = "results/combined_files/cms_2605_13614_combined_control.txt"
 SUB_PATH_TEMPLATE = "{year}/SR/{channel}/idm"
 CONTROL_HEADER = ("Control", "region", "Events", "Error")
+# Years whose histograms are summed in the comparison plots
+PLOT_YEAR_GROUPS = (("2016", "2017", "2018"), ("2022",))
 CONTROL_REGION_SUFFIX_RE = re.compile(
     r"^(?P<year>\d{4})_(?P<channel>EE|MM)_bin_(?P<bin>\d+)$"
 )
@@ -223,6 +225,146 @@ def update_histograms(
             )
     finally:
         root_file.Close()
+
+
+def read_summed_nominal(root_file, years, channel, name):
+    """Return the sum of the nominal histograms of the given years."""
+    total = None
+    for year in years:
+        directory_path = SUB_PATH_TEMPLATE.format(year=year, channel=channel)
+        nominal = root_file.Get(f"{directory_path}/nominal")
+        if not nominal or not nominal.InheritsFrom("TH1"):
+            raise ValueError(
+                f"'nominal' histogram not found in {root_file.GetName()}:"
+                f"{directory_path}"
+            )
+        if total is None:
+            total = nominal.Clone(name)
+            total.SetDirectory(0)
+        else:
+            if nominal.GetNbinsX() != total.GetNbinsX():
+                raise ValueError(
+                    f"Binning of {directory_path} differs from the other years"
+                )
+            total.Add(nominal)
+    return total
+
+
+def plot_histograms(m_h, m_a, original_file, updated_file, output_dir):
+    """Compare the original CMS signal histograms with the updated ones.
+
+    For each channel, one plot is made for the sum of 2016-2018 and one for
+    2022. Return the paths of the written plots.
+    """
+    import ROOT
+
+    ROOT.gROOT.SetBatch(True)
+    ROOT.gStyle.SetOptStat(0)
+    mass_point = mass_point_name(m_h, m_a)
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    files = {}
+    try:
+        for label, path in (("original", original_file), ("updated", updated_file)):
+            files[label] = ROOT.TFile.Open(str(path), "READ")
+            if not files[label] or files[label].IsZombie():
+                raise OSError(f"Could not open histogram file {path}")
+
+        plots = []
+        for control_channel, channel in CHANNELS.items():
+            for years in PLOT_YEAR_GROUPS:
+                year_label = "-".join((years[0], years[-1])) if len(years) > 1 else years[0]
+                tag = f"{mass_point}_{control_channel}_{year_label}"
+                original = read_summed_nominal(
+                    files["original"], years, channel, f"original_{tag}"
+                )
+                updated = read_summed_nominal(
+                    files["updated"], years, channel, f"updated_{tag}"
+                )
+                if original.GetNbinsX() != updated.GetNbinsX():
+                    raise ValueError(
+                        f"Binning of the original and the updated {control_channel} "
+                        f"{year_label} histograms differs"
+                    )
+
+                canvas = ROOT.TCanvas(f"canvas_{tag}", "", 800, 800)
+                top = ROOT.TPad(f"top_{tag}", "", 0, 0.3, 1, 1)
+                bottom = ROOT.TPad(f"bottom_{tag}", "", 0, 0, 1, 0.3)
+                for pad in (top, bottom):
+                    pad.SetLeftMargin(0.13)
+                    pad.SetRightMargin(0.05)
+                top.SetBottomMargin(0.02)
+                bottom.SetTopMargin(0.02)
+                bottom.SetBottomMargin(0.3)
+                top.Draw()
+                bottom.Draw()
+
+                top.cd()
+                original.SetLineColor(ROOT.kBlue + 1)
+                original.SetMarkerColor(ROOT.kBlue + 1)
+                original.SetLineWidth(2)
+                updated.SetLineColor(ROOT.kRed + 1)
+                updated.SetMarkerColor(ROOT.kRed + 1)
+                updated.SetMarkerStyle(20)
+                updated.SetLineWidth(2)
+                maximum = max(
+                    original.GetBinContent(i) + original.GetBinError(i)
+                    for i in range(1, original.GetNbinsX() + 1)
+                )
+                maximum = max(
+                    [maximum] + [
+                        updated.GetBinContent(i) + updated.GetBinError(i)
+                        for i in range(1, updated.GetNbinsX() + 1)
+                    ]
+                )
+                original.SetTitle(f"{mass_point}, {control_channel}, {year_label}")
+                original.GetYaxis().SetTitle("Signal events")
+                original.GetYaxis().SetTitleSize(0.05)
+                original.GetYaxis().SetTitleOffset(1.1)
+                original.GetXaxis().SetLabelSize(0)
+                original.SetMaximum(1.3 * maximum if maximum > 0 else 1.0)
+                original.SetMinimum(0.0)
+                original.Draw("E")
+                updated.Draw("E1 SAME")
+                legend = ROOT.TLegend(0.15, 0.72, 0.5, 0.88)
+                legend.SetBorderSize(0)
+                legend.SetFillStyle(0)
+                legend.AddEntry(original, "CMS", "le")
+                legend.AddEntry(updated, "CheckMATE", "lep")
+                legend.Draw()
+
+                bottom.cd()
+                ratio = updated.Clone(f"ratio_{tag}")
+                ratio.SetDirectory(0)
+                ratio.Divide(original)
+                ratio.SetTitle("")
+                ratio.SetMinimum(0.0)
+                ratio.SetMaximum(2.0)
+                ratio.GetYaxis().SetTitle("CheckMATE / CMS")
+                ratio.GetYaxis().SetNdivisions(505)
+                ratio.GetYaxis().SetTitleSize(0.1)
+                ratio.GetYaxis().SetTitleOffset(0.45)
+                ratio.GetYaxis().SetLabelSize(0.08)
+                ratio.GetXaxis().SetTitle(original.GetXaxis().GetTitle())
+                ratio.GetXaxis().SetTitleSize(0.1)
+                ratio.GetXaxis().SetLabelSize(0.08)
+                ratio.Draw("E1")
+                line = ROOT.TLine(
+                    ratio.GetXaxis().GetXmin(), 1.0, ratio.GetXaxis().GetXmax(), 1.0
+                )
+                line.SetLineStyle(2)
+                line.Draw()
+
+                plot_path = output_dir / f"{tag}.pdf"
+                canvas.SaveAs(str(plot_path))
+                canvas.Close()
+                plots.append(plot_path)
+    finally:
+        for root_file in files.values():
+            if root_file:
+                root_file.Close()
+    return plots
 
 
 def main():
