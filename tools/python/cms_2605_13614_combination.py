@@ -44,6 +44,9 @@ LIMIT_RE = re.compile(
     re.MULTILINE,
 )
 LIMIT_COLUMNS = ("obs", "exp2.5", "exp16", "exp50", "exp84", "exp97.5")
+# Columns for which the most sensitive mass point (lowest limit on r) is
+# reported at the top of the limits file
+BEST_COLUMNS = (("obs", "observed"), ("exp50", "median expected"))
 
 
 def read_mass_points(header):
@@ -130,10 +133,11 @@ def read_limits(path):
     if not path.is_file():
         return rows
     with path.open(encoding="utf-8") as limits_file:
-        next(limits_file, None)
         for line in limits_file:
+            if line.startswith("#"):
+                continue
             fields = line.split()
-            if len(fields) != len(LIMIT_COLUMNS) + 3:
+            if fields[:2] == ["mH", "mA"] or len(fields) != len(LIMIT_COLUMNS) + 3:
                 continue
             limits = {
                 column: value
@@ -144,8 +148,50 @@ def read_limits(path):
     return rows
 
 
+def find_best(rows, column):
+    """Return the mass point with the lowest limit in column, or None."""
+    best = None
+    for point, (limits, status) in rows.items():
+        if status != "ok" or column not in limits:
+            continue
+        try:
+            value = float(limits[column])
+        except ValueError:
+            continue
+        if best is None or value < best[1]:
+            best = (point, value)
+    return best
+
+
+def best_summary(rows):
+    """Return the lines describing the most sensitive mass points.
+
+    If the best observed and the best median expected mass point coincide,
+    it is reported only once.
+    """
+    best = {}
+    for column, label in BEST_COLUMNS:
+        result = find_best(rows, column)
+        if result is not None:
+            best.setdefault(result[0], []).append(label)
+    lines = []
+    for (m_h, m_a), labels in best.items():
+        limits = rows[(m_h, m_a)][0]
+        values = ", ".join(
+            f"{column}={limits[column]}" for column, _ in BEST_COLUMNS
+            if column in limits
+        )
+        lines.append(
+            f"Best {' and '.join(labels)} sensitivity: "
+            f"{mass_point_name(m_h, m_a)} ({values})"
+        )
+    return lines
+
+
 def write_limits(path, rows):
     with path.open("w", encoding="utf-8") as limits_file:
+        for line in best_summary(rows):
+            limits_file.write(f"# {line}\n")
         limits_file.write(
             "\t".join(("mH", "mA") + LIMIT_COLUMNS + ("status",)) + "\n"
         )
@@ -327,6 +373,8 @@ def main():
         rows[(m_h, m_a)] = (limits, status)
         write_limits(limits_file, rows)
 
+    for line in best_summary(rows):
+        print(line)
     print(f"\nResults written to {limits_file}")
     if failed:
         print(f"{len(failed)} of {len(mass_points)} mass points failed:")
