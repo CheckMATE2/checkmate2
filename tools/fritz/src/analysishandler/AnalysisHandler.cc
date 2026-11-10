@@ -1011,7 +1011,17 @@ void AnalysisHandler::isolateMuons() {
                     // check dR
                     if (neighbour->P4().DeltaR(cand->P4()) > maxDR)
                         continue;
-                    // Muons do not deposit into towers, so no tower=?=muon
+                    // Muons do not deposit into towers, so no tower=?=muon; seems one needs it just in case
+					bool candidatesTower = false;
+                    for(int p = 0; p < neighbour->Particles.GetEntries(); p++){
+                        if (neighbour->Particles.At(p) == cand->Particle) {
+                            // break the loop and ignore the tower
+                            candidatesTower = true;
+                            break;
+                        }
+                    }
+                    if (candidatesTower)
+                        continue;
                     sumPT += neighbour->ET;
                 }
             }
