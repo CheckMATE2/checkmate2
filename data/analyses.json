@@ -377,6 +377,15 @@
                   "path": "ATLAS_13TeV"
                 }
           ]
+        },
+        {
+          "inspire_id": 2773395,
+          "implementations": [
+                {
+                  "name": "atlas_2404_01996",
+                  "path": "ATLAS_13TeV"
+                }
+          ]
         }
   ]
 }

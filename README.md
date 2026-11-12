@@ -95,6 +95,11 @@ This is a brief note on how to install CheckMATE from the master branch on https
 # current
 
 
+2026-11-12  Krzysztof Rolbiecki <krolb@fuw.edu.pl>
+
+    ~ added atlas_2404_01996
+
+
 2026-08-12  Matthew Feickert, Krzysztof Rolbiecki <krolb@fuw.edu.pl>
 
     ~ cleaned installation
