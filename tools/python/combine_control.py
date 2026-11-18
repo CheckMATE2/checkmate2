@@ -51,17 +51,16 @@ def read_control_regions(path):
 				raise ValueError(
 					f"{path}:{line_number}: invalid acceptance or N_Norm value"
 				) from error
-			if not math.isfinite(acceptance) or acceptance < 0:
+			# Negative values are allowed: events with negative weights can
+			# make single regions negative. Negative yields of the evaluated
+			# mass point are rejected when the histograms are filled.
+			if not math.isfinite(acceptance):
 				raise ValueError(
-					f"{path}:{line_number}: acceptance must be finite and non-negative"
+					f"{path}:{line_number}: acceptance must be finite"
 				)
 			if not math.isfinite(norm_events):
 				raise ValueError(
 					f"{path}:{line_number}: N_Norm must be finite"
-				)
-			if norm_events < 0:
-				raise ValueError(
-					f"{path}:{line_number}: N_Norm must not be negative"
 				)
 			values[fields[0]] = (acceptance, norm_events)
 
@@ -95,7 +94,7 @@ def combine_files(files):
 					f"{path}: control region {region!r} has events but zero acceptance"
 				)
 			if acceptance:
-				error = norm_events / math.sqrt(acceptance * mc_events)
+				error = norm_events / math.sqrt(abs(acceptance) * mc_events)
 				totals[region][1] += error * error
 
 	return {

@@ -323,6 +323,9 @@ def plot_histograms(m_h, m_a, original_file, updated_file, output_dir):
                 original.GetYaxis().SetTitleSize(0.05)
                 original.GetYaxis().SetTitleOffset(1.1)
                 original.GetXaxis().SetLabelSize(0)
+                original.GetXaxis().SetTitleSize(0.05)
+                original.GetXaxis().SetTitle("pNN score")
+                original.GetXaxis().SetTitleOffset(1.1)
                 original.SetMaximum(1.3 * maximum if maximum > 0 else 1.0)
                 original.SetMinimum(0.0)
                 original.Draw("E")
@@ -358,6 +361,8 @@ def plot_histograms(m_h, m_a, original_file, updated_file, output_dir):
 
                 plot_path = output_dir / f"{tag}.pdf"
                 canvas.SaveAs(str(plot_path))
+                #canvas.SaveAs(str(plot_path.with_suffix(".png")))
+
                 canvas.Close()
                 plots.append(plot_path)
     finally:
