@@ -161,7 +161,8 @@ def calc_cov(path, analysis, mbsr):
     if Info.parameters["backend"] == "jax":
         pyhf.set_backend("jax")
     print("Pyhf backend: "+pyhf.tensorlib.name)
-    stat_model = stat_wrapper(analysis = analysis+mbsr , signal_yields = np.array(s), background_yields = np.array(b), data = np.array(o), covariance_matrix = np.array(cov_mat))
+    modifiers = [{"type": "shape", "name": "stat", "uncertainties": np.array(ds)}]
+    stat_model = stat_wrapper(analysis = analysis+mbsr , signal_yields = np.array(s), background_yields = np.array(b), data = np.array(o), covariance_matrix = np.array(cov_mat), modifiers = modifiers)
     
     string = "================================\n Analysis: "+analysis+" , SR: "+mbsr+"\n"
     string = string + "Limits with "+ covariance + " matrix likelihood (spey):\n"
