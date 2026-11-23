@@ -137,7 +137,7 @@ bool Atlas_2101_01629::Passes_Cuts_4J(bool cutflow, std::string sr) {
     if (mT < 150.) return false;
     if (mT < 520.) {
         if (cutflow) {if (btag) countCutflowEvent(sr+"_btag_09_lowx"); else  countCutflowEvent(sr+"_bveto_09_lowx");}
-        if (meff < 1300) {
+        if (meff < 1600) {
             if (cutflow) {if (btag) countCutflowEvent(sr+"_btag_10_lowxMeff1000"); else  countCutflowEvent(sr+"_bveto_10_lowxMeff1000");}
             if (btag) countSignalEvent("4J_lx_btag_1000"); else  countSignalEvent("4J_lx_bveto_1000");  
             return true;
@@ -157,7 +157,7 @@ bool Atlas_2101_01629::Passes_Cuts_4J(bool cutflow, std::string sr) {
         
     if (mT > 520. ) {
         if (cutflow) {if (btag) countCutflowEvent(sr+"_btag_09_highx"); else  countCutflowEvent(sr+"_bveto_09_highx");}
-        if (meff < 1300) {
+        if (meff < 1600) {
             if (cutflow) {if (btag) countCutflowEvent(sr+"_btag_10_highxMeff1000"); else  countCutflowEvent(sr+"_bveto_10_highxMeff1000");}
             if (btag) countSignalEvent("4J_hx_btag_1000"); else  countSignalEvent("4J_hx_bveto_1000");  
             return true;
