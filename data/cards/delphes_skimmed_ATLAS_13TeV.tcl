@@ -17,6 +17,7 @@ set ExecutionPath {
   Calorimeter
   EFlowMerger
   EFlowFilter
+  JetInputFilter
   
   MissingET
 
@@ -303,8 +304,19 @@ module Merger MissingET {
 ############
 
 
-module FastJetFinder FastJetFinder {
+# ATLAS jets are calorimeter jets, to which muons contribute almost nothing.
+# Clustering the muons (as CheckMATE did) pulls them into jets, and the analyses' muon-jet
+# overlap removal then deletes boosted muons from top decays (-56% baseline muons in Gtt,
+# docs/physics_decisions.md D6). Jets are therefore built without muons; MET is unchanged.
+module PdgCodeFilter JetInputFilter {
   set InputArray EFlowMerger/eflow
+  set OutputArray eflow
+  add PdgCode {13}
+  add PdgCode {-13}
+}
+
+module FastJetFinder FastJetFinder {
+  set InputArray JetInputFilter/eflow
   set OutputArray jets
 
   # algorithm: 1 CDFJetClu, 2 MidPoint, 3 SIScone, 4 kt, 5 Cambridge/Aachen, 6 antikt
