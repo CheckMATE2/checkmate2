@@ -22,6 +22,9 @@ void Cms_1908_04722::analyze() {
 
   missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
   
+  // PF electron/muon candidates for the isolated-track veto (before any isolation)
+  std::vector<Electron*> trackVetoE = filterPhaseSpace(electronsLoose, 5., -2.4, 2.4);
+  std::vector<Muon*> trackVetoMu = filterPhaseSpace(muonsCombined, 5., -2.4, 2.4);
   electronsLoose = filterPhaseSpace(electronsLoose, 5., -2.5, 2.5);
   std::vector<Electron*> electronsPF = filterPhaseSpace(electronsLoose, 10., -2.5, 2.5, false, true);   // =>   pT < 10
   electronsMedium = filterPhaseSpace(electronsMedium, 10., -2.5, 2.5);
@@ -65,17 +68,47 @@ void Cms_1908_04722::analyze() {
   if (HTmiss/HT >= 1.) return;
   countCutflowEvent("04_HTmiss/HT>1");
   
+  // Vetoes of the paper (arXiv:1908.04722, Sec. 5): no isolated electron or muon with pT > 10 GeV, and
+  // no isolated track with mT(track, ptmiss) < 100 GeV: pT > 5 GeV and relative track isolation
+  // (dR = 0.3) < 0.2 for PF electrons and muons, pT > 10 GeV and isolation < 0.1 for other tracks.
+  // The previous code vetoed only 5-10 GeV PF leptons, with the Delphes isolation and no mT requirement,
+  // and had no veto on hadronic isolated tracks.
   if (muonsCombined.size() ) return;
   countCutflowEvent("05_muVeto");
-  
-  if (muonsPF.size() ) return;
-  countCutflowEvent("06_mutrackVeto");
-  
+
   if (electronsMedium.size() ) return;
-  countCutflowEvent("07_eVeto");  
-  
-  if (electronsPF.size() ) return;
-  countCutflowEvent("08_etrackVeto");    
+  countCutflowEvent("06_eVeto");
+
+  const TLorentzVector met = missingET->P4();
+  auto trkiso = [&](const TLorentzVector& p, const TRef& self) {
+    double sum = 0.;
+    for (size_t t = 0; t < tracks.size(); t++) {
+      if (tracks[t]->Particle == self) continue;
+      if (tracks[t]->P4().DeltaR(p) < 0.3) sum += tracks[t]->PT;
+    }
+    return sum;
+  };
+  for (size_t i = 0; i < trackVetoE.size(); i++) {
+    TLorentzVector p = trackVetoE[i]->P4();
+    if (mT(p, met) < 100. && trkiso(p, trackVetoE[i]->Particle) < 0.2 * p.Perp()) return;
+  }
+  for (size_t i = 0; i < trackVetoMu.size(); i++) {
+    TLorentzVector p = trackVetoMu[i]->P4();
+    if (mT(p, met) < 100. && trkiso(p, trackVetoMu[i]->Particle) < 0.2 * p.Perp()) return;
+  }
+  countCutflowEvent("07_PFlepTrackVeto");
+
+  for (size_t t = 0; t < tracks.size(); t++) {
+    Track* trk = tracks[t];
+    if (trk->PT < 10. || fabs(trk->Eta) > 2.4) continue;
+    TLorentzVector p = trk->P4();
+    if (mT(p, met) >= 100.) continue;
+    double sum = 0.;
+    for (size_t u = 0; u < tracks.size(); u++)
+      if (u != t && tracks[u]->P4().DeltaR(p) < 0.3) sum += tracks[u]->PT;
+    if (sum < 0.1 * trk->PT) return;
+  }
+  countCutflowEvent("08_isoTrackVeto");
   
   if (photonsMedium.size() ) return;
   countCutflowEvent("09_photVeto");    
