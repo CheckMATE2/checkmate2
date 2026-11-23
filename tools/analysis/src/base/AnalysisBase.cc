@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include "AnalysisBase.h"
 
 AnalysisBase::AnalysisBase() {
@@ -54,9 +55,13 @@ void AnalysisBase::setup(std::map<std::string, std::vector<int> > whichTagsIn, s
 
     initialize(); // specified by derived analysis classes
 
-    //uncomment to save correlation information
-    //correlationFile = bookFile(analysis+"_correlations.dat", true);
-    //print_map(correlationMap, 0, correlationFile);
+    // per-event signal-region log when CHECKMATE_EVENTLOG is set
+    // ("#" header with the regions booked at initialisation, then one "E" line per event)
+    if (std::getenv("CHECKMATE_EVENTLOG") != nullptr) {
+        logEvents = true;
+        correlationFile = bookFile(analysis+"_correlations.dat", true);
+        print_map(correlationMap, 0, correlationFile);
+    }
 }
 void AnalysisBase::resetCorrelationMap() {
     for (std::map<std::string,double>::iterator it = correlationMap.begin(); it != correlationMap.end(); ++it)
@@ -74,8 +79,13 @@ void AnalysisBase::processEvent(int iEvent) {
       delete finalStateObjects[i];
     finalStateObjects.clear(); 
 
-    //uncomment to save correlation information
-    //print_map(correlationMap, 1, correlationFile);
+    if (logEvents) {  // "E <weight> <names of regions entered>" (sparse,
+                      // robust against regions booked lazily during the run)
+        *fStreams[correlationFile] << "E " << weight;
+        for (const auto& it : correlationMap)
+            if (it.second != 0) *fStreams[correlationFile] << " " << it.first;
+        *fStreams[correlationFile] << "\n";
+    }
 }
 
 void AnalysisBase::finish() {

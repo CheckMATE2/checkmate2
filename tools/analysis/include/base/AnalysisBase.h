@@ -748,10 +748,12 @@ class AnalysisBase {
     inline void countControlEvent(std::string region) {      
       controlRegions[region] += weight;
       controlRegions2[region] += weight*weight;
+      if (logEvents) correlationMap[region] += 1;  // log control regions too
     }
     inline void countControlEvent(std::string region, std::map<std::string, double >& map ) {      
       controlRegions[region] += weight;
       controlRegions2[region] += weight*weight;
+      if (logEvents) correlationMap[region] += 1;
       if (!map.empty()) {
         if (map.find(region) == map.end()) {
           cout << "Warning: Region " << region << " not found in map. Adding it now." << endl;
@@ -894,6 +896,7 @@ class AnalysisBase {
     double xsecterr;
     double luminosity;
     int correlationFile;
+    bool logEvents = false;
         
     // Sums up weights (and weights^2) that fall into control, signal or cutflow regions 
     std::map<std::string, double> controlRegions;
