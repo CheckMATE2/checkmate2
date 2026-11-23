@@ -57,8 +57,10 @@ void Atlas_2102_10874::analyze() {
   nonbjets = overlapRemoval(nonbjets, photonsCand, 0.4);
 
   std::vector<Jet*> taus;
+  // the tau tag was evaluated on jets[i] instead of taucand[i]; the two lists differ as
+  // soon as a jet has 2.5 < |eta| < 2.8, so the wrong jet was tested.
   for(int i=0; i< taucand.size(); i++)
-    if( checkTauTag(jets[i], "loose") and fabs(jets[i]->Charge)==1 )
+    if( checkTauTag(taucand[i], "loose") and fabs(taucand[i]->Charge)==1 )
       taus.push_back(taucand[i]);
 
   taus = filterPhaseSpace(taus, 18., -2.5, 2.5, true);//tau jet
