@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "atlas_2211_08028.h"
 #include "fastjet/tools/Filter.hh"
 
@@ -82,6 +83,20 @@ void Atlas_2211_08028::initialize() {
   nngtt = new TH1F("gtt", "NN score", 20, 0., 1.);  
   nngbb = new TH1F("gbb", "NN score", 20, 0., 1.);  
 
+}
+
+// remove leptons within dR < min(0.4, 0.04 + 10 GeV/pT) of any jet
+template <class L>
+static std::vector<L*> shrinkingConeOR(const std::vector<L*>& leptons, const std::vector<Jet*>& jets) {
+  std::vector<L*> out;
+  for (L* l : leptons) {
+    const double cone = std::min(0.4, 0.04 + 10. / l->PT);
+    bool keep = true;
+    for (Jet* j : jets)
+      if (l->P4().DeltaR(j->P4()) < cone) { keep = false; break; }
+    if (keep) out.push_back(l);
+  }
+  return out;
 }
 
 void Atlas_2211_08028::analyze() {
@@ -199,14 +214,17 @@ void Atlas_2211_08028::analyze() {
   //cout << electrons.size() + muons.size() << "  " << electronsTight.size() + muonsCombined.size() << "  ";  
 
   nonbjets = overlapRemoval(nonbjets, electronsLoose, 0.2, "y");      
-  electronsLoose = overlapRemoval(electronsLoose, bjets, 0.4, "y");      
-  electronsTight = overlapRemoval(electronsTight, bjets, 0.4, "y");          
-  electronsLoose = overlapRemoval(electronsLoose, nonbjets, 0.4, "y");      
-  electronsTight = overlapRemoval(electronsTight, nonbjets, 0.4, "y");      
+  // lepton-jet overlap removal with the shrinking cone dR = min(0.4, 0.04 + 10 GeV/pT)
+  // used by the ATLAS analysis code (SimpleAnalysis ANA-SUSY-2018-30, radiusCalcLep), instead of
+  // the fixed 0.4 described in the paper; the fixed cone removes boosted leptons from top decays.
+  electronsLoose = shrinkingConeOR(electronsLoose, bjets);
+  electronsTight = shrinkingConeOR(electronsTight, bjets);
+  electronsLoose = shrinkingConeOR(electronsLoose, nonbjets);
+  electronsTight = shrinkingConeOR(electronsTight, nonbjets);
   nonbjets = overlapRemoval_muon_jet_tracks(nonbjets, muonsCombined, 0.2, 2);   
   bjets = overlapRemoval_muon_jet_tracks(bjets, muonsCombined, 0.2, 2);   
-  muonsCombined = overlapRemoval(muonsCombined, nonbjets, 0.4, "y");
-  muonsCombined = overlapRemoval(muonsCombined, bjets, 0.4, "y");
+  muonsCombined = shrinkingConeOR(muonsCombined, nonbjets);
+  muonsCombined = shrinkingConeOR(muonsCombined, bjets);
   
   signal_jets = bjets;
   signal_jets.insert(signal_jets.end(), nonbjets.begin(), nonbjets.end());
