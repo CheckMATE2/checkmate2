@@ -225,7 +225,8 @@ bool Atlas_2004_14060::SRA( std::vector<Jet*> jets, std::vector<Jet*> bjets, std
     
   //if (met/sqrt(ht) < 23.) return false;   //OK substitute here a simple significance aka "event-based"
 //  if (met/sqrt(resolution) < 25.) return false;
-//  if (calcMETSignificance(jets) < 25.) return false;
+  // SRA requires S > 25 (paper Table 3; ATLAS code ANA-SUSY-2018-12: MetSig > 25), as SRB its S > 14
+  if (calcMETSignificance(jets) < 25.) return false;
   if  (cf != "") countCutflowEvent(cf+"_17_S>25");
   
   TLorentzVector jet12 = TLorentzVector( largeR12[0].px(), largeR12[0].py(), largeR12[0].pz(), largeR12[0].e() );
@@ -723,10 +724,13 @@ bool Atlas_2004_14060::SRC( std::vector<Jet*> jets, std::vector<Jet*> bjets, std
   if (jets[1]->PT < 80.) return false;
   if  (cf != "") countCutflowEvent(cf+"_07_jet2>80");      
   
-  for (int i = 0; i < 4; i++){
-    if ( fabs(jets[i]->P4().DeltaPhi(pTmiss)) < 0.2 ) return false;}
+  // SRC preselection as in the ATLAS code (ANA-SUSY-2018-12): Delta phi(jet, pTmiss) > 0.4 for the two
+  // leading jets (was > 0.2 for four jets) and S > 5 (the cutflow step was counted without a test)
+  for (int i = 0; i < 2; i++){
+    if ( fabs(jets[i]->P4().DeltaPhi(pTmiss)) < 0.4 ) return false;}
   if  (cf != "") countCutflowEvent(cf+"_08_dPhi(jet,MET)");  
   
+  if (calcMETSignificance(jets) < 5.) return false;
   if  (cf != "") countCutflowEvent(cf+"_09_Significance>5");  
     
    if (NSj< 4.) return false; 
