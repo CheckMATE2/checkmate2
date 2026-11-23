@@ -1,3 +1,4 @@
+#include <type_traits>
 #include "atlas_2010_14293.h"
 #include "TMVA/Reader.h"
 
@@ -522,7 +523,11 @@ std::vector<X*> Atlas_2010_14293::specialoverlap(std::vector<X*> candidates, std
         bool overlap = false;
         // If a neighbour is too close, declare overlap, break and don't save candidate
         for(int j = 0; j < neighbours.size(); j++) {
-          if (candidates[i]->P4().DeltaR(neighbours[j]->P4()) > 0.2 and candidates[i]->P4().DeltaR(neighbours[j]->P4()) < std::min(0.4, 0.04 + 10./candidates[i]->PT) ) {
+          // muons within the cone are removed at any distance, as in the ATLAS code (the lower bound
+          // 0.2 applies to electrons only, whose jets within 0.2 were removed before)
+          const double dR = candidates[i]->P4().DeltaR(neighbours[j]->P4());
+          const double lo = std::is_same<X, Muon>::value ? -1. : 0.2;
+          if (dR > lo and dR < std::min(0.4, 0.04 + 10./candidates[i]->PT) ) {
             overlap = true;
             break;
           }
