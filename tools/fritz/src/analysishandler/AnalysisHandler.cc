@@ -1,4 +1,18 @@
 #include "AnalysisHandler.h"
+#include <cstdlib>
+#include <string>
+
+// heaviest quark flavour (5 = b, 4 = c, 0 = other) of a hadron PDG code (mesons nq1q2j,
+// baryons nq1q2q3j); quarks, leptons, bosons and BSM codes (> 1e6) are 0.
+static int heavyFlavourOfHadron(int apid) {
+    if (apid < 100 || apid >= 1000000)
+        return 0;
+    const int q1 = (apid / 1000) % 10, q2 = (apid / 100) % 10, q3 = (apid / 10) % 10;
+    if (q1 > 0 && q3 == 0)
+        return 0;   // diquarks (nq1q20j) in the event record
+    const int m = q1 > 0 ? std::max(q1, std::max(q2, q3)) : std::max(q2, q3);
+    return (m == 5 || m == 4) ? m : 0;
+}
 
 AnalysisHandler::AnalysisHandler() {
     doJetTauTags = false;
@@ -789,12 +803,39 @@ bool AnalysisHandler::readParticles(int iEvent) {
                       "GenParticleBranch not properly assigned!");
     }
 
-    for(int i = 0; i < branchGenParticle->GetEntries(); i++) {
-        if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 5)
-            true_b.push_back((GenParticle*)branchGenParticle->At(i));
-        else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 4)
-            true_c.push_back((GenParticle*)branchGenParticle->At(i));
-        else if (abs( ((GenParticle*)branchGenParticle->At(i))->PID)  == 15) {
+    // heavy-flavour truth labels from weakly decaying B and C hadrons (pT > 5 GeV), as the
+    // experiments' hadron-based (ghost-association) labelling, instead of every b/c quark copy in the
+    // event record, which labels additional jets near shower b quarks (validation/btag/labelling.py).
+    // CHECKMATE_BLABEL=quark restores the quark-based labels (comparisons).
+    static const bool quarkLabels = [] {
+        const char* s = getenv("CHECKMATE_BLABEL");
+        return s != NULL && std::string(s) == "quark";
+    }();
+    const int nGen = branchGenParticle->GetEntries();
+    for(int i = 0; i < nGen; i++) {
+        GenParticle* p = (GenParticle*)branchGenParticle->At(i);
+        const int apid = abs(p->PID);
+        if (!quarkLabels && apid != 15) {
+            const int heavy = heavyFlavourOfHadron(apid);
+            if (heavy == 0 || p->PT < 5.)
+                continue;
+            bool weak = true;   // no daughter hadron of the same heavy flavour
+            for (int d = p->D1; d >= 0 && d <= p->D2 && d < nGen; d++)
+                if (heavyFlavourOfHadron(abs(((GenParticle*)branchGenParticle->At(d))->PID)) == heavy)
+                    weak = false;
+            if (!weak)
+                continue;
+            if (heavy == 5)
+                true_b.push_back(p);
+            else
+                true_c.push_back(p);
+            continue;
+        }
+        if (apid == 5)
+            true_b.push_back(p);
+        else if (apid == 4)
+            true_c.push_back(p);
+        else if (apid == 15) {
             true_tau.push_back((GenParticle*)branchGenParticle->At(i));
         }
     }
