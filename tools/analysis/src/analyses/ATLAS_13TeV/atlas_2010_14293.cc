@@ -187,8 +187,10 @@ void Atlas_2010_14293::analyze() {
   jets = overlapRemoval(jets, electronsLoose, 0.2, "y");
   electronsLoose = specialoverlap(electronsLoose, jets);
   electronsTight = specialoverlap(electronsTight, jets);
+  // ATLAS order: jets with fewer than three tracks within dR < 0.2 of a muon are removed first,
+  // then muons within the shrinking cone of the remaining jets
+  jets = overlapRemoval_muon_jet_tracks(jets, muonsCombined, 0.2, 2);
   muonsCombined = specialoverlap(muonsCombined, jets);
-  jets = overlapRemoval_muon_jet_tracks(jets, muonsCombined, 0.2, 2); 
   
   std::vector<Electron*> CRelectrons = Isolate_leptons_with_inverse_track_isolation_cone(electronsTight, tracks, towers, 0.2, 10., 0.2, 0.06, 0.06, true);
   std::vector<Muon*> CRmuons = Isolate_leptons_with_inverse_track_isolation_cone(muonsCombined, tracks, towers, 0.3, 10., 0.2, 0.15, 0.3, true);
