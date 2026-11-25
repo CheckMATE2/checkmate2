@@ -1,3 +1,4 @@
+#include <iomanip>
 #include <cstdlib>
 #include "AnalysisBase.h"
 
@@ -81,7 +82,7 @@ void AnalysisBase::processEvent(int iEvent) {
 
     if (logEvents) {  // "E <weight> <names of regions entered>" (sparse,
                       // robust against regions booked lazily during the run)
-        *fStreams[correlationFile] << "E " << weight;
+        *fStreams[correlationFile] << "E " << std::setprecision(17) << weight;   // round-trip precision
         for (const auto& it : correlationMap)
             if (it.second != 0) *fStreams[correlationFile] << " " << it.first;
         *fStreams[correlationFile] << "\n";
