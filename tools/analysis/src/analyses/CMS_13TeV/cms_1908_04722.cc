@@ -25,6 +25,7 @@ void Cms_1908_04722::analyze() {
   // PF electron/muon candidates for the isolated-track veto (before any isolation)
   std::vector<Electron*> trackVetoE = filterPhaseSpace(electronsLoose, 5., -2.4, 2.4);
   std::vector<Muon*> trackVetoMu = filterPhaseSpace(muonsCombined, 5., -2.4, 2.4);
+  std::vector<Muon*> allMuons = muonsCombined;  // for the track-isolation sums (not in the card's tracks)
   electronsLoose = filterPhaseSpace(electronsLoose, 5., -2.5, 2.5);
   std::vector<Electron*> electronsPF = filterPhaseSpace(electronsLoose, 10., -2.5, 2.5, false, true);   // =>   pT < 10
   electronsMedium = filterPhaseSpace(electronsMedium, 10., -2.5, 2.5);
@@ -86,6 +87,10 @@ void Cms_1908_04722::analyze() {
       if (tracks[t]->Particle == self) continue;
       if (tracks[t]->P4().DeltaR(p) < 0.3) sum += tracks[t]->PT;
     }
+    for (size_t m = 0; m < allMuons.size(); m++) {
+      if (allMuons[m]->Particle == self) continue;
+      if (allMuons[m]->P4().DeltaR(p) < 0.3) sum += allMuons[m]->PT;
+    }
     return sum;
   };
   for (size_t i = 0; i < trackVetoE.size(); i++) {
@@ -106,6 +111,8 @@ void Cms_1908_04722::analyze() {
     double sum = 0.;
     for (size_t u = 0; u < tracks.size(); u++)
       if (u != t && tracks[u]->P4().DeltaR(p) < 0.3) sum += tracks[u]->PT;
+    for (size_t m = 0; m < allMuons.size(); m++)
+      if (allMuons[m]->P4().DeltaR(p) < 0.3) sum += allMuons[m]->PT;
     if (sum < 0.1 * trk->PT) return;
   }
   countCutflowEvent("08_isoTrackVeto");
