@@ -1,3 +1,4 @@
+#include <type_traits>
 #include "atlas_2010_14293.h"
 #include "TMVA/Reader.h"
 
@@ -186,8 +187,10 @@ void Atlas_2010_14293::analyze() {
   jets = overlapRemoval(jets, electronsLoose, 0.2, "y");
   electronsLoose = specialoverlap(electronsLoose, jets);
   electronsTight = specialoverlap(electronsTight, jets);
+  // ATLAS order: jets with fewer than three tracks within dR < 0.2 of a muon are removed first,
+  // then muons within the shrinking cone of the remaining jets
+  jets = overlapRemoval_muon_jet_tracks(jets, muonsCombined, 0.2, 2);
   muonsCombined = specialoverlap(muonsCombined, jets);
-  jets = overlapRemoval_muon_jet_tracks(jets, muonsCombined, 0.2, 2); 
   
   std::vector<Electron*> CRelectrons = Isolate_leptons_with_inverse_track_isolation_cone(electronsTight, tracks, towers, 0.2, 10., 0.2, 0.06, 0.06, true);
   std::vector<Muon*> CRmuons = Isolate_leptons_with_inverse_track_isolation_cone(muonsCombined, tracks, towers, 0.3, 10., 0.2, 0.15, 0.3, true);
@@ -522,7 +525,11 @@ std::vector<X*> Atlas_2010_14293::specialoverlap(std::vector<X*> candidates, std
         bool overlap = false;
         // If a neighbour is too close, declare overlap, break and don't save candidate
         for(int j = 0; j < neighbours.size(); j++) {
-          if (candidates[i]->P4().DeltaR(neighbours[j]->P4()) > 0.2 and candidates[i]->P4().DeltaR(neighbours[j]->P4()) < std::min(0.4, 0.04 + 10./candidates[i]->PT) ) {
+          // muons within the cone are removed at any distance, as in the ATLAS code (the lower bound
+          // 0.2 applies to electrons only, whose jets within 0.2 were removed before)
+          const double dR = candidates[i]->P4().DeltaR(neighbours[j]->P4());
+          const double lo = std::is_same<X, Muon>::value ? -1. : 0.2;
+          if (dR > lo and dR < std::min(0.4, 0.04 + 10./candidates[i]->PT) ) {
             overlap = true;
             break;
           }
