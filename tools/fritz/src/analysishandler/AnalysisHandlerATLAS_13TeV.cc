@@ -178,6 +178,34 @@ void AnalysisHandlerATLAS_13TeV::identifyPhotons() {
     }
 }
 
+// baseline leptons with a fixed isolation that emulates ATLAS identification rejecting leptons
+// inside jets (from heavy-flavour decays), which Delphes reconstructs with the prompt-lepton efficiency.
+// ATLAS 'Loose' track isolation: sum pT of tracks (pT > 1 GeV) in a cone of min(R, 10 GeV/pT) around the lepton,
+// excluding its own track, below 0.15 pT; R = 0.2 for electrons, 0.3 for muons. Opt-in with
+// CHECKMATE_ATLAS_BASELINE_ISO=loose; by default tag 0 is used (the first isolation criterion of whichever
+// analysis is loaded first). The gate also applies to the leptons from which analyses build signal leptons:
+// every ATLAS signal working point is at least as tight as Loose, but analyses whose implemented signal
+// isolation is looser will see fewer signal leptons.
+static bool atlasBaselineIsoLegacy() {
+    static const bool legacy = [] {
+        const char* v = std::getenv("CHECKMATE_ATLAS_BASELINE_ISO");
+        return !(v && std::string(v) == "loose");   // opt-in: CHECKMATE_ATLAS_BASELINE_ISO=loose
+    }();
+    return legacy;
+}
+
+template <class T>
+static bool atlasBaselineTrackIso(T* cand, const std::vector<Track*>& tracks, double rmax) {
+    const double cone = std::min(rmax, 10. / cand->PT);
+    double sum = 0.;
+    for (size_t t = 0; t < tracks.size(); t++) {
+        if (tracks[t]->PT < 1.) continue;
+        if (tracks[t]->Particle == cand->Particle) continue;
+        if (tracks[t]->P4().DeltaR(cand->P4()) < cone) sum += tracks[t]->PT;
+    }
+    return sum < 0.15 * cand->PT;
+}
+
 void AnalysisHandlerATLAS_13TeV::identifyElectrons() {
     double eEffMed = 0, eEffTigOvMed = 0, eEffLoo = 0;
     Electron* cand = NULL;
@@ -187,8 +215,8 @@ void AnalysisHandlerATLAS_13TeV::identifyElectrons() {
     electronsTight.clear();
     for (int e = 0; e < electrons.size(); e++) {
         cand = electrons[e];
-        // tag 0 is the loose isolation condition
-        if (electronIsolationTags[cand][0]) {
+        // tag 0 is the loose isolation condition; here a fixed track isolation, see above
+        if (atlasBaselineIsoLegacy() ? electronIsolationTags[cand][0] : atlasBaselineTrackIso(cand, tracks, 0.2)) {
 	  eEffLoo = electronRecEff(cand->PT, cand->Eta) *
                       electronIDEffLoose(cand->PT, cand->Eta);
 	  if (rand()/(RAND_MAX+1.) <  eEffLoo) {
@@ -216,7 +244,7 @@ void AnalysisHandlerATLAS_13TeV::identifyMuons()  {
     // Reconstruct Muons
     for (int m = 0; m < muons.size(); m++) {
         cand = muons[m];
-        if (muonIsolationTags[muons[m]][0]) {
+        if (atlasBaselineIsoLegacy() ? muonIsolationTags[muons[m]][0] : atlasBaselineTrackIso(cand, tracks, 0.3)) {
             muonsLoose.push_back(muons[m]);
             mEffCombPlus = muonEffCombPlus(muons[m]->PT, muons[m]->Eta);
             if (rand()/((double)RAND_MAX+1) < mEffCombPlus ) {
