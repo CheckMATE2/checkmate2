@@ -27,6 +27,7 @@ void Cms_sus_19_005::analyze() {
 
 
   missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
+  std::vector<Muon*> allMuons = muonsCombined;  // for the track-isolation sums (not in the card's tracks)
   
   electronsLoose = filterPhaseSpace(electronsLoose, 5., -2.4, 2.4);
   std::vector<Electron*> electronsPF = filterPhaseSpace(electronsLoose, 10., -2.4, 2.4, false, true);   // =>   pT < 10
@@ -51,14 +52,28 @@ void Cms_sus_19_005::analyze() {
     if ( mT(muonsPF[i]->P4(), missingET->P4() ) < 100. ) return;  
     
   countCutflowEvent("02_softlep_veto");
+
+  // isolated-track veto (arXiv:1909.03460, Table 1): any track with pT > 10 GeV, |eta| < 2.4,
+  // MT(track, ptmiss) < 100 GeV and sum pT of other tracks within dR = 0.3 below 0.1 pT.
+  // It mainly removes W -> tau_h nu.
+  for (size_t t = 0; t < tracks.size(); t++) {
+    Track* trk = tracks[t];
+    if (trk->PT < 10. || fabs(trk->Eta) > 2.4) continue;
+    if (mT(trk->P4(), missingET->P4()) > 100.) continue;
+    double sumpt = 0.;
+    for (size_t u = 0; u < tracks.size(); u++)
+      if (u != t && tracks[u]->P4().DeltaR(trk->P4()) < 0.3) sumpt += tracks[u]->PT;
+    for (size_t m = 0; m < allMuons.size(); m++)
+      if (allMuons[m]->P4().DeltaR(trk->P4()) < 0.3) sumpt += allMuons[m]->PT;
+    if (sumpt < 0.1 * trk->PT) return;
+  }
+  countCutflowEvent("02b_isotrack_veto");
   
   jets = filterPhaseSpace(jets, 20., -4.7, 4.7);
   jets = overlapRemoval(jets, electronsMedium, 0.3, "y");
   jets = overlapRemoval(jets, muonsCombined, 0.3, "y");
   jets = overlapRemoval(jets, photonsMedium, 0.3, "y");
 
-  if (dPhi(jets, 0) < 0.3) return;
-  countCutflowEvent("03_dPhi_min");
   
   std::vector<Jet*> bjets;
   std::vector<Jet*> lightjets;
@@ -73,6 +88,11 @@ void Cms_sus_19_005::analyze() {
   int Nj = signaljets.size();
   int Nb = bjets.size();
   if ( !Nj ) return;
+  // Delta phi_min with the four leading jets with pT > 30 GeV and |eta| < 4.7 (paper, Sec. 3.1: "For the
+  // determination of Delta phi_min, we consider jets with |eta| < 4.7"; jets have pT > 30 GeV unless stated
+  // otherwise), not from pT > 20 GeV
+  if (dPhi(filterPhaseSpace(jets, 30., -4.7, 4.7), 0) < 0.3) return;
+  countCutflowEvent("03_dPhi_min");
   countCutflowEvent("04_Nj>=1");
   
   double  HT = 0.;
@@ -132,7 +152,9 @@ void Cms_sus_19_005::analyze() {
     double MT2 = mT2(clusters[0].P4(), clusters[1].P4(), 0., missingET->P4(), false);
     
     if (MT2 < 200. and HT < 1500.) return;
-    if (MT2 < 400.) return;
+    // MT2 > 400 GeV only for HT >= 1500 GeV (paper, Table 1); the bins with 200 < MT2 < 400 GeV
+    // at lower HT were left empty
+    if (MT2 < 400. and HT >= 1500.) return;
     countCutflowEvent("10_MT2>200");
     
     fill_bins_2j(Nj, Nb, HT, MT2);
