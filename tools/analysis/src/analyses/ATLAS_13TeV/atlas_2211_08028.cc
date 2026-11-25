@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cmath>
 #include "atlas_2211_08028.h"
 #include "fastjet/tools/Filter.hh"
 
@@ -93,7 +94,10 @@ static std::vector<L*> shrinkingConeOR(const std::vector<L*>& leptons, const std
     const double cone = std::min(0.4, 0.04 + 10. / l->PT);
     bool keep = true;
     for (Jet* j : jets)
-      if (l->P4().DeltaR(j->P4()) < cone) { keep = false; break; }
+      if (std::hypot(l->P4().Rapidity() - j->P4().Rapidity(), l->P4().DeltaPhi(j->P4())) < cone) {
+        keep = false;   // rapidity-azimuth distance, as overlapRemoval(..., "y")
+        break;
+      }
     if (keep) out.push_back(l);
   }
   return out;
