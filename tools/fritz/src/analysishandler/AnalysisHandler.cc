@@ -10,6 +10,8 @@ static int heavyFlavourOfHadron(int apid) {
     const int q1 = (apid / 1000) % 10, q2 = (apid / 100) % 10, q3 = (apid / 10) % 10;
     if (q1 > 0 && q3 == 0)
         return 0;   // diquarks (nq1q20j) in the event record
+    if (q1 == 0 && q2 == q3)
+        return 0;   // quarkonia (J/psi, Upsilon, ...): hidden flavour, no weak decay
     const int m = q1 > 0 ? std::max(q1, std::max(q2, q3)) : std::max(q2, q3);
     return (m == 5 || m == 4) ? m : 0;
 }
