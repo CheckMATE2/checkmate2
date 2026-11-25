@@ -27,6 +27,7 @@ void Cms_sus_19_005::analyze() {
 
 
   missingET->addMuons(muonsCombined);  // Adds muons to missing ET. This should almost always be done which is why this line is not commented out.
+  std::vector<Muon*> allMuons = muonsCombined;  // for the track-isolation sums (not in the card's tracks)
   
   electronsLoose = filterPhaseSpace(electronsLoose, 5., -2.4, 2.4);
   std::vector<Electron*> electronsPF = filterPhaseSpace(electronsLoose, 10., -2.4, 2.4, false, true);   // =>   pT < 10
@@ -62,6 +63,8 @@ void Cms_sus_19_005::analyze() {
     double sumpt = 0.;
     for (size_t u = 0; u < tracks.size(); u++)
       if (u != t && tracks[u]->P4().DeltaR(trk->P4()) < 0.3) sumpt += tracks[u]->PT;
+    for (size_t m = 0; m < allMuons.size(); m++)
+      if (allMuons[m]->P4().DeltaR(trk->P4()) < 0.3) sumpt += allMuons[m]->PT;
     if (sumpt < 0.1 * trk->PT) return;
   }
   countCutflowEvent("02b_isotrack_veto");
@@ -85,9 +88,10 @@ void Cms_sus_19_005::analyze() {
   int Nj = signaljets.size();
   int Nb = bjets.size();
   if ( !Nj ) return;
-  // Delta phi_min with the signal jets (pT > 30 GeV, |eta| < 2.4) as in the paper (Table 1),
-  // not with all jets with pT > 20 GeV and |eta| < 4.7
-  if (dPhi(signaljets, 0) < 0.3) return;
+  // Delta phi_min with the four leading jets with pT > 30 GeV and |eta| < 4.7 (paper, Sec. 3.1: "For the
+  // determination of Delta phi_min, we consider jets with |eta| < 4.7"; jets have pT > 30 GeV unless stated
+  // otherwise), not from pT > 20 GeV
+  if (dPhi(filterPhaseSpace(jets, 30., -4.7, 4.7), 0) < 0.3) return;
   countCutflowEvent("03_dPhi_min");
   countCutflowEvent("04_Nj>=1");
   
