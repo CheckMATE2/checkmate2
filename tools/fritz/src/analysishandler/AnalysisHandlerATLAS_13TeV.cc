@@ -181,12 +181,15 @@ void AnalysisHandlerATLAS_13TeV::identifyPhotons() {
 // baseline leptons with a fixed isolation that emulates ATLAS identification rejecting leptons
 // inside jets (from heavy-flavour decays), which Delphes reconstructs with the prompt-lepton efficiency.
 // ATLAS 'Loose' track isolation: sum pT of tracks (pT > 1 GeV) in a cone of min(R, 10 GeV/pT) around the lepton,
-// excluding its own track, below 0.15 pT; R = 0.2 for electrons, 0.3 for muons. Replaces CheckMATE's tag 0, the
-// first isolation criterion of whichever analysis is loaded first. CHECKMATE_ATLAS_BASELINE_ISO=legacy restores it.
+// excluding its own track, below 0.15 pT; R = 0.2 for electrons, 0.3 for muons. Opt-in with
+// CHECKMATE_ATLAS_BASELINE_ISO=loose; by default tag 0 is used (the first isolation criterion of whichever
+// analysis is loaded first). The gate also applies to the leptons from which analyses build signal leptons:
+// every ATLAS signal working point is at least as tight as Loose, but analyses whose implemented signal
+// isolation is looser will see fewer signal leptons.
 static bool atlasBaselineIsoLegacy() {
     static const bool legacy = [] {
         const char* v = std::getenv("CHECKMATE_ATLAS_BASELINE_ISO");
-        return v && std::string(v) == "legacy";
+        return !(v && std::string(v) == "loose");   // opt-in: CHECKMATE_ATLAS_BASELINE_ISO=loose
     }();
     return legacy;
 }
